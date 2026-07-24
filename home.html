@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>台湾華語スタディ StayTW Study — 無料の台湾中国語（繁体字）学習ツール｜単語・文法・フレーズ・クイズ</title>
+<meta name="description" content="日本語・英語・韓国語話者のための無料台湾華語学習ツール。TOCFL対応の単語カード・基本文法・場面別フレーズ・クイズ。繁体字＋注音＋拼音、登録不要でブラウザからすぐ使える。">
+<meta property="og:title" content="台湾華語スタディ StayTW Study — 無料の台湾中国語学習ツール">
+<meta property="og:description" content="単語・文法・フレーズ・クイズ。繁体字＋注音＋拼音、すべて無料。">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="images/bear.svg">
+<style>
+/* ======================================================
+   台湾華語スタディ StayTW Study — Landing Page
+   （StayJP Study と同じ「和紙＋朱印」デザインシステム）
+   ====================================================== */
+:root {
+  --bg: #FAF8F3; --bg2: #FFFFFF; --bg3: #F2EEE5; --hd: #FAF8F3;
+  --tx: #1C1C1E; --tx2: #6A6A6A; --tx-s: #A9A9A9; --tx3: #A9A9A9;
+  --ac: #B8362A; --ac-soft: rgba(184,54,42,.08); --ac2: #2F5D7A;
+  --bd: #E5DECF; --line: #DDD5C0;
+  --sh: 0 1px 3px rgba(0,0,0,.03); --sh2: 0 2px 8px rgba(0,0,0,.04);
+  --r: 10px; --hh: 56px; --ease: cubic-bezier(.25,.1,.25,1);
+  --serif: "Hiragino Mincho ProN", "Noto Serif JP", "Yu Mincho", "游明朝", "Songti TC", serif;
+}
+[data-theme="dark"] {
+  --bg: #121113; --bg2: #1B1A1C; --bg3: #1F1E20; --hd: #121113;
+  --tx: #EDE8DE; --tx2: #8F8A7E; --tx-s: #5D5A53; --tx3: #5D5A53;
+  --ac: #E4715F; --ac-soft: rgba(228,113,95,.1); --ac2: #7FA5C2;
+  --bd: #2C2A27; --line: #2C2A27; --sh: none; --sh2: none;
+}
+*{margin:0;padding:0;box-sizing:border-box;transition:color .2s var(--ease),background .2s var(--ease),border-color .2s var(--ease),opacity .2s var(--ease)}
+html{scroll-behavior:smooth}
+html,body{overflow-x:hidden}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","PingFang TC",system-ui,sans-serif;
+  background:var(--bg);color:var(--tx);line-height:1.7;font-size:16px;letter-spacing:.01em;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--ac2);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* == Header == */
+.hd{position:fixed;top:0;left:0;right:0;background:color-mix(in srgb,var(--bg) 88%,transparent);z-index:100;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(14px);-webkit-backdrop-filter:saturate(140%) blur(14px)}
+.hd-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;padding:0 32px;height:var(--hh);gap:12px}
+.hd h1{color:var(--tx);font-size:15px;font-weight:700;white-space:nowrap;letter-spacing:.02em;font-family:var(--serif)}
+.hd-links{display:flex;gap:14px;margin-left:auto;align-items:center}
+.hd-links a{color:var(--tx2);text-decoration:none;font-size:13px;font-weight:500;white-space:nowrap}
+.hd-links a:hover{color:var(--tx);text-decoration:none}
+.lang-btn{background:var(--bg3);border:1px solid var(--bd);cursor:pointer;color:var(--tx2);padding:2px 10px;font-size:12px;font-weight:600;border-radius:8px;white-space:nowrap;font-family:inherit}
+.lang-btn:hover{color:var(--ac);border-color:var(--ac)}
+.theme-btn{background:none;border:none;cursor:pointer;color:var(--tx3);padding:6px;border-radius:10px;display:flex;align-items:center}
+.theme-btn:hover{color:var(--tx);background:var(--bg3)}
+.theme-btn svg{width:18px;height:18px}
+
+/* == Hero == */
+.hero{padding:calc(var(--hh) + 96px) 32px 110px;display:flex;align-items:center;gap:60px;position:relative;overflow:hidden}
+.hero-inner{max-width:1100px;margin:0 auto;flex:1}
+.hero-eyebrow{font-size:11px;letter-spacing:.28em;color:var(--ac);font-weight:700;margin-bottom:28px;display:inline-flex;align-items:center;gap:12px}
+.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--ac)}
+.hero-kana{font-family:var(--serif);font-size:clamp(28px,4.5vw,48px);font-weight:400;color:var(--tx2);letter-spacing:.08em;line-height:1.2;margin-bottom:14px}
+.hero-title{font-family:var(--serif);font-size:clamp(44px,8vw,88px);font-weight:700;line-height:1.15;letter-spacing:-.01em;color:var(--tx);margin-bottom:32px;max-width:820px}
+.hero-title em{font-style:normal;color:var(--ac);position:relative;display:inline-block}
+.hero-title em::after{content:'';position:absolute;left:0;right:0;bottom:-6px;height:2px;background:var(--ac);transform:scaleX(0);transform-origin:left;animation:underlineIn 1s .3s var(--ease) forwards}
+@keyframes underlineIn{to{transform:scaleX(1)}}
+.hero-desc{max-width:560px;font-size:16px;color:var(--tx2);line-height:2;margin-bottom:44px}
+.hero-desc strong{color:var(--tx);font-weight:600}
+.hero-cta-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.hero-cta{display:inline-flex;align-items:center;gap:10px;background:var(--tx);color:var(--bg);padding:16px 32px;border-radius:100px;font-size:15px;font-weight:600;letter-spacing:.02em;text-decoration:none;transition:transform .2s var(--ease),background .2s var(--ease)}
+.hero-cta:hover{background:var(--ac);color:#fff;text-decoration:none;transform:translateY(-1px)}
+.hero-cta svg{transition:transform .2s var(--ease)}
+.hero-cta:hover svg{transform:translateX(3px)}
+.hero-sub{font-size:13px;color:var(--tx-s)}
+.hero-mascot{flex-shrink:0;width:clamp(220px,26vw,340px);position:relative}
+.hero-mascot img{width:100%;height:auto;display:block;filter:drop-shadow(0 12px 32px rgba(0,0,0,.12))}
+.hero-mascot .mascot-name{text-align:center;font-size:12px;color:var(--tx3);letter-spacing:.15em;margin-top:10px}
+@media(max-width:900px){
+  .hero{flex-direction:column;gap:0;padding:calc(var(--hh) + 28px) 24px 64px}
+  .hero-mascot{width:46vw;max-width:190px;margin:0 auto 10px;order:-1}
+  .hero-mascot .mascot-name{display:none}
+}
+
+/* == Marquee == */
+.marquee{padding:28px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;background:var(--bg);-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.marquee-track{display:flex;gap:48px;width:max-content;animation:marquee 32s linear infinite}
+.marquee-track:hover{animation-play-state:paused}
+@keyframes marquee{to{transform:translateX(-50%)}}
+.marquee span{font-family:var(--serif);font-size:22px;color:var(--tx2);letter-spacing:.05em;white-space:nowrap;display:inline-flex;align-items:center;gap:48px}
+.marquee span::after{content:'·';color:var(--ac);font-size:28px;line-height:0}
+
+/* == Section == */
+.section{padding:110px 32px}
+.section-inner{max-width:1100px;margin:0 auto}
+.eyebrow{font-size:11px;letter-spacing:.28em;color:var(--ac);font-weight:700;text-transform:uppercase;display:inline-flex;align-items:center;gap:12px;margin-bottom:16px}
+.eyebrow::before{content:'';width:24px;height:1px;background:var(--ac)}
+.section-title{font-family:var(--serif);font-size:clamp(30px,4vw,44px);font-weight:700;letter-spacing:-.01em;margin-bottom:56px;line-height:1.25;max-width:720px}
+.section-title em{font-style:normal;color:var(--ac)}
+
+/* == Features == */
+.features{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.feature-card{padding:48px 36px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .3s var(--ease)}
+.feature-card:hover{background:var(--bg3)}
+.feature-num{font-family:var(--serif);font-size:13px;color:var(--ac);letter-spacing:.2em;font-weight:500;margin-bottom:20px}
+.feature-num::before{content:'';display:inline-block;width:20px;height:1px;background:var(--ac);vertical-align:middle;margin-right:10px}
+.feature-title{font-family:var(--serif);font-size:22px;font-weight:700;margin-bottom:10px;letter-spacing:-.01em;color:var(--tx)}
+.feature-desc{font-size:14px;color:var(--tx2);line-height:1.9}
+
+/* == Persona cards（三タイプ） == */
+.pt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:760px){.pt-grid{grid-template-columns:1fr}}
+.pt-card{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:28px 24px;transition:transform .2s var(--ease),border-color .2s var(--ease)}
+.pt-card:hover{transform:translateY(-2px);border-color:var(--ac)}
+.pt-name{font-size:17px;font-weight:700;color:var(--tx);margin-bottom:10px;font-family:var(--serif)}
+.pt-desc{font-size:14px;color:var(--tx2)}
+.pt-desc b{color:var(--tx)}
+
+/* == Story == */
+.story{background:var(--bg3)}
+.story-text{font-family:var(--serif);font-size:17px;line-height:2.1;color:var(--tx);max-width:760px}
+.story-text p{margin-bottom:22px}
+.story-text strong{color:var(--ac);font-weight:700}
+
+/* == Stats == */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line)}
+.stat-item{padding:44px 20px;text-align:left;border-left:1px solid var(--line);min-width:0}
+.stat-item:first-child{border-left:none}
+.stat-number{font-family:var(--serif);font-size:clamp(40px,5vw,64px);font-weight:700;color:var(--tx);letter-spacing:-.02em;line-height:1;display:flex;align-items:baseline;gap:4px}
+.stat-number sup{font-size:.4em;color:var(--ac);font-weight:500}
+.stat-label{font-size:12px;color:var(--tx2);margin-top:12px;letter-spacing:.15em;text-transform:uppercase}
+@media(max-width:680px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat-item:nth-child(n){border-left:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .stat-item:nth-child(odd){border-left:none}
+}
+
+/* == FAQ == */
+.faq{max-width:780px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;font-size:16px;font-weight:600;color:var(--tx);padding:18px 4px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';color:var(--ac);font-size:22px;font-weight:400;flex-shrink:0}
+.faq details[open] summary::after{content:'−'}
+.faq .faq-a{font-size:15px;color:var(--tx2);line-height:1.9;padding:0 4px 20px}
+
+/* == Footer == */
+.ft{padding:56px 32px;color:var(--tx3);font-size:12px;border-top:1px solid var(--line);background:var(--bg);line-height:1.9}
+.ft-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.ft-brand{font-family:var(--serif);font-size:14px;color:var(--tx2);letter-spacing:.05em}
+.ft a{color:var(--tx2);text-decoration:none;margin-left:20px}
+.ft a:hover{color:var(--ac)}
+@media(max-width:600px){.ft-inner{flex-direction:column;align-items:flex-start}.ft a{margin:0 16px 0 0}}
+
+/* == Scroll reveal == */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal-d1{transition-delay:.08s}.reveal-d2{transition-delay:.16s}.reveal-d3{transition-delay:.24s}.reveal-d4{transition-delay:.32s}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+@media(max-width:768px){
+  .hd-inner{padding:0 20px}
+  .features{grid-template-columns:1fr}
+  .feature-card{padding:36px 24px}
+  .section{padding:72px 24px}
+  .section-title{margin-bottom:40px}
+  .hero-kana{font-size:22px;margin-bottom:8px}
+  .hero-title{font-size:40px;margin-bottom:18px}
+  .hero-desc{margin-bottom:26px}
+}
+@media(max-width:480px){.marquee span{font-size:18px}.hero-cta{padding:14px 28px;font-size:14px}}
+</style>
+</head>
+<body>
+
+<header class="hd">
+  <div class="hd-inner">
+    <h1><img src="images/bear.svg" alt="" style="width:26px;height:30px;vertical-align:middle;margin-right:6px"><span data-i18n="brand">台湾華語スタディ</span> <span style="color:var(--ac)">StayTW</span></h1>
+    <div class="hd-links">
+      <a href="index.html" data-i18n="navTools">学習ツール</a>
+      <a href="tocfl.html" data-i18n="navGuide">TOCFLガイド</a>
+      <a href="#about" data-i18n="navAbout">サイトについて</a>
+      <button class="lang-btn" id="langBtn" onclick="twCycleLang()">日</button>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="ダークモード切替"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow reveal" data-i18n="heroEyebrow">STAYTW · STUDY</div>
+    <h2 class="hero-kana reveal reveal-d1" data-i18n="heroKana">毎日、少しずつ。</h2>
+    <h1 class="hero-title reveal reveal-d2"><span data-i18n="heroTitle1">ゼロから、</span><br><em data-i18n="heroTitleEm">台湾華語。</em></h1>
+    <p class="hero-desc reveal reveal-d3" data-i18n="heroDesc">単語 100+・文法 20・場面別フレーズ・クイズ。繁体字＋注音＋拼音、すべて無料。登録もダウンロードも不要、ブラウザで今すぐ。</p>
+    <div class="hero-cta-row reveal reveal-d4">
+      <a href="index.html" class="hero-cta"><span data-i18n="heroCta">無料で始める</span>
+        <svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <span class="hero-sub" data-i18n="heroSub">無料・登録不要・ブラウザですぐ使える</span>
+    </div>
+  </div>
+  <div class="hero-mascot reveal reveal-d2">
+    <img src="images/bear.svg" alt="StayTW Study 吉祥物 — 珍奶黑熊">
+    <div class="mascot-name">MILK TEA BEAR · 珍奶黑熊</div>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>繁體字</span><span>注音 ㄅㄆㄇㄈ</span><span>拼音</span><span>TOCFL L1–L5</span><span>珍珠奶茶</span><span>夜市</span><span>捷運</span><span>你好</span><span>謝謝</span><span>不好意思</span><span>單字 1000+</span><span>文法 84</span><span>SRS 復習</span><span>模擬試験</span>
+    <span>繁體字</span><span>注音 ㄅㄆㄇㄈ</span><span>拼音</span><span>TOCFL L1–L5</span><span>珍珠奶茶</span><span>夜市</span><span>捷運</span><span>你好</span><span>謝謝</span><span>不好意思</span><span>單字 1000+</span><span>文法 84</span><span>SRS 復習</span><span>模擬試験</span>
+  </div>
+</div>
+
+<!-- Features -->
+<section class="section">
+  <div class="section-inner">
+    <div class="eyebrow reveal" data-i18n="eyeTools">FEATURES · 機能</div>
+    <h2 class="section-title reveal" data-i18n-html="secToolsTitle">八つのツールで、<em>台湾のことばを毎日 15 分</em>。</h2>
+    <div class="features">
+      <div class="feature-card reveal">
+        <div class="feature-num">01 · VOCAB</div>
+        <div class="feature-title" data-i18n="ft1Title">単語カード</div>
+        <div class="feature-desc" data-i18n="ft1Desc">TOCFL 対応の頻出語。注音・拼音・日英韓の訳と例文つき。タップで音声も聞ける。</div>
+      </div>
+      <div class="feature-card reveal reveal-d1">
+        <div class="feature-num">02 · GRAMMAR</div>
+        <div class="feature-title" data-i18n="ft2Title">文法ポイント</div>
+        <div class="feature-desc" data-i18n="ft2Desc">「是・嗎・了・過」など、つまずきやすい基本文法を例文と一緒に整理。</div>
+      </div>
+      <div class="feature-card reveal reveal-d2">
+        <div class="feature-num">03 · PHRASES</div>
+        <div class="feature-title" data-i18n="ft3Title">場面別フレーズ</div>
+        <div class="feature-desc" data-i18n="ft3Desc">夜市・ドリンクスタンド・MRT——台湾のリアルな場面でそのまま使える一言。</div>
+      </div>
+      <div class="feature-card reveal reveal-d3">
+        <div class="feature-num">04 · QUIZ</div>
+        <div class="feature-title" data-i18n="ft4Title">クイズ</div>
+        <div class="feature-desc" data-i18n="ft4Desc">覚えた単語を4択でチェック。間違えた単語はその場で復習。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- For whom · 三タイプの学習者 -->
+<section class="section" style="background:var(--bg3)">
+  <div class="section-inner">
+    <div class="eyebrow reveal" data-i18n="eyePersona">FOR YOU · あなたはどのタイプ？</div>
+    <h2 class="section-title reveal" data-i18n-html="secPersonaTitle">三人三様、<em>入口はぜんぶ用意した</em>。</h2>
+    <div class="pt-grid" style="margin-top:0">
+      <div class="pt-card reveal">
+        <div style="font-size:34px;margin-bottom:10px">🧳</div>
+        <div class="pt-name" data-i18n="ps1t">旅行で使いたい</div>
+        <div class="pt-desc" style="line-height:1.9" data-i18n-html="ps1d"></div>
+      </div>
+      <div class="pt-card reveal reveal-d1">
+        <div style="font-size:34px;margin-bottom:10px">🏠</div>
+        <div class="pt-name" data-i18n="ps2t">仕事・家庭で台湾に住む</div>
+        <div class="pt-desc" style="line-height:1.9" data-i18n-html="ps2d"></div>
+      </div>
+      <div class="pt-card reveal reveal-d2">
+        <div style="font-size:34px;margin-bottom:10px">🎓</div>
+        <div class="pt-name" data-i18n="ps3t">台湾の大学に進学したい</div>
+        <div class="pt-desc" style="line-height:1.9" data-i18n-html="ps3d"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About / Story -->
+<section class="section story" id="about">
+  <div class="section-inner">
+    <div class="eyebrow reveal" data-i18n="eyeAbout">ABOUT · サイトについて</div>
+    <h2 class="section-title reveal" data-i18n-html="secAboutTitle">台湾人が作った、<em>逆方向</em>の学習サイト。</h2>
+    <div class="story-text reveal reveal-d1">
+      <p data-i18n-html="story1"></p>
+      <p data-i18n-html="story2"></p>
+      <p data-i18n-html="story3"></p>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="section">
+  <div class="section-inner">
+    <div class="eyebrow reveal" data-i18n="eyeStats">NUMBERS · 数字</div>
+    <h2 class="section-title reveal" data-i18n-html="secStatsTitle">コンテンツは<em>拡充中</em>。</h2>
+    <div class="stats-grid">
+      <div class="stat-item reveal"><div class="stat-number">1,000<sup>+</sup></div><div class="stat-label" data-i18n="statVocab">単語</div></div>
+      <div class="stat-item reveal reveal-d1"><div class="stat-number">84</div><div class="stat-label" data-i18n="statGrammar">文法</div></div>
+      <div class="stat-item reveal reveal-d2"><div class="stat-number">65<sup>+</sup></div><div class="stat-label" data-i18n="statPhrases">フレーズ</div></div>
+      <div class="stat-item reveal reveal-d3"><div class="stat-number">5</div><div class="stat-label" data-i18n="statLevels">レベル TOCFL L1–L5</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="section-inner">
+    <div class="eyebrow reveal" data-i18n="eyeFaq">FAQ · よくある質問</div>
+    <h2 class="section-title reveal" data-i18n="faqTitle">よくある質問</h2>
+    <div class="faq reveal reveal-d1">
+      <details>
+        <summary data-i18n="faqQ1">簡体字ではなく繁体字なの？</summary>
+        <div class="faq-a" data-i18n-html="faqA1"></div>
+      </details>
+      <details>
+        <summary data-i18n="faqQ2">注音（ㄅㄆㄇㄈ）と拼音、どちらを覚えればいい？</summary>
+        <div class="faq-a" data-i18n-html="faqA2"></div>
+      </details>
+      <details>
+        <summary data-i18n="faqQ3">登録や料金は必要？</summary>
+        <div class="faq-a" data-i18n-html="faqA3"></div>
+      </details>
+      <details>
+        <summary data-i18n="faqQ4">TOCFL って何？</summary>
+        <div class="faq-a" data-i18n-html="faqA4"></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="ft">
+  <div class="ft-inner">
+    <div>
+      <div class="ft-brand">© 2026 · StayTW Study</div>
+      <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
+    </div>
+    <div>
+      <a href="index.html" data-i18n="navTools">学習ツール</a>
+      <a href="tocfl.html" data-i18n="navGuide">TOCFLガイド</a>
+      <a href="#about" data-i18n="navAbout">サイトについて</a>
+    </div>
+  </div>
+</footer>
+
+<script src="i18n.js?v=5"></script>
+<script>
+function toggleTheme(){
+  const d = document.documentElement.dataset.theme === "dark";
+  document.documentElement.dataset.theme = d ? "" : "dark";
+  localStorage.setItem("stw-theme", d ? "light" : "dark");
+}
+(function(){
+  const saved = localStorage.getItem("stw-theme");
+  if (saved === "dark" || (!saved && matchMedia("(prefers-color-scheme: dark)").matches))
+    document.documentElement.dataset.theme = "dark";
+  const lang = twGetLang();
+  document.getElementById("langBtn").textContent = {ja:"日",en:"EN",ko:"한"}[lang];
+  document.documentElement.lang = lang;
+  twApplyI18n();
+  // scroll reveal
+  const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } }),{threshold:.12});
+  document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+})();
+</script>
+</body>
+</html>
