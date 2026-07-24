@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- StayTW favicon：台灣黑熊頭 -->
+  <circle cx="14" cy="12" r="9" fill="#3B3A3E"/>
+  <circle cx="50" cy="12" r="9" fill="#3B3A3E"/>
+  <circle cx="14" cy="12.6" r="4.5" fill="#5A575E"/>
+  <circle cx="50" cy="12.6" r="4.5" fill="#5A575E"/>
+  <circle cx="32" cy="34" r="26" fill="#3B3A3E"/>
+  <ellipse cx="32" cy="41" rx="11" ry="8.5" fill="#E9DCC8"/>
+  <ellipse cx="32" cy="38.4" rx="4" ry="3.1" fill="#2A292C"/>
+  <circle cx="20.5" cy="30" r="3.2" fill="#1D1C1F"/>
+  <circle cx="43.5" cy="30" r="3.2" fill="#1D1C1F"/>
+  <circle cx="21.7" cy="28.8" r="1.1" fill="#FFF"/>
+  <circle cx="44.7" cy="28.8" r="1.1" fill="#FFF"/>
+  <path d="M24 56 L32 63 L40 56" fill="none" stroke="#F7F3EA" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
