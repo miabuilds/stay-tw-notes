@@ -74,6 +74,8 @@ ja: {
   syncLogoutConfirm:"ログアウトしますか？（学習履歴はこの端末とクラウドの両方に残ります）",
   // 音声
   voiceLabel:"音声",
+  navMore:"その他",
+  navContact:"ご意見",
   // レベル名
   lv_l1:"入門", lv_l2:"基礎", lv_l3:"中級", lv_l4:"上級", lv_l5:"最上級",
   // カードヒント・操作
@@ -225,6 +227,8 @@ en: {
   syncLogin:"Sign in", syncLogout:"Sign out",
   syncLogoutConfirm:"Sign out? (Your progress stays on this device and in the cloud.)",
   voiceLabel:"Voice",
+  navMore:"More",
+  navContact:"Feedback",
   lv_l1:"Beginner", lv_l2:"Basic", lv_l3:"Intermediate", lv_l4:"Advanced", lv_l5:"Fluent",
   cardHintFront:"Tap the card = audio + answer", cardHintBack:"Rate how well you knew it — it goes into your review queue",
   kbdHint:"⌨️ Space: flip / ←→: prev·next / 1·2·3: rate",
@@ -332,6 +336,8 @@ ko: {
   syncLogin:"로그인", syncLogout:"로그아웃",
   syncLogoutConfirm:"로그아웃할까요? (학습 기록은 이 기기와 클라우드에 모두 남습니다.)",
   voiceLabel:"음성",
+  navMore:"더보기",
+  navContact:"의견 보내기",
   lv_l1:"입문", lv_l2:"기초", lv_l3:"중급", lv_l4:"고급", lv_l5:"최상급",
   cardHintFront:"카드를 탭 = 발음 + 정답", cardHintBack:"기억 정도를 3단계로 평가하면 복습에 등록됩니다",
   kbdHint:"⌨️ Space: 뒤집기 / ←→: 이동 / 1·2·3: 평가",
