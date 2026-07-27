@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StayTW 後台</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#FAF8F3;--bg2:#FFF;--tx:#1C1C1E;--tx2:#6A6A6A;--tx3:#A9A9A9;--ac:#B8362A;--bd:#E5DECF;--line:#DDD5C0;--ok:#2F7A5D;--serif:"Hiragino Mincho ProN","Songti TC",serif}
+[data-theme="dark"]{--bg:#121113;--bg2:#1B1A1C;--tx:#EDE8DE;--tx2:#8F8A7E;--tx3:#5D5A53;--ac:#E4715F;--bd:#2C2A27;--line:#2C2A27;--ok:#4C9B7A}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","PingFang TC",sans-serif;background:var(--bg);color:var(--tx);line-height:1.7;font-size:15px}
+.wrap{max-width:960px;margin:0 auto;padding:36px 24px 90px}
+h1{font-family:var(--serif);font-size:24px;margin-bottom:20px}
+h2{font-size:16px;font-weight:700;margin:32px 0 12px;color:var(--tx)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.card b{font-family:var(--serif);font-size:28px;display:block;line-height:1.2}
+.card span{font-size:12px;color:var(--tx3)}
+table{width:100%;border-collapse:collapse;background:var(--bg2);border-radius:12px;overflow:hidden;font-size:13.5px}
+th,td{border-bottom:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+th{background:rgba(0,0,0,.03);font-size:12px;color:var(--tx2)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+.login{max-width:420px;margin:80px auto;text-align:center}
+.login input{width:100%;border:1px solid var(--bd);background:var(--bg2);color:var(--tx);border-radius:10px;padding:12px 14px;font-size:15px;margin:14px 0}
+.btn{background:var(--tx);color:var(--bg);border:none;border-radius:999px;padding:11px 28px;font-size:14px;font-weight:600;cursor:pointer}
+.btn:hover{background:var(--ac);color:#fff}
+.tag{display:inline-block;font-size:11px;border-radius:6px;padding:0 7px;font-weight:700}
+.tag.bug{color:#fff;background:var(--ac)}.tag.content{color:#fff;background:#B07A1F}.tag.feature{color:#fff;background:var(--ok)}.tag.other{color:var(--tx2);background:rgba(0,0,0,.06)}
+.muted{color:var(--tx3);font-size:12px}
+a{color:#2F5D7A}
+.sandbox{opacity:.55}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="login" class="login">
+    <div style="font-size:44px">🐻‍❄️</div>
+    <h1>StayTW 後台</h1>
+    <p class="muted">輸入 Admin Token（只需一次，存在本機）</p>
+    <input id="tok" type="password" placeholder="Admin Token">
+    <button class="btn" onclick="saveTok()">進入</button>
+    <p class="muted" id="loginErr"></p>
+  </div>
+
+  <div id="dash" style="display:none">
+    <h1>StayTW 後台 <span class="muted" style="font-weight:400">iOS 收益（RevenueCat）＋使用者回饋</span></h1>
+    <div class="cards" id="cards"></div>
+    <h2>近 30 天收益（美金計）</h2>
+    <div class="tbl"><table id="daily"><thead><tr><th>日期</th><th>筆數</th><th>USD</th></tr></thead><tbody></tbody></table></div>
+    <h2>各商品累計</h2>
+    <div class="tbl"><table id="byproduct"><thead><tr><th>商品</th><th>筆數</th><th>USD</th></tr></thead><tbody></tbody></table></div>
+    <h2>最近交易事件 <span class="muted">（灰色＝沙盒測試）</span></h2>
+    <div class="tbl"><table id="events"><thead><tr><th>時間(UTC)</th><th>類型</th><th>商品</th><th>金額</th><th>幣別</th><th>國家</th></tr></thead><tbody></tbody></table></div>
+    <h2>使用者回饋</h2>
+    <div class="tbl"><table id="fb"><thead><tr><th>時間(UTC)</th><th>類型</th><th>內容</th><th>email</th></tr></thead><tbody></tbody></table></div>
+    <p class="muted" style="margin-top:20px">來源：RevenueCat webhook → Cloudflare D1。更完整的圖表看 <a href="https://app.revenuecat.com/projects/5b67fb57/overview" target="_blank">RevenueCat 儀表板</a>。金額為 RC 換算美金；日圓實收以 App Store Connect 為準。</p>
+    <button class="btn" style="margin-top:14px" onclick="localStorage.removeItem('stw_admin_tok');location.reload()">登出</button>
+  </div>
+</div>
+<script>
+const API="https://staytw-api.abc83327.workers.dev";
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function saveTok(){ localStorage.setItem("stw_admin_tok", document.getElementById("tok").value.trim()); load(); }
+async function api(path){
+  const r=await fetch(API+path,{headers:{Authorization:"Bearer "+localStorage.getItem("stw_admin_tok")}});
+  if(r.status===401) throw new Error("unauthorized");
+  return r.json();
+}
+async function load(){
+  const tok=localStorage.getItem("stw_admin_tok");
+  if(!tok) return;
+  try{
+    const [sum, events, fb]=await Promise.all([api("/api/admin/summary"),api("/api/admin/events"),api("/api/admin/feedback")]);
+    document.getElementById("login").style.display="none";
+    document.getElementById("dash").style.display="";
+    document.getElementById("cards").innerHTML=`
+      <div class="card"><b>$${sum.revenue.usd??0}</b><span>累計收益（USD・正式）</span></div>
+      <div class="card"><b>${sum.revenue.n??0}</b><span>累計交易筆數</span></div>
+      <div class="card"><b>${sum.feedbackCount??0}</b><span>使用者回饋</span></div>`;
+    document.querySelector("#daily tbody").innerHTML=(sum.last30||[]).map(r=>`<tr><td>${esc(r.d)}</td><td>${r.n}</td><td>$${r.usd??0}</td></tr>`).join("")||"<tr><td colspan=3 class=muted>還沒有正式交易</td></tr>";
+    document.querySelector("#byproduct tbody").innerHTML=(sum.byProduct||[]).map(r=>`<tr><td>${esc(r.product_id)}</td><td>${r.n}</td><td>$${r.usd??0}</td></tr>`).join("")||"<tr><td colspan=3 class=muted>還沒有正式交易</td></tr>";
+    document.querySelector("#events tbody").innerHTML=(events||[]).map(r=>`<tr class="${r.environment!=='PRODUCTION'?'sandbox':''}"><td>${esc(r.ts)}</td><td>${esc(r.event_type)}</td><td>${esc(r.product_id)}</td><td>${r.price_in_purchased_currency??r.price??""}</td><td>${esc(r.currency)}</td><td>${esc(r.country)}</td></tr>`).join("")||"<tr><td colspan=6 class=muted>還沒有事件（webhook 接上後會出現）</td></tr>";
+    document.querySelector("#fb tbody").innerHTML=(fb||[]).map(r=>`<tr><td>${esc(r.ts)}</td><td><span class="tag ${esc(r.type)}">${esc(r.type)}</span></td><td style="max-width:420px;white-space:pre-wrap">${esc(r.message)}</td><td>${esc(r.email)}</td></tr>`).join("")||"<tr><td colspan=4 class=muted>還沒有回饋</td></tr>";
+  }catch(e){
+    document.getElementById("loginErr").textContent = e.message==="unauthorized" ? "Token 不對" : "載入失敗："+e.message;
+    localStorage.removeItem("stw_admin_tok");
+  }
+}
+(function(){const s=localStorage.getItem("stw-theme");if(s==="dark"||(!s&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.dataset.theme="dark";})();
+document.getElementById("tok").addEventListener("keydown",e=>{if(e.key==="Enter")saveTok()});
+load();
+</script>
+</body>
+</html>
