@@ -1,15 +1,23 @@
 #!/usr/bin/env python3
-# StayTW Study — 事前生成 TTS（edge-tts / Microsoft neural voice, 無料・API キー不要）
-# 全単語・例文・フレーズ・文法例文を audio/tts/*.mp3 に生成し、audio/manifest.json を書く。
-# 冪等：既存ファイルはスキップ → 単語を増やしたら再実行するだけ。
-#   使い方: python3 scripts/tts-generate.py
-import asyncio, hashlib, json, os, re, subprocess, sys
+# StayTW Study — 事前生成 TTS（Azure Speech 公式 API・Free F0 で商用ライセンス的にクリーン）
+# 音声: zh-TW-HsiaoChenNeural（以前の edge-tts と同じ声）
+# 使い方:
+#   AZURE_SPEECH_KEY=xxxx AZURE_SPEECH_REGION=japaneast python3 scripts/tts-generate.py [--force]
+#   --force: 既存ファイルも全部作り直す（edge-tts 由来の音声を公式版に置き換える時に使用）
+# F0 のレート制限（約20リクエスト/分）に合わせて自動スロットリング＋429リトライ。
+import hashlib, json, os, subprocess, sys, time, urllib.request, urllib.error
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "audio", "tts")
 MANIFEST = os.path.join(ROOT, "audio", "manifest.json")
-VOICE = "zh-TW-HsiaoChenNeural"   # 台湾女性・自然。男性なら zh-TW-YunJheNeural
-CONCURRENCY = 8
+VOICE = "zh-TW-HsiaoChenNeural"
+KEY = os.environ.get("AZURE_SPEECH_KEY")
+REGION = os.environ.get("AZURE_SPEECH_REGION", "japaneast")
+FORCE = "--force" in sys.argv
+INTERVAL = 3.2  # 秒/リクエスト（F0: 20/min を安全側で）
+
+if not KEY:
+    sys.exit("AZURE_SPEECH_KEY を環境変数で渡してください")
 
 NODE = r"""
 const texts = new Set();
@@ -26,45 +34,62 @@ console.log(JSON.stringify([...texts]));
 def fname(text):
     return hashlib.md5(text.encode()).hexdigest()[:12] + ".mp3"
 
-async def gen(sem, communicate_cls, text, path, stats):
-    async with sem:
-        for attempt in range(3):
-            try:
-                await communicate_cls(text, VOICE).save(path)
-                stats["done"] += 1
-                if stats["done"] % 50 == 0:
-                    print(f'  {stats["done"]}/{stats["total"]} generated', flush=True)
-                return
-            except Exception as e:
-                if attempt == 2:
-                    stats["fail"].append(text)
-                    print(f"  FAIL: {text[:20]}… {e}", flush=True)
-                else:
-                    await asyncio.sleep(2 * (attempt + 1))
+def synth(text, path):
+    esc = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    ssml = f"<speak version='1.0' xml:lang='zh-TW'><voice name='{VOICE}'>{esc}</voice></speak>"
+    req = urllib.request.Request(
+        f"https://{REGION}.tts.speech.microsoft.com/cognitiveservices/v1",
+        data=ssml.encode("utf-8"),
+        headers={
+            "Ocp-Apim-Subscription-Key": KEY,
+            "Content-Type": "application/ssml+xml",
+            "X-Microsoft-OutputFormat": "audio-24khz-48kbitrate-mono-mp3",
+            "User-Agent": "staytw-tts",
+        })
+    for attempt in range(5):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                data = r.read()
+            if len(data) < 500:
+                raise RuntimeError("suspiciously small audio")
+            with open(path, "wb") as f:
+                f.write(data)
+            return True
+        except urllib.error.HTTPError as e:
+            if e.code == 429:           # レート制限 → 待って再試行
+                time.sleep(15 * (attempt + 1))
+                continue
+            if e.code in (500, 502, 503):
+                time.sleep(5 * (attempt + 1)); continue
+            print(f"  HTTP {e.code}: {text[:20]}", flush=True)
+            return False
+        except Exception as ex:
+            time.sleep(3 * (attempt + 1))
+    return False
 
-async def main():
-    import edge_tts
+def main():
     os.makedirs(OUT, exist_ok=True)
     texts = json.loads(subprocess.check_output(["node", "-e", NODE], cwd=ROOT))
-    manifest = {}
-    if os.path.exists(MANIFEST):
-        manifest = json.load(open(MANIFEST))
+    manifest = json.load(open(MANIFEST)) if os.path.exists(MANIFEST) else {}
     todo = []
     for t in texts:
-        f = fname(t)
-        manifest[t] = f
+        f = fname(t); manifest[t] = f
         p = os.path.join(OUT, f)
-        if not (os.path.exists(p) and os.path.getsize(p) > 1000):
+        if FORCE or not (os.path.exists(p) and os.path.getsize(p) > 1000):
             todo.append((t, p))
-    stats = {"done": 0, "total": len(todo), "fail": []}
-    print(f"texts: {len(texts)}, to generate: {len(todo)}")
-    sem = asyncio.Semaphore(CONCURRENCY)
-    await asyncio.gather(*[gen(sem, edge_tts.Communicate, t, p, stats) for t, p in todo])
-    # 失敗した分は manifest から外す（Web Speech にフォールバックさせる）
-    for t in stats["fail"]:
+    print(f"texts: {len(texts)}, to generate: {len(todo)} (force={FORCE})", flush=True)
+    done, fail = 0, []
+    for i, (t, p) in enumerate(todo):
+        ok = synth(t, p)
+        if ok: done += 1
+        else: fail.append(t)
+        if (i + 1) % 50 == 0:
+            print(f"  {i+1}/{len(todo)} done={done} fail={len(fail)}", flush=True)
+        time.sleep(INTERVAL)
+    for t in fail:
         manifest.pop(t, None)
     json.dump(manifest, open(MANIFEST, "w"), ensure_ascii=False, indent=0)
-    print(f"done: {stats['done']}, failed: {len(stats['fail'])}, manifest: {len(manifest)} entries")
+    print(f"done: {done}, failed: {len(fail)}, manifest: {len(manifest)}", flush=True)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

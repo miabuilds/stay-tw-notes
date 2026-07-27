@@ -1,0 +1,8 @@
+name = "staytw-api"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "staytw-db"
+database_id = "210c9251-2707-442f-9357-0a293e5b6d28"
