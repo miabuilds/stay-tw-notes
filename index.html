@@ -420,25 +420,25 @@ button{font-family:inherit}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="firebase-config.js?v=7"></script>
-<script src="i18n.js?v=7"></script>
-<script src="tts.js?v=7"></script>
-<script src="vocab-l1.js?v=7"></script>
-<script src="vocab-l2.js?v=7"></script>
-<script src="vocab-l3.js?v=7"></script>
-<script src="vocab-l4.js?v=7"></script>
-<script src="vocab-l5.js?v=7"></script>
-<script src="grammar-l1.js?v=7"></script>
-<script src="grammar-l2.js?v=7"></script>
-<script src="grammar-l3.js?v=7"></script>
-<script src="grammar-l4.js?v=7"></script>
-<script src="grammar-l5.js?v=7"></script>
-<script src="phrases-l1.js?v=7"></script>
-<script src="writing-data.js?v=7"></script>
-<script src="paywall.js?v=7"></script>
-<script src="srs.js?v=7"></script>
-<script src="mock-exam.js?v=7"></script>
-<script src="sync.js?v=7"></script>
+<script src="firebase-config.js?v=8"></script>
+<script src="i18n.js?v=8"></script>
+<script src="tts.js?v=8"></script>
+<script src="vocab-l1.js?v=8"></script>
+<script src="vocab-l2.js?v=8"></script>
+<script src="vocab-l3.js?v=8"></script>
+<script src="vocab-l4.js?v=8"></script>
+<script src="vocab-l5.js?v=8"></script>
+<script src="grammar-l1.js?v=8"></script>
+<script src="grammar-l2.js?v=8"></script>
+<script src="grammar-l3.js?v=8"></script>
+<script src="grammar-l4.js?v=8"></script>
+<script src="grammar-l5.js?v=8"></script>
+<script src="phrases-l1.js?v=8"></script>
+<script src="writing-data.js?v=8"></script>
+<script src="paywall.js?v=8"></script>
+<script src="srs.js?v=8"></script>
+<script src="mock-exam.js?v=8"></script>
+<script src="sync.js?v=8"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -764,6 +764,7 @@ const SPK = (() => {
     document.getElementById("spkBox").innerHTML = `
       <p style="font-size:14px;color:var(--tx2);line-height:1.9;text-align:left">${twT("spkIntro")}</p>
       ${SRCls ? "" : `<p style="font-size:12.5px;color:var(--ac);background:var(--ac-soft);border-radius:8px;padding:8px 12px">${twT("spkNoSupport")}</p>`}
+      ${SRCls && /Edg\//.test(navigator.userAgent) ? `<p style="font-size:12.5px;color:var(--ac);background:var(--ac-soft);border-radius:8px;padding:8px 12px">${twT("spkEdgeNote")}</p>` : ""}
       <div class="spk-src">
         <button class="pos-btn ${src==="vocab"?"on":""}" onclick="SPK.setSrc('vocab')">${twT("spkSourceVocab")}</button>
         <button class="pos-btn ${src==="phrase"?"on":""}" onclick="SPK.setSrc('phrase')">${twT("spkSourcePhrase")}</button>
@@ -836,7 +837,9 @@ const SPK = (() => {
       recording = false; mic.classList.remove("rec");
       clearTimeout(stopTimer);
       if (finalText) { st.textContent = twT("spkRecord"); showResult(finalText); return; }
-      if (gotError === "not-allowed" || gotError === "audio-capture" || gotError === "service-not-allowed")
+      if (gotError === "language-not-supported")
+        st.textContent = twT("spkErrLang");
+      else if (gotError === "not-allowed" || gotError === "audio-capture" || gotError === "service-not-allowed")
         st.textContent = twT("spkErrMic");
       else if (gotError === "network")
         st.textContent = twT("spkErrNet");
