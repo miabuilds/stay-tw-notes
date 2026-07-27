@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>台湾華語スタディ StayTW Study — 学習ツール｜単語・文法・フレーズ・クイズ・復習・模試</title>
 <meta name="description" content="台湾華語（繁体字中国語）の無料学習ツール。TOCFL Level 1〜5 の単語カード・文法・場面別フレーズ・クイズ・SRS復習・模擬試験。注音＋拼音つき、日本語・英語・韓国語対応。">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -65,7 +65,6 @@ button{font-family:inherit}
 .lv-btn.on small{color:rgba(255,255,255,.75)}
 .voice-sel{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--tx3)}
 .voice-sel select{border:1px solid var(--bd);background:var(--bg2);color:var(--tx2);border-radius:8px;padding:4px 8px;font-size:12px;max-width:200px;font-family:inherit}
-@media(max-width:640px){.voice-sel{margin-left:0;width:100%}}
 
 /* == Tool tabs == */
 .tools{display:flex;gap:0;border-bottom:1px solid var(--line);margin-bottom:28px;overflow-x:auto}
@@ -283,14 +282,41 @@ button{font-family:inherit}
 
 /* == Footer == */
 .ft{padding:40px 24px;color:var(--tx3);font-size:12px;border-top:1px solid var(--line);text-align:center;line-height:1.9}
+
+/* == モバイル下部ナビ == */
+.bnav{display:none;position:fixed;left:0;right:0;bottom:0;z-index:120;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+.bn-item{flex:1;background:none;border:none;color:var(--tx3);font-size:10.5px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;cursor:pointer;position:relative;font-family:inherit;-webkit-tap-highlight-color:transparent}
+.bn-item .bi{font-size:21px;line-height:1.2}
+.bn-item.on{color:var(--ac)}
+.bn-item .badge{position:absolute;top:-1px;left:calc(50% + 7px);background:var(--ac);color:#fff;font-size:9.5px;font-weight:700;border-radius:999px;padding:0 5px;min-width:16px;text-align:center}
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:180;opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:190;background:var(--bg);border-radius:20px 20px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .28s var(--ease);box-shadow:0 -8px 30px rgba(0,0,0,.18)}
+.more-open .sheet-bg{opacity:1;pointer-events:auto}
+.more-open .sheet{transform:none}
+.sheet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sheet-item{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:14px 6px;text-align:center;font-size:12px;font-weight:600;color:var(--tx);cursor:pointer;font-family:inherit;text-decoration:none;display:block;-webkit-tap-highlight-color:transparent}
+.sheet-item .bi{display:block;font-size:22px;margin-bottom:5px}
+
+@media(max-width:700px){
+  .tools{display:none}
+  .bnav{display:flex}
+  .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+  .toast{bottom:calc(78px + env(safe-area-inset-bottom))}
+  .levels{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-left:-16px;margin-right:-16px;padding:0 16px 4px}
+  .levels::-webkit-scrollbar{display:none}
+  .lv-btn{flex:0 0 auto}
+  .voice-sel{display:none}
+  .search{font-size:16px}          /* 16px 未満だと iOS がフォーカス時にズームする */
+  .pos-btn{padding:7px 15px;font-size:13px}
+  .fc-grade button{padding:12px 4px}
+}
 @media(max-width:600px){
   .hd-inner{padding:0 12px;gap:8px}
   .hd h1{font-size:13px}
   .hd h1 img{width:22px;height:25px}
   .hd-links{gap:8px}
   .hd-links a.hide-sp{display:none}
-  .wrap{padding:calc(var(--hh) + 18px) 16px 60px}
-  .tool-btn{padding:12px 12px;font-size:13.5px}
+  .wrap{padding-top:calc(var(--hh) + 18px);padding-left:16px;padding-right:16px}
 }
 </style>
 </head>
@@ -415,31 +441,51 @@ button{font-family:inherit}
 <!-- トースト -->
 <div class="toast" id="toast"></div>
 
+<!-- モバイル下部ナビ -->
+<nav class="bnav">
+  <button class="bn-item on" data-bn="fc"><span class="bi">🃏</span><span data-i18n="navVocab">単語</span></button>
+  <button class="bn-item" data-bn="quiz"><span class="bi">🎯</span><span data-i18n="toolQuiz">クイズ</span></button>
+  <button class="bn-item" data-bn="srs"><span class="bi">🔁</span><span data-i18n="toolSrs">復習</span><span class="badge" id="srsBadgeB" style="display:none"></span></button>
+  <button class="bn-item" data-bn="exam"><span class="bi">📝</span><span data-i18n="toolExam">模試</span></button>
+  <button class="bn-item" data-bn="more"><span class="bi">⋯</span><span data-i18n="navMore">その他</span></button>
+</nav>
+<div class="sheet-bg" onclick="toggleMore(false)"></div>
+<div class="sheet" id="moreSheet">
+  <div class="sheet-grid">
+    <button class="sheet-item" data-panel="list"><span class="bi">📚</span><span data-i18n="toolVocabList">単語リスト</span></button>
+    <button class="sheet-item" data-panel="grammar"><span class="bi">✏️</span><span data-i18n="toolGrammar">文法</span></button>
+    <button class="sheet-item" data-panel="phrases"><span class="bi">💬</span><span data-i18n="toolPhrases">フレーズ</span></button>
+    <button class="sheet-item" data-panel="speak"><span class="bi">🎤</span><span data-i18n="toolSpeak">スピーキング</span></button>
+    <button class="sheet-item" data-panel="write"><span class="bi">✍️</span><span data-i18n="toolWrite">ライティング</span></button>
+    <a class="sheet-item" href="contact.html"><span class="bi">📮</span><span data-i18n="navContact" style="display:block">ご意見</span></a>
+  </div>
+</div>
+
 <footer class="ft">
   <div style="font-family:var(--serif);font-size:13px;color:var(--tx2)">© 2026 StayTW Study</div>
   <div style="margin-top:6px"><a href="contact.html" style="color:var(--tx2)">ご意見・不具合報告</a></div>
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="firebase-config.js?v=10"></script>
-<script src="i18n.js?v=10"></script>
-<script src="tts.js?v=10"></script>
-<script src="vocab-l1.js?v=10"></script>
-<script src="vocab-l2.js?v=10"></script>
-<script src="vocab-l3.js?v=10"></script>
-<script src="vocab-l4.js?v=10"></script>
-<script src="vocab-l5.js?v=10"></script>
-<script src="grammar-l1.js?v=10"></script>
-<script src="grammar-l2.js?v=10"></script>
-<script src="grammar-l3.js?v=10"></script>
-<script src="grammar-l4.js?v=10"></script>
-<script src="grammar-l5.js?v=10"></script>
-<script src="phrases-l1.js?v=10"></script>
-<script src="writing-data.js?v=10"></script>
-<script src="paywall.js?v=10"></script>
-<script src="srs.js?v=10"></script>
-<script src="mock-exam.js?v=10"></script>
-<script src="sync.js?v=10"></script>
+<script src="firebase-config.js?v=11"></script>
+<script src="i18n.js?v=11"></script>
+<script src="tts.js?v=11"></script>
+<script src="vocab-l1.js?v=11"></script>
+<script src="vocab-l2.js?v=11"></script>
+<script src="vocab-l3.js?v=11"></script>
+<script src="vocab-l4.js?v=11"></script>
+<script src="vocab-l5.js?v=11"></script>
+<script src="grammar-l1.js?v=11"></script>
+<script src="grammar-l2.js?v=11"></script>
+<script src="grammar-l3.js?v=11"></script>
+<script src="grammar-l4.js?v=11"></script>
+<script src="grammar-l5.js?v=11"></script>
+<script src="phrases-l1.js?v=11"></script>
+<script src="writing-data.js?v=11"></script>
+<script src="paywall.js?v=11"></script>
+<script src="srs.js?v=11"></script>
+<script src="mock-exam.js?v=11"></script>
+<script src="sync.js?v=11"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -470,18 +516,26 @@ function setLevel(lv){
 }
 document.querySelectorAll(".lv-btn").forEach(b => b.onclick = () => setLevel(b.dataset.lv));
 
-/* ===== タブ ===== */
-document.querySelectorAll(".tool-btn").forEach(b=>{
-  b.onclick = () => {
-    document.querySelectorAll(".tool-btn").forEach(x=>x.classList.remove("on"));
-    document.querySelectorAll(".panel").forEach(x=>x.classList.remove("on"));
-    b.classList.add("on");
-    document.getElementById("panel-"+b.dataset.panel).classList.add("on");
-    if (b.dataset.panel === "srs") renderSrsHome();       // 最新の学習数を反映
-    if (b.dataset.panel === "exam" && !document.getElementById("exTimer")) renderExamHome();
-    if (b.dataset.panel === "speak") SPK.render();
-    if (b.dataset.panel === "write") WR.render();
-  };
+/* ===== タブ（上部タブ＋モバイル下部ナビの両方から呼ぶ） ===== */
+function switchPanel(p){
+  document.querySelectorAll(".tool-btn").forEach(x=>x.classList.toggle("on", x.dataset.panel===p));
+  document.querySelectorAll(".panel").forEach(x=>x.classList.remove("on"));
+  document.getElementById("panel-"+p).classList.add("on");
+  const bn = ["fc","quiz","srs","exam"].includes(p) ? p : "more";
+  document.querySelectorAll(".bn-item").forEach(x=>x.classList.toggle("on", x.dataset.bn===bn));
+  if (p === "srs") renderSrsHome();                       // 最新の学習数を反映
+  if (p === "exam" && !document.getElementById("exTimer")) renderExamHome();
+  if (p === "speak") SPK.render();
+  if (p === "write") WR.render();
+  window.scrollTo({top:0});
+}
+document.querySelectorAll(".tool-btn").forEach(b=>{ b.onclick = () => switchPanel(b.dataset.panel); });
+function toggleMore(show){ document.body.classList.toggle("more-open", show); }
+document.querySelectorAll(".bn-item").forEach(b=>{
+  b.onclick = () => { if (b.dataset.bn === "more") { toggleMore(true); return; } switchPanel(b.dataset.bn); };
+});
+document.querySelectorAll("#moreSheet button[data-panel]").forEach(b=>{
+  b.onclick = () => { toggleMore(false); switchPanel(b.dataset.panel); };
 });
 
 /* ===== 単語カード（枠内タップで発音＋めくり = 原サイトと同じ）===== */
@@ -956,9 +1010,11 @@ function renderSrsHome(){
 }
 function updateSrsBadges(){
   const c = SRS.getDueCount();
-  const b = document.getElementById("srsBadge");
-  b.style.display = c ? "" : "none";
-  b.textContent = c;
+  for (const id of ["srsBadge","srsBadgeB"]) {
+    const b = document.getElementById(id);
+    b.style.display = c ? "" : "none";
+    b.textContent = c;
+  }
   if (document.getElementById("panel-srs").classList.contains("on")) renderSrsHome();
 }
 
