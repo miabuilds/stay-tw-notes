@@ -420,25 +420,25 @@ button{font-family:inherit}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="firebase-config.js?v=8"></script>
-<script src="i18n.js?v=8"></script>
-<script src="tts.js?v=8"></script>
-<script src="vocab-l1.js?v=8"></script>
-<script src="vocab-l2.js?v=8"></script>
-<script src="vocab-l3.js?v=8"></script>
-<script src="vocab-l4.js?v=8"></script>
-<script src="vocab-l5.js?v=8"></script>
-<script src="grammar-l1.js?v=8"></script>
-<script src="grammar-l2.js?v=8"></script>
-<script src="grammar-l3.js?v=8"></script>
-<script src="grammar-l4.js?v=8"></script>
-<script src="grammar-l5.js?v=8"></script>
-<script src="phrases-l1.js?v=8"></script>
-<script src="writing-data.js?v=8"></script>
-<script src="paywall.js?v=8"></script>
-<script src="srs.js?v=8"></script>
-<script src="mock-exam.js?v=8"></script>
-<script src="sync.js?v=8"></script>
+<script src="firebase-config.js?v=9"></script>
+<script src="i18n.js?v=9"></script>
+<script src="tts.js?v=9"></script>
+<script src="vocab-l1.js?v=9"></script>
+<script src="vocab-l2.js?v=9"></script>
+<script src="vocab-l3.js?v=9"></script>
+<script src="vocab-l4.js?v=9"></script>
+<script src="vocab-l5.js?v=9"></script>
+<script src="grammar-l1.js?v=9"></script>
+<script src="grammar-l2.js?v=9"></script>
+<script src="grammar-l3.js?v=9"></script>
+<script src="grammar-l4.js?v=9"></script>
+<script src="grammar-l5.js?v=9"></script>
+<script src="phrases-l1.js?v=9"></script>
+<script src="writing-data.js?v=9"></script>
+<script src="paywall.js?v=9"></script>
+<script src="srs.js?v=9"></script>
+<script src="mock-exam.js?v=9"></script>
+<script src="sync.js?v=9"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -883,7 +883,7 @@ const WR = (() => {
       <div class="wr-task">📝 ${cur.task[ck] || cur.task.j}</div>
       <div style="font-size:12px;color:var(--tx3);letter-spacing:.08em;margin-bottom:6px">${twT("wrHints")} ${twT("wrHintTap")}</div>
       <div class="wr-hints">${cur.hints.map(h => `<span class="wr-hint" onclick="WR.hint(this.dataset.z)" data-z="${h.z}">${h.z}<small>${h.py}</small></span>`).join("")}</div>
-      <textarea class="wr-ta" id="wrTa" placeholder="${twT("wrPlaceholder")}" oninput="WR.onInput()">${d[cur.id] || ""}</textarea>
+      <textarea class="wr-ta" id="wrTa" maxlength="3000" placeholder="${twT("wrPlaceholder")}" oninput="WR.onInput()">${d[cur.id] || ""}</textarea>
       <div class="wr-meta">
         <span id="wrCount">${(d[cur.id] || "").length} ${twT("wrChars")}</span>
         <span>${twT("wrMin")}: ${cur.minLen}+</span>
@@ -905,8 +905,9 @@ const WR = (() => {
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => {
       const d = drafts();
-      d[cur.id] = ta.value;
-      localStorage.setItem("stw_writing", JSON.stringify(d));
+      d[cur.id] = ta.value.slice(0, 3000); // 念のため上限（localStorage 保護）
+      try { localStorage.setItem("stw_writing", JSON.stringify(d)); }
+      catch (e) { console.warn("draft save failed (storage full)", e); return; }
       const s = document.getElementById("wrSaved");
       if (s) { s.style.opacity = 1; setTimeout(() => s.style.opacity = 0, 1200); }
     }, 600);

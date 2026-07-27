@@ -11,7 +11,8 @@ const SRS = (() => {
   };
   function getData() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
   function save(d) {
-    localStorage.setItem(KEY, JSON.stringify(d));
+    try { localStorage.setItem(KEY, JSON.stringify(d)); }
+    catch (e) { console.warn("srs save failed (storage full)", e); return; }
     if (typeof window !== "undefined" && typeof window.onSRSChange === "function") window.onSRSChange();
   }
   function today() { return new Date().toISOString().split("T")[0]; }
