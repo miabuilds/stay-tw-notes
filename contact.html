@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ご意見・不具合報告 — StayTW Study</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#FAF8F3;--bg2:#FFF;--bg3:#F2EEE5;--tx:#1C1C1E;--tx2:#6A6A6A;--tx3:#A9A9A9;--ac:#B8362A;--ac-soft:rgba(184,54,42,.08);--bd:#E5DECF;--line:#DDD5C0;--ease:cubic-bezier(.25,.1,.25,1);--serif:"Hiragino Mincho ProN","Noto Serif JP",serif}
+[data-theme="dark"]{--bg:#121113;--bg2:#1B1A1C;--bg3:#1F1E20;--tx:#EDE8DE;--tx2:#8F8A7E;--tx3:#5D5A53;--ac:#E4715F;--ac-soft:rgba(228,113,95,.1);--bd:#2C2A27;--line:#2C2A27}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--tx);line-height:1.8;font-size:16px}
+.wrap{max-width:640px;margin:0 auto;padding:48px 24px 90px}
+h1{font-family:var(--serif);font-size:26px;margin:18px 0 6px}
+.lead{color:var(--tx2);font-size:14.5px;margin-bottom:28px}
+label{display:block;font-size:13px;font-weight:700;color:var(--tx2);margin:18px 0 6px}
+select,input,textarea{width:100%;border:1px solid var(--bd);background:var(--bg2);color:var(--tx);border-radius:10px;padding:11px 14px;font-size:15px;font-family:inherit}
+textarea{min-height:150px;resize:vertical}
+select:focus,input:focus,textarea:focus{outline:none;border-color:var(--ac)}
+.btn{margin-top:22px;background:var(--tx);color:var(--bg);border:none;border-radius:999px;padding:13px 32px;font-size:15px;font-weight:600;cursor:pointer}
+.btn:hover{background:var(--ac);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.done{background:var(--ac-soft);border-radius:12px;padding:16px;margin-top:20px;font-size:14.5px;display:none}
+.back{font-size:13px;color:var(--tx2);text-decoration:none}
+.hp{position:absolute;left:-9999px;opacity:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← 学習ツールへ戻る</a>
+  <h1>ご意見・不具合報告</h1>
+  <p class="lead">気づいたことがあれば、なんでも気軽に送ってください。内容の誤り報告は特にありがたいです。返信が必要な場合はメールアドレスを添えてください。</p>
+  <form id="f">
+    <label>種類</label>
+    <select name="type">
+      <option value="bug">不具合（動かない・表示がおかしい）</option>
+      <option value="content">内容の誤り（単語・訳・音声など）</option>
+      <option value="feature">機能の要望</option>
+      <option value="other" selected>その他・感想</option>
+    </select>
+    <label>内容 *</label>
+    <textarea name="message" required placeholder="例：Level 2 の「颱風」の例文の日本語訳が不自然です／模試の結果画面で…"></textarea>
+    <label>メールアドレス（任意・返信が必要な場合）</label>
+    <input name="email" type="email" placeholder="you@example.com">
+    <input class="hp" name="website" tabindex="-1" autocomplete="off">
+    <button class="btn" type="submit">送信する</button>
+    <div class="done" id="done">✅ 送信しました。ありがとうございます！</div>
+  </form>
+</div>
+<script>
+(function(){
+  const saved=localStorage.getItem("stw-theme");
+  if(saved==="dark"||(!saved&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.dataset.theme="dark";
+})();
+document.getElementById("f").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const f=e.target, btn=f.querySelector(".btn");
+  btn.disabled=true; btn.textContent="送信中…";
+  try{
+    const r=await fetch("https://staytw-api.abc83327.workers.dev/api/feedback",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({type:f.type.value,message:f.message.value,email:f.email.value,
+        website:f.website.value,lang:localStorage.getItem("stw-lang")||"ja"})});
+    if(!r.ok) throw new Error("send failed");
+    document.getElementById("done").style.display="block";
+    f.message.value=""; btn.textContent="送信する"; btn.disabled=false;
+  }catch(err){
+    btn.textContent="送信できませんでした — もう一度";
+    btn.disabled=false;
+  }
+});
+</script>
+</body>
+</html>
