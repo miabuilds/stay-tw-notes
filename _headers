@@ -1,0 +1,8 @@
+# Cloudflare Pages 快取策略
+# 音檔檔名 = 內容 hash → 可以放心永久快取（改內容檔名就變）
+/audio/tts/*
+  Cache-Control: public, max-age=31536000, immutable
+/audio/manifest.json
+  Cache-Control: public, max-age=3600
+/images/*
+  Cache-Control: public, max-age=86400
