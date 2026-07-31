@@ -271,11 +271,6 @@ button{font-family:inherit}
 
 /* == 付費牆 == */
 .pw-quota{display:inline-block;font-size:12.5px;color:var(--tx2);background:var(--bg3);border:1px solid var(--bd);border-radius:999px;padding:3px 12px;margin:8px 0}
-.pw-quota.trial{color:#B07A1F;background:rgba(176,122,31,.1);border-color:rgba(176,122,31,.35)}
-.pw-quota.locked{color:var(--ac);background:var(--ac-soft);border-color:color-mix(in srgb,var(--ac) 30%,var(--bd))}
-.lv-btn.lv-locked{opacity:.62}
-.lv-btn.lv-locked::after{content:"🔒";font-size:9px;margin-left:3px;vertical-align:top}
-.lv-btn.lv-locked.on{opacity:1}
 .pw-benefits{list-style:none;margin:14px 0;padding:0}
 .pw-benefits li{font-size:13.5px;color:var(--tx);padding:5px 0;line-height:1.6}
 .pw-plans{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 16px}
@@ -472,28 +467,25 @@ button{font-family:inherit}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="firebase-config.js?v=12"></script>
-<script src="i18n.js?v=12"></script>
-<script src="tts.js?v=12"></script>
-<script src="vocab-l1.js?v=12"></script>
-<script src="vocab-l2.js?v=12"></script>
-<script src="vocab-l3.js?v=12"></script>
-<script src="vocab-l4.js?v=12"></script>
-<script src="vocab-l5.js?v=12"></script>
-<script src="grammar-l1.js?v=12"></script>
-<script src="grammar-l2.js?v=12"></script>
-<script src="grammar-l3.js?v=12"></script>
-<script src="grammar-l4.js?v=12"></script>
-<script src="grammar-l5.js?v=12"></script>
-<script src="phrases-l1.js?v=12"></script>
-<script src="writing-data.js?v=12"></script>
-<script src="paywall.js?v=12"></script>
-<script src="auth.js?v=12"></script>
-<script src="srs.js?v=12"></script>
-<script src="mock-exam.js?v=12"></script>
-<script src="sync.js?v=12"></script>
+<script src="firebase-config.js?v=11"></script>
+<script src="i18n.js?v=11"></script>
+<script src="tts.js?v=11"></script>
+<script src="vocab-l1.js?v=11"></script>
+<script src="vocab-l2.js?v=11"></script>
+<script src="vocab-l3.js?v=11"></script>
+<script src="vocab-l4.js?v=11"></script>
+<script src="vocab-l5.js?v=11"></script>
+<script src="grammar-l1.js?v=11"></script>
+<script src="grammar-l2.js?v=11"></script>
+<script src="grammar-l3.js?v=11"></script>
+<script src="grammar-l4.js?v=11"></script>
+<script src="grammar-l5.js?v=11"></script>
+<script src="phrases-l1.js?v=11"></script>
+<script src="writing-data.js?v=11"></script>
+<script src="paywall.js?v=11"></script>
+<script src="srs.js?v=11"></script>
+<script src="mock-exam.js?v=11"></script>
+<script src="sync.js?v=11"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -515,7 +507,6 @@ function getGrammarData(lv){ return GRAMMAR_BY_LEVEL[lv] || []; }
 let currentLevel = localStorage.getItem("stw-level") || "l1";
 
 function setLevel(lv){
-  if (!Paywall.requireLevel(lv)) return;      // L2-5 はフル機能のみ（未解放なら Paywall）
   currentLevel = lv;
   localStorage.setItem("stw-level", lv);
   document.querySelectorAll(".lv-btn").forEach(b => b.classList.toggle("on", b.dataset.lv === lv));
@@ -523,30 +514,10 @@ function setLevel(lv){
   renderCard(); renderPosRow(); renderList(); renderGrammar(); renderSrsHome(); renderExamHome();
   qzReset(); SPK.reset();
 }
-// アクセス状態が変わったら（ログイン / 体験開始 / 課金）画面を再描画。
-// taste は L1 に固定、フル機能になったら保存レベルへ復帰（体験中に選んだ L3 を課金後に復元など）。
-function twRerenderAll(){
-  try {
-    const saved = localStorage.getItem("stw-level") || "l1";
-    const eff = Paywall.hasFull() ? saved : "l1";
-    if (eff !== currentLevel){
-      currentLevel = eff;
-      deck = [...getVocabData(eff)]; fcIdx = 0; posFilter = "all";
-      renderCard(); renderPosRow();
-    }
-    document.querySelectorAll(".lv-btn").forEach(b => {
-      b.classList.toggle("on", b.dataset.lv === currentLevel);
-      b.classList.toggle("lv-locked", b.dataset.lv !== "l1" && !Paywall.hasFull());
-    });
-    renderList(); renderGrammar(); renderSrsHome(); renderExamHome();
-    if (typeof qzReset === "function" && document.getElementById("panel-quiz")?.classList.contains("on")) qzReset();
-  } catch (e) {}
-}
 document.querySelectorAll(".lv-btn").forEach(b => b.onclick = () => setLevel(b.dataset.lv));
 
 /* ===== タブ（上部タブ＋モバイル下部ナビの両方から呼ぶ） ===== */
 function switchPanel(p){
-  if (p === "grammar" && !Paywall.hasFull()) { Paywall.show("grammar"); return; }  // 文法はフル機能のみ
   document.querySelectorAll(".tool-btn").forEach(x=>x.classList.toggle("on", x.dataset.panel===p));
   document.querySelectorAll(".panel").forEach(x=>x.classList.remove("on"));
   document.getElementById("panel-"+p).classList.add("on");
@@ -1084,12 +1055,7 @@ function onLangChange(){
   document.getElementById("langBtn").textContent = {ja:"日",en:"EN",ko:"한"}[lang];
   document.documentElement.lang = lang;
   twApplyI18n();
-  if (!Paywall.hasFull() && currentLevel !== "l1") currentLevel = "l1";   // taste は L1 に固定（保存値は残す）
-  deck = [...getVocabData(currentLevel)]; fcIdx = 0;
-  document.querySelectorAll(".lv-btn").forEach(b => {
-    b.classList.toggle("on", b.dataset.lv === currentLevel);
-    b.classList.toggle("lv-locked", b.dataset.lv !== "l1" && !Paywall.hasFull());
-  });
+  document.querySelectorAll(".lv-btn").forEach(b => b.classList.toggle("on", b.dataset.lv === currentLevel));
   renderCard(); renderPosRow(); renderList(); renderGrammar(); renderPhrases();
   renderSrsHome(); renderExamHome(); qzReset(); updateSrsBadges();
   renderLevelLabels();
