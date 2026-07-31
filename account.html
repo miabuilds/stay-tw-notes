@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>アカウント — StayTW Study</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#FAF8F3;--bg2:#FFF;--bg3:#F2EEE5;--tx:#1C1C1E;--tx2:#6A6A6A;--tx3:#A9A9A9;--ac:#B8362A;--ac-soft:rgba(184,54,42,.08);--bd:#E5DECF;--line:#DDD5C0;--ok:#2F7A5D;--serif:"Hiragino Mincho ProN","Noto Serif JP",serif}
+[data-theme="dark"]{--bg:#121113;--bg2:#1B1A1C;--bg3:#1F1E20;--tx:#EDE8DE;--tx2:#8F8A7E;--tx3:#5D5A53;--ac:#E4715F;--ac-soft:rgba(228,113,95,.1);--bd:#2C2A27;--line:#2C2A27;--ok:#4C9B7A}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--tx);line-height:1.7;font-size:15px}
+.hd{border-bottom:1px solid var(--line)}
+.hd-inner{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:12px 20px}
+.hd h1{font-family:var(--serif);font-size:15px;font-weight:700}
+.hd h1 a{color:inherit;text-decoration:none;display:flex;align-items:center;gap:7px}
+.hd h1 img{width:24px;height:28px}
+.hd-links{margin-left:auto;display:flex;gap:10px;align-items:center}
+.hd-links a{color:var(--tx2);font-size:13px;text-decoration:none}
+.lang-btn{background:var(--bg3);border:1px solid var(--bd);cursor:pointer;color:var(--tx2);padding:3px 10px;font-size:12px;font-weight:600;border-radius:8px}
+.wrap{max-width:520px;margin:0 auto;padding:40px 20px 80px}
+h2{font-family:var(--serif);font-size:24px;margin-bottom:20px}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:16px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:14px}
+.row .k{color:var(--tx2)}
+.row .v{font-weight:700}
+.badge{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 12px}
+.badge.premium{background:var(--ac);color:#fff}
+.badge.trial{background:rgba(176,122,31,.14);color:#B07A1F}
+.badge.free{background:var(--bg3);color:var(--tx2)}
+.btn{border:none;border-radius:10px;padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn.primary{background:var(--ac);color:#fff;width:100%}
+.btn.ghost{background:transparent;color:var(--tx2);border:1px solid var(--bd)}
+.btn.danger{background:transparent;color:var(--ac);border:1px solid color-mix(in srgb,var(--ac) 40%,var(--bd))}
+.ok-banner{background:rgba(47,122,93,.1);border:1px solid rgba(47,122,93,.35);color:var(--ok);border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:14px;font-weight:600;display:none}
+.muted{color:var(--tx3);font-size:12.5px;line-height:1.9;margin-top:14px}
+.center{text-align:center}
+.login-box{text-align:center;padding:30px 0}
+.login-box img{width:70px;height:auto}
+</style>
+</head>
+<body>
+<header class="hd"><div class="hd-inner">
+  <h1><a href="home.html"><img src="images/bear.svg" alt=""><span data-i18n="brand">台湾華語スタディ</span> <span style="color:var(--ac)">StayTW</span></a></h1>
+  <div class="hd-links">
+    <a href="index.html" data-i18n="navTools">学習ツール</a>
+    <button class="lang-btn" id="langBtn" onclick="twCycleLang()">日</button>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <div class="ok-banner" id="okBanner" data-i18n="acThanks">✓ ご購入ありがとうございます！反映まで少し時間がかかる場合があります。</div>
+  <h2 data-i18n="acTitle">アカウント</h2>
+
+  <!-- 未ログイン -->
+  <div id="loggedOut" class="card login-box" style="display:none">
+    <img src="images/bear.svg" alt="">
+    <p style="margin:14px 0 18px;color:var(--tx2)" data-i18n="acLoginLead">ログインすると学習状況とプランが表示されます。</p>
+    <button class="btn primary" onclick="STW_AUTH.login()" data-i18n="acLoginBtn">Google でログイン</button>
+  </div>
+
+  <!-- 未設定 -->
+  <div id="notReady" class="card center" style="display:none">
+    <p style="color:var(--tx2)" data-i18n="acSetup">ログイン機能は準備中です。</p>
+  </div>
+
+  <!-- ログイン済み -->
+  <div id="loggedIn" style="display:none">
+    <div class="card">
+      <div class="row"><span class="k" data-i18n="acEmail">メール</span><span class="v" id="acEmail"></span></div>
+      <div class="row"><span class="k" data-i18n="acStatus">状態</span><span class="v" id="acStatus"></span></div>
+      <div class="row" id="rowExpire" style="display:none"><span class="k" id="acExpireK" data-i18n="acExpire">次回更新 / 期限</span><span class="v" id="acExpire"></span></div>
+    </div>
+
+    <div id="ctaUpgrade" style="display:none">
+      <a class="btn primary" href="pricing.html" style="display:block;text-align:center;text-decoration:none" data-i18n="acSeePlans">プランを見る</a>
+    </div>
+    <div id="ctaCancel" style="display:none;margin-top:6px">
+      <button class="btn danger" style="width:100%" onclick="cancelSub()" data-i18n="acCancel">自動更新を停止する</button>
+      <p class="muted center" data-i18n="acCancelNote">停止しても期限までは引き続きご利用いただけます。</p>
+    </div>
+
+    <div class="center" style="margin-top:24px">
+      <button class="btn ghost" onclick="STW_AUTH.logout().then(()=>location.reload())" data-i18n="acLogout">ログアウト</button>
+    </div>
+  </div>
+
+  <p class="muted center"><a href="index.html" style="color:var(--tx2)" data-i18n="navTools">学習ツール</a> ・ <a href="pricing.html" style="color:var(--tx2)" data-i18n="prTitle">プラン</a></p>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="firebase-config.js?v=12"></script>
+<script src="i18n.js?v=12"></script>
+<script src="paywall.js?v=12"></script>
+<script src="auth.js?v=12"></script>
+<script>
+(function(){const s=localStorage.getItem("stw-theme");if(s==="dark"||(!s&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.dataset.theme="dark";})();
+if (new URLSearchParams(location.search).get("from") === "ecpay") {
+  document.getElementById("okBanner").style.display = "block";
+}
+function fmtDate(ms){ if(!ms) return "—"; const d=new Date(Number(ms)); return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}`; }
+
+function render(){
+  const a = window.STW_AUTH;
+  const show = id => document.getElementById(id).style.display = "";
+  const hide = id => document.getElementById(id).style.display = "none";
+  hide("loggedOut"); hide("loggedIn"); hide("notReady");
+
+  if (!a || !a.configured){ show("notReady"); return; }
+  if (!a.user){ show("loggedOut"); return; }
+  show("loggedIn");
+  document.getElementById("acEmail").textContent = a.user.email || "—";
+  const ent = a.entitlement || {};
+  const st = document.getElementById("acStatus");
+  const rowExp = document.getElementById("rowExpire");
+  hide("ctaUpgrade"); hide("ctaCancel");
+
+  if (ent.access === "premium"){
+    const planName = { monthly:twT("pwMonthly"), yearly:twT("pwYearly"), lifetime:twT("pwLifetime") }[ent.plan] || "Premium";
+    st.innerHTML = `<span class="badge premium">${planName}</span>`;
+    if (ent.plan !== "lifetime"){
+      rowExp.style.display = "flex";
+      document.getElementById("acExpireK").textContent = ent.willRenew ? twT("acNextBilling") : twT("acExpire");
+      document.getElementById("acExpire").textContent = fmtDate(ent.expiresAt);
+      if (ent.willRenew) show("ctaCancel");
+    }
+  } else if (ent.access === "trial"){
+    const n = Math.max(0, Math.ceil((ent.trialEndsAt - Date.now())/864e5));
+    st.innerHTML = `<span class="badge trial">${twT("acTrialBadge").replace("{n}", n)}</span>`;
+    show("ctaUpgrade");
+  } else {
+    st.innerHTML = `<span class="badge free" data-i18n="acFree">無料</span>`;
+    show("ctaUpgrade");
+  }
+  twApplyI18n(document.getElementById("loggedIn"));
+}
+if (window.STW_AUTH) STW_AUTH.onReady(render);
+
+async function cancelSub(){
+  if (!confirm(twT("acCancelConfirm"))) return;
+  try{
+    const token = await STW_AUTH.getIdToken();
+    const r = await fetch(STW_API + "/api/cancel-subscription", { method:"POST", headers:{ Authorization:"Bearer "+token }});
+    const d = await r.json();
+    if (!r.ok){ alert(d.error || "error"); return; }
+    await STW_AUTH.refreshEntitlement(); render();
+    alert(twT("acCancelDone"));
+  }catch(e){ alert("error"); }
+}
+// 綠界から戻った直後は反映待ちのことがあるので少し遅らせて再取得
+if (new URLSearchParams(location.search).get("from") === "ecpay" && window.STW_AUTH){
+  STW_AUTH.onReady(()=>{ setTimeout(async ()=>{ await STW_AUTH.refreshEntitlement(); render(); }, 2500); });
+}
+</script>
+</body>
+</html>
