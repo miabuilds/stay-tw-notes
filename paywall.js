@@ -54,7 +54,7 @@ const Paywall = (() => {
   // ツールのホーム画面に出す残り枠バッジ
   function quotaBadge(feature) {
     if (isPremium()) return "";
-    return `<div class="pw-quota">🎟 ${twT("pwQuotaLeft")}: <b>${left(feature)} / ${LIMITS[feature]}</b></div>`;
+    return `<div class="pw-quota">${twT("pwQuotaLeft")}: <b>${left(feature)} / ${LIMITS[feature]}</b></div>`;
   }
 
   const isNative = () => typeof window !== "undefined" && !!window.ReactNativeWebView;
@@ -82,7 +82,7 @@ const Paywall = (() => {
         <div class="pw-plan"><b>${PRICES.lifetime}</b><span>${twT("pwLifetime")}</span></div>
       </div>
       ${isNative()
-        ? `<button class="btn primary" style="width:100%;padding:13px" onclick="Paywall.openNative()">🔓 ${twT("pwCtaNative")}</button>`
+        ? `<button class="btn primary" style="width:100%;padding:13px" onclick="Paywall.openNative()">${twT("pwCtaNative")}</button>`
         : `<div style="text-align:center">
              <button class="btn primary" style="width:100%;padding:13px" onclick="Paywall.openStore()"> ${twT("pwCtaIos")}</button>
              <p style="font-size:12px;color:var(--tx3);margin-top:8px">${twT("pwWebNote")}</p>
