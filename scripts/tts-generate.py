@@ -32,10 +32,23 @@ console.log(JSON.stringify([...texts]));
 """
 
 def fname(text):
-    return hashlib.md5(text.encode()).hexdigest()[:12] + ".mp3"
+    # 読み上げ用サニタイズで変化する語は別ハッシュ（immutable キャッシュを破棄。他は従来通り）
+    key = text if spoken(text) == text else text + "\x00v2"
+    return hashlib.md5(key.encode()).hexdigest()[:12] + ".mp3"
+
+import re
+def spoken(text):
+    # tts.js の sanitize と同じ：読み上げ用に区切り記号・括弧・絵文字を除去
+    t = re.sub(r"<[^>]+>", "", text)
+    t = re.sub(r"[／/｜|—―–…⋯~〜]+", "、", t)               # 区切り → ポーズ（「斜線」等と読ませない）
+    t = re.sub(r"[（）()「」『』【】《》〈〉“”‘’\"']", "", t)
+    t = re.sub(r"[＿_]{2,}", "、", t)
+    t = re.sub(r"[🔊💡✓★☆♪]", "", t)
+    t = re.sub(r"、{2,}", "、", t).strip("、")
+    return t or text
 
 def synth(text, path):
-    esc = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    esc = spoken(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
     ssml = f"<speak version='1.0' xml:lang='zh-TW'><voice name='{VOICE}'>{esc}</voice></speak>"
     req = urllib.request.Request(
         f"https://{REGION}.tts.speech.microsoft.com/cognitiveservices/v1",
