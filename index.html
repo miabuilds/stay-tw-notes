@@ -323,6 +323,12 @@ button{font-family:inherit}
 .sheet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .sheet-item{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:14px 6px;text-align:center;font-size:12px;font-weight:600;color:var(--tx);cursor:pointer;font-family:inherit;text-decoration:none;display:block;-webkit-tap-highlight-color:transparent}
 .sheet-item .bi{display:block;font-size:22px;margin-bottom:5px}
+.bn-item .bi svg,.sheet-item .bi svg{stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;display:block;margin:0 auto}
+.bn-item .bi{height:24px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.bn-item .bi svg{width:23px;height:23px}
+.sheet-item .bi svg{width:24px;height:24px}
+/* インライン線アイコン（発音ボタン等、絵文字の代わり） */
+.ic{width:1.05em;height:1.05em;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.15em;display:inline-block;flex:none}
 
 @media(max-width:700px){
   .tools{display:none}
@@ -420,7 +426,7 @@ button{font-family:inherit}
     </div>
     <div class="fc-ctrl">
       <button class="btn" onclick="fcMove(-1)" data-i18n="btnPrev">← 前へ</button>
-      <button class="tts-btn" onclick="event.stopPropagation();speakZh(deck[fcIdx].w)" title="発音">🔊</button>
+      <button class="tts-btn" onclick="event.stopPropagation();speakZh(deck[fcIdx].w)" title="発音"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>
       <button class="btn primary" onclick="fcMove(1)" data-i18n="btnNext">次へ →</button>
       <button class="btn" onclick="fcShuffle()" data-i18n="btnShuffle">シャッフル</button>
     </div>
@@ -508,26 +514,26 @@ button{font-family:inherit}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="firebase-config.js?v=15"></script>
-<script src="i18n.js?v=15"></script>
-<script src="tts.js?v=15"></script>
-<script src="vocab-l1.js?v=15"></script>
-<script src="vocab-l2.js?v=15"></script>
-<script src="vocab-l3.js?v=15"></script>
-<script src="vocab-l4.js?v=15"></script>
-<script src="vocab-l5.js?v=15"></script>
-<script src="grammar-l1.js?v=15"></script>
-<script src="grammar-l2.js?v=15"></script>
-<script src="grammar-l3.js?v=15"></script>
-<script src="grammar-l4.js?v=15"></script>
-<script src="grammar-l5.js?v=15"></script>
-<script src="phrases-l1.js?v=15"></script>
-<script src="zhuyin.js?v=15"></script>
-<script src="writing-data.js?v=15"></script>
-<script src="paywall.js?v=15"></script>
-<script src="srs.js?v=15"></script>
-<script src="mock-exam.js?v=15"></script>
-<script src="sync.js?v=15"></script>
+<script src="firebase-config.js?v=16"></script>
+<script src="i18n.js?v=16"></script>
+<script src="tts.js?v=16"></script>
+<script src="vocab-l1.js?v=16"></script>
+<script src="vocab-l2.js?v=16"></script>
+<script src="vocab-l3.js?v=16"></script>
+<script src="vocab-l4.js?v=16"></script>
+<script src="vocab-l5.js?v=16"></script>
+<script src="grammar-l1.js?v=16"></script>
+<script src="grammar-l2.js?v=16"></script>
+<script src="grammar-l3.js?v=16"></script>
+<script src="grammar-l4.js?v=16"></script>
+<script src="grammar-l5.js?v=16"></script>
+<script src="phrases-l1.js?v=16"></script>
+<script src="zhuyin.js?v=16"></script>
+<script src="writing-data.js?v=16"></script>
+<script src="paywall.js?v=16"></script>
+<script src="srs.js?v=16"></script>
+<script src="mock-exam.js?v=16"></script>
+<script src="sync.js?v=16"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -592,7 +598,7 @@ function renderCard(){
   document.getElementById("fcPos").textContent = w.c;
   document.getElementById("fcMean").textContent = w.m[mk] || w.m.j;
   document.getElementById("fcEx").innerHTML =
-    `<span>${w.ex.z} 🔊</span><span class="py">${w.ex.py}</span><span class="tr">${w.ex[mk] || w.ex.j}</span>`;
+    `<span>${w.ex.z} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></span><span class="py">${w.ex.py}</span><span class="tr">${w.ex[mk] || w.ex.j}</span>`;
   document.getElementById("fcEx").onclick = e => { e.stopPropagation(); speakZh(w.ex.z); };
   document.getElementById("fcProg").textContent = `${fcIdx+1} / ${deck.length}`;
 }
@@ -685,7 +691,7 @@ function renderList(){
         <span class="vcard-pos">${v.c}</span>
       </div>
       <div class="vcard-m">${v.m[mk] || v.m.j}</div>
-      <div class="vcard-ex" data-ex="1"><b>${v.ex.z}</b> 🔊<br>${v.ex.py}<br>${v.ex[mk] || v.ex.j}</div>
+      <div class="vcard-ex" data-ex="1"><b>${v.ex.z}</b> <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg><br>${v.ex.py}<br>${v.ex[mk] || v.ex.j}</div>
     </div>`).join("");
   // 枠内タップで発音（例文部分は例文を読む）
   document.querySelectorAll("#vList .vcard").forEach(card=>{
@@ -704,7 +710,7 @@ function renderGrammar(){
         <div class="g-pattern">${typeof g.p === "object" ? (g.p[mk] || g.p.j) : g.p}</div>
         <div class="g-ex">${g.ex[mk] || g.ex.j}</div>
         <div class="g-eg">${g.eg.map(e=>`
-          <span class="zh" onclick="speakZh(this.dataset.z)" data-z="${e.z.replace(/<[^>]+>/g,"")}">${e.z} 🔊</span>
+          <span class="zh" onclick="speakZh(this.dataset.z)" data-z="${e.z.replace(/<[^>]+>/g,"")}">${e.z} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></span>
           <span class="py">${e.py}</span><span class="tr">${e[mk] || e.j}</span>`).join("")}
         </div>
       </div>
@@ -730,7 +736,7 @@ function renderPhrases(){
           <div class="ph-m">${it.m[mk] || it.m.j}</div>
           ${it.note ? `<div class="ph-note">💡 ${it.note[ck] || it.note.j}</div>` : ""}
         </div>
-        <button class="tts-btn" onclick="event.stopPropagation();speakZh('${it.z}')">🔊</button>
+        <button class="tts-btn" onclick="event.stopPropagation();speakZh('${it.z}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>
       </div>`).join("")}`).join("");
 }
 
@@ -762,7 +768,7 @@ function qzNext(){
     document.getElementById("qzBox").innerHTML = `
       <div style="font-size:13px;color:var(--tx3)">${qzIdx+1} / ${qzOrder.length}　${twT("quizScore")}: ${qzScore}</div>
       <div style="font-size:24px;font-weight:700;margin:22px 0 4px">${w.m[mk] || w.m.j}</div>
-      <div style="margin-bottom:18px"><button class="tts-btn" onclick="speakZh('${w.w}')">🔊</button></div>
+      <div style="margin-bottom:18px"><button class="tts-btn" onclick="speakZh('${w.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
       <input class="search" id="qzInput" style="max-width:320px;text-align:center;font-size:18px" placeholder="${twT("qzTypePh")}" autocomplete="off">
       <div style="margin-top:14px"><button class="btn primary" onclick="qzTypeAnswer()">${twT("qzSubmit")}</button></div>
       <div id="qzTypeResult" style="margin-top:16px;min-height:52px"></div>`;
@@ -777,7 +783,7 @@ function qzNext(){
   document.getElementById("qzBox").innerHTML = `
     <div style="font-size:13px;color:var(--tx3)">${qzIdx+1} / ${qzOrder.length}　${twT("quizScore")}: ${qzScore}</div>
     <div class="qz-word" onclick="speakZh('${w.w}')">${w.w}</div>
-    <div class="qz-py">${w.zy}　${w.py}　<button class="tts-btn" style="width:30px;height:30px;font-size:13px" onclick="speakZh('${w.w}')">🔊</button></div>
+    <div class="qz-py">${w.zy}　${w.py}　<button class="tts-btn" style="width:30px;height:30px;font-size:13px" onclick="speakZh('${w.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
     <div class="qz-opts">${opts.map(o=>
       `<button class="qz-opt" data-ok="${o.w===w.w}" onclick="qzAnswer(this)">${o.m[mk] || o.m.j}</button>`).join("")}
     </div>`;
@@ -868,7 +874,7 @@ const SPK = (() => {
         <button class="pos-btn ${src==="phrase"?"on":""}" onclick="SPK.setSrc('phrase')">${twT("spkSourcePhrase")}</button>
       </div>
       <div class="spk-card">
-        <div class="spk-z" onclick="speakZh(this.dataset.z)" data-z="${it.z}">${it.z} 🔊</div>
+        <div class="spk-z" onclick="speakZh(this.dataset.z)" data-z="${it.z}">${it.z} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></div>
         <div class="spk-py">${it.py}</div>
         <div class="spk-tr">${it.tr}</div>
         ${SRCls ? `<button class="spk-mic" id="spkMic" onclick="SPK.toggle()">🎤</button>
@@ -876,7 +882,7 @@ const SPK = (() => {
         <div id="spkResult"></div>
       </div>
       <div style="display:flex;gap:10px;justify-content:center;margin-top:18px">
-        <button class="btn" onclick="speakZh('${it.z}')">🔊 ${twT("spkListen")}</button>
+        <button class="btn" onclick="speakZh('${it.z}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg> ${twT("spkListen")}</button>
         <button class="btn primary" onclick="SPK.next()">${twT("spkNext")}</button>
       </div>
       <div style="font-size:13px;color:var(--tx3);margin-top:10px">${idx+1} / ${items.length}</div>`;
@@ -1146,7 +1152,7 @@ const ZY = (() => {
     body().innerHTML = `<div class="zy-test">
       <p class="zy-hint">${twT("zyTypeHint")}</p>
       <div class="zy-prompt">${z.z}</div>
-      <button class="zy-play-btn" onclick="ZY.play(null,'${z.rep}')">🔊 ${twT("btnPlay")}</button>
+      <button class="zy-play-btn" onclick="ZY.play(null,'${z.rep}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg> ${twT("btnPlay")}</button>
       <div><input class="zy-input" id="zyIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${twT("zyTypePh")}"></div>
       <div class="zy-fb" id="zyFb"></div>
       <div style="margin-top:10px"><button class="btn primary" id="zyGo" onclick="ZY.submitType()">${twT("qzSubmit")}</button></div>
@@ -1174,7 +1180,7 @@ const ZY = (() => {
     const opts = [z, ...ZHUYIN.filter(x => x.z !== z.z).sort(() => Math.random()-.5).slice(0,3)].sort(() => Math.random()-.5);
     body().innerHTML = `<div class="zy-test">
       <p class="zy-hint">${twT("zyListenHint")}</p>
-      <button class="zy-play-btn" onclick="ZY.play(null,'${z.rep}')">🔊 ${twT("btnPlay")}</button>
+      <button class="zy-play-btn" onclick="ZY.play(null,'${z.rep}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg> ${twT("btnPlay")}</button>
       <div class="zy-opts">${opts.map(o => `<button class="zy-opt" data-z="${o.z}" onclick="ZY.pick(this,'${o.z}','${z.z}')">${o.z}</button>`).join("")}</div>
       <div class="zy-fb" id="zyFb"></div>
       ${progress()}</div>`;
@@ -1201,7 +1207,7 @@ const ZY = (() => {
   }
   function result(){
     body().innerHTML = `<div class="zy-test">
-      <div style="font-size:52px">${correct >= 12 ? "🎉" : correct >= 8 ? "👍" : "💪"}</div>
+      <div style="font-family:var(--serif);font-size:34px;color:var(--ac);font-weight:700">${correct >= 12 ? twT("zyResGreat") : correct >= 8 ? twT("zyResGood") : twT("zyResTry")}</div>
       <h3 style="font-family:var(--serif);font-size:24px;margin:10px 0">${correct} / ${TOTAL}</h3>
       <div style="margin-top:18px"><button class="btn primary" onclick="ZY.again()">${twT("quizRetry")}</button></div></div>`;
   }
@@ -1212,12 +1218,38 @@ const ZY = (() => {
   return { render, play, submitType, pick, again };
 })();
 
+/* ===== アイコン（絵文字をやめてミニマルな線アイコンに統一） ===== */
+const ICONS = {
+  fc:`<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/></svg>`,
+  list:`<svg viewBox="0 0 24 24"><path d="M8.5 7h11M8.5 12h11M8.5 17h11"/><circle cx="4.7" cy="7" r=".7"/><circle cx="4.7" cy="12" r=".7"/><circle cx="4.7" cy="17" r=".7"/></svg>`,
+  grammar:`<svg viewBox="0 0 24 24"><path d="M5 4.5h11a2 2 0 0 1 2 2V20a1.6 1.6 0 0 0-1.6-1.6H5z"/><path d="M5 4.5A1.5 1.5 0 0 0 3.5 6v13.4A1.6 1.6 0 0 1 5 18.4"/></svg>`,
+  phrases:`<svg viewBox="0 0 24 24"><path d="M4.5 5.5a1 1 0 0 1 1-1h13a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9.5l-4 3.5z"/></svg>`,
+  quiz:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.3"/><path d="M8.4 12.2l2.5 2.4 4.6-5"/></svg>`,
+  speak:`<svg viewBox="0 0 24 24"><rect x="9" y="3.2" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17.2V20.5M8.7 20.5h6.6"/></svg>`,
+  write:`<svg viewBox="0 0 24 24"><path d="M4 20l1-4L16.5 4.5a2 2 0 0 1 3 3L8 19z"/><path d="M14.5 6.5l3 3"/></svg>`,
+  srs:`<svg viewBox="0 0 24 24"><path d="M4.5 10a7.5 7.5 0 0 1 12.6-3.4L20 9M19.5 14a7.5 7.5 0 0 1-12.6 3.4L4 15"/><path d="M20 4.5V9h-4.5M4 19.5V15h4.5"/></svg>`,
+  exam:`<svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2.2"/><path d="M9.2 4a1 1 0 0 1 1-1h3.6a1 1 0 0 1 1 1v1.2h-5.6z"/><path d="M8.6 11h6.8M8.6 15h4.4"/></svg>`,
+  more:`<svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><circle cx="6" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></svg>`,
+  contact:`<svg viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M4 8l8 5 8-5"/></svg>`,
+};
+function applyIcons(){
+  document.querySelectorAll(".tool-btn .ti").forEach(el => el.remove());   // デスクトップのタブは文字だけ（すっきり）
+  document.querySelectorAll(".bn-item").forEach(b => { const bi = b.querySelector(".bi"); if (bi) bi.innerHTML = ICONS[b.dataset.bn] || ""; });
+  document.querySelectorAll(".sheet-item").forEach(b => {
+    const bi = b.querySelector(".bi"); if (!bi) return;
+    const k = b.dataset.panel || "contact";
+    if (k === "zhuyin") { bi.textContent = "ㄅ"; bi.style.fontFamily = "var(--serif)"; bi.style.fontWeight = "700"; }
+    else bi.innerHTML = ICONS[k] || "";
+  });
+}
+
 /* ===== 初期化 ===== */
 (function init(){
   const lang = twGetLang();
   document.getElementById("langBtn").textContent = {ja:"日",en:"EN",ko:"한"}[lang];
   document.documentElement.lang = lang;
   twApplyI18n();
+  applyIcons();
   document.querySelectorAll(".lv-btn").forEach(b => b.classList.toggle("on", b.dataset.lv === currentLevel));
   renderCard(); renderPosRow(); renderList(); renderGrammar(); renderPhrases();
   renderSrsHome(); renderExamHome(); qzReset(); updateSrsBadges();
