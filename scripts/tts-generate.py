@@ -28,6 +28,7 @@ const texts = new Set();
   G.forEach(g => g.eg.forEach(e => texts.add(e.z.replace(/<[^>]+>/g, ""))));
 });
 require("./phrases-l1.js").PHRASES_L1.forEach(s => s.items.forEach(i => texts.add(i.z)));
+require("./zhuyin.js").ZHUYIN.forEach(s => texts.add(s.rep));   // 注音の呼読音（代表字）
 console.log(JSON.stringify([...texts]));
 """
 
