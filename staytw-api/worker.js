@@ -10,12 +10,71 @@ function cors(req) {
   const ok = ALLOW_ORIGINS.some(a => o.startsWith(a));
   return {
     "Access-Control-Allow-Origin": ok ? o : ALLOW_ORIGINS[0],
-    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+    "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type,Authorization",
   };
 }
 const json = (data, status, extra) =>
   new Response(JSON.stringify(data), { status: status || 200, headers: { "Content-Type": "application/json", ...extra } });
+
+// ───────────────────── 認証ヘルパー ─────────────────────
+const nowMs = () => Date.now();
+const nowSec = () => Math.floor(Date.now() / 1000);
+const TE = new TextEncoder();
+
+function b64urlToBytes(s) {
+  s = String(s).replace(/-/g, "+").replace(/_/g, "/");
+  const pad = s.length % 4 ? "=".repeat(4 - (s.length % 4)) : "";
+  const bin = atob(s + pad);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  return arr;
+}
+function bytesToB64url(bytes) {
+  let bin = "";
+  for (const b of bytes) bin += String.fromCharCode(b);
+  return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+const decodeJwtPart = (p) => JSON.parse(new TextDecoder().decode(b64urlToBytes(p)));
+
+// Apple / Google の ID トークン（RS256 OIDC JWT）を検証：kid で JWKS を引き、署名＋iss/aud/exp を確認
+async function verifyOidcJwt(token, jwksUrl, issuers, audience) {
+  const parts = String(token || "").split(".");
+  if (parts.length !== 3) return null;
+  let header, payload;
+  try { header = decodeJwtPart(parts[0]); payload = decodeJwtPart(parts[1]); } catch { return null; }
+  if (header.alg !== "RS256") return null;
+  if (!issuers.includes(payload.iss)) return null;
+  if (payload.aud !== audience) return null;
+  if (!payload.exp || payload.exp < nowSec() - 60) return null;
+  let jwks;
+  try { jwks = await (await fetch(jwksUrl, { cf: { cacheTtl: 3600 } })).json(); } catch { return null; }
+  const jwk = (jwks.keys || []).find(k => k.kid === header.kid);
+  if (!jwk) return null;
+  const key = await crypto.subtle.importKey("jwk", jwk, { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" }, false, ["verify"]);
+  const ok = await crypto.subtle.verify("RSASSA-PKCS1-v1_5", key, b64urlToBytes(parts[2]), TE.encode(parts[0] + "." + parts[1]));
+  return ok ? payload : null;
+}
+
+// StayTW 自前の session トークン（HS256、SESSION_SECRET で署名）
+async function hmacKey(secret) {
+  return crypto.subtle.importKey("raw", TE.encode(secret || "dev"), { name: "HMAC", hash: "SHA-256" }, false, ["sign", "verify"]);
+}
+async function signSession(uid, secret) {
+  const head = bytesToB64url(TE.encode(JSON.stringify({ alg: "HS256", typ: "JWT" })));
+  const body = bytesToB64url(TE.encode(JSON.stringify({ uid, iat: nowSec(), exp: nowSec() + 90 * 86400 })));
+  const sig = new Uint8Array(await crypto.subtle.sign("HMAC", await hmacKey(secret), TE.encode(head + "." + body)));
+  return `${head}.${body}.${bytesToB64url(sig)}`;
+}
+async function verifySession(token, secret) {
+  const parts = String(token || "").split(".");
+  if (parts.length !== 3) return null;
+  const ok = await crypto.subtle.verify("HMAC", await hmacKey(secret), b64urlToBytes(parts[2]), TE.encode(parts[0] + "." + parts[1]));
+  if (!ok) return null;
+  let payload; try { payload = decodeJwtPart(parts[1]); } catch { return null; }
+  if (!payload.exp || payload.exp < nowSec()) return null;
+  return payload.uid || null;
+}
 
 export default {
   async fetch(req, env) {
@@ -35,6 +94,51 @@ export default {
       ).bind(type, msg, String(b.email || "").slice(0, 200), String(b.lang || "").slice(0, 8),
              (req.headers.get("User-Agent") || "").slice(0, 300)).run();
       return json({ ok: true }, 200, h);
+    }
+
+    // ---------- 原生登入（Apple/Google ID トークン → StayTW session）----------
+    if (url.pathname === "/api/native-login" && req.method === "POST") {
+      let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
+      const provider = b.provider;
+      let payload = null;
+      if (provider === "apple") {
+        payload = await verifyOidcJwt(b.token, "https://appleid.apple.com/auth/keys",
+          ["https://appleid.apple.com"], "com.staytw.app");
+      } else if (provider === "google") {
+        if (!env.GOOGLE_IOS_CLIENT_ID) return json({ error: "google_not_configured" }, 501, h);
+        payload = await verifyOidcJwt(b.token, "https://www.googleapis.com/oauth2/v3/certs",
+          ["accounts.google.com", "https://accounts.google.com"], env.GOOGLE_IOS_CLIENT_ID);
+      } else return json({ error: "bad_provider" }, 400, h);
+      if (!payload || !payload.sub) return json({ error: "invalid_token" }, 401, h);
+      const uid = `${provider}:${payload.sub}`;
+      const email = String(payload.email || "");
+      await env.DB.prepare(
+        `INSERT INTO auth_users (uid, provider, sub, email, created_at, updated_at)
+         VALUES (?1,?2,?3,?4,?5,?5) ON CONFLICT(uid) DO UPDATE SET email=?4, updated_at=?5`
+      ).bind(uid, provider, String(payload.sub), email, nowMs()).run();
+      const sessionToken = await signSession(uid, env.SESSION_SECRET);
+      return json({ sessionToken, uid, email }, 200, h);
+    }
+
+    // ---------- 学習進度クラウド同期（Bearer session）----------
+    if (url.pathname === "/api/progress") {
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      if (!uid) return json({ error: "unauthorized" }, 401, h);
+      if (req.method === "GET") {
+        const row = await env.DB.prepare("SELECT data, updated_at FROM progress WHERE uid=?1").bind(uid).first();
+        return json({ data: row ? JSON.parse(row.data) : {}, updatedAt: row?.updated_at || null }, 200, h);
+      }
+      if (req.method === "POST" || req.method === "PUT") {
+        let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
+        const data = JSON.stringify(b.data || {});
+        if (data.length > 900000) return json({ error: "too_large" }, 413, h);   // 1MiB D1 上限より手前で防爆
+        await env.DB.prepare(
+          `INSERT INTO progress (uid, data, updated_at) VALUES (?1,?2,?3)
+           ON CONFLICT(uid) DO UPDATE SET data=?2, updated_at=?3`
+        ).bind(uid, data, nowMs()).run();
+        return json({ ok: true }, 200, h);
+      }
+      return json({ error: "method_not_allowed" }, 405, h);
     }
 
     // ---------- RevenueCat webhook ----------

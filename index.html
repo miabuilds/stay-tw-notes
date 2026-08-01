@@ -39,22 +39,22 @@ a{color:var(--ac2);text-decoration:none}
 button{font-family:inherit}
 
 /* == Header == */
-.hd{position:fixed;top:0;left:0;right:0;background:color-mix(in srgb,var(--bg) 88%,transparent);z-index:100;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(14px);-webkit-backdrop-filter:saturate(140%) blur(14px)}
+.hd{position:fixed;top:0;left:0;right:0;background:color-mix(in srgb,var(--bg) 88%,transparent);z-index:100;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(14px);-webkit-backdrop-filter:saturate(140%) blur(14px);padding-top:env(safe-area-inset-top)}
 .hd-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;padding:0 24px;height:var(--hh);gap:10px}
 .hd h1{color:var(--tx);font-size:15px;font-weight:700;white-space:nowrap;letter-spacing:.02em;font-family:var(--serif);display:flex;align-items:center;gap:8px}
 .hd h1 a{color:inherit;display:flex;align-items:center;gap:8px}
 .hd h1 img{width:26px;height:30px}
 .hd-links{display:flex;gap:12px;margin-left:auto;align-items:center}
 .hd-links a{color:var(--tx2);font-size:13px;font-weight:500;white-space:nowrap}
-.hd-links a:hover{color:var(--tx)}
+@media(hover:hover){.hd-links a:hover{color:var(--tx)}}
 .lang-btn{background:var(--bg3);border:1px solid var(--bd);cursor:pointer;color:var(--tx2);padding:2px 10px;font-size:12px;font-weight:600;border-radius:8px;white-space:nowrap}
-.lang-btn:hover{color:var(--ac);border-color:var(--ac)}
+@media(hover:hover){.lang-btn:hover{color:var(--ac);border-color:var(--ac)}}
 .theme-btn{background:none;border:none;cursor:pointer;color:var(--tx3);padding:6px;border-radius:10px;display:flex;align-items:center}
-.theme-btn:hover{color:var(--tx);background:var(--bg3)}
+@media(hover:hover){.theme-btn:hover{color:var(--tx);background:var(--bg3)}}
 .theme-btn svg{width:18px;height:18px}
 
 /* == Layout == */
-.wrap{max-width:1000px;margin:0 auto;padding:calc(var(--hh) + 28px) 24px 80px}
+.wrap{max-width:1000px;margin:0 auto;padding:calc(var(--hh) + env(safe-area-inset-top) + 28px) 24px 80px}
 
 /* == Level tabs & voice == */
 .levels{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;align-items:center}
@@ -78,7 +78,7 @@ button{font-family:inherit}
 /* == はじめての流れ（初回のみ表示） == */
 .ob-strip{display:flex;align-items:center;gap:12px;background:var(--ac-soft);border:1px solid color-mix(in srgb,var(--ac) 30%,var(--bd));border-radius:12px;padding:10px 14px;margin-bottom:16px;font-size:13.5px;color:var(--tx);line-height:1.7}
 .ob-strip button{margin-left:auto;background:none;border:none;color:var(--tx3);cursor:pointer;font-size:12px;white-space:nowrap;padding:4px}
-.ob-strip button:hover{color:var(--ac)}
+@media(hover:hover){.ob-strip button:hover{color:var(--ac)}}
 
 /* == トースト（評価したときのフィードバック） == */
 .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--tx);color:var(--bg);font-size:13.5px;font-weight:600;padding:10px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease);z-index:300;box-shadow:0 6px 24px rgba(0,0,0,.25)}
@@ -101,7 +101,7 @@ button{font-family:inherit}
 .fc-pos{display:inline-block;font-size:11px;font-weight:700;color:var(--ac);border:1px solid var(--ac);border-radius:6px;padding:0 7px;margin-top:14px;letter-spacing:.05em}
 .fc-mean{font-size:23px;font-weight:700;margin-bottom:12px}
 .fc-ex{font-size:15px;color:var(--tx);line-height:1.85;border-top:1px solid var(--line);padding-top:12px;margin-top:2px;cursor:pointer;border-radius:8px;padding:12px 8px 4px}
-.fc-ex:hover{background:var(--ac-soft)}
+@media(hover:hover){.fc-ex:hover{background:var(--ac-soft)}}
 .fc-ex .py{font-size:12.5px;color:var(--tx3);display:block}
 .fc-ex .tr{font-size:13.5px;color:var(--tx2);display:block;margin-top:2px}
 .fc-grade{display:flex;gap:8px;margin-top:14px;width:100%}
@@ -110,15 +110,15 @@ button{font-family:inherit}
 .fc-grade .g-ok{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,var(--bd))}
 .fc-grade .g-mid{color:#B07A1F}
 .fc-grade .g-ng{color:var(--ac);border-color:color-mix(in srgb,var(--ac) 45%,var(--bd))}
-.fc-grade button:hover{border-color:currentColor}
+@media(hover:hover){.fc-grade button:hover{border-color:currentColor}}
 .fc-ctrl{display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap}
 .btn{border:1px solid var(--bd);background:var(--bg2);color:var(--tx);border-radius:999px;padding:9px 20px;font-size:14px;font-weight:600;cursor:pointer}
-.btn:hover{border-color:var(--ac);color:var(--ac)}
+@media(hover:hover){.btn:hover{border-color:var(--ac);color:var(--ac)}}
 .btn.primary{background:var(--tx);color:var(--bg);border-color:var(--tx)}
-.btn.primary:hover{background:var(--ac);border-color:var(--ac);color:#fff}
+@media(hover:hover){.btn.primary:hover{background:var(--ac);border-color:var(--ac);color:#fff}}
 .fc-prog{text-align:center;font-size:13px;color:var(--tx3);margin-top:12px}
 .tts-btn{background:var(--ac-soft);border:none;color:var(--ac);border-radius:999px;width:38px;height:38px;font-size:17px;cursor:pointer;flex-shrink:0}
-.tts-btn:hover{background:var(--ac);color:#fff}
+@media(hover:hover){.tts-btn:hover{background:var(--ac);color:#fff}}
 
 /* == Word list == */
 .search{width:100%;max-width:380px;border:1px solid var(--bd);background:var(--bg2);color:var(--tx);border-radius:10px;padding:10px 14px;font-size:14px;margin-bottom:8px}
@@ -129,7 +129,7 @@ button{font-family:inherit}
 .vlist{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:720px){.vlist{grid-template-columns:1fr}}
 .vcard{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--sh);cursor:pointer}
-.vcard:hover{border-color:var(--ac)}
+@media(hover:hover){.vcard:hover{border-color:var(--ac)}}
 .vcard-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .vcard-w{font-family:var(--serif);font-size:26px;font-weight:700}
 .vcard-zy{font-size:12px;color:var(--ac);letter-spacing:.08em}
@@ -137,7 +137,7 @@ button{font-family:inherit}
 .vcard-pos{font-size:10.5px;font-weight:700;color:var(--ac);border:1px solid var(--ac);border-radius:5px;padding:0 5px;margin-left:auto}
 .vcard-m{font-size:15px;font-weight:600;margin-top:4px}
 .vcard-ex{font-size:13.5px;color:var(--tx2);margin-top:8px;border-top:1px dashed var(--line);padding-top:8px;line-height:1.8;border-radius:6px}
-.vcard-ex:hover{background:var(--ac-soft)}
+@media(hover:hover){.vcard-ex:hover{background:var(--ac-soft)}}
 .vcard-ex b{color:var(--tx);font-weight:600}
 
 /* == Grammar == */
@@ -153,7 +153,7 @@ button{font-family:inherit}
 .g-ex{font-size:14px;color:var(--tx2);line-height:1.9;margin-bottom:12px}
 .g-eg{border-top:1px dashed var(--line);padding-top:10px;font-size:15px;line-height:1.9}
 .g-eg .zh{color:var(--tx);font-weight:500;cursor:pointer;border-radius:6px;padding:1px 4px}
-.g-eg .zh:hover{background:var(--ac-soft)}
+@media(hover:hover){.g-eg .zh:hover{background:var(--ac-soft)}}
 .g-eg .zh em{font-style:normal;color:var(--ac);font-weight:700}
 .g-eg .py{font-size:12.5px;color:var(--tx3);display:block}
 .g-eg .tr{font-size:13.5px;color:var(--tx2);display:block;margin-bottom:8px}
@@ -162,7 +162,7 @@ button{font-family:inherit}
 .ph-cat{font-family:var(--serif);font-size:20px;font-weight:700;margin:30px 0 14px;display:flex;align-items:center;gap:10px}
 .ph-cat:first-child{margin-top:0}
 .ph-item{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;cursor:pointer}
-.ph-item:hover{border-color:var(--ac)}
+@media(hover:hover){.ph-item:hover{border-color:var(--ac)}}
 .ph-main{flex:1;min-width:0}
 .ph-z{font-family:var(--serif);font-size:19px;font-weight:700;line-height:1.5}
 .ph-py{font-size:13px;color:var(--tx3)}
@@ -175,7 +175,7 @@ button{font-family:inherit}
 .qz-py{color:var(--tx2);font-size:15px;margin-bottom:22px}
 .qz-opts{display:grid;gap:10px}
 .qz-opt{border:1px solid var(--bd);background:var(--bg2);color:var(--tx);border-radius:12px;padding:13px 16px;font-size:15.5px;font-weight:600;cursor:pointer;text-align:left}
-.qz-opt:hover{border-color:var(--ac)}
+@media(hover:hover){.qz-opt:hover{border-color:var(--ac)}}
 .qz-opt.ok{background:var(--ok);border-color:var(--ok);color:#fff}
 .qz-opt.ng{background:var(--ac);border-color:var(--ac);color:#fff;opacity:.85}
 .qz-opt:disabled{cursor:default}
@@ -187,11 +187,11 @@ button{font-family:inherit}
 .spk-src{display:flex;gap:8px;justify-content:center;margin-bottom:18px}
 .spk-card{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:30px 26px;box-shadow:var(--sh2)}
 .spk-z{font-family:var(--serif);font-size:clamp(24px,5vw,32px);font-weight:700;line-height:1.6;cursor:pointer}
-.spk-z:hover{color:var(--ac)}
+@media(hover:hover){.spk-z:hover{color:var(--ac)}}
 .spk-py{color:var(--tx3);font-size:14px;margin-top:6px}
 .spk-tr{color:var(--tx2);font-size:14.5px;margin-top:4px}
 .spk-mic{width:88px;height:88px;border-radius:50%;border:none;background:var(--ac);color:#fff;font-size:36px;cursor:pointer;margin:22px auto 6px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(184,54,42,.3);transition:transform .15s var(--ease)}
-.spk-mic:hover{transform:scale(1.06)}
+@media(hover:hover){.spk-mic:hover{transform:scale(1.06)}}
 .spk-mic.rec{animation:pulse 1.2s infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(184,54,42,.45)}50%{box-shadow:0 0 0 18px rgba(184,54,42,0)}}
 .spk-status{font-size:13px;color:var(--tx3);min-height:20px}
@@ -208,21 +208,21 @@ button{font-family:inherit}
 /* == ライティング == */
 .wr{max-width:680px;margin:0 auto}
 .wr-topic{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:14px}
-.wr-topic:hover{border-color:var(--ac)}
+@media(hover:hover){.wr-topic:hover{border-color:var(--ac)}}
 .wr-topic .lv{font-size:11px;font-weight:700;color:var(--ac);border:1px solid var(--ac);border-radius:6px;padding:1px 8px;white-space:nowrap}
 .wr-topic h4{font-size:16px;font-weight:700}
 .wr-topic .done{margin-left:auto;font-size:12px;color:var(--ok)}
 .wr-task{background:var(--ac-soft);border-radius:12px;padding:12px 16px;font-size:14px;line-height:1.8;margin:12px 0}
 .wr-hints{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px}
 .wr-hint{background:var(--bg2);border:1px solid var(--bd);border-radius:999px;padding:4px 13px;font-size:13.5px;cursor:pointer}
-.wr-hint:hover{border-color:var(--ac);color:var(--ac)}
+@media(hover:hover){.wr-hint:hover{border-color:var(--ac);color:var(--ac)}}
 .wr-hint small{color:var(--tx3);margin-left:5px}
 .wr-ta{width:100%;min-height:180px;border:1px solid var(--bd);background:var(--bg2);color:var(--tx);border-radius:14px;padding:14px 16px;font-size:16.5px;line-height:1.9;font-family:inherit;resize:vertical}
 .wr-ta:focus{outline:none;border-color:var(--ac)}
 .wr-meta{display:flex;align-items:center;gap:12px;font-size:12.5px;color:var(--tx3);margin:8px 2px 18px}
 .wr-model{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:14px}
 .wr-model .zh{font-family:var(--serif);font-size:16.5px;line-height:2;cursor:pointer;border-radius:8px}
-.wr-model .zh:hover{background:var(--ac-soft)}
+@media(hover:hover){.wr-model .zh:hover{background:var(--ac-soft)}}
 .wr-model .tr{font-size:13.5px;color:var(--tx2);line-height:1.9;border-top:1px dashed var(--line);margin-top:12px;padding-top:12px}
 
 /* == SRS == */
@@ -244,7 +244,7 @@ button{font-family:inherit}
 .srs-hint{font-size:12px;color:var(--tx3);margin-top:22px}
 .srs-meaning{font-size:21px;font-weight:700;margin:12px 0}
 .srs-ex{font-size:14px;line-height:1.8;border-top:1px dashed var(--line);padding-top:10px;border-radius:8px}
-.srs-ex:hover{background:var(--ac-soft)}
+@media(hover:hover){.srs-ex:hover{background:var(--ac-soft)}}
 .srs-ex .py{display:block;font-size:12px;color:var(--tx3)}
 .srs-ex .tr{display:block;font-size:12.5px;color:var(--tx2)}
 .srs-btns{display:flex;gap:8px;margin-top:18px}
@@ -258,12 +258,12 @@ button{font-family:inherit}
 .ex-top{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
 .ex-sec{font-size:12px;font-weight:700;color:var(--ac);border:1px solid var(--ac);border-radius:6px;padding:1px 8px}
 .ex-passage{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px 20px;font-size:16px;line-height:2;margin-bottom:16px;cursor:pointer;font-family:var(--serif)}
-.ex-passage:hover{border-color:var(--ac)}
+@media(hover:hover){.ex-passage:hover{border-color:var(--ac)}}
 .ex-stem{font-size:18px;font-weight:600;margin-bottom:16px;line-height:1.8;cursor:pointer}
 .ex-stem.big{font-family:var(--serif);font-size:40px;text-align:center;font-weight:700}
 .ex-listen{text-align:center;padding:26px 0 20px}
 .ex-play{width:84px;height:84px;border-radius:50%;border:none;background:var(--ac);color:#fff;font-size:34px;cursor:pointer;box-shadow:0 6px 20px rgba(184,54,42,.3);transition:transform .15s var(--ease)}
-.ex-play:hover{transform:scale(1.06)}
+@media(hover:hover){.ex-play:hover{transform:scale(1.06)}}
 .ex-hist{border-top:1px solid var(--line);margin-top:26px;padding-top:14px}
 .ex-hist-item{display:flex;gap:14px;font-size:13.5px;padding:7px 0;border-bottom:1px dashed var(--line);color:var(--tx2)}
 .ex-hist-item b{color:var(--tx)}
@@ -300,6 +300,8 @@ button{font-family:inherit}
 @media(max-width:700px){
   .tools{display:none}
   .bnav{display:flex}
+  /* モバイルは backdrop-blur を切る＝タブ切替のカクつき解消（GPU 合成が重い） */
+  .hd,.bnav{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg)}
   .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
   .toast{bottom:calc(78px + env(safe-area-inset-bottom))}
   .levels{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-left:-16px;margin-right:-16px;padding:0 16px 4px}
@@ -316,7 +318,7 @@ button{font-family:inherit}
   .hd h1 img{width:22px;height:25px}
   .hd-links{gap:8px}
   .hd-links a.hide-sp{display:none}
-  .wrap{padding-top:calc(var(--hh) + 18px);padding-left:16px;padding-right:16px}
+  .wrap{padding-top:calc(var(--hh) + env(safe-area-inset-top) + 18px);padding-left:16px;padding-right:16px}
 }
 </style>
 </head>
@@ -467,25 +469,25 @@ button{font-family:inherit}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="firebase-config.js?v=13"></script>
-<script src="i18n.js?v=13"></script>
-<script src="tts.js?v=13"></script>
-<script src="vocab-l1.js?v=13"></script>
-<script src="vocab-l2.js?v=13"></script>
-<script src="vocab-l3.js?v=13"></script>
-<script src="vocab-l4.js?v=13"></script>
-<script src="vocab-l5.js?v=13"></script>
-<script src="grammar-l1.js?v=13"></script>
-<script src="grammar-l2.js?v=13"></script>
-<script src="grammar-l3.js?v=13"></script>
-<script src="grammar-l4.js?v=13"></script>
-<script src="grammar-l5.js?v=13"></script>
-<script src="phrases-l1.js?v=13"></script>
-<script src="writing-data.js?v=13"></script>
-<script src="paywall.js?v=13"></script>
-<script src="srs.js?v=13"></script>
-<script src="mock-exam.js?v=13"></script>
-<script src="sync.js?v=13"></script>
+<script src="firebase-config.js?v=14"></script>
+<script src="i18n.js?v=14"></script>
+<script src="tts.js?v=14"></script>
+<script src="vocab-l1.js?v=14"></script>
+<script src="vocab-l2.js?v=14"></script>
+<script src="vocab-l3.js?v=14"></script>
+<script src="vocab-l4.js?v=14"></script>
+<script src="vocab-l5.js?v=14"></script>
+<script src="grammar-l1.js?v=14"></script>
+<script src="grammar-l2.js?v=14"></script>
+<script src="grammar-l3.js?v=14"></script>
+<script src="grammar-l4.js?v=14"></script>
+<script src="grammar-l5.js?v=14"></script>
+<script src="phrases-l1.js?v=14"></script>
+<script src="writing-data.js?v=14"></script>
+<script src="paywall.js?v=14"></script>
+<script src="srs.js?v=14"></script>
+<script src="mock-exam.js?v=14"></script>
+<script src="sync.js?v=14"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
