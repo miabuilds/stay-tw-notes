@@ -140,6 +140,21 @@ export default {
       return json({ sessionToken, uid, email }, 200, h);
     }
 
+    // ---------- Web Google ログイン（→ StayTW session）----------
+    if (url.pathname === "/api/web-login" && req.method === "POST") {
+      let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
+      const payload = await verifyGoogleWeb(b.token);
+      if (!payload || !payload.sub) return json({ error: "invalid_token" }, 401, h);
+      const uid = "google:" + payload.sub;
+      const email = String(payload.email || "");
+      await env.DB.prepare(
+        `INSERT INTO auth_users (uid, provider, sub, email, created_at, updated_at)
+         VALUES (?1,'google',?2,?3,?4,?4) ON CONFLICT(uid) DO UPDATE SET email=?3, updated_at=?4`
+      ).bind(uid, String(payload.sub), email, nowMs()).run();
+      const sessionToken = await signSession(uid, env.SESSION_SECRET);
+      return json({ sessionToken, uid, email, name: payload.name || "", picture: payload.picture || "" }, 200, h);
+    }
+
     // ---------- 学習進度クラウド同期（Bearer session）----------
     if (url.pathname === "/api/progress") {
       const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
