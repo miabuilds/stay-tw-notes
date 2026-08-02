@@ -88,6 +88,10 @@ ja: {
   // はじめての人向けの流れ
   obFlow:"① 単語カードで覚える → ② クイズで確認 → ③ 復習で定着 → ④ 模試で腕試し",
   obClose:"閉じる",
+  obQ:"台湾華語を学ぶ目的は？", obQdesc:"目的に合わせて、おすすめのレベルから始められます。あとで自由に変えられます。",
+  obTravel:"旅行・短期滞在", obTravelD:"まず使える挨拶・注文・道案内から",
+  obLive:"台湾で暮らす・働く", obLiveD:"日常会話と生活の語彙をしっかり",
+  obExam:"TOCFL・試験対策", obExamD:"語彙を広げて模試で実力チェック", obSkip:"スキップ",
   gradeSaved:"復習に登録：",
   // Landing 全文
   navGuide:"TOCFLガイド",
@@ -242,6 +246,10 @@ en: {
   kbdHint:"Space: flip / ←→: prev·next / 1·2·3: rate",
   obFlow:"① Learn with flashcards → ② Check with quizzes → ③ Lock in with review → ④ Test yourself with mock exams",
   obClose:"Dismiss",
+  obQ:"Why are you learning Taiwanese Mandarin?", obQdesc:"We'll suggest a level to start from. You can change it anytime.",
+  obTravel:"Travel / short stay", obTravelD:"Start with greetings, ordering and directions",
+  obLive:"Living / working in Taiwan", obLiveD:"Solid everyday conversation and daily-life words",
+  obExam:"TOCFL / exam prep", obExamD:"Grow your vocabulary and test yourself with mock exams", obSkip:"Skip",
   gradeSaved:"Added to review: ",
 },
 ko: {
@@ -355,6 +363,10 @@ ko: {
   kbdHint:"Space: 뒤집기 / ←→: 이동 / 1·2·3: 평가",
   obFlow:"① 단어 카드로 외우기 → ② 퀴즈로 확인 → ③ 복습으로 정착 → ④ 모의고사로 실력 점검",
   obClose:"닫기",
+  obQ:"대만 화어를 배우는 목적은?", obQdesc:"목적에 맞는 레벨부터 시작할 수 있어요. 나중에 자유롭게 바꿀 수 있습니다.",
+  obTravel:"여행·단기 체류", obTravelD:"먼저 인사·주문·길찾기부터",
+  obLive:"대만에서 생활·근무", obLiveD:"일상 회화와 생활 어휘를 탄탄하게",
+  obExam:"TOCFL·시험 대비", obExamD:"어휘를 넓히고 모의고사로 실력 점검", obSkip:"건너뛰기",
   gradeSaved:"복습에 등록: ",
 },
 };
