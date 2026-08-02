@@ -1,13 +1,95 @@
 <!DOCTYPE html>
 <html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>利用規約 — StayTW Study</title><link rel="icon" href="favicon.svg" type="image/svg+xml">
-<style>body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;max-width:720px;margin:0 auto;padding:48px 24px;line-height:1.9;color:#1C1C1E;background:#FAF8F3}h1{font-size:24px;margin-bottom:24px}h2{font-size:17px;margin:28px 0 8px}p,li{font-size:14.5px;color:#444}a{color:#2F5D7A}</style></head><body>
-<h1>利用規約</h1>
-<p>本規約は、StayTW Study（以下「本サービス」）の利用条件を定めるものです。ユーザーは本サービスを利用することで、本規約に同意したものとみなされます。</p>
-<h2>1. サービス内容</h2><p>本サービスは台湾華語（繁体字中国語）の学習コンテンツと練習ツールを提供します。コンテンツの閲覧は無料、練習ツールには1日の無料利用枠があり、プレミアムプラン（サブスクリプションまたは買い切り）で無制限にご利用いただけます。</p>
-<h2>2. 購入・解約・返金</h2><p>プレミアムの購入・管理・解約は App Store のアカウント設定から行えます。サブスクリプションは期間終了の24時間前までに解約しない限り自動更新されます。返金は Apple のポリシーに従います。</p>
-<h2>3. 禁止事項</h2><ul><li>コンテンツの無断複製・再配布・転売</li><li>本サービスの運営を妨害する行為</li><li>リバースエンジニアリング等の解析行為</li></ul>
-<h2>4. 免責</h2><p>本サービスは学習の参考情報を提供するものであり、試験の合格等を保証するものではありません。コンテンツには正確を期していますが、誤りがあった場合の損害について運営者は責任を負いません。TOCFL・SC-TOP とは無関係の個人サービスです。</p>
-<h2>5. 規約の変更</h2><p>本規約は必要に応じて変更されることがあります。重要な変更はサービス内で告知します。</p>
-<p style="margin-top:36px;font-size:13px;color:#888">最終更新：2026年7月<br>お問い合わせ：<a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a></p>
+<style>body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;max-width:720px;margin:0 auto;padding:48px 24px;line-height:1.9;color:#1C1C1E;background:#FAF8F3}h1{font-size:24px;margin-bottom:24px}h2{font-size:17px;margin:28px 0 8px}p,li{font-size:14.5px;color:#444}a{color:#2F5D7A}#langToggle{font:inherit;font-size:13px;color:#2F5D7A;background:transparent;border:1px solid #d8d2c4;border-radius:8px;padding:4px 12px;cursor:pointer}#langToggle:hover{background:#f0ebe0}</style></head><body>
+<div style="text-align:right;margin-bottom:8px"><button id="langToggle" data-i18n="langBtn" onclick="cycleLang()" aria-label="Language">日本語</button></div>
+<h1 data-i18n="h1">利用規約</h1>
+<p data-i18n="intro">本規約は、StayTW Study（以下「本サービス」）の利用条件を定めるものです。ユーザーは本サービスを利用することで、本規約に同意したものとみなされます。</p>
+<h2 data-i18n="h2_1">1. サービス内容</h2><p data-i18n="p1">本サービスは台湾華語（繁体字中国語）の学習コンテンツと練習ツールを提供します。コンテンツの閲覧は無料、練習ツールには1日の無料利用枠があり、プレミアムプラン（サブスクリプションまたは買い切り）で無制限にご利用いただけます。</p>
+<h2 data-i18n="h2_2">2. 購入・解約・返金</h2><p data-i18n="p2">プレミアムの購入・管理・解約は App Store のアカウント設定から行えます。サブスクリプションは期間終了の24時間前までに解約しない限り自動更新されます。返金は Apple のポリシーに従います。</p>
+<h2 data-i18n="h2_3">3. 禁止事項</h2><ul><li data-i18n="li1">コンテンツの無断複製・再配布・転売</li><li data-i18n="li2">本サービスの運営を妨害する行為</li><li data-i18n="li3">リバースエンジニアリング等の解析行為</li></ul>
+<h2 data-i18n="h2_4">4. 免責</h2><p data-i18n="p4">本サービスは学習の参考情報を提供するものであり、試験の合格等を保証するものではありません。コンテンツには正確を期していますが、誤りがあった場合の損害について運営者は責任を負いません。TOCFL・SC-TOP とは無関係の個人サービスです。</p>
+<h2 data-i18n="h2_5">5. 規約の変更</h2><p data-i18n="p5">本規約は必要に応じて変更されることがあります。重要な変更はサービス内で告知します。</p>
+<p style="margin-top:36px;font-size:13px;color:#888" data-i18n-html="footer">最終更新：2026年7月<br>お問い合わせ：<a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a></p>
+<script>
+const T={
+ja:{
+langBtn:"日本語",
+h1:"利用規約",
+intro:"本規約は、StayTW Study（以下「本サービス」）の利用条件を定めるものです。ユーザーは本サービスを利用することで、本規約に同意したものとみなされます。",
+h2_1:"1. サービス内容",
+p1:"本サービスは台湾華語（繁体字中国語）の学習コンテンツと練習ツールを提供します。コンテンツの閲覧は無料、練習ツールには1日の無料利用枠があり、プレミアムプラン（サブスクリプションまたは買い切り）で無制限にご利用いただけます。",
+h2_2:"2. 購入・解約・返金",
+p2:"プレミアムの購入・管理・解約は App Store のアカウント設定から行えます。サブスクリプションは期間終了の24時間前までに解約しない限り自動更新されます。返金は Apple のポリシーに従います。",
+h2_3:"3. 禁止事項",
+li1:"コンテンツの無断複製・再配布・転売",
+li2:"本サービスの運営を妨害する行為",
+li3:"リバースエンジニアリング等の解析行為",
+h2_4:"4. 免責",
+p4:"本サービスは学習の参考情報を提供するものであり、試験の合格等を保証するものではありません。コンテンツには正確を期していますが、誤りがあった場合の損害について運営者は責任を負いません。TOCFL・SC-TOP とは無関係の個人サービスです。",
+h2_5:"5. 規約の変更",
+p5:"本規約は必要に応じて変更されることがあります。重要な変更はサービス内で告知します。",
+footer:'最終更新：2026年7月<br>お問い合わせ：<a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a>'
+},
+en:{
+langBtn:"English",
+h1:"Terms of Service",
+intro:'These Terms set out the conditions for using StayTW Study (the "Service"). By using the Service, you are deemed to have agreed to these Terms.',
+h2_1:"1. Service Description",
+p1:"The Service provides learning content and practice tools for Taiwanese Mandarin (Traditional Chinese). Viewing content is free, practice tools have a daily free usage quota, and a premium plan (subscription or one-time purchase) unlocks unlimited use.",
+h2_2:"2. Purchases, Cancellation, and Refunds",
+p2:"You can purchase, manage, and cancel premium from your App Store account settings. Subscriptions renew automatically unless canceled at least 24 hours before the end of the current period. Refunds follow Apple's policy.",
+h2_3:"3. Prohibited Conduct",
+li1:"Unauthorized copying, redistribution, or resale of content",
+li2:"Actions that interfere with the operation of the Service",
+li3:"Reverse engineering or other analysis of the Service",
+h2_4:"4. Disclaimer",
+p4:"The Service provides reference information for study and does not guarantee passing any exam or similar results. While we strive for accuracy, the operator is not liable for any damages arising from errors in the content. This is an independent, personal service with no affiliation to TOCFL or SC-TOP.",
+h2_5:"5. Changes to These Terms",
+p5:"These Terms may be changed as necessary. Significant changes will be announced within the Service.",
+footer:'Last updated: July 2026<br>Contact: <a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a>'
+},
+ko:{
+langBtn:"한국어",
+h1:"이용약관",
+intro:'본 약관은 StayTW Study(이하 "본 서비스")의 이용 조건을 정합니다. 사용자는 본 서비스를 이용함으로써 본 약관에 동의한 것으로 간주됩니다.',
+h2_1:"1. 서비스 내용",
+p1:"본 서비스는 대만 화어(번체 중국어) 학습 콘텐츠와 연습 도구를 제공합니다. 콘텐츠 열람은 무료이며, 연습 도구에는 하루 무료 이용 한도가 있고, 프리미엄 플랜(구독 또는 일시 구매)으로 무제한 이용하실 수 있습니다.",
+h2_2:"2. 구매·해지·환불",
+p2:"프리미엄의 구매·관리·해지는 App Store 계정 설정에서 하실 수 있습니다. 구독은 기간 종료 24시간 전까지 해지하지 않으면 자동으로 갱신됩니다. 환불은 Apple의 정책을 따릅니다.",
+h2_3:"3. 금지 사항",
+li1:"콘텐츠의 무단 복제·재배포·재판매",
+li2:"본 서비스의 운영을 방해하는 행위",
+li3:"리버스 엔지니어링 등의 분석 행위",
+h2_4:"4. 면책",
+p4:"본 서비스는 학습을 위한 참고 정보를 제공하는 것이며, 시험 합격 등을 보장하지 않습니다. 콘텐츠의 정확성을 기하고 있으나, 오류로 인한 손해에 대해 운영자는 책임을 지지 않습니다. TOCFL·SC-TOP와는 무관한 개인 서비스입니다.",
+h2_5:"5. 약관 변경",
+p5:"본 약관은 필요에 따라 변경될 수 있습니다. 중요한 변경 사항은 서비스 내에서 공지합니다.",
+footer:'최종 업데이트: 2026년 7월<br>문의: <a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a>'
+}
+};
+function applyLang(){
+  const lang=localStorage.getItem("stw-lang")||"ja";
+  document.documentElement.lang=lang;
+  const dict=T[lang]||T.ja;
+  document.querySelectorAll("[data-i18n]").forEach(function(el){
+    const k=el.getAttribute("data-i18n");
+    const v=(dict[k]!==undefined)?dict[k]:T.ja[k];
+    if(v!==undefined)el.textContent=v;
+  });
+  document.querySelectorAll("[data-i18n-html]").forEach(function(el){
+    const k=el.getAttribute("data-i18n-html");
+    const v=(dict[k]!==undefined)?dict[k]:T.ja[k];
+    if(v!==undefined)el.innerHTML=v;
+  });
+}
+function cycleLang(){
+  const order=["ja","en","ko"];
+  const cur=localStorage.getItem("stw-lang")||"ja";
+  const next=order[(order.indexOf(cur)+1)%order.length];
+  localStorage.setItem("stw-lang",next);
+  applyLang();
+}
+applyLang();
+</script>
 </body></html>
