@@ -356,5 +356,6 @@ function toggleTheme(){
   document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
 })();
 </script>
+<script>try{fetch("https://staytw-api.abc83327.workers.dev/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname,ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
 </body>
 </html>
