@@ -60,7 +60,7 @@ const STW_WEB = (() => {
     el.style.display = "";
     if (session && user) {
       const label = (user.name || user.email || "?").trim().slice(0, 1).toUpperCase();
-      el.innerHTML = `<button onclick="STW_WEB.logout()" title="${(user.email||'')}（クリックでログアウト）"
+      el.innerHTML = `<button onclick="switchPanel('profile')" title="${(user.email||'')}"
         style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--ac);color:#fff;font-weight:700;font-size:13px;border:none;cursor:pointer">${label}</button>`;
     } else {
       el.innerHTML = `<button class="lang-btn" onclick="STW_WEB.login()">${(typeof twT==="function"?twT("navLogin"):"ログイン")}</button>`;
@@ -72,7 +72,7 @@ const STW_WEB = (() => {
     if (!session) return;
     try {
       const r = await fetch(STW_API + "/api/progress", { headers: { Authorization: "Bearer " + session } });
-      if (!r.ok) { if (r.status === 401) logout(); return; }
+      if (!r.ok) return;   // 同期失敗はスキップ（ログイン状態は保持。手動ログアウトのみ）
       const { data } = await r.json();
       mergeCloud(data || {});
       await push();     // マージ済みユニオンを押し戻し（両端末で収束）
@@ -138,5 +138,5 @@ const STW_WEB = (() => {
   if (session) pullMerge();
   initGoogle();
 
-  return { login, logout, closeModal, initGoogle, isLoggedIn: () => !!session };
+  return { login, logout, closeModal, initGoogle, isLoggedIn: () => !!session, getUser: () => user, sync: pullMerge };
 })();
