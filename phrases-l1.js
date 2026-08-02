@@ -90,5 +90,28 @@ const PHRASES_L1 = [
 {z:"我迷路了，這裡是哪裡？",py:"Wǒ mílù le, zhèlǐ shì nǎlǐ?",m:{j:"道に迷いました。ここはどこですか。",e:"I'm lost—where am I?",k:"길을 잃었어요. 여기가 어디예요?"}},
 {z:"沒問題！",py:"Méi wèntí!",m:{j:"問題ないよ！",e:"No problem!",k:"문제없어요!"}},
 ]},
+{icon:"",t:"both",cat:{j:"コンビニ（超商）",e:"Convenience Stores",k:"편의점(超商)"},items:[
+{z:"我要在這裡繳費。",py:"Wǒ yào zài zhèlǐ jiǎofèi.",m:{j:"ここで支払い（公共料金など）をしたいです。",e:"I'd like to pay a bill here.",k:"여기서 요금을 내고 싶어요."},note:{j:"台湾のコンビニは水道・電気・ガス・駐車場・交通違反・クレジットカードまで払える万能窓口。",e:"Taiwan convenience stores pay almost anything — utilities, parking, fines, even credit-card bills.",k:"대만 편의점은 공과금·주차·과태료·카드값까지 거의 다 낼 수 있는 만능 창구."}},
+{z:"我要取貨，這是我的手機號碼。",py:"Wǒ yào qǔhuò, zhè shì wǒ de shǒujī hàomǎ.",m:{j:"荷物の受け取りです。これが私の携帯番号です。",e:"I'm here to pick up a package—here's my phone number.",k:"택배 찾으러 왔어요. 이게 제 휴대폰 번호예요."},note:{j:"ネット通販は「超商取貨」が定番。店頭でバーコードか電話番号を見せて受け取る。",e:"Online orders often ship to a store — show a barcode or phone number to collect.",k:"온라인 쇼핑은 '超商取貨'가 기본. 매장에서 바코드나 번호를 보여주고 수령."}},
+{z:"這個可以幫我微波嗎？",py:"Zhège kěyǐ bāng wǒ wéibō ma?",m:{j:"これ、温めてもらえますか。",e:"Could you heat this up for me?",k:"이거 데워 주실 수 있어요?"}},
+{z:"我要一杯中杯拿鐵，熱的。",py:"Wǒ yào yì bēi zhōngbēi nátiě, rè de.",m:{j:"ラテのMサイズ、ホットを一杯ください。",e:"One medium latte, hot, please.",k:"라떼 미디엄 사이즈 따뜻한 걸로 한 잔이요."},note:{j:"CITY CAFE（7-11）や Let's Café（全家）は通勤族の定番コーヒー。",e:"CITY CAFE (7-11) and Let's Café (FamilyMart) are the daily commuter coffee.",k:"CITY CAFE(세븐)·Let's Café(패밀리마트)는 직장인 필수 커피."}},
+{z:"這裡可以影印嗎？",py:"Zhèlǐ kěyǐ yǐngyìn ma?",m:{j:"ここでコピーできますか。",e:"Can I make copies here?",k:"여기서 복사할 수 있어요?"},note:{j:"ibon（7-11）や FamiPort（全家）でコピー・印刷・チケット購入・書類まで手続きできる。",e:"Kiosks like ibon (7-11) handle copies, printing, tickets and paperwork.",k:"ibon(세븐) 같은 키오스크로 복사·인쇄·티켓·서류 처리 가능."}},
+{z:"袋子不用，謝謝。",py:"Dàizi búyòng, xièxie.",m:{j:"袋はいりません、ありがとう。",e:"No bag, thanks.",k:"봉투는 필요 없어요, 감사합니다."},note:{j:"レジ袋は有料。エコバッグ持参が普通。",e:"Plastic bags cost extra; bringing your own is normal.",k:"비닐봉투는 유료라 에코백을 들고 다니는 게 보통."}},
+]},
+{icon:"",t:"both",cat:{j:"天気・台風・地震",e:"Weather, Typhoons & Earthquakes",k:"날씨・태풍・지진"},items:[
+{z:"今天會下雨嗎？記得帶傘。",py:"Jīntiān huì xiàyǔ ma? Jìdé dài sǎn.",m:{j:"今日は雨降るかな？傘を忘れずに。",e:"Will it rain today? Don't forget an umbrella.",k:"오늘 비 올까요? 우산 챙기세요."}},
+{z:"聽說颱風要來了。",py:"Tīngshuō táifēng yào lái le.",m:{j:"台風が来るらしいよ。",e:"I hear a typhoon is coming.",k:"태풍이 온다더라고요."},note:{j:"台風接近時は各県市が「停班停課（＝台風休み）」を発表。前夜にニュースや市政府の公式SNSで確認する。",e:"When a typhoon nears, each city may declare work/school off. Check the news or the city's official page the night before.",k:"태풍이 오면 지자체가 휴무·휴교를 발표. 전날 밤 뉴스나 시청 공식 계정을 확인."}},
+{z:"明天放颱風假嗎？",py:"Míngtiān fàng táifēngjià ma?",m:{j:"明日は台風休みですか。",e:"Is tomorrow a typhoon day off?",k:"내일 태풍 휴무인가요?"}},
+{z:"剛剛是不是地震？",py:"Gānggāng shì bú shì dìzhèn?",m:{j:"今の、地震じゃなかった？",e:"Was that an earthquake just now?",k:"방금 지진 아니었어요?"},note:{j:"台湾は地震が多い。強い揺れの前にスマホの「国家級警報」が大音量で鳴るので驚かないで。",e:"Earthquakes are common; phones blast a loud national alert before strong shaking.",k:"대만은 지진이 잦아 강한 흔들림 전에 휴대폰 '국가급 경보'가 크게 울린다."}},
+{z:"今天好熱，室內都開冷氣。",py:"Jīntiān hǎo rè, shìnèi dōu kāi lěngqì.",m:{j:"今日は暑いね、室内はどこも冷房。",e:"So hot today—everywhere indoors has the AC on.",k:"오늘 너무 덥네요, 실내는 다 에어컨 틀어요."}},
+{z:"外面在下大雨，等一下再走。",py:"Wàimiàn zài xià dàyǔ, děng yíxià zài zǒu.",m:{j:"外は土砂降りだから、少し待ってから行こう。",e:"It's pouring outside—let's wait a bit before we go.",k:"밖에 비 많이 와요, 좀 있다 가요."}},
+]},
+{icon:"",t:"both",cat:{j:"お参り・年中行事",e:"Temples & Festivals",k:"참배・명절"},items:[
+{z:"我們去廟裡拜拜。",py:"Wǒmen qù miào lǐ bàibài.",m:{j:"お寺（廟）にお参りに行こう。",e:"Let's go pray at the temple.",k:"우리 사당에 참배하러 가요."},note:{j:"「拜拜」はお参り。線香を持ち手を合わせて平安を祈る、台湾の日常的な信仰文化。",e:"拜拜 means to worship — holding incense and praying for safety, part of everyday Taiwanese life.",k:"'拜拜'는 참배. 향을 들고 평안을 비는 대만의 일상 신앙 문화."}},
+{z:"這是一點心意，紅包給你。",py:"Zhè shì yìdiǎn xīnyì, hóngbāo gěi nǐ.",m:{j:"ほんの気持ちです、ご祝儀（紅包）どうぞ。",e:"A small token—here's a red envelope for you.",k:"작은 성의예요, 홍바오 드릴게요."},note:{j:"紅包＝ご祝儀・お年玉。金額は「4」（＝死と同音）を避け、偶数の縁起数字にするのが習わし。",e:"Red envelopes: avoid amounts with 4 (sounds like 'death'); pick even, lucky numbers.",k:"홍바오는 축의금·세뱃돈. '4'(죽음과 발음)를 피하고 짝수 길한 금액으로."}},
+{z:"中秋節要不要一起烤肉？",py:"Zhōngqiūjié yào bú yào yìqǐ kǎoròu?",m:{j:"中秋節、一緒にバーベキューしない？",e:"Want to barbecue together for Mid-Autumn Festival?",k:"추석에 같이 바비큐 할래요?"},note:{j:"台湾の中秋節は家族や友人でBBQ、月餅と文旦（ザボン）を食べる独特の過ごし方。",e:"Taiwan's Mid-Autumn is uniquely spent grilling with family, eating mooncakes and pomelo.",k:"대만 추석은 가족·친구와 바비큐, 월병과 유자를 먹는 독특한 방식."}},
+{z:"新年快樂，恭喜發財！",py:"Xīnnián kuàilè, gōngxǐ fācái!",m:{j:"あけましておめでとう、金運上々を！",e:"Happy New Year—may you prosper!",k:"새해 복 많이 받고, 부자 되세요!"},note:{j:"旧正月の定番あいさつ。「恭喜發財」に子どもは「紅包拿來（お年玉ちょうだい）」と返す。",e:"The classic Lunar New Year greeting; kids reply 紅包拿來 ('hand over the red envelope!').",k:"설 대표 인사. 아이들은 '紅包拿來(세뱃돈 주세요)'로 받아친다."}},
+{z:"過年我要回南部老家。",py:"Guònián wǒ yào huí nánbù lǎojiā.",m:{j:"旧正月は南部の実家に帰ります。",e:"I'm going back to my hometown in the south for New Year.",k:"설에 남부 고향 집에 내려가요."}},
+]},
 ];
 if (typeof module !== "undefined") module.exports = { PHRASES_L1 };
