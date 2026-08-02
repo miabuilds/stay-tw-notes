@@ -52,6 +52,15 @@ a{color:#2F5D7A}
     <div class="tbl"><table id="byproduct"><thead><tr><th>商品</th><th>筆數</th><th>USD</th></tr></thead><tbody></tbody></table></div>
     <h2>最近交易事件 <span class="muted">（灰色＝沙盒測試）</span></h2>
     <div class="tbl"><table id="events"><thead><tr><th>時間(UTC)</th><th>類型</th><th>商品</th><th>金額</th><th>幣別</th><th>國家</th></tr></thead><tbody></tbody></table></div>
+    <h2>流量（Page Views）</h2>
+    <div class="cards" id="trafCards"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px" class="traf-grid">
+      <div><h3 style="font-size:14px;margin:6px 0">國家 / 地區</h3><div class="tbl"><table id="trCountry"><thead><tr><th>地區</th><th>次數</th></tr></thead><tbody></tbody></table></div></div>
+      <div><h3 style="font-size:14px;margin:6px 0">熱門頁面</h3><div class="tbl"><table id="trPath"><thead><tr><th>路徑</th><th>次數</th></tr></thead><tbody></tbody></table></div></div>
+    </div>
+    <h3 style="font-size:14px;margin:16px 0 6px">近 30 天每日</h3>
+    <div class="tbl"><table id="trDaily"><thead><tr><th>日期</th><th>PV</th></tr></thead><tbody></tbody></table></div>
+
     <h2>使用者回饋</h2>
     <div class="tbl"><table id="fb"><thead><tr><th>時間(UTC)</th><th>類型</th><th>內容</th><th>email</th></tr></thead><tbody></tbody></table></div>
     <p class="muted" style="margin-top:20px">來源：RevenueCat webhook → Cloudflare D1。更完整的圖表看 <a href="https://app.revenuecat.com/projects/5b67fb57/overview" target="_blank">RevenueCat 儀表板</a>。金額為 RC 換算美金；日圓實收以 App Store Connect 為準。</p>
@@ -71,7 +80,7 @@ async function load(){
   const tok=localStorage.getItem("stw_admin_tok");
   if(!tok) return;
   try{
-    const [sum, events, fb]=await Promise.all([api("/api/admin/summary"),api("/api/admin/events"),api("/api/admin/feedback")]);
+    const [sum, events, fb, traf]=await Promise.all([api("/api/admin/summary"),api("/api/admin/events"),api("/api/admin/feedback"),api("/api/admin/traffic")]);
     document.getElementById("login").style.display="none";
     document.getElementById("dash").style.display="";
     document.getElementById("cards").innerHTML=`
@@ -82,6 +91,15 @@ async function load(){
     document.querySelector("#byproduct tbody").innerHTML=(sum.byProduct||[]).map(r=>`<tr><td>${esc(r.product_id)}</td><td>${r.n}</td><td>$${r.usd??0}</td></tr>`).join("")||"<tr><td colspan=3 class=muted>還沒有正式交易</td></tr>";
     document.querySelector("#events tbody").innerHTML=(events||[]).map(r=>`<tr class="${r.environment!=='PRODUCTION'?'sandbox':''}"><td>${esc(r.ts)}</td><td>${esc(r.event_type)}</td><td>${esc(r.product_id)}</td><td>${r.price_in_purchased_currency??r.price??""}</td><td>${esc(r.currency)}</td><td>${esc(r.country)}</td></tr>`).join("")||"<tr><td colspan=6 class=muted>還沒有事件（webhook 接上後會出現）</td></tr>";
     document.querySelector("#fb tbody").innerHTML=(fb||[]).map(r=>`<tr><td>${esc(r.ts)}</td><td><span class="tag ${esc(r.type)}">${esc(r.type)}</span></td><td style="max-width:420px;white-space:pre-wrap">${esc(r.message)}</td><td>${esc(r.email)}</td></tr>`).join("")||"<tr><td colspan=4 class=muted>還沒有回饋</td></tr>";
+    const src=Object.fromEntries((traf.bySource||[]).map(r=>[r.source,r.n]));
+    document.getElementById("trafCards").innerHTML=`
+      <div class="card"><b>${traf.today??0}</b><span>今日 PV</span></div>
+      <div class="card"><b>${traf.total??0}</b><span>累計 PV</span></div>
+      <div class="card"><b>${src.web||0}</b><span>Web（30天）</span></div>
+      <div class="card"><b>${src.app||0}</b><span>App 内（30天）</span></div>`;
+    document.querySelector("#trCountry tbody").innerHTML=(traf.countries||[]).map(r=>`<tr><td>${esc(r.country)}</td><td>${r.n}</td></tr>`).join("")||"<tr><td colspan=2 class=muted>—</td></tr>";
+    document.querySelector("#trPath tbody").innerHTML=(traf.paths||[]).map(r=>`<tr><td>${esc(r.path)}</td><td>${r.n}</td></tr>`).join("")||"<tr><td colspan=2 class=muted>—</td></tr>";
+    document.querySelector("#trDaily tbody").innerHTML=(traf.daily||[]).map(r=>`<tr><td>${esc(r.d)}</td><td>${r.n}</td></tr>`).join("")||"<tr><td colspan=2 class=muted>還沒有流量</td></tr>";
   }catch(e){
     document.getElementById("loginErr").textContent = e.message==="unauthorized" ? "Token 不對" : "載入失敗："+e.message;
     localStorage.removeItem("stw_admin_tok");

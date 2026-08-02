@@ -96,6 +96,18 @@ export default {
       return json({ ok: true }, 200, h);
     }
 
+    // ---------- 流量計數（公開ビーコン。JS を実行する実ブラウザのみ＝bot 除外）----------
+    if (url.pathname === "/api/hit" && req.method === "POST") {
+      let b; try { b = await req.json(); } catch { b = {}; }
+      const path = String(b.path || "/").slice(0, 200);
+      const ref = String(b.ref || "").slice(0, 300);
+      const country = (req.cf && req.cf.country) || req.headers.get("CF-IPCountry") || "";
+      const inApp = /STAYTW_NATIVE|ReactNative/i.test(String(b.ua || "")) || b.app ? "app" : "web";
+      await env.DB.prepare("INSERT INTO hits (path, referrer, country, source) VALUES (?1,?2,?3,?4)")
+        .bind(path, ref, country, inApp).run();
+      return new Response(null, { status: 204, headers: h });
+    }
+
     // ---------- 原生登入（Apple/Google ID トークン → StayTW session）----------
     if (url.pathname === "/api/native-login" && req.method === "POST") {
       let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
@@ -188,6 +200,19 @@ export default {
         const r = await env.DB.prepare(
           `SELECT id, ts, type, message, email, lang FROM feedback ORDER BY id DESC LIMIT 200`).all();
         return json(r.results, 200, h);
+      }
+      if (url.pathname === "/api/admin/traffic") {
+        const [total, today, daily, countries, paths, refs, bySource] = await Promise.all([
+          env.DB.prepare(`SELECT COUNT(*) n FROM hits`).first(),
+          env.DB.prepare(`SELECT COUNT(*) n FROM hits WHERE date(ts)=date('now')`).first(),
+          env.DB.prepare(`SELECT date(ts) d, COUNT(*) n FROM hits WHERE ts>datetime('now','-30 days') GROUP BY date(ts) ORDER BY d DESC`).all(),
+          env.DB.prepare(`SELECT country, COUNT(*) n FROM hits WHERE ts>datetime('now','-30 days') AND country!='' GROUP BY country ORDER BY n DESC LIMIT 12`).all(),
+          env.DB.prepare(`SELECT path, COUNT(*) n FROM hits WHERE ts>datetime('now','-30 days') GROUP BY path ORDER BY n DESC LIMIT 12`).all(),
+          env.DB.prepare(`SELECT referrer, COUNT(*) n FROM hits WHERE ts>datetime('now','-30 days') AND referrer!='' GROUP BY referrer ORDER BY n DESC LIMIT 10`).all(),
+          env.DB.prepare(`SELECT source, COUNT(*) n FROM hits WHERE ts>datetime('now','-30 days') GROUP BY source`).all(),
+        ]);
+        return json({ total: total.n, today: today.n, daily: daily.results, countries: countries.results,
+                      paths: paths.results, refs: refs.results, bySource: bySource.results }, 200, h);
       }
       return json({ error: "not found" }, 404, h);
     }
