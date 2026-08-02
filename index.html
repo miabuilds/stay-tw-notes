@@ -256,6 +256,19 @@ button{font-family:inherit}
 .srs-home{max-width:640px}
 .srs-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin:18px 0}
 .srs-stat{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+/* マイページ */
+.pf-acc{display:flex;align-items:center;gap:14px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.pf-avatar{width:46px;height:46px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;flex:none}
+.pf-logout{background:none;border:1px solid var(--bd);color:var(--tx2);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;flex:none}
+.pf-sync{font-size:12px;color:#2F7A5D;margin:8px 0 0;text-align:center}
+[data-theme="dark"] .pf-sync{color:#4C9B7A}
+.pf-h{font-size:13px;letter-spacing:.05em;color:var(--tx2);font-weight:700;margin:24px 0 12px}
+.pf-levels{display:flex;flex-direction:column;gap:10px}
+.pf-lv{display:flex;align-items:center;gap:12px}
+.pf-lvn{font-size:13px;font-weight:700;width:64px;flex:none}
+.pf-bar{flex:1;height:8px;background:var(--bg3);border-radius:999px;overflow:hidden}
+.pf-bar i{display:block;height:100%;background:var(--ac);border-radius:999px;transition:width .5s var(--ease)}
+.pf-lvc{font-size:12px;color:var(--tx3);width:58px;text-align:right;flex:none}
 .srs-stat b{font-family:var(--serif);font-size:26px;display:block;line-height:1.2}
 .srs-stat span{font-size:11.5px;color:var(--tx3)}
 .srs-stat.hot b{color:var(--ac)}
@@ -453,6 +466,9 @@ button{font-family:inherit}
     <div id="zyBody"></div>
   </section>
 
+  <!-- マイページ -->
+  <section class="panel" id="panel-profile"><div id="pfBody"></div></section>
+
   <!-- 文法 -->
   <section class="panel" id="panel-grammar"><div id="gList"></div></section>
 
@@ -510,6 +526,7 @@ button{font-family:inherit}
   <div class="sheet-grid">
     <button class="sheet-item" data-panel="list"><span class="bi">📚</span><span data-i18n="toolVocabList">単語リスト</span></button>
     <button class="sheet-item" data-panel="zhuyin"><span class="bi">ㄅ</span><span data-i18n="toolZhuyin">注音</span></button>
+    <button class="sheet-item" data-panel="profile"><span class="bi"></span><span data-i18n="toolProfile">マイページ</span></button>
     <button class="sheet-item" data-panel="grammar"><span class="bi">✏️</span><span data-i18n="toolGrammar">文法</span></button>
     <button class="sheet-item" data-panel="phrases"><span class="bi">💬</span><span data-i18n="toolPhrases">フレーズ</span></button>
     <button class="sheet-item" data-panel="speak"><span class="bi">🎤</span><span data-i18n="toolSpeak">スピーキング</span></button>
@@ -524,25 +541,25 @@ button{font-family:inherit}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="i18n.js?v=20"></script>
-<script src="tts.js?v=20"></script>
-<script src="vocab-l1.js?v=20"></script>
-<script src="vocab-l2.js?v=20"></script>
-<script src="vocab-l3.js?v=20"></script>
-<script src="vocab-l4.js?v=20"></script>
-<script src="vocab-l5.js?v=20"></script>
-<script src="grammar-l1.js?v=20"></script>
-<script src="grammar-l2.js?v=20"></script>
-<script src="grammar-l3.js?v=20"></script>
-<script src="grammar-l4.js?v=20"></script>
-<script src="grammar-l5.js?v=20"></script>
-<script src="phrases-l1.js?v=20"></script>
-<script src="zhuyin.js?v=20"></script>
-<script src="writing-data.js?v=20"></script>
-<script src="paywall.js?v=20"></script>
-<script src="websync.js?v=20"></script>
-<script src="srs.js?v=20"></script>
-<script src="mock-exam.js?v=20"></script>
+<script src="i18n.js?v=21"></script>
+<script src="tts.js?v=21"></script>
+<script src="vocab-l1.js?v=21"></script>
+<script src="vocab-l2.js?v=21"></script>
+<script src="vocab-l3.js?v=21"></script>
+<script src="vocab-l4.js?v=21"></script>
+<script src="vocab-l5.js?v=21"></script>
+<script src="grammar-l1.js?v=21"></script>
+<script src="grammar-l2.js?v=21"></script>
+<script src="grammar-l3.js?v=21"></script>
+<script src="grammar-l4.js?v=21"></script>
+<script src="grammar-l5.js?v=21"></script>
+<script src="phrases-l1.js?v=21"></script>
+<script src="zhuyin.js?v=21"></script>
+<script src="writing-data.js?v=21"></script>
+<script src="paywall.js?v=21"></script>
+<script src="websync.js?v=21"></script>
+<script src="srs.js?v=21"></script>
+<script src="mock-exam.js?v=21"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -585,6 +602,7 @@ function switchPanel(p){
   if (p === "speak") SPK.render();
   if (p === "write") WR.render();
   if (p === "zhuyin") ZY.render();
+  if (p === "profile") renderProfile();
   // レベル選択は語彙系のみ関係。注音・フレーズ等では隠す
   const noLevel = ["zhuyin", "phrases", "speak", "write"].includes(p);
   const lv = document.querySelector(".levels"); if (lv) lv.style.display = noLevel ? "none" : "";
@@ -1054,6 +1072,44 @@ const WR = (() => {
 })();
 
 /* ===== 復習 SRS ホーム ===== */
+/* ===== マイページ ===== */
+function renderProfile(){
+  const parse = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } };
+  const srs = parse("stw_srs", {}), exam = parse("stw_exam_history", []);
+  const keys = Object.keys(srs);
+  const total = keys.length, mastered = keys.filter(k => srs[k].interval >= 21).length, learning = total - mastered;
+  const per = { l1:{t:0,m:0}, l2:{t:0,m:0}, l3:{t:0,m:0}, l4:{t:0,m:0}, l5:{t:0,m:0} };
+  keys.forEach(k => { const lv = k.split(":")[0]; if (per[lv]) { per[lv].t++; if (srs[k].interval >= 21) per[lv].m++; } });
+  const best = exam.length ? Math.max(...exam.map(h => Math.round(h.score / h.total * 100))) : 0;
+  const li = !!(window.STW_WEB && STW_WEB.isLoggedIn && STW_WEB.isLoggedIn());
+  const u = li && STW_WEB.getUser ? STW_WEB.getUser() : null;
+  const lvName = { l1:twT("lv_l1"), l2:twT("lv_l2"), l3:twT("lv_l3"), l4:twT("lv_l4"), l5:twT("lv_l5") };
+  let acc;
+  if (li && u) {
+    const label = (u.name || u.email || "?").trim().slice(0, 1).toUpperCase();
+    acc = `<div class="pf-acc"><div class="pf-avatar">${label}</div>
+      <div style="flex:1;min-width:0"><b style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.name || u.email || ""}</b><span style="font-size:12.5px;color:var(--tx3)">${u.email || ""}</span></div>
+      <button class="pf-logout" onclick="STW_WEB.logout();renderProfile()">${twT("acLogout")}</button></div>
+      <p class="pf-sync">✓ ${twT("pfSynced")}</p>`;
+  } else {
+    acc = `<div class="pf-acc"><img src="images/bear.svg" style="width:46px;height:auto">
+      <div style="flex:1"><b style="display:block">${twT("loginTitle")}</b><span style="font-size:12.5px;color:var(--tx2)">${twT("pfGuest")}</span></div>
+      <button class="btn primary" style="padding:9px 18px" onclick="STW_WEB.login()">${twT("navLogin")}</button></div>`;
+  }
+  document.getElementById("pfBody").innerHTML = `${acc}
+    <div class="srs-stats-grid" style="margin-top:20px">
+      <div class="srs-stat"><b>${total}</b><span>${twT("pfLearned")}</span></div>
+      <div class="srs-stat"><b>${mastered}</b><span>${twT("srsMastered")}</span></div>
+      <div class="srs-stat"><b>${learning}</b><span>${twT("srsLearning")}</span></div>
+      <div class="srs-stat"><b>${best ? best + "%" : "—"}</b><span>${twT("pfExamBest")}</span></div>
+    </div>
+    <h3 class="pf-h">${twT("pfByLevel")}</h3>
+    <div class="pf-levels">${["l1","l2","l3","l4","l5"].map(lv =>
+      `<div class="pf-lv"><span class="pf-lvn">${lvName[lv]}</span><div class="pf-bar"><i style="width:${per[lv].t ? Math.min(100, per[lv].m / per[lv].t * 100) : 0}%"></i></div><span class="pf-lvc">${per[lv].m} / ${per[lv].t}</span></div>`).join("")}</div>
+    ${exam.length ? `<h3 class="pf-h">${twT("exHistory")}</h3><div class="ex-hist">${exam.slice(-8).reverse().map(h =>
+      `<div class="ex-hist-item"><span>${new Date(h.ts).toLocaleDateString()}</span><b>${h.score} / ${h.total}</b><span>${Math.round(h.score / h.total * 100)}%</span></div>`).join("")}</div>` : ""}`;
+}
+
 function renderSrsHome(){
   const st = SRS.getStats(currentLevel);
   const due = SRS.getDueCount();
@@ -1241,6 +1297,7 @@ const ICONS = {
   srs:`<svg viewBox="0 0 24 24"><path d="M4.5 10a7.5 7.5 0 0 1 12.6-3.4L20 9M19.5 14a7.5 7.5 0 0 1-12.6 3.4L4 15"/><path d="M20 4.5V9h-4.5M4 19.5V15h4.5"/></svg>`,
   exam:`<svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2.2"/><path d="M9.2 4a1 1 0 0 1 1-1h3.6a1 1 0 0 1 1 1v1.2h-5.6z"/><path d="M8.6 11h6.8M8.6 15h4.4"/></svg>`,
   more:`<svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><circle cx="6" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></svg>`,
+  profile:`<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>`,
   contact:`<svg viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M4 8l8 5 8-5"/></svg>`,
 };
 function applyIcons(){
