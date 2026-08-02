@@ -1,16 +1,92 @@
 <!DOCTYPE html>
 <html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>プライバシーポリシー — StayTW Study</title><link rel="icon" href="favicon.svg" type="image/svg+xml">
-<style>body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;max-width:720px;margin:0 auto;padding:48px 24px;line-height:1.9;color:#1C1C1E;background:#FAF8F3}h1{font-size:24px;margin-bottom:24px}h2{font-size:17px;margin:28px 0 8px}p,li{font-size:14.5px;color:#444}a{color:#2F5D7A}</style></head><body>
-<h1>プライバシーポリシー</h1>
-<p>StayTW Study（以下「本サービス」）は、ユーザーのプライバシーを尊重します。</p>
-<h2>1. 収集する情報</h2><ul>
-<li><b>学習データ</b>：復習の進捗・模試の成績・作文の下書きなどは、原則としてお使いの端末内（ローカルストレージ）に保存されます。</li>
-<li><b>購入情報</b>：プレミアムの購入状態は Apple / RevenueCat を通じて確認します。クレジットカード情報等を本サービスが直接取得することはありません。</li>
-<li><b>音声</b>：スピーキング練習の音声は発音判定のために端末上・OS の音声認識機能で処理され、本サービスのサーバーに保存されることはありません。</li>
+<style>body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;max-width:720px;margin:0 auto;padding:48px 24px;line-height:1.9;color:#1C1C1E;background:#FAF8F3}h1{font-size:24px;margin-bottom:24px}h2{font-size:17px;margin:28px 0 8px}p,li{font-size:14.5px;color:#444}a{color:#2F5D7A}#langToggle{font:inherit;font-size:13px;color:#2F5D7A;background:transparent;border:1px solid #d8d2c4;border-radius:8px;padding:4px 12px;cursor:pointer}#langToggle:hover{background:#f0ebe0}</style></head><body>
+<div style="text-align:right;margin-bottom:8px"><button id="langToggle" data-i18n="langBtn" onclick="cycleLang()" aria-label="Language">日本語</button></div>
+<h1 data-i18n="h1">プライバシーポリシー</h1>
+<p data-i18n="intro">StayTW Study（以下「本サービス」）は、ユーザーのプライバシーを尊重します。</p>
+<h2 data-i18n="h2_1">1. 収集する情報</h2><ul>
+<li data-i18n-html="li1"><b>学習データ</b>：復習の進捗・模試の成績・作文の下書きなどは、原則としてお使いの端末内（ローカルストレージ）に保存されます。</li>
+<li data-i18n-html="li2"><b>購入情報</b>：プレミアムの購入状態は Apple / RevenueCat を通じて確認します。クレジットカード情報等を本サービスが直接取得することはありません。</li>
+<li data-i18n-html="li3"><b>音声</b>：スピーキング練習の音声は発音判定のために端末上・OS の音声認識機能で処理され、本サービスのサーバーに保存されることはありません。</li>
 </ul>
-<h2>2. 利用目的</h2><p>収集した情報は、学習機能の提供・購入状態の確認・サービス改善のためにのみ利用します。第三者への販売は行いません。</p>
-<h2>3. 第三者サービス</h2><p>本サービスは以下の第三者サービスを利用する場合があります：Apple App Store（決済）、RevenueCat（購入管理）、Google Firebase（ログイン・同期機能を有効化した場合）。各サービスのプライバシーポリシーもあわせてご確認ください。</p>
-<h2>4. データの削除</h2><p>学習データは端末のブラウザデータ／アプリを削除することで消去できます。その他の削除依頼は下記までご連絡ください。</p>
-<p style="margin-top:36px;font-size:13px;color:#888">最終更新：2026年7月<br>お問い合わせ：<a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a></p>
+<h2 data-i18n="h2_2">2. 利用目的</h2><p data-i18n="p2">収集した情報は、学習機能の提供・購入状態の確認・サービス改善のためにのみ利用します。第三者への販売は行いません。</p>
+<h2 data-i18n="h2_3">3. 第三者サービス</h2><p data-i18n="p3">本サービスは以下の第三者サービスを利用する場合があります：Apple App Store（決済）、RevenueCat（購入管理）、Google Firebase（ログイン・同期機能を有効化した場合）。各サービスのプライバシーポリシーもあわせてご確認ください。</p>
+<h2 data-i18n="h2_4">4. データの削除</h2><p data-i18n="p4">学習データは端末のブラウザデータ／アプリを削除することで消去できます。その他の削除依頼は下記までご連絡ください。</p>
+<p style="margin-top:36px;font-size:13px;color:#888" data-i18n-html="footer">最終更新：2026年7月<br>お問い合わせ：<a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a></p>
+<script>
+const T={
+ja:{
+langBtn:"日本語",
+h1:"プライバシーポリシー",
+intro:"StayTW Study（以下「本サービス」）は、ユーザーのプライバシーを尊重します。",
+h2_1:"1. 収集する情報",
+li1:"<b>学習データ</b>：復習の進捗・模試の成績・作文の下書きなどは、原則としてお使いの端末内（ローカルストレージ）に保存されます。",
+li2:"<b>購入情報</b>：プレミアムの購入状態は Apple / RevenueCat を通じて確認します。クレジットカード情報等を本サービスが直接取得することはありません。",
+li3:"<b>音声</b>：スピーキング練習の音声は発音判定のために端末上・OS の音声認識機能で処理され、本サービスのサーバーに保存されることはありません。",
+h2_2:"2. 利用目的",
+p2:"収集した情報は、学習機能の提供・購入状態の確認・サービス改善のためにのみ利用します。第三者への販売は行いません。",
+h2_3:"3. 第三者サービス",
+p3:"本サービスは以下の第三者サービスを利用する場合があります：Apple App Store（決済）、RevenueCat（購入管理）、Google Firebase（ログイン・同期機能を有効化した場合）。各サービスのプライバシーポリシーもあわせてご確認ください。",
+h2_4:"4. データの削除",
+p4:"学習データは端末のブラウザデータ／アプリを削除することで消去できます。その他の削除依頼は下記までご連絡ください。",
+footer:'最終更新：2026年7月<br>お問い合わせ：<a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a>'
+},
+en:{
+langBtn:"English",
+h1:"Privacy Policy",
+intro:'StayTW Study (the "Service") respects your privacy.',
+h2_1:"1. Information We Collect",
+li1:"<b>Learning data</b>: Review progress, mock exam scores, writing drafts, and similar data are, in principle, stored on your device (local storage).",
+li2:"<b>Purchase information</b>: Premium purchase status is verified through Apple / RevenueCat. The Service never directly obtains your credit card or similar information.",
+li3:"<b>Audio</b>: Audio from speaking practice is processed on-device by your OS's speech recognition for pronunciation assessment and is never stored on the Service's servers.",
+h2_2:"2. Purpose of Use",
+p2:"Collected information is used only to provide learning features, verify purchase status, and improve the Service. We do not sell it to third parties.",
+h2_3:"3. Third-Party Services",
+p3:"The Service may use the following third-party services: Apple App Store (payments), RevenueCat (purchase management), and Google Firebase (when login/sync features are enabled). Please also review each service's privacy policy.",
+h2_4:"4. Deleting Your Data",
+p4:"You can erase your learning data by clearing your device's browser data or deleting the app. For other deletion requests, please contact us below.",
+footer:'Last updated: July 2026<br>Contact: <a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a>'
+},
+ko:{
+langBtn:"한국어",
+h1:"개인정보 처리방침",
+intro:'StayTW Study(이하 "본 서비스")는 사용자의 개인정보를 존중합니다.',
+h2_1:"1. 수집하는 정보",
+li1:"<b>학습 데이터</b>: 복습 진행 상황·모의고사 성적·작문 초안 등은 원칙적으로 사용 중인 기기 내(로컬 스토리지)에 저장됩니다.",
+li2:"<b>구매 정보</b>: 프리미엄 구매 상태는 Apple / RevenueCat을 통해 확인합니다. 신용카드 정보 등을 본 서비스가 직접 취득하는 일은 없습니다.",
+li3:"<b>음성</b>: 스피킹 연습 음성은 발음 판정을 위해 기기 상·OS의 음성 인식 기능으로 처리되며, 본 서비스의 서버에 저장되지 않습니다.",
+h2_2:"2. 이용 목적",
+p2:"수집한 정보는 학습 기능 제공·구매 상태 확인·서비스 개선을 위해서만 이용합니다. 제3자에게 판매하지 않습니다.",
+h2_3:"3. 제3자 서비스",
+p3:"본 서비스는 다음의 제3자 서비스를 이용할 수 있습니다: Apple App Store(결제), RevenueCat(구매 관리), Google Firebase(로그인·동기화 기능을 활성화한 경우). 각 서비스의 개인정보 처리방침도 함께 확인해 주시기 바랍니다.",
+h2_4:"4. 데이터 삭제",
+p4:"학습 데이터는 기기의 브라우저 데이터/앱을 삭제하여 지울 수 있습니다. 그 외 삭제 요청은 아래로 연락해 주시기 바랍니다.",
+footer:'최종 업데이트: 2026년 7월<br>문의: <a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a>'
+}
+};
+function applyLang(){
+  const lang=localStorage.getItem("stw-lang")||"ja";
+  document.documentElement.lang=lang;
+  const dict=T[lang]||T.ja;
+  document.querySelectorAll("[data-i18n]").forEach(function(el){
+    const k=el.getAttribute("data-i18n");
+    const v=(dict[k]!==undefined)?dict[k]:T.ja[k];
+    if(v!==undefined)el.textContent=v;
+  });
+  document.querySelectorAll("[data-i18n-html]").forEach(function(el){
+    const k=el.getAttribute("data-i18n-html");
+    const v=(dict[k]!==undefined)?dict[k]:T.ja[k];
+    if(v!==undefined)el.innerHTML=v;
+  });
+}
+function cycleLang(){
+  const order=["ja","en","ko"];
+  const cur=localStorage.getItem("stw-lang")||"ja";
+  const next=order[(order.indexOf(cur)+1)%order.length];
+  localStorage.setItem("stw-lang",next);
+  applyLang();
+}
+applyLang();
+</script>
 </body></html>
