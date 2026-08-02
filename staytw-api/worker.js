@@ -76,6 +76,14 @@ async function verifySession(token, secret) {
   return payload.uid || null;
 }
 
+// Google 網頁ログイン用（後台・Web）。iOS は env.GOOGLE_IOS_CLIENT_ID、Web はこの公開 client id。
+const GOOGLE_WEB_CLIENT_ID = "949214636130-e2dl3h0t1l789fggve3vsd6pu670lnb1.apps.googleusercontent.com";
+const ADMIN_EMAILS = ["abc83327@gmail.com"];
+async function verifyGoogleWeb(token) {
+  return verifyOidcJwt(token, "https://www.googleapis.com/oauth2/v3/certs",
+    ["accounts.google.com", "https://accounts.google.com"], GOOGLE_WEB_CLIENT_ID);
+}
+
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
@@ -170,10 +178,26 @@ export default {
       return json({ ok: true });
     }
 
-    // ---------- 後台（Bearer ADMIN_TOKEN） ----------
+    // ---------- 後台 Google ログイン（→ 管理 session。ホワイトリストのみ）----------
+    if (url.pathname === "/api/admin-login" && req.method === "POST") {
+      let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
+      const payload = await verifyGoogleWeb(b.token);
+      if (!payload || !payload.email) return json({ error: "invalid_token" }, 401, h);
+      if (!ADMIN_EMAILS.includes(payload.email.toLowerCase())) return json({ error: "not_admin", email: payload.email }, 403, h);
+      const sessionToken = await signSession("admin:" + payload.email.toLowerCase(), env.SESSION_SECRET);
+      return json({ sessionToken, email: payload.email }, 200, h);
+    }
+
+    // ---------- 後台（Google 管理 session または旧 ADMIN_TOKEN）----------
     if (url.pathname.startsWith("/api/admin/")) {
       const auth = req.headers.get("Authorization") || "";
-      if (auth !== `Bearer ${env.ADMIN_TOKEN}`) return json({ error: "unauthorized" }, 401, h);
+      const bearer = auth.replace(/^Bearer\s+/i, "");
+      let ok = env.ADMIN_TOKEN && bearer === env.ADMIN_TOKEN;   // 旧トークン（後方互換）
+      if (!ok) {
+        const uid = await verifySession(bearer, env.SESSION_SECRET);   // Google 管理 session
+        ok = uid && uid.startsWith("admin:") && ADMIN_EMAILS.includes(uid.slice(6));
+      }
+      if (!ok) return json({ error: "unauthorized" }, 401, h);
 
       if (url.pathname === "/api/admin/summary") {
         const [rev, byProduct, last30, fbCount] = await Promise.all([

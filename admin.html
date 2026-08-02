@@ -31,15 +31,15 @@ th{background:rgba(0,0,0,.03);font-size:12px;color:var(--tx2)}
 a{color:#2F5D7A}
 .sandbox{opacity:.55}
 </style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 <div class="wrap">
   <div id="login" class="login">
-    <div style="font-size:44px">🐻‍❄️</div>
+    <div style="font-size:44px">🐻</div>
     <h1>StayTW 後台</h1>
-    <p class="muted">輸入 Admin Token（只需一次，存在本機）</p>
-    <input id="tok" type="password" placeholder="Admin Token">
-    <button class="btn" onclick="saveTok()">進入</button>
+    <p class="muted">用 Google 帳號登入（僅限管理員）</p>
+    <div id="gbtn" style="display:flex;justify-content:center;margin:18px 0"></div>
     <p class="muted" id="loginErr"></p>
   </div>
 
@@ -70,7 +70,21 @@ a{color:#2F5D7A}
 <script>
 const API="https://staytw-api.abc83327.workers.dev";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function saveTok(){ localStorage.setItem("stw_admin_tok", document.getElementById("tok").value.trim()); load(); }
+const WEB_CLIENT_ID="949214636130-e2dl3h0t1l789fggve3vsd6pu670lnb1.apps.googleusercontent.com";
+async function onGoogleCredential(resp){
+  const err=document.getElementById("loginErr"); err.textContent="";
+  try{
+    const r=await fetch(API+"/api/admin-login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token:resp.credential})});
+    const d=await r.json();
+    if(!r.ok){ err.textContent = r.status===403 ? ("この Google アカウントは管理者ではありません："+(d.email||"")) : "ログインに失敗しました"; return; }
+    localStorage.setItem("stw_admin_tok", d.sessionToken); load();
+  }catch(e){ err.textContent="通信エラー"; }
+}
+function initGoogle(){
+  if(!window.google||!window.google.accounts) return setTimeout(initGoogle,150);
+  google.accounts.id.initialize({client_id:WEB_CLIENT_ID, callback:onGoogleCredential});
+  google.accounts.id.renderButton(document.getElementById("gbtn"),{theme:"filled_black",size:"large",text:"signin_with",shape:"pill"});
+}
 async function api(path){
   const r=await fetch(API+path,{headers:{Authorization:"Bearer "+localStorage.getItem("stw_admin_tok")}});
   if(r.status===401) throw new Error("unauthorized");
@@ -101,13 +115,14 @@ async function load(){
     document.querySelector("#trPath tbody").innerHTML=(traf.paths||[]).map(r=>`<tr><td>${esc(r.path)}</td><td>${r.n}</td></tr>`).join("")||"<tr><td colspan=2 class=muted>—</td></tr>";
     document.querySelector("#trDaily tbody").innerHTML=(traf.daily||[]).map(r=>`<tr><td>${esc(r.d)}</td><td>${r.n}</td></tr>`).join("")||"<tr><td colspan=2 class=muted>還沒有流量</td></tr>";
   }catch(e){
-    document.getElementById("loginErr").textContent = e.message==="unauthorized" ? "Token 不對" : "載入失敗："+e.message;
+    document.getElementById("loginErr").textContent = e.message==="unauthorized" ? "セッション切れ。もう一度ログインしてください。" : "載入失敗："+e.message;
     localStorage.removeItem("stw_admin_tok");
+    document.getElementById("login").style.display=""; document.getElementById("dash").style.display="none";
+    initGoogle();
   }
 }
 (function(){const s=localStorage.getItem("stw-theme");if(s==="dark"||(!s&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.dataset.theme="dark";})();
-document.getElementById("tok").addEventListener("keydown",e=>{if(e.key==="Enter")saveTok()});
-load();
+if(localStorage.getItem("stw_admin_tok")) load(); else initGoogle();
 </script>
 </body>
 </html>
