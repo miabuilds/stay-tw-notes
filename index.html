@@ -269,6 +269,11 @@ button{font-family:inherit}
 .pf-bar{flex:1;height:8px;background:var(--bg3);border-radius:999px;overflow:hidden}
 .pf-bar i{display:block;height:100%;background:var(--ac);border-radius:999px;transition:width .5s var(--ease)}
 .pf-lvc{font-size:12px;color:var(--tx3);width:58px;text-align:right;flex:none}
+.pf-streak{display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 66%,#000));color:#fff;border-radius:14px;padding:16px 22px}
+.pf-streak-n{font-family:var(--serif);font-size:42px;font-weight:700;line-height:1;flex:none}
+.pf-streak-n small{font-size:15px;font-weight:600;margin-left:3px}
+.pf-streak-lbl b{display:block;font-size:15px}
+.pf-streak-lbl span{font-size:12.5px;opacity:.85}
 .srs-stat b{font-family:var(--serif);font-size:26px;display:block;line-height:1.2}
 .srs-stat span{font-size:11.5px;color:var(--tx3)}
 .srs-stat.hot b{color:var(--ac)}
@@ -541,25 +546,25 @@ button{font-family:inherit}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="i18n.js?v=22"></script>
-<script src="tts.js?v=22"></script>
-<script src="vocab-l1.js?v=22"></script>
-<script src="vocab-l2.js?v=22"></script>
-<script src="vocab-l3.js?v=22"></script>
-<script src="vocab-l4.js?v=22"></script>
-<script src="vocab-l5.js?v=22"></script>
-<script src="grammar-l1.js?v=22"></script>
-<script src="grammar-l2.js?v=22"></script>
-<script src="grammar-l3.js?v=22"></script>
-<script src="grammar-l4.js?v=22"></script>
-<script src="grammar-l5.js?v=22"></script>
-<script src="phrases-l1.js?v=22"></script>
-<script src="zhuyin.js?v=22"></script>
-<script src="writing-data.js?v=22"></script>
-<script src="paywall.js?v=22"></script>
-<script src="websync.js?v=22"></script>
-<script src="srs.js?v=22"></script>
-<script src="mock-exam.js?v=22"></script>
+<script src="i18n.js?v=23"></script>
+<script src="tts.js?v=23"></script>
+<script src="vocab-l1.js?v=23"></script>
+<script src="vocab-l2.js?v=23"></script>
+<script src="vocab-l3.js?v=23"></script>
+<script src="vocab-l4.js?v=23"></script>
+<script src="vocab-l5.js?v=23"></script>
+<script src="grammar-l1.js?v=23"></script>
+<script src="grammar-l2.js?v=23"></script>
+<script src="grammar-l3.js?v=23"></script>
+<script src="grammar-l4.js?v=23"></script>
+<script src="grammar-l5.js?v=23"></script>
+<script src="phrases-l1.js?v=23"></script>
+<script src="zhuyin.js?v=23"></script>
+<script src="writing-data.js?v=23"></script>
+<script src="paywall.js?v=23"></script>
+<script src="websync.js?v=23"></script>
+<script src="srs.js?v=23"></script>
+<script src="mock-exam.js?v=23"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -647,6 +652,7 @@ function fcShuffle(){ deck.sort(()=>Math.random()-.5); fcIdx = 0; renderCard(); 
 function fcGrade(g){
   const w = deck[fcIdx].w;
   SRS.recordGrade(currentLevel, w, g);
+  recordStudyDay();
   updateSrsBadges();
   const subs = { known: "srsG1sub", soso: "srsG2sub", unknown: "srsG3sub" };
   showToast(`✓ ${w}　${twT("gradeSaved")}${twT(subs[g])}`);
@@ -843,6 +849,7 @@ function qzAnswer(btn){
   const ok = btn.dataset.ok === "true";
   const w = qzOrder[qzIdx];
   SRS.record(currentLevel, w.w, ok);
+  recordStudyDay();
   updateSrsBadges();
   document.querySelectorAll("#qzBox .qz-opt").forEach(b=>{
     b.disabled = true;
@@ -1072,6 +1079,26 @@ const WR = (() => {
 })();
 
 /* ===== 復習 SRS ホーム ===== */
+/* ===== 連続日数（ストリーク） ===== */
+function dayStr(dt){ return dt.getFullYear() + "-" + String(dt.getMonth()+1).padStart(2,"0") + "-" + String(dt.getDate()).padStart(2,"0"); }
+function recordStudyDay(){
+  let days; try { days = JSON.parse(localStorage.getItem("stw_streak") || "[]"); } catch (e) { days = []; }
+  const t = dayStr(new Date());
+  if (!days.includes(t)) {
+    days.push(t); days.sort();
+    localStorage.setItem("stw_streak", JSON.stringify(days.slice(-400)));
+    if (typeof window.onSRSChange === "function") window.onSRSChange();   // クラウド同期
+  }
+}
+function getStreak(){
+  let days; try { days = JSON.parse(localStorage.getItem("stw_streak") || "[]"); } catch (e) { return { cur: 0, total: 0 }; }
+  const set = new Set(days);
+  let cur = 0, cursor = new Date();
+  if (!set.has(dayStr(cursor))) cursor.setDate(cursor.getDate() - 1);   // 今日未学習でも昨日までの連続は生きている
+  while (set.has(dayStr(cursor))) { cur++; cursor.setDate(cursor.getDate() - 1); }
+  return { cur, total: set.size };
+}
+
 /* ===== マイページ ===== */
 function renderProfile(){
   const parse = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } };
@@ -1096,8 +1123,13 @@ function renderProfile(){
       <div style="flex:1"><b style="display:block">${twT("loginTitle")}</b><span style="font-size:12.5px;color:var(--tx2)">${twT("pfGuest")}</span></div>
       <button class="btn primary" style="padding:9px 18px" onclick="STW_WEB.login()">${twT("navLogin")}</button></div>`;
   }
+  const streak = getStreak();
   document.getElementById("pfBody").innerHTML = `${acc}
-    <div class="srs-stats-grid" style="margin-top:20px">
+    <div class="pf-streak">
+      <div class="pf-streak-n">${streak.cur}<small>${twT("pfStreakUnit")}</small></div>
+      <div class="pf-streak-lbl"><b>${twT("pfStreak")}</b><span>${twT("pfStreakTotal").replace("{n}", streak.total)}</span></div>
+    </div>
+    <div class="srs-stats-grid" style="margin-top:16px">
       <div class="srs-stat"><b>${total}</b><span>${twT("pfLearned")}</span></div>
       <div class="srs-stat"><b>${mastered}</b><span>${twT("srsMastered")}</span></div>
       <div class="srs-stat"><b>${learning}</b><span>${twT("srsLearning")}</span></div>

@@ -4,7 +4,7 @@
 // ・同期対象：SRS 復習・模試履歴・作文下書き・レベル
 const STW_API = "https://staytw-api.abc83327.workers.dev";
 const STW_WEB_CLIENT_ID = "949214636130-e2dl3h0t1l789fggve3vsd6pu670lnb1.apps.googleusercontent.com";
-const SYNC_KEYS = ["stw_srs", "stw_exam_history", "stw_writing", "stw_wr_opened", "stw-level"];
+const SYNC_KEYS = ["stw_srs", "stw_exam_history", "stw_writing", "stw_wr_opened", "stw-level", "stw_streak"];
 
 const STW_WEB = (() => {
   let session = localStorage.getItem("stw_session") || null;
@@ -111,6 +111,12 @@ const STW_WEB = (() => {
         localStorage.setItem(k, JSON.stringify(lo));
       }
     });
+    // ストリーク：学習日の和集合
+    if (cloud.stw_streak) {
+      const c = parse(cloud.stw_streak, []), l = parse(localStorage.getItem("stw_streak"), []);
+      const u = Array.from(new Set([...l, ...c])).sort();
+      localStorage.setItem("stw_streak", JSON.stringify(u));
+    }
     if (cloud["stw-level"] && !localStorage.getItem("stw-level")) localStorage.setItem("stw-level", cloud["stw-level"]);
   }
 
