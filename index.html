@@ -281,6 +281,13 @@ button{font-family:inherit}
 .quiz-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
 .quiz-bg.show{display:flex}
 .quiz-box{background:var(--bg);border:1px solid var(--line);border-radius:18px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:18px 20px}
+.persona-opts{display:flex;flex-direction:column;gap:10px;text-align:left}
+.persona-opt{background:var(--bg2);border:1px solid var(--bd);border-radius:14px;padding:14px 16px;cursor:pointer;display:flex;flex-direction:column;gap:3px;transition:border-color .15s var(--ease),background .15s var(--ease);font-family:inherit}
+.persona-opt b{font-size:15.5px;color:var(--tx);font-weight:700}
+.persona-opt span{font-size:12.5px;color:var(--tx2);line-height:1.6}
+.persona-opt:active{background:var(--ac-soft)}
+@media(hover:hover){.persona-opt:hover{border-color:var(--ac);background:var(--ac-soft)}}
+.persona-skip{margin-top:14px;background:none;border:none;color:var(--tx3);font-size:13px;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:3px}
 .qhd{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--tx3);margin-bottom:12px}
 .qclose{margin-left:auto;background:none;border:1px solid var(--bd);color:var(--tx2);border-radius:8px;padding:2px 10px;cursor:pointer}
 .srs-card{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:28px 22px;text-align:center;cursor:pointer;min-height:280px;display:flex;flex-direction:column;justify-content:center}
@@ -515,6 +522,22 @@ button{font-family:inherit}
   <p style="font-size:13.5px;color:var(--tx2);margin-bottom:20px;line-height:1.8" data-i18n="loginDesc">ログインすると、復習・模試・作文の進度がすべての端末で同期されます。</p>
   <div id="gLoginBtn" style="display:flex;justify-content:center"></div>
 </div></div>
+
+<!-- 初回：目的をきいてレベルを提案 -->
+<div class="quiz-bg" id="personaBg"><div class="quiz-box" id="personaBox" style="max-width:400px;text-align:center">
+  <img src="images/bear.svg" alt="" style="width:56px;height:auto;margin:2px 0 4px">
+  <h3 style="font-family:var(--serif);font-size:20px;font-weight:700;margin:4px 0 4px" data-i18n="obQ">台湾華語を学ぶ目的は？</h3>
+  <p style="font-size:13px;color:var(--tx2);margin-bottom:16px" data-i18n="obQdesc">目的に合わせて、おすすめのレベルから始められます。あとで自由に変えられます。</p>
+  <div class="persona-opts">
+    <button class="persona-opt" onclick="pickPersona('travel')">
+      <b data-i18n="obTravel">旅行・短期滞在</b><span data-i18n="obTravelD">まず使える挨拶・注文・道案内から</span></button>
+    <button class="persona-opt" onclick="pickPersona('live')">
+      <b data-i18n="obLive">台湾で暮らす・働く</b><span data-i18n="obLiveD">日常会話と生活の語彙をしっかり</span></button>
+    <button class="persona-opt" onclick="pickPersona('exam')">
+      <b data-i18n="obExam">TOCFL・試験対策</b><span data-i18n="obExamD">語彙を広げて模試で実力チェック</span></button>
+  </div>
+  <button class="persona-skip" onclick="pickPersona('')" data-i18n="obSkip">スキップ</button>
+</div></div>
 <!-- トースト -->
 <div class="toast" id="toast"></div>
 
@@ -546,25 +569,25 @@ button{font-family:inherit}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="i18n.js?v=23"></script>
-<script src="tts.js?v=23"></script>
-<script src="vocab-l1.js?v=23"></script>
-<script src="vocab-l2.js?v=23"></script>
-<script src="vocab-l3.js?v=23"></script>
-<script src="vocab-l4.js?v=23"></script>
-<script src="vocab-l5.js?v=23"></script>
-<script src="grammar-l1.js?v=23"></script>
-<script src="grammar-l2.js?v=23"></script>
-<script src="grammar-l3.js?v=23"></script>
-<script src="grammar-l4.js?v=23"></script>
-<script src="grammar-l5.js?v=23"></script>
-<script src="phrases-l1.js?v=23"></script>
-<script src="zhuyin.js?v=23"></script>
-<script src="writing-data.js?v=23"></script>
-<script src="paywall.js?v=23"></script>
-<script src="websync.js?v=23"></script>
-<script src="srs.js?v=23"></script>
-<script src="mock-exam.js?v=23"></script>
+<script src="i18n.js?v=24"></script>
+<script src="tts.js?v=24"></script>
+<script src="vocab-l1.js?v=24"></script>
+<script src="vocab-l2.js?v=24"></script>
+<script src="vocab-l3.js?v=24"></script>
+<script src="vocab-l4.js?v=24"></script>
+<script src="vocab-l5.js?v=24"></script>
+<script src="grammar-l1.js?v=24"></script>
+<script src="grammar-l2.js?v=24"></script>
+<script src="grammar-l3.js?v=24"></script>
+<script src="grammar-l4.js?v=24"></script>
+<script src="grammar-l5.js?v=24"></script>
+<script src="phrases-l1.js?v=24"></script>
+<script src="zhuyin.js?v=24"></script>
+<script src="writing-data.js?v=24"></script>
+<script src="paywall.js?v=24"></script>
+<script src="websync.js?v=24"></script>
+<script src="srs.js?v=24"></script>
+<script src="mock-exam.js?v=24"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -692,6 +715,16 @@ document.addEventListener("keydown", e => {
 });
 
 /* ===== はじめての流れ ===== */
+const PERSONA_LEVEL = { travel: "l1", live: "l2", exam: "l3" };
+function pickPersona(key){
+  if (key) {
+    localStorage.setItem("stw_persona", key);
+    const lv = PERSONA_LEVEL[key];
+    if (lv) setLevel(lv);
+  }
+  document.getElementById("personaBg").classList.remove("show");
+  document.getElementById("obStrip").style.display = "";   // 続けて学習の流れを案内
+}
 function dismissOb(){
   localStorage.setItem("stw-onboarded", "1");
   document.getElementById("obStrip").style.display = "none";
@@ -794,8 +827,27 @@ function qzReset(){
 }
 function qzStart(){
   quizStarted = true; qzScore = 0; qzIdx = 0;
-  qzOrder = [...getVocabData(currentLevel)].sort(()=>Math.random()-.5).slice(0,10);
+  qzOrder = qzPickWords(10);
   qzNext();
+}
+// 優先復習：復習期限が来た単語・過去に間違えた単語を先に選び、残りはランダムで埋める
+function qzPickWords(n){
+  const vocab = getVocabData(currentLevel);
+  const byWord = {}; vocab.forEach(v => byWord[v.w] = v);
+  const srs = (window.SRS && SRS.getData) ? SRS.getData() : {};
+  const now = Date.now(), pfx = currentLevel + ":";
+  const due = [], wrong = [], rest = [], used = new Set();
+  Object.keys(srs).forEach(key => {
+    if (!key.startsWith(pfx)) return;
+    const w = key.slice(pfx.length), v = byWord[w]; if (!v) return;
+    const e = srs[key];
+    if (SRS.isDue && SRS.isDue(e, now)) { due.push(v); used.add(w); }
+    else if ((e.reviews || 0) > (e.correct || 0) && (e.interval || 0) < 21) { wrong.push(v); used.add(w); }
+  });
+  vocab.forEach(v => { if (!used.has(v.w)) rest.push(v); });
+  const shuf = a => a.sort(() => Math.random() - .5);
+  const order = [...shuf(due), ...shuf(wrong), ...shuf(rest)].slice(0, n);
+  return shuf(order);   // 選抜は優先枠、出題順はランダム
 }
 function qzNext(){
   if (qzIdx >= qzOrder.length) return qzDone();
@@ -1355,7 +1407,10 @@ function applyIcons(){
   renderSrsHome(); renderExamHome(); qzReset(); updateSrsBadges();
   renderLevelLabels();
   fillVoiceSel();
-  if (!localStorage.getItem("stw-onboarded")) document.getElementById("obStrip").style.display = "";
+  if (!localStorage.getItem("stw-onboarded")) {
+    if (!localStorage.getItem("stw_persona")) document.getElementById("personaBg").classList.add("show");
+    else document.getElementById("obStrip").style.display = "";
+  }
   if ("speechSynthesis" in window) speechSynthesis.onvoiceschanged = () => { TTS.refresh(); fillVoiceSel(); };
 })();
 </script>
