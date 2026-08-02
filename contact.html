@@ -10,6 +10,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--tx);line-height:1.8;font-size:16px}
 .wrap{max-width:640px;margin:0 auto;padding:48px 24px 90px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
 h1{font-family:var(--serif);font-size:26px;margin:18px 0 6px}
 .lead{color:var(--tx2);font-size:14.5px;margin-bottom:28px}
 label{display:block;font-size:13px;font-weight:700;color:var(--tx2);margin:18px 0 6px}
@@ -21,52 +22,80 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--ac)}
 .btn:disabled{opacity:.5;cursor:default}
 .done{background:var(--ac-soft);border-radius:12px;padding:16px;margin-top:20px;font-size:14.5px;display:none}
 .back{font-size:13px;color:var(--tx2);text-decoration:none}
+.lang-btn{background:var(--bg3);border:1px solid var(--bd);cursor:pointer;color:var(--tx2);padding:3px 11px;font-size:12px;font-weight:600;border-radius:8px;font-family:inherit}
 .hp{position:absolute;left:-9999px;opacity:0}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <a class="back" href="index.html">← 学習ツールへ戻る</a>
-  <h1>ご意見・不具合報告</h1>
-  <p class="lead">気づいたことがあれば、なんでも気軽に送ってください。内容の誤り報告は特にありがたいです。返信が必要な場合はメールアドレスを添えてください。</p>
+  <div class="top">
+    <a class="back" href="index.html" data-i18n="back">← 学習ツールへ戻る</a>
+    <button class="lang-btn" id="langBtn" onclick="cycleLang()">日</button>
+  </div>
+  <h1 data-i18n="title">ご意見・不具合報告</h1>
+  <p class="lead" data-i18n="lead">気づいたことがあれば、なんでも気軽に送ってください。内容の誤り報告は特にありがたいです。返信が必要な場合はメールアドレスを添えてください。</p>
   <form id="f">
-    <label>種類</label>
+    <label data-i18n="lblType">種類</label>
     <select name="type">
-      <option value="bug">不具合（動かない・表示がおかしい）</option>
-      <option value="content">内容の誤り（単語・訳・音声など）</option>
-      <option value="feature">機能の要望</option>
-      <option value="other" selected>その他・感想</option>
+      <option value="bug" data-i18n="optBug">不具合（動かない・表示がおかしい）</option>
+      <option value="content" data-i18n="optContent">内容の誤り（単語・訳・音声など）</option>
+      <option value="feature" data-i18n="optFeature">機能の要望</option>
+      <option value="other" selected data-i18n="optOther">その他・感想</option>
     </select>
-    <label>内容 *</label>
-    <textarea name="message" required placeholder="例：Level 2 の「颱風」の例文の日本語訳が不自然です／模試の結果画面で…"></textarea>
-    <label>メールアドレス（任意・返信が必要な場合）</label>
+    <label data-i18n="lblMsg">内容 *</label>
+    <textarea name="message" required data-i18n-ph="phMsg" placeholder="例：Level 2 の「颱風」の例文の日本語訳が不自然です／模試の結果画面で…"></textarea>
+    <label data-i18n="lblEmail">メールアドレス（任意・返信が必要な場合）</label>
     <input name="email" type="email" placeholder="you@example.com">
     <input class="hp" name="website" tabindex="-1" autocomplete="off">
-    <button class="btn" type="submit">送信する</button>
-    <div class="done" id="done">✅ 送信しました。ありがとうございます！</div>
+    <button class="btn" type="submit" data-i18n="btnSend">送信する</button>
+    <div class="done" id="done" data-i18n="doneMsg">✅ 送信しました。ありがとうございます！</div>
   </form>
 </div>
 <script>
+const T = {
+  ja:{ back:"← 学習ツールへ戻る", title:"ご意見・不具合報告",
+    lead:"気づいたことがあれば、なんでも気軽に送ってください。内容の誤り報告は特にありがたいです。返信が必要な場合はメールアドレスを添えてください。",
+    lblType:"種類", optBug:"不具合（動かない・表示がおかしい）", optContent:"内容の誤り（単語・訳・音声など）", optFeature:"機能の要望", optOther:"その他・感想",
+    lblMsg:"内容 *", phMsg:"例：Level 2 の「颱風」の例文の日本語訳が不自然です／模試の結果画面で…", lblEmail:"メールアドレス（任意・返信が必要な場合）",
+    btnSend:"送信する", sending:"送信中…", doneMsg:"✅ 送信しました。ありがとうございます！", err:"送信できませんでした — もう一度" },
+  en:{ back:"← Back to study tools", title:"Feedback & Bug Report",
+    lead:"Spotted something? Send it over — anything is welcome. Reports of content errors are especially appreciated. Add your email if you'd like a reply.",
+    lblType:"Type", optBug:"Bug (not working / looks off)", optContent:"Content error (word, translation, audio…)", optFeature:"Feature request", optOther:"Other / thoughts",
+    lblMsg:"Message *", phMsg:"e.g. The example sentence for 颱風 in Level 2 reads unnaturally / On the mock-exam results screen…", lblEmail:"Email (optional, if you'd like a reply)",
+    btnSend:"Send", sending:"Sending…", doneMsg:"✅ Sent — thank you!", err:"Couldn't send — try again" },
+  ko:{ back:"← 학습 도구로 돌아가기", title:"의견·오류 신고",
+    lead:"발견하신 점이 있으면 무엇이든 편하게 보내 주세요. 특히 내용 오류 제보가 큰 도움이 됩니다. 답장이 필요하면 이메일을 남겨 주세요.",
+    lblType:"종류", optBug:"오류 (작동 안 함 / 표시 이상)", optContent:"내용 오류 (단어·번역·음성 등)", optFeature:"기능 요청", optOther:"기타 / 감상",
+    lblMsg:"내용 *", phMsg:"예: Level 2 「颱風」 예문의 번역이 어색해요 / 모의고사 결과 화면에서…", lblEmail:"이메일 (선택, 답장이 필요한 경우)",
+    btnSend:"보내기", sending:"보내는 중…", doneMsg:"✅ 보냈습니다 — 감사합니다!", err:"보내지 못했습니다 — 다시 시도" }
+};
+let LANG = localStorage.getItem("stw-lang") || "ja";
+function applyLang(){
+  const d = T[LANG] || T.ja;
+  document.documentElement.lang = LANG;
+  document.getElementById("langBtn").textContent = {ja:"日",en:"EN",ko:"한"}[LANG];
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ const v=d[el.dataset.i18n]; if(v!=null) el.textContent=v; });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{ const v=d[el.dataset.i18nPh]; if(v!=null) el.placeholder=v; });
+}
+function cycleLang(){ LANG = {ja:"en",en:"ko",ko:"ja"}[LANG]; localStorage.setItem("stw-lang",LANG); applyLang(); }
 (function(){
-  const saved=localStorage.getItem("stw-theme");
-  if(saved==="dark"||(!saved&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.dataset.theme="dark";
+  const s=localStorage.getItem("stw-theme");
+  if(s==="dark"||(!s&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.dataset.theme="dark";
+  applyLang();
 })();
 document.getElementById("f").addEventListener("submit", async (e)=>{
   e.preventDefault();
-  const f=e.target, btn=f.querySelector(".btn");
-  btn.disabled=true; btn.textContent="送信中…";
+  const f=e.target, btn=f.querySelector(".btn"), d=T[LANG]||T.ja;
+  btn.disabled=true; btn.textContent=d.sending;
   try{
     const r=await fetch("https://staytw-api.abc83327.workers.dev/api/feedback",{
       method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({type:f.type.value,message:f.message.value,email:f.email.value,
-        website:f.website.value,lang:localStorage.getItem("stw-lang")||"ja"})});
+        website:f.website.value,lang:LANG})});
     if(!r.ok) throw new Error("send failed");
     document.getElementById("done").style.display="block";
-    f.message.value=""; btn.textContent="送信する"; btn.disabled=false;
-  }catch(err){
-    btn.textContent="送信できませんでした — もう一度";
-    btn.disabled=false;
-  }
+    f.message.value=""; btn.textContent=d.btnSend; btn.disabled=false;
+  }catch(err){ btn.textContent=d.err; btn.disabled=false; }
 });
 </script>
 <script>try{fetch("https://staytw-api.abc83327.workers.dev/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname,ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
