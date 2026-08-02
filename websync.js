@@ -124,7 +124,12 @@ const STW_WEB = (() => {
     } catch (e) {}
   }
 
-  // 離脱時に保存（学習した進度を取りこぼさない）
+  // SRS・模試の変更でクラウドへ（srs.js / mock-exam.js が window.onSRSChange を呼ぶ。デバウンス）
+  let changeT = null;
+  if (typeof window !== "undefined") window.onSRSChange = () => {
+    if (!session) return; clearTimeout(changeT); changeT = setTimeout(push, 3000);
+  };
+  // 離脱時にも保存（学習した進度を取りこぼさない）
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden" && session) push(); });
   window.addEventListener("pagehide", () => { if (session) push(); });
 
