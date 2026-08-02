@@ -17,8 +17,6 @@ const STW_WEB = (() => {
   function initGoogle(){
     if (!window.google || !window.google.accounts) { setTimeout(initGoogle, 200); return; }
     google.accounts.id.initialize({ client_id: STW_WEB_CLIENT_ID, callback: onCredential, auto_select: false });
-    renderAuth();
-    if (session) pullMerge();     // 起動時に同期
   }
 
   async function onCredential(resp){
@@ -38,11 +36,15 @@ const STW_WEB = (() => {
   function login(){
     const bg = document.getElementById("loginBg"); if (!bg) return;
     bg.classList.add("show");
-    if (!gBtnRendered && window.google && google.accounts) {
-      google.accounts.id.renderButton(document.getElementById("gLoginBtn"),
-        { theme: "filled_black", size: "large", text: "signin_with", shape: "pill", width: 240 });
-      gBtnRendered = true;
-    }
+    renderGoogleBtn();
+  }
+  function renderGoogleBtn(){
+    if (gBtnRendered) return;
+    if (!window.google || !window.google.accounts) { setTimeout(renderGoogleBtn, 200); return; }
+    google.accounts.id.initialize({ client_id: STW_WEB_CLIENT_ID, callback: onCredential, auto_select: false });
+    google.accounts.id.renderButton(document.getElementById("gLoginBtn"),
+      { theme: "filled_black", size: "large", text: "signin_with", shape: "pill", width: 240 });
+    gBtnRendered = true;
   }
   function closeModal(){ document.getElementById("loginBg")?.classList.remove("show"); }
   function logout(){
@@ -118,14 +120,18 @@ const STW_WEB = (() => {
     try {
       await fetch(STW_API + "/api/progress", {
         method: "PUT", headers: { "Content-Type": "application/json", Authorization: "Bearer " + session },
-        body: JSON.stringify({ data: o }) });
+        body: JSON.stringify({ data: o }), keepalive: true });   // 離脱時でも送出できるよう keepalive
     } catch (e) {}
   }
 
   // 離脱時に保存（学習した進度を取りこぼさない）
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden" && session) push(); });
-  window.addEventListener("pagehide", () => { if (session) navigator.sendBeacon && navigator.sendBeacon; push(); });
+  window.addEventListener("pagehide", () => { if (session) push(); });
+
+  // 起動時：ログインボタンを即表示（GIS 読込を待たない）、GIS は裏で初期化、ログイン済なら同期
+  renderAuth();
+  if (session) pullMerge();
+  initGoogle();
 
   return { login, logout, closeModal, initGoogle, isLoggedIn: () => !!session };
 })();
-STW_WEB.initGoogle();
