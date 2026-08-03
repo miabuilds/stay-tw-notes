@@ -14,6 +14,7 @@ VOICE = "zh-TW-HsiaoChenNeural"
 KEY = os.environ.get("AZURE_SPEECH_KEY")
 REGION = os.environ.get("AZURE_SPEECH_REGION", "japaneast")
 FORCE = "--force" in sys.argv
+FORCE_ZY = "--force-zy" in sys.argv   # 注音だけ作り直す（音標修正の再生成用。語彙2000+は触らない）
 INTERVAL = 3.2  # 秒/リクエスト（F0: 20/min を安全側で）
 
 if not KEY:
@@ -79,7 +80,9 @@ def post_ssml(ssml, path, label):
                 time.sleep(15 * (attempt + 1)); continue
             if e.code in (500, 502, 503):
                 time.sleep(5 * (attempt + 1)); continue
-            print(f"  HTTP {e.code}: {label}", flush=True)
+            try: body = e.read().decode("utf-8", "replace")[:300]
+            except Exception: body = ""
+            print(f"  HTTP {e.code}: {label} :: {body}", flush=True)
             return False
         except Exception as ex:
             time.sleep(3 * (attempt + 1))
@@ -95,7 +98,8 @@ ZY_VOICE = "zh-CN-XiaoxiaoNeural"
 def synth_zy(rep, ph, path):
     if ph:
         inner = f"<phoneme alphabet='sapi' ph='{ph}'>{esc_xml(rep)}</phoneme>"
-        ssml = f"<speak version='1.0' xml:lang='zh-CN'><voice name='{ZY_VOICE}'>{inner}</voice></speak>"
+        ssml = ("<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' "
+                f"xml:lang='zh-CN'><voice name='{ZY_VOICE}'>{inner}</voice></speak>")
         if post_ssml(ssml, path, f"{rep}/{ph}"):
             return True
         print(f"  ↳ ph 拒否、代表字にフォールバック: {rep}", flush=True)
@@ -126,7 +130,7 @@ def main():
     for s in zy:
         f = zy_fname(s["z"]); manifest[s["z"]] = f
         p = os.path.join(OUT, f)
-        if FORCE or not (os.path.exists(p) and os.path.getsize(p) > 1000):
+        if FORCE or FORCE_ZY or not (os.path.exists(p) and os.path.getsize(p) > 1000):
             zy_todo.append((s, p))
     print(f"注音: {len(zy)}, to generate: {len(zy_todo)}", flush=True)
     for i, (s, p) in enumerate(zy_todo):
