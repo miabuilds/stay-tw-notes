@@ -42,8 +42,9 @@ const STW_WEB = (() => {
     if (gBtnRendered) return;
     if (!window.google || !window.google.accounts) { setTimeout(renderGoogleBtn, 200); return; }
     google.accounts.id.initialize({ client_id: STW_WEB_CLIENT_ID, callback: onCredential, auto_select: false });
+    const locale = ({ ja: "ja", en: "en", ko: "ko" })[localStorage.getItem("stw-lang")] || "ja";
     google.accounts.id.renderButton(document.getElementById("gLoginBtn"),
-      { theme: "filled_black", size: "large", text: "signin_with", shape: "pill", width: 240 });
+      { theme: "filled_black", size: "large", text: "signin_with", shape: "pill", width: 240, locale });
     gBtnRendered = true;
   }
   function closeModal(){ document.getElementById("loginBg")?.classList.remove("show"); }
