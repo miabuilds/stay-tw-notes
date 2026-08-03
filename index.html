@@ -1278,15 +1278,15 @@ const ZY = (() => {
     for (const g of ["initial","medial","final"]){
       const items = ZHUYIN.filter(z => z.g === g);
       html += `<div class="zy-group"><h4>${twT(GKEY[g])}</h4><div class="zy-grid">` +
-        items.map(z => `<button class="zy-cell" onclick="ZY.play(this,'${z.rep}')"><div class="zy-z">${z.z}</div><div class="zy-py">${z.py}</div></button>`).join("") +
+        items.map(z => `<button class="zy-cell" onclick="ZY.play(this,'${z.z}','${z.rep}')"><div class="zy-z">${z.z}</div><div class="zy-py">${z.py}</div></button>`).join("") +
         `</div></div>`;
     }
     body().innerHTML = html;
   }
-  function play(el, rep){
+  function play(el, sym, rep){
     document.querySelectorAll(".zy-cell.play").forEach(c => c.classList.remove("play"));
     if (el){ el.classList.add("play"); setTimeout(() => el.classList.remove("play"), 700); }
-    TTS.speak(rep);
+    TTS.speakKey(sym, rep);   // 符号キーの専用音声（呼読音・一声）。無ければ rep を読む
   }
 
   // ── テスト（打ち／聴き）──
@@ -1307,7 +1307,7 @@ const ZY = (() => {
     body().innerHTML = `<div class="zy-test">
       <p class="zy-hint">${twT("zyTypeHint")}</p>
       <div class="zy-prompt">${z.z}</div>
-      <button class="zy-play-btn" onclick="ZY.play(null,'${z.rep}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg> ${twT("btnPlay")}</button>
+      <button class="zy-play-btn" onclick="ZY.play(null,'${z.z}','${z.rep}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg> ${twT("btnPlay")}</button>
       <div><input class="zy-input" id="zyIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${twT("zyTypePh")}"></div>
       <div class="zy-fb" id="zyFb"></div>
       <div style="margin-top:10px"><button class="btn primary" id="zyGo" onclick="ZY.submitType()">${twT("qzSubmit")}</button></div>
@@ -1315,7 +1315,7 @@ const ZY = (() => {
     const inp = document.getElementById("zyIn");
     inp.focus();
     inp.addEventListener("keydown", e => { if (e.key === "Enter") submitType(); });
-    play(null, z.rep);
+    play(null, z.z, z.rep);
   }
   function submitType(){
     if (locked){ next(); return; }
@@ -1335,11 +1335,11 @@ const ZY = (() => {
     const opts = [z, ...ZHUYIN.filter(x => x.z !== z.z).sort(() => Math.random()-.5).slice(0,3)].sort(() => Math.random()-.5);
     body().innerHTML = `<div class="zy-test">
       <p class="zy-hint">${twT("zyListenHint")}</p>
-      <button class="zy-play-btn" onclick="ZY.play(null,'${z.rep}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg> ${twT("btnPlay")}</button>
+      <button class="zy-play-btn" onclick="ZY.play(null,'${z.z}','${z.rep}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg> ${twT("btnPlay")}</button>
       <div class="zy-opts">${opts.map(o => `<button class="zy-opt" data-z="${o.z}" onclick="ZY.pick(this,'${o.z}','${z.z}')">${o.z}</button>`).join("")}</div>
       <div class="zy-fb" id="zyFb"></div>
       ${progress()}</div>`;
-    play(null, z.rep);
+    play(null, z.z, z.rep);
   }
   function pick(el, picked, answer){
     if (locked) return;
