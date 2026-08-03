@@ -95,6 +95,13 @@ const TTS = (() => {
     speechSynthesis.speak(u);
   }
 
+  // キー指定再生：事前生成 mp3 を key で引いて再生。無ければ fallback テキストを読む
+  // （注音のように「符号」をキーに専用音声を持たせ、語彙の同字と音声を分離するため）
+  function speakKey(key, fallback, rate) {
+    if (playMp3(key, rate)) return;
+    speak(fallback != null ? fallback : key, rate);
+  }
+
   // ボイス選択メニュー用：品質順の {uri, label} 一覧
   function options() {
     if (!list.length) refresh();
@@ -113,7 +120,7 @@ const TTS = (() => {
     if ("speechSynthesis" in window) speechSynthesis.cancel();
   }
 
-  return { speak, stop, options, setVoice, currentURI, refresh };
+  return { speak, speakKey, stop, options, setVoice, currentURI, refresh };
 })();
 // 既存コードとの互換用グローバル
 function speakZh(text, rate) { TTS.speak(text, rate); }

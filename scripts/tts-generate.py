@@ -28,9 +28,13 @@ const texts = new Set();
   G.forEach(g => g.eg.forEach(e => texts.add(e.z.replace(/<[^>]+>/g, ""))));
 });
 require("./phrases-l1.js").PHRASES_L1.forEach(s => s.items.forEach(i => texts.add(i.z)));
-require("./zhuyin.js").ZHUYIN.forEach(s => texts.add(s.rep));   // 注音の呼読音（代表字）
 console.log(JSON.stringify([...texts]));
 """
+
+# 注音は「符号」をキーに、ph（拼音+一声）を <phoneme> で rep に当てて合成（呼読音を平音で統一）
+NODE_ZY = 'console.log(JSON.stringify(require("./zhuyin.js").ZHUYIN.map(z=>({z:z.z,rep:z.rep,ph:z.ph||""}))));'
+def zy_fname(sym):
+    return hashlib.md5(("ZY1:" + sym).encode()).hexdigest()[:12] + ".mp3"
 
 def fname(text):
     # 読み上げ用サニタイズで変化する語は別ハッシュ（immutable キャッシュを破棄。他は従来通り）
@@ -48,9 +52,11 @@ def spoken(text):
     t = re.sub(r"、{2,}", "、", t).strip("、")
     return t or text
 
-def synth(text, path):
+def synth(text, path, ph=None):
     esc = spoken(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-    ssml = f"<speak version='1.0' xml:lang='zh-TW'><voice name='{VOICE}'>{esc}</voice></speak>"
+    # ph があれば <phoneme> で指定音（拼音+声調）を当てる。Azure が ph を認識できない時は中の字をそのまま読む（安全側）
+    inner = f"<phoneme alphabet='sapi' ph='{ph}'>{esc}</phoneme>" if ph else esc
+    ssml = f"<speak version='1.0' xml:lang='zh-TW'><voice name='{VOICE}'>{inner}</voice></speak>"
     req = urllib.request.Request(
         f"https://{REGION}.tts.speech.microsoft.com/cognitiveservices/v1",
         data=ssml.encode("utf-8"),
@@ -100,6 +106,21 @@ def main():
         if (i + 1) % 50 == 0:
             print(f"  {i+1}/{len(todo)} done={done} fail={len(fail)}", flush=True)
         time.sleep(INTERVAL)
+    # ── 注音（符号キー・呼読音を一声で統一）──
+    zy = json.loads(subprocess.check_output(["node", "-e", NODE_ZY], cwd=ROOT))
+    zy_todo = []
+    for s in zy:
+        f = zy_fname(s["z"]); manifest[s["z"]] = f
+        p = os.path.join(OUT, f)
+        if FORCE or not (os.path.exists(p) and os.path.getsize(p) > 1000):
+            zy_todo.append((s, p))
+    print(f"注音: {len(zy)}, to generate: {len(zy_todo)}", flush=True)
+    for i, (s, p) in enumerate(zy_todo):
+        ok = synth(s["rep"], p, ph=(s.get("ph") or None))
+        if ok: done += 1
+        else: fail.append(s["z"]); manifest.pop(s["z"], None)
+        time.sleep(INTERVAL)
+
     for t in fail:
         manifest.pop(t, None)
     json.dump(manifest, open(MANIFEST, "w"), ensure_ascii=False, indent=0)
