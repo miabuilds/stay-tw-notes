@@ -92,6 +92,7 @@ ja: {
   obTravel:"旅行・短期滞在", obTravelD:"まず使える挨拶・注文・道案内から",
   obLive:"台湾で暮らす・働く", obLiveD:"日常会話と生活の語彙をしっかり",
   obExam:"TOCFL・試験対策", obExamD:"語彙を広げて模試で実力チェック", obSkip:"スキップ",
+  themeToggle:"ダークモード切替",
   gradeSaved:"復習に登録：",
   // Landing 全文
   navGuide:"TOCFLガイド",
@@ -250,6 +251,7 @@ en: {
   obTravel:"Travel / short stay", obTravelD:"Start with greetings, ordering and directions",
   obLive:"Living / working in Taiwan", obLiveD:"Solid everyday conversation and daily-life words",
   obExam:"TOCFL / exam prep", obExamD:"Grow your vocabulary and test yourself with mock exams", obSkip:"Skip",
+  themeToggle:"Toggle dark mode",
   gradeSaved:"Added to review: ",
 },
 ko: {
@@ -367,6 +369,7 @@ ko: {
   obTravel:"여행·단기 체류", obTravelD:"먼저 인사·주문·길찾기부터",
   obLive:"대만에서 생활·근무", obLiveD:"일상 회화와 생활 어휘를 탄탄하게",
   obExam:"TOCFL·시험 대비", obExamD:"어휘를 넓히고 모의고사로 실력 점검", obSkip:"건너뛰기",
+  themeToggle:"다크 모드 전환",
   gradeSaved:"복습에 등록: ",
 },
 };
@@ -393,6 +396,7 @@ function twApplyI18n(root){
   (root||document).querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent = twT(el.dataset.i18n); });
   (root||document).querySelectorAll("[data-i18n-html]").forEach(el=>{ el.innerHTML = twT(el.dataset.i18nHtml); }); // <em>/<strong> を含む文用
   (root||document).querySelectorAll("[data-i18n-ph]").forEach(el=>{ el.placeholder = twT(el.dataset.i18nPh); });
+  (root||document).querySelectorAll("[data-i18n-aria]").forEach(el=>{ el.setAttribute("aria-label", twT(el.dataset.i18nAria)); });
 }
 function twCycleLang(){
   const order = ["ja","en","ko"];
