@@ -19,11 +19,17 @@ const TTS = (() => {
     if (!MANIFEST || !audioEl) return false;
     const f = MANIFEST[text];
     if (!f) return false;
-    if ("speechSynthesis" in window) speechSynthesis.cancel();
-    audioEl.pause();
-    audioEl.src = "audio/tts/" + f;
+    if ("speechSynthesis" in window && speechSynthesis.speaking) speechSynthesis.cancel();
     audioEl.playbackRate = rate || 1;
-    audioEl.play().catch(() => {});
+    // 同じ音声を連打したときは読み込み直さず頭出しだけ（連続タップのカクつき防止）
+    if (audioEl.dataset.f === f && audioEl.readyState >= 2) {
+      try { audioEl.currentTime = 0; } catch (e) {}
+    } else {
+      audioEl.src = "audio/tts/" + f;
+      audioEl.dataset.f = f;
+    }
+    const p = audioEl.play();
+    if (p && p.catch) p.catch(() => {});   // 連打で前の再生が中断されても無視
     return true;
   }
 
