@@ -97,6 +97,7 @@ def synth(text, path):
 ZY_VOICE = "zh-CN-XiaoxiaoNeural"
 def synth_zy(rep, ph, path):
     if ph:
+        ph = re.sub(r"\s*(\d+)$", r" \1", ph)   # Azure SAPI は「音節<空白>声調」を要求（bo1 → bo 1）
         inner = f"<phoneme alphabet='sapi' ph='{ph}'>{esc_xml(rep)}</phoneme>"
         ssml = ("<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' "
                 f"xml:lang='zh-CN'><voice name='{ZY_VOICE}'>{inner}</voice></speak>")
