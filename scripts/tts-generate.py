@@ -52,11 +52,10 @@ def spoken(text):
     t = re.sub(r"、{2,}", "、", t).strip("、")
     return t or text
 
-def synth(text, path, ph=None):
-    esc = spoken(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-    # ph があれば <phoneme> で指定音（拼音+声調）を当てる。Azure が ph を認識できない時は中の字をそのまま読む（安全側）
-    inner = f"<phoneme alphabet='sapi' ph='{ph}'>{esc}</phoneme>" if ph else esc
-    ssml = f"<speak version='1.0' xml:lang='zh-TW'><voice name='{VOICE}'>{inner}</voice></speak>"
+def esc_xml(s):
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+def post_ssml(ssml, path, label):
     req = urllib.request.Request(
         f"https://{REGION}.tts.speech.microsoft.com/cognitiveservices/v1",
         data=ssml.encode("utf-8"),
@@ -77,15 +76,30 @@ def synth(text, path, ph=None):
             return True
         except urllib.error.HTTPError as e:
             if e.code == 429:           # レート制限 → 待って再試行
-                time.sleep(15 * (attempt + 1))
-                continue
+                time.sleep(15 * (attempt + 1)); continue
             if e.code in (500, 502, 503):
                 time.sleep(5 * (attempt + 1)); continue
-            print(f"  HTTP {e.code}: {text[:20]}", flush=True)
+            print(f"  HTTP {e.code}: {label}", flush=True)
             return False
         except Exception as ex:
             time.sleep(3 * (attempt + 1))
     return False
+
+def synth(text, path):
+    inner = esc_xml(spoken(text))
+    ssml = f"<speak version='1.0' xml:lang='zh-TW'><voice name='{VOICE}'>{inner}</voice></speak>"
+    return post_ssml(ssml, path, text[:20])
+
+# 注音：拼音音標(SAPI)は zh-CN の声で有効。呼読音を一声=平音で統一。ph が拒否されたら代表字の素読みへ自動フォールバック。
+ZY_VOICE = "zh-CN-XiaoxiaoNeural"
+def synth_zy(rep, ph, path):
+    if ph:
+        inner = f"<phoneme alphabet='sapi' ph='{ph}'>{esc_xml(rep)}</phoneme>"
+        ssml = f"<speak version='1.0' xml:lang='zh-CN'><voice name='{ZY_VOICE}'>{inner}</voice></speak>"
+        if post_ssml(ssml, path, f"{rep}/{ph}"):
+            return True
+        print(f"  ↳ ph 拒否、代表字にフォールバック: {rep}", flush=True)
+    return synth(rep, path)   # zh-TW で代表字をそのまま読む（従来動作）
 
 def main():
     os.makedirs(OUT, exist_ok=True)
@@ -116,7 +130,7 @@ def main():
             zy_todo.append((s, p))
     print(f"注音: {len(zy)}, to generate: {len(zy_todo)}", flush=True)
     for i, (s, p) in enumerate(zy_todo):
-        ok = synth(s["rep"], p, ph=(s.get("ph") or None))
+        ok = synth_zy(s["rep"], (s.get("ph") or None), p)
         if ok: done += 1
         else: fail.append(s["z"]); manifest.pop(s["z"], None)
         time.sleep(INTERVAL)
