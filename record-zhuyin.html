@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>注音 呼讀音 錄音工具 — StayTW</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#FAF8F3;--bg2:#FFF;--bg3:#F2EEE5;--tx:#1C1C1E;--tx2:#6A6A6A;--tx3:#A9A9A9;--ac:#B8362A;--ac-soft:rgba(184,54,42,.08);--bd:#E5DECF;--line:#DDD5C0;--ok:#2F7A5D;--ease:cubic-bezier(.25,.1,.25,1);--serif:"Hiragino Mincho ProN","Songti TC",serif}
+[data-theme="dark"]{--bg:#121113;--bg2:#1B1A1C;--bg3:#1F1E20;--tx:#EDE8DE;--tx2:#8F8A7E;--tx3:#5D5A53;--ac:#E4715F;--ac-soft:rgba(228,113,95,.1);--bd:#2C2A27;--line:#2C2A27;--ok:#4C9B7A}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","PingFang TC",sans-serif;background:var(--bg);color:var(--tx);line-height:1.7}
+.wrap{max-width:560px;margin:0 auto;padding:28px 20px 60px}
+h1{font-family:var(--serif);font-size:22px;margin-bottom:6px}
+.lead{color:var(--tx2);font-size:13.5px;line-height:1.8;margin-bottom:18px}
+.lead b{color:var(--tx)}
+.prog{font-size:13px;color:var(--tx3);margin-bottom:8px}
+.prog b{color:var(--ac);font-family:var(--serif);font-size:16px}
+.pbar{height:7px;background:var(--bg3);border-radius:5px;overflow:hidden;margin-bottom:22px}
+.pbar i{display:block;height:100%;background:var(--ac);border-radius:5px;transition:width .3s var(--ease)}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:26px 20px;text-align:center;margin-bottom:16px}
+.sym{font-family:var(--serif);font-size:88px;font-weight:700;line-height:1}
+.hint{font-size:15px;color:var(--tx2);margin-top:8px}
+.hint b{color:var(--ac);font-size:19px;font-family:var(--serif)}
+.say{font-size:12.5px;color:var(--tx3);margin-top:6px}
+.ctrls{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:20px;flex-wrap:wrap}
+.btn{border:none;border-radius:999px;padding:12px 22px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px}
+.btn.rec{background:var(--ac);color:#fff}
+.btn.rec.on{background:#a02418;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.6}}
+.btn.ghost{background:var(--bg3);color:var(--tx2);border:1px solid var(--bd)}
+.btn:disabled{opacity:.4;cursor:default}
+.dot{width:10px;height:10px;border-radius:50%;background:#fff}
+audio{width:100%;margin-top:16px;display:none}
+audio.show{display:block}
+.nav{display:flex;justify-content:space-between;margin-top:8px}
+.nav button{background:none;border:none;color:var(--tx2);font-size:14px;cursor:pointer;font-family:inherit;padding:8px}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:24px}
+.chip{aspect-ratio:1;border:1px solid var(--bd);background:var(--bg2);border-radius:10px;font-family:var(--serif);font-size:19px;cursor:pointer;color:var(--tx2);position:relative;padding:0}
+.chip.cur{border-color:var(--ac);border-width:2px}
+.chip.has{background:var(--ok);color:#fff;border-color:var(--ok)}
+.grp-label{font-size:11px;color:var(--tx3);letter-spacing:.1em;margin:18px 0 6px}
+.save{position:sticky;bottom:14px;margin-top:26px}
+.save .btn{width:100%;justify-content:center;background:var(--tx);color:var(--bg);padding:15px;font-size:15.5px}
+.save .btn:hover{background:var(--ac);color:#fff}
+.note{font-size:12px;color:var(--tx3);text-align:center;margin-top:10px;line-height:1.7}
+.err{background:var(--ac-soft);color:var(--ac);border-radius:10px;padding:12px;font-size:13px;margin-bottom:16px;display:none}
+</style>
+<script>(function(){const s=localStorage.getItem("stw-theme");if(s==="dark"||(!s&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.dataset.theme="dark";})();</script>
+</head>
+<body>
+<div class="wrap">
+  <h1>注音 呼讀音 錄音</h1>
+  <p class="lead">照順序把每個符號的<b>呼讀音</b>錄一次(ㄅ念「ㄅㄛ」、ㄉ念「ㄉㄜ」…),平平地念、台灣腔。錄完可當場試聽、不滿意重錄。全部錄好按最下面<b>「下載全部」</b>,再把下載的檔案給我。</p>
+  <div class="err" id="err"></div>
+  <div class="prog">已錄 <b id="pn">0</b> / 37</div>
+  <div class="pbar"><i id="pbar" style="width:0"></i></div>
+
+  <div class="card">
+    <div class="sym" id="sym">ㄅ</div>
+    <div class="hint" id="hint"></div>
+    <div class="say" id="say">念呼讀音,平平的一聲,念一次就好</div>
+    <div class="ctrls">
+      <button class="btn rec" id="recBtn"><span class="dot"></span><span id="recTxt">錄音</span></button>
+      <button class="btn ghost" id="reBtn" disabled>重錄</button>
+    </div>
+    <audio id="player" controls></audio>
+    <div class="nav">
+      <button id="prev">← 上一個</button>
+      <button id="next">下一個 →</button>
+    </div>
+  </div>
+
+  <div id="grids"></div>
+
+  <div class="save">
+    <button class="btn" id="dl" disabled>下載全部（<span id="dln">0</span> 個）</button>
+    <p class="note" id="note">錄好會下載成 zy-01…zy-37 的檔案(webm)。若瀏覽器問「是否下載多個檔案」請按允許。</p>
+  </div>
+</div>
+
+<script src="zhuyin.js"></script>
+<script>
+const SYMS = ZHUYIN.map(z => z);
+const GRP = { initial:"聲母", medial:"介音", final:"韻母" };
+let idx = 0;
+const recs = new Array(SYMS.length).fill(null);   // Blob or null
+let mediaRec = null, chunks = [], stream = null, recording = false, mime = "";
+
+const $ = id => document.getElementById(id);
+
+async function ensureMic(){
+  if (stream) return true;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation:true, noiseSuppression:true } });
+    mime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus") ? "audio/webm;codecs=opus"
+         : MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm"
+         : MediaRecorder.isTypeSupported("audio/mp4") ? "audio/mp4" : "";
+    return true;
+  } catch (e) {
+    $("err").style.display = "block";
+    $("err").textContent = "マイクにアクセスできません（ブラウザの許可を確認してください）: " + e.message;
+    return false;
+  }
+}
+
+function renderGrids(){
+  let html = ""; let last = "";
+  SYMS.forEach((z,i)=>{
+    if (z.g !== last){ html += `<div class="grp-label">${GRP[z.g]}</div><div class="grid">`; last = z.g; }
+    // close previous grid when group changes handled by simple flow: we just open new grid each group
+  });
+  // rebuild properly grouped
+  html = "";
+  ["initial","medial","final"].forEach(g=>{
+    html += `<div class="grp-label">${GRP[g]}</div><div class="grid">`;
+    SYMS.forEach((z,i)=>{ if (z.g===g) html += `<button class="chip" data-i="${i}">${z.z}</button>`; });
+    html += `</div>`;
+  });
+  $("grids").innerHTML = html;
+  document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{ idx = +c.dataset.i; show(); });
+}
+
+function show(){
+  const z = SYMS[idx];
+  $("sym").textContent = z.z;
+  $("hint").innerHTML = `<b>${z.py}</b>`;
+  document.querySelectorAll(".chip").forEach(c=>{
+    const i = +c.dataset.i;
+    c.classList.toggle("cur", i===idx);
+    c.classList.toggle("has", !!recs[i]);
+  });
+  const p = $("player");
+  if (recs[idx]){ p.src = URL.createObjectURL(recs[idx]); p.classList.add("show"); $("reBtn").disabled = false; }
+  else { p.removeAttribute("src"); p.classList.remove("show"); $("reBtn").disabled = true; }
+  updateProg();
+}
+
+function updateProg(){
+  const n = recs.filter(Boolean).length;
+  $("pn").textContent = n; $("dln").textContent = n;
+  $("pbar").style.width = (n/SYMS.length*100) + "%";
+  $("dl").disabled = n === 0;
+}
+
+async function toggleRec(){
+  if (recording){ mediaRec.stop(); return; }
+  if (!await ensureMic()) return;
+  chunks = [];
+  mediaRec = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
+  mediaRec.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
+  mediaRec.onstop = () => {
+    recs[idx] = new Blob(chunks, { type: mime || "audio/webm" });
+    recording = false;
+    $("recBtn").classList.remove("on"); $("recTxt").textContent = "錄音";
+    show();
+    // 自動で次へ（最後尾以外）
+    if (idx < SYMS.length - 1) setTimeout(()=>{ idx++; show(); }, 400);
+  };
+  mediaRec.start();
+  recording = true;
+  $("recBtn").classList.add("on"); $("recTxt").textContent = "停止";
+}
+
+$("recBtn").onclick = toggleRec;
+$("reBtn").onclick = ()=>{ recs[idx] = null; show(); toggleRec(); };
+$("prev").onclick = ()=>{ if (idx>0){ idx--; show(); } };
+$("next").onclick = ()=>{ if (idx<SYMS.length-1){ idx++; show(); } };
+
+const ext = () => (mime.includes("mp4") ? "mp4" : "webm");
+$("dl").onclick = async ()=>{
+  for (let i=0;i<SYMS.length;i++){
+    if (!recs[i]) continue;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(recs[i]);
+    a.download = `zy-${String(i+1).padStart(2,"0")}.${ext()}`;
+    document.body.appendChild(a); a.click(); a.remove();
+    await new Promise(r=>setTimeout(r, 350));
+  }
+};
+
+// キーボード：スペースで録音/停止、矢印で移動
+document.addEventListener("keydown", e=>{
+  if (e.code === "Space"){ e.preventDefault(); toggleRec(); }
+  if (e.code === "ArrowLeft") $("prev").click();
+  if (e.code === "ArrowRight") $("next").click();
+});
+
+renderGrids();
+show();
+</script>
+</body>
+</html>
