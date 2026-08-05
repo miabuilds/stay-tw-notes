@@ -29,7 +29,7 @@ const texts = new Set();
   G.forEach(g => g.eg.forEach(e => texts.add(e.z.replace(/<[^>]+>/g, ""))));
 });
 require("./phrases-l1.js").PHRASES_L1.forEach(s => s.items.forEach(i => texts.add(i.z)));
-["l1"].forEach(l => { try { require("./reading-" + l + ".js")["READING_" + l.toUpperCase()].forEach(s => { s.lines.forEach(x => texts.add(x.z)); s.vocab.forEach(v => texts.add(v.w)); }); } catch(e){} });
+["l1","l2","l3","l4","l5"].forEach(l => { try { require("./reading-" + l + ".js")["READING_" + l.toUpperCase()].forEach(s => { s.lines.forEach(x => texts.add(x.z)); s.vocab.forEach(v => texts.add(v.w)); }); } catch(e){} });
 console.log(JSON.stringify([...texts]));
 """
 
