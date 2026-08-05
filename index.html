@@ -277,6 +277,50 @@ button{font-family:inherit}
 .srs-stat b{font-family:var(--serif);font-size:26px;display:block;line-height:1.2}
 .srs-stat span{font-size:11.5px;color:var(--tx3)}
 .srs-stat.hot b{color:var(--ac)}
+/* 毎日の目標 */
+.pf-daily{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-top:12px}
+.pf-daily.done{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 8%,var(--bg2))}
+.pf-daily-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.pf-daily-top b{font-size:14.5px}
+.pf-daily-top span{font-family:var(--serif);font-size:16px;color:var(--ac)}
+.pf-daily.done .pf-daily-top span{color:var(--ok)}
+.pf-daily-bar{height:8px;background:var(--bg3);border-radius:6px;overflow:hidden}
+.pf-daily-bar i{display:block;height:100%;background:var(--ac);border-radius:6px;transition:width .4s var(--ease)}
+.pf-daily.done .pf-daily-bar i{background:var(--ok)}
+.pf-daily-set{margin-top:11px;font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:6px}
+.pf-goal{border:1px solid var(--bd);background:var(--bg);color:var(--tx2);border-radius:7px;padding:2px 10px;font-size:12.5px;cursor:pointer;font-family:inherit}
+.pf-goal.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+/* 読解（分級閲読） */
+.rd-lead{color:var(--tx2);font-size:14px;line-height:1.9;margin-bottom:16px}
+.rd-empty{color:var(--tx3);text-align:center;padding:40px 0}
+.rd-card{display:block;width:100%;text-align:left;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:10px;cursor:pointer;font-family:inherit;transition:border-color .15s var(--ease)}
+.rd-card-t{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--tx);margin-bottom:3px}
+.rd-card-meta{font-size:12.5px;color:var(--tx3)}
+.rd-ok{color:var(--ok);font-weight:600}
+@media(hover:hover){.rd-card:hover{border-color:var(--ac)}}
+.rd-back{background:none;border:none;color:var(--tx2);font-size:13.5px;cursor:pointer;font-family:inherit;padding:0;margin-bottom:10px}
+.rd-title{font-family:var(--serif);font-size:22px;font-weight:700;margin-bottom:14px}
+.rd-toggles{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.rd-tg{border:1px solid var(--bd);background:var(--bg);color:var(--tx2);border-radius:999px;padding:5px 14px;font-size:13px;cursor:pointer;font-family:inherit}
+.rd-tg.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.rd-line{padding:12px 4px;border-bottom:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.rd-z{font-family:var(--serif);font-size:20px;line-height:1.7;color:var(--tx);display:flex;align-items:center;gap:8px}
+.rd-spk{width:17px;height:17px;color:var(--tx3);flex:none}
+.rd-py{font-size:13px;color:var(--tx3);margin-top:3px}
+.rd-tr{font-size:14px;color:var(--tx2);margin-top:5px;line-height:1.7}
+.rd-h4{font-size:14px;font-weight:700;color:var(--tx2);margin:26px 0 12px;letter-spacing:.02em}
+.rd-voc{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:9px 2px;border-bottom:1px dashed var(--line);cursor:pointer}
+.rd-voc-w{font-family:var(--serif);font-size:17px;font-weight:700;grid-row:span 2}
+.rd-voc-p{font-size:12px;color:var(--tx3)}
+.rd-voc-m{font-size:13.5px;color:var(--tx2)}
+.rd-q{font-size:15.5px;font-weight:600;margin-bottom:12px;line-height:1.7}
+.rd-opts{display:flex;flex-direction:column;gap:9px}
+.rd-opt{text-align:left;background:var(--bg2);border:1px solid var(--bd);border-radius:11px;padding:12px 15px;font-size:14.5px;cursor:pointer;font-family:inherit;color:var(--tx);transition:border-color .12s}
+.rd-opt.ok{background:color-mix(in srgb,var(--ok) 14%,var(--bg2));border-color:var(--ok);color:var(--tx)}
+.rd-opt.ng{background:color-mix(in srgb,var(--ac) 12%,var(--bg2));border-color:var(--ac)}
+@media(hover:hover){.rd-opt:not(:disabled):hover{border-color:var(--ac)}}
+.rd-why{margin-top:14px;font-size:13.5px;line-height:1.85;color:var(--tx2);display:none}
+.rd-why.ok,.rd-why.ng{display:block;background:var(--bg3);border-radius:10px;padding:12px 14px}
 /* 復習モーダル */
 .quiz-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
 .quiz-bg.show{display:flex}
@@ -427,6 +471,7 @@ button{font-family:inherit}
     <button class="tool-btn" data-panel="zhuyin"><span class="ti">ㄅ</span><span data-i18n="toolZhuyin">注音</span></button>
     <button class="tool-btn" data-panel="grammar"><span class="ti">✏️</span><span data-i18n="toolGrammar">文法</span></button>
     <button class="tool-btn" data-panel="phrases"><span class="ti">💬</span><span data-i18n="toolPhrases">フレーズ</span></button>
+    <button class="tool-btn" data-panel="reading"><span class="ti">📖</span><span data-i18n="toolReading">読解</span></button>
     <button class="tool-btn" data-panel="quiz"><span class="ti">🎯</span><span data-i18n="toolQuiz">クイズ</span></button>
     <button class="tool-btn" data-panel="speak"><span class="ti">🎤</span><span data-i18n="toolSpeak">スピーキング</span></button>
     <button class="tool-btn" data-panel="write"><span class="ti">✍️</span><span data-i18n="toolWrite">ライティング</span></button>
@@ -489,6 +534,7 @@ button{font-family:inherit}
   <section class="panel" id="panel-grammar"><div id="gList"></div></section>
 
   <!-- フレーズ -->
+  <section class="panel" id="panel-reading"><div class="rd" id="rdBox"></div></section>
   <section class="panel" id="panel-phrases">
     <div class="pos-row" id="phFilterRow"></div>
     <div id="phList"></div>
@@ -561,6 +607,7 @@ button{font-family:inherit}
     <button class="sheet-item" data-panel="profile"><span class="bi"></span><span data-i18n="toolProfile">マイページ</span></button>
     <button class="sheet-item" data-panel="grammar"><span class="bi">✏️</span><span data-i18n="toolGrammar">文法</span></button>
     <button class="sheet-item" data-panel="phrases"><span class="bi">💬</span><span data-i18n="toolPhrases">フレーズ</span></button>
+    <button class="sheet-item" data-panel="reading"><span class="bi">📖</span><span data-i18n="toolReading">読解</span></button>
     <button class="sheet-item" data-panel="speak"><span class="bi">🎤</span><span data-i18n="toolSpeak">スピーキング</span></button>
     <button class="sheet-item" data-panel="write"><span class="bi">✍️</span><span data-i18n="toolWrite">ライティング</span></button>
     <a class="sheet-item" href="contact.html"><span class="bi">📮</span><span data-i18n="navContact" style="display:block">ご意見</span></a>
@@ -573,25 +620,26 @@ button{font-family:inherit}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="i18n.js?v=29"></script>
-<script src="tts.js?v=29"></script>
-<script src="vocab-l1.js?v=29"></script>
-<script src="vocab-l2.js?v=29"></script>
-<script src="vocab-l3.js?v=29"></script>
-<script src="vocab-l4.js?v=29"></script>
-<script src="vocab-l5.js?v=29"></script>
-<script src="grammar-l1.js?v=29"></script>
-<script src="grammar-l2.js?v=29"></script>
-<script src="grammar-l3.js?v=29"></script>
-<script src="grammar-l4.js?v=29"></script>
-<script src="grammar-l5.js?v=29"></script>
-<script src="phrases-l1.js?v=29"></script>
-<script src="zhuyin.js?v=29"></script>
-<script src="writing-data.js?v=29"></script>
-<script src="paywall.js?v=29"></script>
-<script src="websync.js?v=29"></script>
-<script src="srs.js?v=29"></script>
-<script src="mock-exam.js?v=29"></script>
+<script src="i18n.js?v=30"></script>
+<script src="tts.js?v=30"></script>
+<script src="vocab-l1.js?v=30"></script>
+<script src="vocab-l2.js?v=30"></script>
+<script src="vocab-l3.js?v=30"></script>
+<script src="vocab-l4.js?v=30"></script>
+<script src="vocab-l5.js?v=30"></script>
+<script src="grammar-l1.js?v=30"></script>
+<script src="grammar-l2.js?v=30"></script>
+<script src="grammar-l3.js?v=30"></script>
+<script src="grammar-l4.js?v=30"></script>
+<script src="grammar-l5.js?v=30"></script>
+<script src="phrases-l1.js?v=30"></script>
+<script src="zhuyin.js?v=30"></script>
+<script src="reading-l1.js?v=30"></script>
+<script src="writing-data.js?v=30"></script>
+<script src="paywall.js?v=30"></script>
+<script src="websync.js?v=30"></script>
+<script src="srs.js?v=30"></script>
+<script src="mock-exam.js?v=30"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -634,6 +682,7 @@ function switchPanel(p){
   if (p === "speak") SPK.render();
   if (p === "write") WR.render();
   if (p === "zhuyin") ZY.render();
+  if (p === "reading") RD.render();
   if (p === "profile") renderProfile();
   // レベル選択は語彙系のみ関係。注音・フレーズ等では隠す
   const noLevel = ["zhuyin", "phrases", "speak", "write", "profile"].includes(p);
@@ -679,7 +728,7 @@ function fcShuffle(){ deck.sort(()=>Math.random()-.5); fcIdx = 0; renderCard(); 
 function fcGrade(g){
   const w = deck[fcIdx].w;
   SRS.recordGrade(currentLevel, w, g);
-  recordStudyDay();
+  recordStudy();
   updateSrsBadges();
   const subs = { known: "srsG1sub", soso: "srsG2sub", unknown: "srsG3sub" };
   showToast(`✓ ${w}　${twT("gradeSaved")}${twT(subs[g])}`);
@@ -905,7 +954,7 @@ function qzAnswer(btn){
   const ok = btn.dataset.ok === "true";
   const w = qzOrder[qzIdx];
   SRS.record(currentLevel, w.w, ok);
-  recordStudyDay();
+  recordStudy();
   updateSrsBadges();
   document.querySelectorAll("#qzBox .qz-opt").forEach(b=>{
     b.disabled = true;
@@ -1154,6 +1203,25 @@ function getStreak(){
   while (set.has(dayStr(cursor))) { cur++; cursor.setDate(cursor.getDate() - 1); }
   return { cur, total: set.size };
 }
+/* ===== 毎日の目標（学習した項目数） ===== */
+function getGoalTarget(){ const g = parseInt(localStorage.getItem("stw_goal") || "20", 10); return (g > 0 ? g : 20); }
+function setGoalTarget(n){ localStorage.setItem("stw_goal", String(n)); if (typeof window.onSRSChange === "function") window.onSRSChange(); }
+function getDaily(){
+  let d; try { d = JSON.parse(localStorage.getItem("stw_daily") || "null"); } catch (e) { d = null; }
+  const t = dayStr(new Date());
+  const n = (d && d.d === t) ? (d.n || 0) : 0;
+  const goal = getGoalTarget();
+  return { n, goal, done: n >= goal, pct: Math.min(100, Math.round(n / goal * 100)) };
+}
+function bumpDaily(){
+  const t = dayStr(new Date());
+  let d; try { d = JSON.parse(localStorage.getItem("stw_daily") || "null"); } catch (e) { d = null; }
+  d = (d && d.d === t) ? d : { d: t, n: 0 };
+  d.n = (d.n || 0) + 1;
+  localStorage.setItem("stw_daily", JSON.stringify(d));
+}
+// 学習1アクション＝ストリーク記録＋今日のカウント。フラッシュカード評価・クイズ回答・読解などから呼ぶ。
+function recordStudy(){ recordStudyDay(); bumpDaily(); }
 
 /* ===== マイページ ===== */
 function renderProfile(){
@@ -1179,12 +1247,18 @@ function renderProfile(){
       <div style="flex:1"><b style="display:block">${twT("loginTitle")}</b><span style="font-size:12.5px;color:var(--tx2)">${twT("pfGuest")}</span></div>
       <button class="btn primary" style="padding:9px 18px" onclick="STW_WEB.login()">${twT("navLogin")}</button></div>`;
   }
-  const streak = getStreak();
+  const streak = getStreak(), daily = getDaily();
   document.getElementById("pfBody").innerHTML = `${acc}
     <div class="pf-streak">
       <div class="pf-streak-n">${streak.cur}<small>${twT("pfStreakUnit")}</small></div>
       <div class="pf-streak-lbl"><b>${twT("pfStreak")}</b><span>${twT("pfStreakTotal").replace("{n}", streak.total)}</span></div>
     </div>
+    <div class="pf-daily ${daily.done ? "done" : ""}">
+      <div class="pf-daily-top"><b>${twT("pfDaily")}</b><span>${daily.done ? twT("pfDailyDone") : `${daily.n} / ${daily.goal}`}</span></div>
+      <div class="pf-daily-bar"><i style="width:${daily.pct}%"></i></div>
+      <div class="pf-daily-set">${twT("pfDailyGoal")}: ${[10,20,30,50].map(n=>`<button class="pf-goal ${daily.goal===n?"on":""}" onclick="setGoalTarget(${n});renderProfile()">${n}</button>`).join("")}</div>
+    </div>`;
+  document.getElementById("pfBody").innerHTML += `
     <div class="srs-stats-grid" style="margin-top:16px">
       <div class="srs-stat"><b>${total}</b><span>${twT("pfLearned")}</span></div>
       <div class="srs-stat"><b>${mastered}</b><span>${twT("srsMastered")}</span></div>
@@ -1373,6 +1447,108 @@ const ZY = (() => {
   return { render, play, submitType, pick, again };
 })();
 
+/* ===== 分級閲読（読解）：台湾のリアルな短文＋逐句音声＋生詞＋理解チェック ===== */
+const RD = (() => {
+  const DATA = { l1: (typeof READING_L1 !== "undefined" ? READING_L1 : []) };
+  let showPy = false, showTr = false, cur = null;
+  const box = () => document.getElementById("rdBox");
+  const list = () => DATA[currentLevel] || [];
+
+  function render(){ cur = null; renderList(); }
+
+  function renderList(){
+    const mk = twMKey(), items = list();
+    if (!items.length){
+      box().innerHTML = `<p class="rd-empty">${twT("rdComing")}</p>`; return;
+    }
+    box().innerHTML = `<p class="rd-lead">${twT("rdLead")}</p>` + items.map((s,i)=>{
+      const done = readDone(s.id);
+      return `<button class="rd-card" onclick="RD.open(${i})">
+        <div class="rd-card-t">${s.title[mk] || s.title.j}</div>
+        <div class="rd-card-meta">${s.lines.length} ${twT("rdSentences")}${done ? ` ・ <span class="rd-ok">${twT("rdRead")}</span>` : ""}</div>
+      </button>`;
+    }).join("");
+  }
+
+  function open(i){
+    cur = list()[i]; if (!cur) return;
+    showTr = false;
+    renderStory();
+    window.scrollTo({top:0});
+  }
+
+  function renderStory(){
+    const mk = twMKey(), s = cur;
+    const lines = s.lines.map((ln,idx)=>`
+      <div class="rd-line" onclick="RD.line(${idx})" data-idx="${idx}">
+        <div class="rd-z">${ln.z}<svg viewBox="0 0 24 24" class="ic rd-spk"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></div>
+        <div class="rd-py" style="${showPy?"":"display:none"}">${ln.py}</div>
+        <div class="rd-tr" style="${showTr?"":"display:none"}">${ln.m[mk] || ln.m.j}</div>
+      </div>`).join("");
+    const vocab = s.vocab.map(v=>`
+      <div class="rd-voc" onclick="speakZh('${v.w}')">
+        <span class="rd-voc-w">${v.w}</span>
+        <span class="rd-voc-p">${v.zy} ｜ ${v.py}</span>
+        <span class="rd-voc-m">${v.m[mk] || v.m.j}</span>
+      </div>`).join("");
+    box().innerHTML = `
+      <button class="rd-back" onclick="RD.render()">← ${twT("rdBack")}</button>
+      <h3 class="rd-title">${s.title[mk] || s.title.j}</h3>
+      <div class="rd-toggles">
+        <button class="rd-tg ${showPy?"on":""}" onclick="RD.togglePy()">${twT("rdPinyin")}</button>
+        <button class="rd-tg ${showTr?"on":""}" onclick="RD.toggleTr()">${twT("rdTrans")}</button>
+        <button class="rd-tg" onclick="RD.playAll()">▶ ${twT("rdPlayAll")}</button>
+      </div>
+      <div class="rd-story">${lines}</div>
+      <h4 class="rd-h4">${twT("rdVocab")}</h4>
+      <div class="rd-vocs">${vocab}</div>
+      <div id="rdQ"></div>`;
+    renderQ();
+  }
+
+  function line(idx){
+    const ln = cur.lines[idx];
+    speakZh(ln.z);
+    // タップした行の訳をその場で表示（読解しながら答え合わせ）
+    const el = box().querySelector(`.rd-line[data-idx="${idx}"] .rd-tr`);
+    if (el) el.style.display = "";
+  }
+  function togglePy(){ showPy = !showPy; renderStory(); }
+  function toggleTr(){ showTr = !showTr; renderStory(); }
+  function playAll(){
+    let i = 0; const step = () => { if (!cur || i >= cur.lines.length) return; speakZh(cur.lines[i].z); i++; setTimeout(step, 2600); };
+    step();
+  }
+
+  function renderQ(){
+    const mk = twMKey(), q = cur.q; if (!q) return;
+    document.getElementById("rdQ").innerHTML = `
+      <h4 class="rd-h4">${twT("rdCheck")}</h4>
+      <div class="rd-q">${q.ask[mk] || q.ask.j}</div>
+      <div class="rd-opts">${q.opts.map((o,i)=>`<button class="rd-opt" data-i="${i}" onclick="RD.answer(${i})">${o[mk] || o.j}</button>`).join("")}</div>
+      <div class="rd-why" id="rdWhy"></div>`;
+  }
+  function answer(i){
+    const mk = twMKey(), q = cur.q, ok = i === q.ans;
+    box().querySelectorAll(".rd-opt").forEach((b,idx)=>{ b.disabled = true; if (idx===q.ans) b.classList.add("ok"); });
+    if (!ok) box().querySelectorAll(".rd-opt")[i].classList.add("ng");
+    const why = document.getElementById("rdWhy");
+    why.className = "rd-why " + (ok?"ok":"ng");
+    why.innerHTML = `<b>${ok?"⭕":"❌"}</b> ${q.why[mk] || q.why.j}`;
+    markRead(cur.id);
+    recordStudy();   // ストリーク＋今日の学習数
+  }
+
+  // 読了記録
+  function readDone(id){ try { return (JSON.parse(localStorage.getItem("stw_read")||"[]")).includes(id); } catch(e){ return false; } }
+  function markRead(id){
+    let a; try{ a = JSON.parse(localStorage.getItem("stw_read")||"[]"); }catch(e){ a=[]; }
+    if (!a.includes(id)){ a.push(id); localStorage.setItem("stw_read", JSON.stringify(a)); if (typeof window.onSRSChange==="function") window.onSRSChange(); }
+  }
+
+  return { render, open, line, togglePy, toggleTr, playAll, answer };
+})();
+
 /* ===== アイコン（絵文字をやめてミニマルな線アイコンに統一） ===== */
 const ICONS = {
   fc:`<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/></svg>`,
@@ -1386,6 +1562,7 @@ const ICONS = {
   exam:`<svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2.2"/><path d="M9.2 4a1 1 0 0 1 1-1h3.6a1 1 0 0 1 1 1v1.2h-5.6z"/><path d="M8.6 11h6.8M8.6 15h4.4"/></svg>`,
   more:`<svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><circle cx="6" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></svg>`,
   profile:`<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>`,
+  reading:`<svg viewBox="0 0 24 24"><path d="M12 6.5C10.5 5 7.5 4.5 4.5 5v13c3-.5 6 0 7.5 1.5M12 6.5c1.5-1.5 4.5-2 7.5-1.5v13c-3-.5-6 0-7.5 1.5M12 6.5v13"/></svg>`,
   contact:`<svg viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M4 8l8 5 8-5"/></svg>`,
 };
 function applyIcons(){
