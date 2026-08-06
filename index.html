@@ -350,6 +350,9 @@ button{font-family:inherit}
 .ar-card-cat{font-size:11.5px;color:var(--ac);font-weight:700;letter-spacing:.04em;margin-bottom:5px}
 .ar-card-zh{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--tx);line-height:1.35}
 .ar-card-t{font-size:13px;color:var(--tx3);margin-top:3px}
+.ar-card.locked{opacity:.72}
+.ar-lock{font-size:10.5px;font-weight:700;color:var(--tx2);background:var(--bg3);border:1px solid var(--bd);border-radius:5px;padding:1px 7px;margin-left:4px;letter-spacing:.02em}
+.ar-freetag{font-size:10.5px;font-weight:700;color:#fff;background:var(--ok);border-radius:5px;padding:1px 8px;margin-left:4px}
 .ar-cat{font-size:12px;color:var(--ac);font-weight:700;letter-spacing:.05em;margin-bottom:6px}
 .ar-zhtitle{font-family:var(--serif);font-size:27px;font-weight:700;line-height:1.3}
 .ar-title{font-size:14px;color:var(--tx3);margin-top:5px}
@@ -690,33 +693,33 @@ button{font-family:inherit}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="i18n.js?v=35"></script>
-<script src="tts.js?v=35"></script>
-<script src="vocab-l1.js?v=35"></script>
-<script src="vocab-l2.js?v=35"></script>
-<script src="vocab-l3.js?v=35"></script>
-<script src="vocab-l4.js?v=35"></script>
-<script src="vocab-l5.js?v=35"></script>
-<script src="grammar-l1.js?v=35"></script>
-<script src="grammar-l2.js?v=35"></script>
-<script src="grammar-l3.js?v=35"></script>
-<script src="grammar-l4.js?v=35"></script>
-<script src="grammar-l5.js?v=35"></script>
-<script src="phrases-l1.js?v=35"></script>
-<script src="zhuyin.js?v=35"></script>
-<script src="reading-l1.js?v=35"></script>
-<script src="reading-l2.js?v=35"></script>
-<script src="reading-l3.js?v=35"></script>
-<script src="reading-l4.js?v=35"></script>
-<script src="reading-l5.js?v=35"></script>
-<script src="articles-1.js?v=35"></script>
-<script src="articles-2.js?v=35"></script>
-<script src="articles-3.js?v=35"></script>
-<script src="writing-data.js?v=35"></script>
-<script src="paywall.js?v=35"></script>
-<script src="websync.js?v=35"></script>
-<script src="srs.js?v=35"></script>
-<script src="mock-exam.js?v=35"></script>
+<script src="i18n.js?v=36"></script>
+<script src="tts.js?v=36"></script>
+<script src="vocab-l1.js?v=36"></script>
+<script src="vocab-l2.js?v=36"></script>
+<script src="vocab-l3.js?v=36"></script>
+<script src="vocab-l4.js?v=36"></script>
+<script src="vocab-l5.js?v=36"></script>
+<script src="grammar-l1.js?v=36"></script>
+<script src="grammar-l2.js?v=36"></script>
+<script src="grammar-l3.js?v=36"></script>
+<script src="grammar-l4.js?v=36"></script>
+<script src="grammar-l5.js?v=36"></script>
+<script src="phrases-l1.js?v=36"></script>
+<script src="zhuyin.js?v=36"></script>
+<script src="reading-l1.js?v=36"></script>
+<script src="reading-l2.js?v=36"></script>
+<script src="reading-l3.js?v=36"></script>
+<script src="reading-l4.js?v=36"></script>
+<script src="reading-l5.js?v=36"></script>
+<script src="articles-1.js?v=36"></script>
+<script src="articles-2.js?v=36"></script>
+<script src="articles-3.js?v=36"></script>
+<script src="writing-data.js?v=36"></script>
+<script src="paywall.js?v=36"></script>
+<script src="websync.js?v=36"></script>
+<script src="srs.js?v=36"></script>
+<script src="mock-exam.js?v=36"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -1760,6 +1763,9 @@ function twArticles(){
     (typeof ARTICLES_1 !== "undefined" ? ARTICLES_1 : []),
     (typeof ARTICLES_2 !== "undefined" ? ARTICLES_2 : []),
     (typeof ARTICLES_3 !== "undefined" ? ARTICLES_3 : []),
+    (typeof ARTICLES_4 !== "undefined" ? ARTICLES_4 : []),
+    (typeof ARTICLES_5 !== "undefined" ? ARTICLES_5 : []),
+    (typeof ARTICLES_6 !== "undefined" ? ARTICLES_6 : []),
   ].flat();
 }
 const AR = (() => {
@@ -1768,17 +1774,24 @@ const AR = (() => {
   const parse = (k,d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v==null?d:v; } catch(e){ return d; } };
 
   function render(){ cur = null; renderList(); }
+  function locked(i){ return i !== 0 && !Paywall.isPremium(); }   // 最初の1本は無料、以降はプレミアム
   function renderList(){
     const mk = twMKey(), items = twArticles();
     if (!items.length){ box().innerHTML = `<p class="rd-empty">${twT("arComing")}</p>`; return; }
-    box().innerHTML = `<p class="rd-lead">${twT("arLead")}</p>` + items.map((a,i)=>`
-      <button class="ar-card" onclick="AR.open(${i})">
-        <div class="ar-card-cat">${a.cat[mk] || a.cat.j}${readDone(a.id) ? ` ・ <span class="rd-ok">${twT("rdRead")}</span>` : ""}</div>
+    box().innerHTML = `<p class="rd-lead">${twT("arLead")}</p>` + items.map((a,i)=>{
+      const lk = locked(i);
+      const tag = lk ? `<span class="ar-lock">🔒 ${twT("arLocked")}</span>` : (i===0 ? `<span class="ar-freetag">${twT("arFree")}</span>` : "");
+      return `<button class="ar-card ${lk?"locked":""}" onclick="AR.open(${i})">
+        <div class="ar-card-cat">${a.cat[mk] || a.cat.j}${readDone(a.id) ? ` ・ <span class="rd-ok">${twT("rdRead")}</span>` : ""} ${tag}</div>
         <div class="ar-card-zh">${a.zhTitle}</div>
         <div class="ar-card-t">${a.title[mk] || a.title.j}</div>
-      </button>`).join("");
+      </button>`;
+    }).join("");
   }
-  function open(i){ cur = twArticles()[i]; if (!cur) return; showTr = false; renderArticle(); window.scrollTo({top:0}); }
+  function open(i){
+    if (locked(i)) { Paywall.show("article"); return; }   // 有料記事はペイウォールへ
+    cur = twArticles()[i]; if (!cur) return; showTr = false; renderArticle(); window.scrollTo({top:0});
+  }
 
   function renderArticle(){
     const mk = twMKey(), a = cur;
