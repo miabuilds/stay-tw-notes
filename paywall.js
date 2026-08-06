@@ -63,12 +63,13 @@ const Paywall = (() => {
     const bg = document.getElementById("pwBg");
     if (!bg) return;
     const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite") }[feature] || "";
+    const desc = feature === "article" ? twT("pwContentHit") : twT("pwLimitHit").replace("{f}", featName);
     document.getElementById("pwBox").innerHTML = `
       <button class="qclose" style="float:right" onclick="Paywall.close()">✕</button>
       <div style="text-align:center;padding:8px 0 4px">
         <img src="images/bear.svg" alt="" style="width:74px;height:auto">
         <h3 style="font-family:var(--serif);font-size:21px;font-weight:700;margin:10px 0 4px">${twT("pwTitle")}</h3>
-        <p style="font-size:13.5px;color:var(--tx2)">${twT("pwLimitHit").replace("{f}", featName)}</p>
+        <p style="font-size:13.5px;color:var(--tx2)">${desc}</p>
       </div>
       <ul class="pw-benefits">
         <li>✓ ${twT("pwB1")}</li>

@@ -131,6 +131,7 @@ ja: {
   // 付費牆
   pwTitle:"プレミアムで無制限に",
   pwLimitHit:"「{f}」の今日の無料枠を使い切りました",
+  pwContentHit:"この記事はプレミアム限定です。最初の1本は無料で読めます。", arFree:"無料", arLocked:"プレミアム",
   pwQuotaLeft:"今日の無料枠",
   pwB1:"練習ツール全部が無制限（クイズ・復習・模試・スピーキング・ライティング）",
   pwB2:"全単語・全例文のネイティブ級音声",
@@ -239,6 +240,7 @@ en: {
   faqA4:"Taiwan's official Chinese proficiency test. It's the Taiwanese counterpart of the JLPT, and this site's Levels 1–5 are aligned to it. Most Taiwanese universities look for around Level 3 (B1). See the <a href='tocfl.html'>TOCFL Guide</a>.",
   pwTitle:"Go unlimited with Premium",
   pwLimitHit:"You've used today's free quota for {f}",
+  pwContentHit:"This article is premium-only. The first one is free to read.", arFree:"Free", arLocked:"Premium",
   pwQuotaLeft:"Free today",
   pwB1:"Unlimited practice tools (quiz, review, mock exams, speaking, writing)",
   pwB2:"Native-quality audio for every word and sentence",
@@ -369,6 +371,7 @@ ko: {
   faqA4:"대만의 공식 중국어 능력 시험 '화어문능력측험'입니다. JLPT의 대만판에 해당하며, 이 사이트의 레벨(Level 1~5)은 이를 기준으로 합니다. 대만 대학 진학에는 보통 Level 3(B1) 정도가 요구됩니다. 자세한 내용은 <a href='tocfl.html'>TOCFL 가이드</a>에서.",
   pwTitle:"프리미엄으로 무제한",
   pwLimitHit:"'{f}'의 오늘 무료 횟수를 다 사용했어요",
+  pwContentHit:"이 칼럼은 프리미엄 전용입니다. 첫 편은 무료로 읽을 수 있어요.", arFree:"무료", arLocked:"프리미엄",
   pwQuotaLeft:"오늘 무료",
   pwB1:"연습 도구 전부 무제한 (퀴즈·복습·모의고사·말하기·쓰기)",
   pwB2:"모든 단어·예문의 원어민급 음성",
