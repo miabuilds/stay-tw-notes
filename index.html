@@ -345,6 +345,10 @@ button{font-family:inherit}
 .rd-why{margin-top:14px;font-size:13.5px;line-height:1.85;color:var(--tx2);display:none}
 .rd-why.ok,.rd-why.ng{display:block;background:var(--bg3);border-radius:10px;padding:12px 14px}
 /* 記事（コラム） */
+.ar-filter{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.ar-fc{border:1px solid var(--bd);background:var(--bg2);color:var(--tx2);border-radius:999px;padding:5px 13px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
+.ar-fc.on{background:var(--ac);border-color:var(--ac);color:#fff}
+@media(hover:hover){.ar-fc:hover{border-color:var(--ac)}}
 .ar-card{display:block;width:100%;text-align:left;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:11px;cursor:pointer;font-family:inherit;transition:border-color .15s var(--ease)}
 @media(hover:hover){.ar-card:hover{border-color:var(--ac)}}
 .ar-card-cat{font-size:11.5px;color:var(--ac);font-weight:700;letter-spacing:.04em;margin-bottom:5px}
@@ -693,39 +697,39 @@ button{font-family:inherit}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="i18n.js?v=38"></script>
-<script src="tts.js?v=38"></script>
-<script src="vocab-l1.js?v=38"></script>
-<script src="vocab-l2.js?v=38"></script>
-<script src="vocab-l3.js?v=38"></script>
-<script src="vocab-l4.js?v=38"></script>
-<script src="vocab-l5.js?v=38"></script>
-<script src="grammar-l1.js?v=38"></script>
-<script src="grammar-l2.js?v=38"></script>
-<script src="grammar-l3.js?v=38"></script>
-<script src="grammar-l4.js?v=38"></script>
-<script src="grammar-l5.js?v=38"></script>
-<script src="phrases-l1.js?v=38"></script>
-<script src="zhuyin.js?v=38"></script>
-<script src="reading-l1.js?v=38"></script>
-<script src="reading-l2.js?v=38"></script>
-<script src="reading-l3.js?v=38"></script>
-<script src="reading-l4.js?v=38"></script>
-<script src="reading-l5.js?v=38"></script>
-<script src="articles-1.js?v=38"></script>
-<script src="articles-2.js?v=38"></script>
-<script src="articles-3.js?v=38"></script>
-<script src="articles-4.js?v=38"></script>
-<script src="articles-5.js?v=38"></script>
-<script src="articles-6.js?v=38"></script>
-<script src="articles-7.js?v=38"></script>
-<script src="articles-8.js?v=38"></script>
-<script src="articles-9.js?v=38"></script>
-<script src="writing-data.js?v=38"></script>
-<script src="paywall.js?v=38"></script>
-<script src="websync.js?v=38"></script>
-<script src="srs.js?v=38"></script>
-<script src="mock-exam.js?v=38"></script>
+<script src="i18n.js?v=39"></script>
+<script src="tts.js?v=39"></script>
+<script src="vocab-l1.js?v=39"></script>
+<script src="vocab-l2.js?v=39"></script>
+<script src="vocab-l3.js?v=39"></script>
+<script src="vocab-l4.js?v=39"></script>
+<script src="vocab-l5.js?v=39"></script>
+<script src="grammar-l1.js?v=39"></script>
+<script src="grammar-l2.js?v=39"></script>
+<script src="grammar-l3.js?v=39"></script>
+<script src="grammar-l4.js?v=39"></script>
+<script src="grammar-l5.js?v=39"></script>
+<script src="phrases-l1.js?v=39"></script>
+<script src="zhuyin.js?v=39"></script>
+<script src="reading-l1.js?v=39"></script>
+<script src="reading-l2.js?v=39"></script>
+<script src="reading-l3.js?v=39"></script>
+<script src="reading-l4.js?v=39"></script>
+<script src="reading-l5.js?v=39"></script>
+<script src="articles-1.js?v=39"></script>
+<script src="articles-2.js?v=39"></script>
+<script src="articles-3.js?v=39"></script>
+<script src="articles-4.js?v=39"></script>
+<script src="articles-5.js?v=39"></script>
+<script src="articles-6.js?v=39"></script>
+<script src="articles-7.js?v=39"></script>
+<script src="articles-8.js?v=39"></script>
+<script src="articles-9.js?v=39"></script>
+<script src="writing-data.js?v=39"></script>
+<script src="paywall.js?v=39"></script>
+<script src="websync.js?v=39"></script>
+<script src="srs.js?v=39"></script>
+<script src="mock-exam.js?v=39"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -1775,6 +1779,9 @@ function twArticles(){
     (typeof ARTICLES_7 !== "undefined" ? ARTICLES_7 : []),
     (typeof ARTICLES_8 !== "undefined" ? ARTICLES_8 : []),
     (typeof ARTICLES_9 !== "undefined" ? ARTICLES_9 : []),
+    (typeof ARTICLES_10 !== "undefined" ? ARTICLES_10 : []),
+    (typeof ARTICLES_11 !== "undefined" ? ARTICLES_11 : []),
+    (typeof ARTICLES_12 !== "undefined" ? ARTICLES_12 : []),
   ].flat();
 }
 const AR = (() => {
@@ -1784,10 +1791,14 @@ const AR = (() => {
 
   function render(){ cur = null; renderList(); }
   function locked(i){ return i !== 0 && !Paywall.isPremium(); }   // 最初の1本は無料、以降はプレミアム
+  let arFilter = "all", arCats = [];
   function renderList(){
     const mk = twMKey(), items = twArticles();
     if (!items.length){ box().innerHTML = `<p class="rd-empty">${twT("arComing")}</p>`; return; }
-    box().innerHTML = `<p class="rd-lead">${twT("arLead")}</p>` + items.map((a,i)=>{
+    arCats = [...new Set(items.map(a => a.cat.e))];
+    const chips = `<div class="ar-filter"><button class="ar-fc ${arFilter==="all"?"on":""}" onclick="AR.filter(-1)">${twT("arAll")}</button>` +
+      arCats.map((c,ci)=>{ const lab = (items.find(a=>a.cat.e===c).cat[mk]) || c; return `<button class="ar-fc ${arFilter===c?"on":""}" onclick="AR.filter(${ci})">${lab}</button>`; }).join("") + `</div>`;
+    const cards = items.map((a,i)=>({a,i})).filter(x => arFilter==="all" || x.a.cat.e===arFilter).map(({a,i})=>{
       const lk = locked(i);
       const tag = lk ? `<span class="ar-lock">🔒 ${twT("arLocked")}</span>` : (i===0 ? `<span class="ar-freetag">${twT("arFree")}</span>` : "");
       return `<button class="ar-card ${lk?"locked":""}" onclick="AR.open(${i})">
@@ -1796,7 +1807,9 @@ const AR = (() => {
         <div class="ar-card-t">${a.title[mk] || a.title.j}</div>
       </button>`;
     }).join("");
+    box().innerHTML = `<p class="rd-lead">${twT("arLead")}</p>` + chips + cards;
   }
+  function filter(ci){ arFilter = ci < 0 ? "all" : arCats[ci]; renderList(); }
   function open(i){
     if (locked(i)) { Paywall.show("article"); return; }   // 有料記事はペイウォールへ
     cur = twArticles()[i]; if (!cur) return; showTr = false; renderArticle(); window.scrollTo({top:0});
@@ -1843,7 +1856,7 @@ const AR = (() => {
   function readDone(id){ return parse("stw_art_read", []).includes(id); }
   function markRead(id){ let a=parse("stw_art_read",[]); if(!a.includes(id)){ a.push(id); localStorage.setItem("stw_art_read",JSON.stringify(a)); if(typeof window.onSRSChange==="function")window.onSRSChange(); } }
 
-  return { render, open, para, togglePy, toggleTr, playAll };
+  return { render, open, para, togglePy, toggleTr, playAll, filter };
 })();
 
 /* ===== アイコン（絵文字をやめてミニマルな線アイコンに統一） ===== */
