@@ -344,6 +344,23 @@ button{font-family:inherit}
 @media(hover:hover){.rd-opt:not(:disabled):hover{border-color:var(--ac)}}
 .rd-why{margin-top:14px;font-size:13.5px;line-height:1.85;color:var(--tx2);display:none}
 .rd-why.ok,.rd-why.ng{display:block;background:var(--bg3);border-radius:10px;padding:12px 14px}
+/* 記事（コラム） */
+.ar-card{display:block;width:100%;text-align:left;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:11px;cursor:pointer;font-family:inherit;transition:border-color .15s var(--ease)}
+@media(hover:hover){.ar-card:hover{border-color:var(--ac)}}
+.ar-card-cat{font-size:11.5px;color:var(--ac);font-weight:700;letter-spacing:.04em;margin-bottom:5px}
+.ar-card-zh{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--tx);line-height:1.35}
+.ar-card-t{font-size:13px;color:var(--tx3);margin-top:3px}
+.ar-cat{font-size:12px;color:var(--ac);font-weight:700;letter-spacing:.05em;margin-bottom:6px}
+.ar-zhtitle{font-family:var(--serif);font-size:27px;font-weight:700;line-height:1.3}
+.ar-title{font-size:14px;color:var(--tx3);margin-top:5px}
+.ar-intro{font-size:14px;color:var(--tx2);line-height:1.9;margin:14px 0 4px;padding-left:12px;border-left:2px solid var(--bd)}
+.ar-para{padding:14px 4px;border-bottom:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ar-z{font-family:var(--serif);font-size:19px;line-height:2;color:var(--tx);text-align:justify}
+.ar-z .rd-spk{width:16px;height:16px;color:var(--tx3);margin-left:6px;vertical-align:middle}
+.ar-py{font-size:12.5px;color:var(--tx3);margin-top:6px;line-height:1.8}
+.ar-tr{font-size:14px;color:var(--tx2);margin-top:8px;line-height:1.9}
+.ar-note{margin-top:24px;background:var(--ac-soft);border-radius:14px;padding:16px 18px;font-size:13.5px;color:var(--tx2);line-height:1.95}
+.ar-note-h{font-size:12px;font-weight:700;color:var(--ac);letter-spacing:.06em;margin-bottom:6px}
 /* 学習パス */
 .pa-lv{font-family:var(--serif);font-size:22px;font-weight:700}
 .pa-lead{color:var(--tx2);font-size:13.5px;line-height:1.8;margin-top:3px}
@@ -519,6 +536,7 @@ button{font-family:inherit}
     <button class="tool-btn" data-panel="grammar"><span class="ti">✏️</span><span data-i18n="toolGrammar">文法</span></button>
     <button class="tool-btn" data-panel="phrases"><span class="ti">💬</span><span data-i18n="toolPhrases">フレーズ</span></button>
     <button class="tool-btn" data-panel="reading"><span class="ti">📖</span><span data-i18n="toolReading">読解</span></button>
+    <button class="tool-btn" data-panel="articles"><span class="ti">📰</span><span data-i18n="toolArticles">記事</span></button>
     <button class="tool-btn" data-panel="quiz"><span class="ti">🎯</span><span data-i18n="toolQuiz">クイズ</span></button>
     <button class="tool-btn" data-panel="speak"><span class="ti">🎤</span><span data-i18n="toolSpeak">スピーキング</span></button>
     <button class="tool-btn" data-panel="write"><span class="ti">✍️</span><span data-i18n="toolWrite">ライティング</span></button>
@@ -584,6 +602,7 @@ button{font-family:inherit}
 
   <!-- フレーズ -->
   <section class="panel" id="panel-reading"><div class="rd" id="rdBox"></div></section>
+  <section class="panel" id="panel-articles"><div class="rd" id="arBox"></div></section>
   <section class="panel" id="panel-phrases">
     <div class="pos-row" id="phFilterRow"></div>
     <div id="phList"></div>
@@ -657,6 +676,7 @@ button{font-family:inherit}
     <button class="sheet-item" data-panel="grammar"><span class="bi">✏️</span><span data-i18n="toolGrammar">文法</span></button>
     <button class="sheet-item" data-panel="phrases"><span class="bi">💬</span><span data-i18n="toolPhrases">フレーズ</span></button>
     <button class="sheet-item" data-panel="reading"><span class="bi">📖</span><span data-i18n="toolReading">読解</span></button>
+    <button class="sheet-item" data-panel="articles"><span class="bi">📰</span><span data-i18n="toolArticles">記事</span></button>
     <button class="sheet-item" data-panel="exam"><span class="bi">📝</span><span data-i18n="toolExam">模試</span></button>
     <button class="sheet-item" data-panel="speak"><span class="bi">🎤</span><span data-i18n="toolSpeak">スピーキング</span></button>
     <button class="sheet-item" data-panel="write"><span class="bi">✍️</span><span data-i18n="toolWrite">ライティング</span></button>
@@ -670,30 +690,33 @@ button{font-family:inherit}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="i18n.js?v=33"></script>
-<script src="tts.js?v=33"></script>
-<script src="vocab-l1.js?v=33"></script>
-<script src="vocab-l2.js?v=33"></script>
-<script src="vocab-l3.js?v=33"></script>
-<script src="vocab-l4.js?v=33"></script>
-<script src="vocab-l5.js?v=33"></script>
-<script src="grammar-l1.js?v=33"></script>
-<script src="grammar-l2.js?v=33"></script>
-<script src="grammar-l3.js?v=33"></script>
-<script src="grammar-l4.js?v=33"></script>
-<script src="grammar-l5.js?v=33"></script>
-<script src="phrases-l1.js?v=33"></script>
-<script src="zhuyin.js?v=33"></script>
-<script src="reading-l1.js?v=33"></script>
-<script src="reading-l2.js?v=33"></script>
-<script src="reading-l3.js?v=33"></script>
-<script src="reading-l4.js?v=33"></script>
-<script src="reading-l5.js?v=33"></script>
-<script src="writing-data.js?v=33"></script>
-<script src="paywall.js?v=33"></script>
-<script src="websync.js?v=33"></script>
-<script src="srs.js?v=33"></script>
-<script src="mock-exam.js?v=33"></script>
+<script src="i18n.js?v=34"></script>
+<script src="tts.js?v=34"></script>
+<script src="vocab-l1.js?v=34"></script>
+<script src="vocab-l2.js?v=34"></script>
+<script src="vocab-l3.js?v=34"></script>
+<script src="vocab-l4.js?v=34"></script>
+<script src="vocab-l5.js?v=34"></script>
+<script src="grammar-l1.js?v=34"></script>
+<script src="grammar-l2.js?v=34"></script>
+<script src="grammar-l3.js?v=34"></script>
+<script src="grammar-l4.js?v=34"></script>
+<script src="grammar-l5.js?v=34"></script>
+<script src="phrases-l1.js?v=34"></script>
+<script src="zhuyin.js?v=34"></script>
+<script src="reading-l1.js?v=34"></script>
+<script src="reading-l2.js?v=34"></script>
+<script src="reading-l3.js?v=34"></script>
+<script src="reading-l4.js?v=34"></script>
+<script src="reading-l5.js?v=34"></script>
+<script src="articles-1.js?v=34"></script>
+<script src="articles-2.js?v=34"></script>
+<script src="articles-3.js?v=34"></script>
+<script src="writing-data.js?v=34"></script>
+<script src="paywall.js?v=34"></script>
+<script src="websync.js?v=34"></script>
+<script src="srs.js?v=34"></script>
+<script src="mock-exam.js?v=34"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -738,6 +761,7 @@ function switchPanel(p){
   if (p === "path") PA.render();
   if (p === "zhuyin") ZY.render();
   if (p === "reading") RD.render();
+  if (p === "articles") AR.render();
   if (p === "profile") renderProfile();
   // レベル選択は語彙系のみ関係。注音・フレーズ等では隠す
   const noLevel = ["zhuyin", "phrases", "speak", "write", "profile"].includes(p);
@@ -1730,6 +1754,76 @@ const RD = (() => {
   return { render, open, line, togglePy, toggleTr, playAll, answer };
 })();
 
+/* ===== 記事（コラム）：台湾のリアルを深掘りする長文リーディング ===== */
+function twArticles(){
+  return [
+    (typeof ARTICLES_1 !== "undefined" ? ARTICLES_1 : []),
+    (typeof ARTICLES_2 !== "undefined" ? ARTICLES_2 : []),
+    (typeof ARTICLES_3 !== "undefined" ? ARTICLES_3 : []),
+  ].flat();
+}
+const AR = (() => {
+  let showPy = false, showTr = false, cur = null;
+  const box = () => document.getElementById("arBox");
+  const parse = (k,d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v==null?d:v; } catch(e){ return d; } };
+
+  function render(){ cur = null; renderList(); }
+  function renderList(){
+    const mk = twMKey(), items = twArticles();
+    if (!items.length){ box().innerHTML = `<p class="rd-empty">${twT("arComing")}</p>`; return; }
+    box().innerHTML = `<p class="rd-lead">${twT("arLead")}</p>` + items.map((a,i)=>`
+      <button class="ar-card" onclick="AR.open(${i})">
+        <div class="ar-card-cat">${a.cat[mk] || a.cat.j}${readDone(a.id) ? ` ・ <span class="rd-ok">${twT("rdRead")}</span>` : ""}</div>
+        <div class="ar-card-zh">${a.zhTitle}</div>
+        <div class="ar-card-t">${a.title[mk] || a.title.j}</div>
+      </button>`).join("");
+  }
+  function open(i){ cur = twArticles()[i]; if (!cur) return; showTr = false; renderArticle(); window.scrollTo({top:0}); }
+
+  function renderArticle(){
+    const mk = twMKey(), a = cur;
+    const paras = a.paras.map((p,idx)=>`
+      <div class="ar-para" onclick="AR.para(${idx})" data-idx="${idx}">
+        <div class="ar-z">${p.z}<svg viewBox="0 0 24 24" class="ic rd-spk"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></div>
+        <div class="ar-py" style="${showPy?"":"display:none"}">${p.py}</div>
+        <div class="ar-tr" style="${showTr?"":"display:none"}">${p.m[mk] || p.m.j}</div>
+      </div>`).join("");
+    const vocab = a.vocab.map(v=>`
+      <div class="rd-voc" onclick="speakZh('${v.w}')">
+        <span class="rd-voc-w">${v.w}</span><span class="rd-voc-p">${v.zy} ｜ ${v.py}</span>
+        <span class="rd-voc-m">${v.m[mk] || v.m.j}</span></div>`).join("");
+    box().innerHTML = `
+      <button class="rd-back" onclick="AR.render()">← ${twT("rdBack")}</button>
+      <div class="ar-cat">${a.cat[mk] || a.cat.j}</div>
+      <h3 class="ar-zhtitle">${a.zhTitle}</h3>
+      <div class="ar-title">${a.title[mk] || a.title.j}</div>
+      <p class="ar-intro">${a.intro[mk] || a.intro.j}</p>
+      <div class="rd-toggles">
+        <button class="rd-tg ${showPy?"on":""}" onclick="AR.togglePy()">${twT("rdPinyin")}</button>
+        <button class="rd-tg ${showTr?"on":""}" onclick="AR.toggleTr()">${twT("rdTrans")}</button>
+        <button class="rd-tg" onclick="AR.playAll()">▶ ${twT("rdPlayAll")}</button>
+      </div>
+      <div class="ar-body">${paras}</div>
+      <h4 class="rd-h4">${twT("rdVocab")}</h4>
+      <div class="rd-vocs">${vocab}</div>
+      <div class="ar-note"><div class="ar-note-h">${twT("arNote")}</div>${a.note[mk] || a.note.j}</div>`;
+    markRead(a.id);
+    if (typeof recordStudy === "function") recordStudy();
+  }
+  function para(idx){
+    const p = cur.paras[idx]; speakZh(p.z);
+    const el = box().querySelector(`.ar-para[data-idx="${idx}"] .ar-tr`); if (el) el.style.display = "";
+  }
+  function togglePy(){ showPy = !showPy; renderArticle(); }
+  function toggleTr(){ showTr = !showTr; renderArticle(); }
+  function playAll(){ let i=0; const step=()=>{ if(!cur||i>=cur.paras.length)return; speakZh(cur.paras[i].z); i++; setTimeout(step, 5200); }; step(); }
+
+  function readDone(id){ return parse("stw_art_read", []).includes(id); }
+  function markRead(id){ let a=parse("stw_art_read",[]); if(!a.includes(id)){ a.push(id); localStorage.setItem("stw_art_read",JSON.stringify(a)); if(typeof window.onSRSChange==="function")window.onSRSChange(); } }
+
+  return { render, open, para, togglePy, toggleTr, playAll };
+})();
+
 /* ===== アイコン（絵文字をやめてミニマルな線アイコンに統一） ===== */
 const ICONS = {
   fc:`<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/></svg>`,
@@ -1745,6 +1839,7 @@ const ICONS = {
   profile:`<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>`,
   reading:`<svg viewBox="0 0 24 24"><path d="M12 6.5C10.5 5 7.5 4.5 4.5 5v13c3-.5 6 0 7.5 1.5M12 6.5c1.5-1.5 4.5-2 7.5-1.5v13c-3-.5-6 0-7.5 1.5M12 6.5v13"/></svg>`,
   path:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M14.5 9.5l-1.5 4-4 1.5 1.5-4z" style="fill:currentColor;stroke:none"/></svg>`,
+  articles:`<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M7.5 9h6M7.5 12h6M7.5 15h4M16 9h.5v6H16z"/></svg>`,
   contact:`<svg viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M4 8l8 5 8-5"/></svg>`,
 };
 function applyIcons(){

@@ -4,7 +4,7 @@
 // ・同期対象：SRS 復習・模試履歴・作文下書き・レベル
 const STW_API = "https://staytw-api.abc83327.workers.dev";
 const STW_WEB_CLIENT_ID = "949214636130-e2dl3h0t1l789fggve3vsd6pu670lnb1.apps.googleusercontent.com";
-const SYNC_KEYS = ["stw_srs", "stw_exam_history", "stw_writing", "stw_wr_opened", "stw-level", "stw_streak", "stw_read", "stw_goal"];
+const SYNC_KEYS = ["stw_srs", "stw_exam_history", "stw_writing", "stw_wr_opened", "stw-level", "stw_streak", "stw_read", "stw_goal", "stw_art_read"];
 
 const STW_WEB = (() => {
   let session = localStorage.getItem("stw_session") || null;
@@ -118,11 +118,12 @@ const STW_WEB = (() => {
       const u = Array.from(new Set([...l, ...c])).sort();
       localStorage.setItem("stw_streak", JSON.stringify(u));
     }
-    // 読了済みの読み物：id の和集合
-    if (cloud.stw_read) {
-      const c = parse(cloud.stw_read, []), l = parse(localStorage.getItem("stw_read"), []);
-      localStorage.setItem("stw_read", JSON.stringify(Array.from(new Set([...l, ...c]))));
-    }
+    // 読了済みの読み物・記事：id の和集合
+    ["stw_read", "stw_art_read"].forEach(k => {
+      if (!cloud[k]) return;
+      const c = parse(cloud[k], []), l = parse(localStorage.getItem(k), []);
+      localStorage.setItem(k, JSON.stringify(Array.from(new Set([...l, ...c]))));
+    });
     if (cloud["stw-level"] && !localStorage.getItem("stw-level")) localStorage.setItem("stw-level", cloud["stw-level"]);
     if (cloud.stw_goal && !localStorage.getItem("stw_goal")) localStorage.setItem("stw_goal", cloud.stw_goal);
   }
