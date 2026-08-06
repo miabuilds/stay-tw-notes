@@ -208,6 +208,29 @@ button{font-family:inherit}
 .zy-fb.ok{color:var(--ok)}.zy-fb.ng{color:var(--ac)}
 .zy-prog{font-size:13px;color:var(--tx3);margin-top:14px}
 @media(hover:hover){.zy-cell:hover{border-color:var(--ac)}.zy-opt:hover{border-color:var(--ac)}.zy-tab:hover{color:var(--ac)}}
+/* 注音 書き方（なぞり書き） */
+.zw{max-width:420px;margin:0 auto;text-align:center}
+.zw-info{display:flex;align-items:center;justify-content:center;gap:12px;margin:6px 0 14px}
+.zw-py{font-family:var(--serif);font-size:22px;color:var(--ac)}
+.zw-pad{position:relative;width:min(320px,80vw);aspect-ratio:1;margin:0 auto;background:var(--bg2);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.zw-pad::before,.zw-pad::after{content:"";position:absolute;background:var(--line)}
+.zw-pad::before{left:50%;top:0;bottom:0;width:1px;transform:translateX(-.5px)}
+.zw-pad::after{top:50%;left:0;right:0;height:1px;transform:translateY(-.5px)}
+.zw-guide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:min(230px,58vw);line-height:1;color:var(--tx);opacity:.13;pointer-events:none;user-select:none}
+.zw-guide.hide{display:none}
+.zw-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.zw-ctrls{display:flex;gap:8px;justify-content:center;margin-top:16px}
+.zw-nav{display:flex;align-items:center;justify-content:space-between;margin-top:18px;max-width:320px;margin-left:auto;margin-right:auto}
+.zw-nav button{background:none;border:none;color:var(--tx2);font-size:14px;cursor:pointer;font-family:inherit;padding:8px}
+.zw-prog{font-size:13px;color:var(--tx3)}
+/* 注音 vs 拼音 説明 */
+.zy-py-info{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:2px 16px;margin-bottom:16px}
+.zy-py-info summary{cursor:pointer;font-size:14px;font-weight:700;color:var(--tx);padding:12px 0;list-style:none}
+.zy-py-info summary::-webkit-details-marker{display:none}
+.zy-py-info summary::before{content:"＋";color:var(--ac);font-weight:700;margin-right:8px}
+.zy-py-info[open] summary::before{content:"－"}
+.zy-py-body{font-size:13.5px;line-height:1.9;color:var(--tx2);padding:2px 0 14px}
+.zy-py-body b{color:var(--tx);font-weight:700}
 
 /* == スピーキング == */
 .spk{max-width:560px;margin:0 auto;text-align:center}
@@ -547,6 +570,7 @@ button{font-family:inherit}
   <section class="panel" id="panel-zhuyin">
     <div class="zy-tabs">
       <button class="zy-tab on" data-zy="table" data-i18n="zyTabTable">一覧</button>
+      <button class="zy-tab" data-zy="write" data-i18n="zyTabWrite">書き方</button>
       <button class="zy-tab" data-zy="listen" data-i18n="zyTabListen">聴きテスト</button>
     </div>
     <div id="zyBody"></div>
@@ -646,30 +670,30 @@ button{font-family:inherit}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="i18n.js?v=32"></script>
-<script src="tts.js?v=32"></script>
-<script src="vocab-l1.js?v=32"></script>
-<script src="vocab-l2.js?v=32"></script>
-<script src="vocab-l3.js?v=32"></script>
-<script src="vocab-l4.js?v=32"></script>
-<script src="vocab-l5.js?v=32"></script>
-<script src="grammar-l1.js?v=32"></script>
-<script src="grammar-l2.js?v=32"></script>
-<script src="grammar-l3.js?v=32"></script>
-<script src="grammar-l4.js?v=32"></script>
-<script src="grammar-l5.js?v=32"></script>
-<script src="phrases-l1.js?v=32"></script>
-<script src="zhuyin.js?v=32"></script>
-<script src="reading-l1.js?v=32"></script>
-<script src="reading-l2.js?v=32"></script>
-<script src="reading-l3.js?v=32"></script>
-<script src="reading-l4.js?v=32"></script>
-<script src="reading-l5.js?v=32"></script>
-<script src="writing-data.js?v=32"></script>
-<script src="paywall.js?v=32"></script>
-<script src="websync.js?v=32"></script>
-<script src="srs.js?v=32"></script>
-<script src="mock-exam.js?v=32"></script>
+<script src="i18n.js?v=33"></script>
+<script src="tts.js?v=33"></script>
+<script src="vocab-l1.js?v=33"></script>
+<script src="vocab-l2.js?v=33"></script>
+<script src="vocab-l3.js?v=33"></script>
+<script src="vocab-l4.js?v=33"></script>
+<script src="vocab-l5.js?v=33"></script>
+<script src="grammar-l1.js?v=33"></script>
+<script src="grammar-l2.js?v=33"></script>
+<script src="grammar-l3.js?v=33"></script>
+<script src="grammar-l4.js?v=33"></script>
+<script src="grammar-l5.js?v=33"></script>
+<script src="phrases-l1.js?v=33"></script>
+<script src="zhuyin.js?v=33"></script>
+<script src="reading-l1.js?v=33"></script>
+<script src="reading-l2.js?v=33"></script>
+<script src="reading-l3.js?v=33"></script>
+<script src="reading-l4.js?v=33"></script>
+<script src="reading-l5.js?v=33"></script>
+<script src="writing-data.js?v=33"></script>
+<script src="paywall.js?v=33"></script>
+<script src="websync.js?v=33"></script>
+<script src="srs.js?v=33"></script>
+<script src="mock-exam.js?v=33"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -1376,10 +1400,63 @@ const ZY = (() => {
 
   function render(){
     document.querySelectorAll(".zy-tab").forEach(t => t.classList.toggle("on", t.dataset.zy === mode));
-    if (mode === "table") renderTable(); else startTest();
+    if (mode === "table") renderTable();
+    else if (mode === "write") renderWrite();
+    else startTest();
   }
+
+  /* ── 書き方（なぞり書き練習）── */
+  let wi = 0, wGuide = true;
+  function renderWrite(){
+    const z = ZHUYIN[wi];
+    body().innerHTML = `<div class="zw">
+      <p class="zy-hint">${twT("zyWriteHint")}</p>
+      <div class="zw-info">
+        <button class="tts-btn" onclick="ZY.play(null,'${z.z}','${z.rep}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>
+        <span class="zw-py">${z.py}</span>
+      </div>
+      <div class="zw-pad">
+        <div class="zw-guide ${wGuide?"":"hide"}" id="zwGuide">${z.z}</div>
+        <canvas class="zw-canvas" id="zwCanvas" width="600" height="600"></canvas>
+      </div>
+      <div class="zw-ctrls">
+        <button class="zy-tab" onclick="ZY.wGuide()" id="zwGuideBtn">${wGuide?twT("zwGuideOn"):twT("zwGuideOff")}</button>
+        <button class="zy-tab" onclick="ZY.wClear()">${twT("zwClear")}</button>
+      </div>
+      <div class="zw-nav">
+        <button onclick="ZY.wMove(-1)">←</button>
+        <span class="zw-prog">${z.z}　${wi+1} / ${ZHUYIN.length}</span>
+        <button onclick="ZY.wMove(1)">→</button>
+      </div>
+    </div>`;
+    initCanvas();
+  }
+  let ctx = null, drawing = false;
+  function initCanvas(){
+    const c = document.getElementById("zwCanvas"); if (!c) return;
+    ctx = c.getContext("2d");
+    const cs = getComputedStyle(document.documentElement);
+    ctx.lineWidth = 22; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.strokeStyle = (cs.getPropertyValue("--ac") || "#B8362A").trim();
+    const pos = e => {
+      const r = c.getBoundingClientRect();
+      const t = e.touches ? e.touches[0] : e;
+      return { x: (t.clientX - r.left) / r.width * c.width, y: (t.clientY - r.top) / r.height * c.height };
+    };
+    const start = e => { e.preventDefault(); drawing = true; const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
+    const move = e => { if (!drawing) return; e.preventDefault(); const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); };
+    const end = () => { drawing = false; };
+    c.addEventListener("mousedown", start); c.addEventListener("mousemove", move);
+    window.addEventListener("mouseup", end);
+    c.addEventListener("touchstart", start, {passive:false}); c.addEventListener("touchmove", move, {passive:false});
+    c.addEventListener("touchend", end);
+  }
+  function wClear(){ const c = document.getElementById("zwCanvas"); if (c && ctx) ctx.clearRect(0,0,c.width,c.height); }
+  function wGuideToggle(){ wGuide = !wGuide; renderWrite(); }
+  function wMove(d){ wi = (wi + d + ZHUYIN.length) % ZHUYIN.length; renderWrite(); }
   function renderTable(){
-    let html = `<p class="zy-hint">${twT("zyHint")}</p>`;
+    let html = `<details class="zy-py-info"><summary>${twT("zyPyToggle")}</summary><div class="zy-py-body">${twT("zyPyBody")}</div></details>`;
+    html += `<p class="zy-hint">${twT("zyHint")}</p>`;
     for (const g of ["initial","medial","final"]){
       const items = ZHUYIN.filter(z => z.g === g);
       html += `<div class="zy-group"><h4>${twT(GKEY[g])}</h4><div class="zy-grid">` +
@@ -1475,7 +1552,7 @@ const ZY = (() => {
 
   document.querySelectorAll(".zy-tab").forEach(t => t.onclick = () => { mode = t.dataset.zy; render(); });
 
-  return { render, play, submitType, pick, again };
+  return { render, play, submitType, pick, again, wClear, wGuide: wGuideToggle, wMove };
 })();
 
 /* 読み物データはファイル毎に const 宣言（window に載らない）ので名前で引く */
