@@ -3,16 +3,32 @@
 # 使い方:
 #   python3 scripts/ingest-zhuyin-folder.py [フォルダ(既定=~/Downloads)] [--apply]
 #   まず --apply なしで対象一覧を確認 → よければ --apply で mp3 変換＆manifest 更新。
-import glob, hashlib, json, os, subprocess, sys
+import glob, hashlib, json, os, subprocess, sys, tempfile, zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "audio", "tts")
 MANIFEST = os.path.join(ROOT, "audio", "manifest.json")
 
+# 録音室級の後処理：ローカット→軽いノイズ低減→前後の無音を詰める→放送ラウドネスに正規化
+POLISH = ("highpass=f=85,afftdn=nr=12,"
+          "silenceremove=start_periods=1:start_threshold=-40dB:start_silence=0.03:detection=peak,"
+          "areverse,silenceremove=start_periods=1:start_threshold=-40dB:start_silence=0.03:detection=peak,areverse,"
+          "loudnorm=I=-16:TP=-1.5:LRA=11")
+
 args = [a for a in sys.argv[1:]]
 APPLY = "--apply" in args
-args = [a for a in args if a != "--apply"]
-FOLDER = os.path.expanduser(args[0]) if args else os.path.expanduser("~/Downloads")
+RAW = "--raw" in args   # 後処理なしで取り込む
+args = [a for a in args if a not in ("--apply", "--raw")]
+TARGET = os.path.expanduser(args[0]) if args else os.path.expanduser("~/Downloads")
+
+# zip が渡されたら一時フォルダに展開
+if os.path.isfile(TARGET) and TARGET.lower().endswith(".zip"):
+    tmp = tempfile.mkdtemp(prefix="zy-")
+    with zipfile.ZipFile(TARGET) as z: z.extractall(tmp)
+    print(f"zip を展開: {TARGET} → {tmp}")
+    FOLDER = tmp
+else:
+    FOLDER = TARGET
 
 ZY = json.loads(subprocess.check_output(
     ["node", "-e", 'console.log(JSON.stringify(require("./zhuyin.js").ZHUYIN.map(z=>z.z)))'], cwd=ROOT))
@@ -43,8 +59,10 @@ manifest = json.load(open(MANIFEST)) if os.path.exists(MANIFEST) else {}
 os.makedirs(OUT, exist_ok=True)
 for i, sym, path in found:
     f = zy_fname(sym); out = os.path.join(OUT, f)
-    subprocess.run(["ffmpeg", "-y", "-i", path, "-ar", "24000", "-ac", "1",
-                    "-b:a", "48k", "-codec:a", "libmp3lame", out], capture_output=True)
+    cmd = ["ffmpeg", "-y", "-i", path]
+    if not RAW: cmd += ["-af", POLISH]
+    cmd += ["-ar", "24000", "-ac", "1", "-b:a", "48k", "-codec:a", "libmp3lame", out]
+    subprocess.run(cmd, capture_output=True)
     manifest[sym] = f
     print(f"  ✓ {sym} → {f}")
 json.dump(manifest, open(MANIFEST, "w"), ensure_ascii=False, indent=0)
