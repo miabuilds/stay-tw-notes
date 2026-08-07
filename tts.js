@@ -15,12 +15,15 @@ const TTS = (() => {
       .then(m => { MANIFEST = m; })
       .catch(() => {});
   }
-  function playMp3(text, rate) {
+  function playMp3(text, rate, onend) {
     if (!MANIFEST || !audioEl) return false;
     const f = MANIFEST[text];
     if (!f) return false;
     if ("speechSynthesis" in window && speechSynthesis.speaking) speechSynthesis.cancel();
     audioEl.playbackRate = rate || 1;
+    // 再生完了で次へ進めるよう ended を通知（読み上げの自動送り用）
+    audioEl.onended = () => { if (onend) onend(); };
+    audioEl.onerror = () => { if (onend) onend(); };
     // 同じ音声を連打したときは読み込み直さず頭出しだけ（連続タップのカクつき防止）
     if (audioEl.dataset.f === f && audioEl.readyState >= 2) {
       try { audioEl.currentTime = 0; } catch (e) {}
@@ -79,12 +82,12 @@ const TTS = (() => {
       .trim();
   }
 
-  function speak(text, rate) {
-    if (!text) return;
-    if (playMp3(text, rate)) return;             // 高音質 mp3 があればそちらを再生
-    if (!("speechSynthesis" in window)) return;
+  function speak(text, rate, onend) {
+    if (!text) { if (onend) onend(); return; }
+    if (playMp3(text, rate, onend)) return;      // 高音質 mp3 があればそちらを再生（ended で送り）
+    if (!("speechSynthesis" in window)) { if (onend) onend(); return; }
     text = sanitize(text);
-    if (!text) return;
+    if (!text) { if (onend) onend(); return; }
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "zh-TW";
@@ -92,6 +95,8 @@ const TTS = (() => {
     if (v) { u.voice = v; u.lang = v.lang; }
     u.rate = rate || 0.95;
     u.pitch = 1.05;
+    let done = false; const fin = () => { if (done) return; done = true; if (onend) onend(); };
+    u.onend = fin; u.onerror = fin;
     speechSynthesis.speak(u);
   }
 
@@ -123,4 +128,4 @@ const TTS = (() => {
   return { speak, speakKey, stop, options, setVoice, currentURI, refresh };
 })();
 // 既存コードとの互換用グローバル
-function speakZh(text, rate) { TTS.speak(text, rate); }
+function speakZh(text, rate, onend) { TTS.speak(text, rate, onend); }
