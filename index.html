@@ -326,8 +326,8 @@ button{font-family:inherit}
 .rd-toggles{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
 .rd-tg{border:1px solid var(--bd);background:var(--bg);color:var(--tx2);border-radius:999px;padding:5px 14px;font-size:13px;cursor:pointer;font-family:inherit}
 .rd-tg.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-.rd-line{padding:12px 4px;border-bottom:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent}
-.rd-z{font-family:var(--serif);font-size:20px;line-height:1.7;color:var(--tx);display:flex;align-items:center;gap:8px}
+.rd-line{position:relative;padding:14px 46px 14px 6px;border-bottom:1px solid var(--line);-webkit-tap-highlight-color:transparent}
+.rd-z{font-family:var(--serif);line-height:2;color:var(--tx);text-align:justify}
 .rd-spk{width:17px;height:17px;color:var(--tx3);flex:none}
 .rd-py{font-size:13px;color:var(--tx3);margin-top:3px}
 .rd-tr{font-size:14px;color:var(--tx2);margin-top:5px;line-height:1.7}
@@ -680,7 +680,7 @@ body.more-open .ar-bar{display:none}
 <!-- 付費牆モーダル -->
 <div class="quiz-bg" id="pwBg"><div class="quiz-box" id="pwBox" style="max-width:420px"></div></div>
 <!-- 記事：タップした単語の即時辞書シート -->
-<div class="wsheet-bg" id="wsBg" onclick="AR.closeWord()"></div>
+<div class="wsheet-bg" id="wsBg" onclick="twCloseWord()"></div>
 <div class="wsheet" id="wsBox"></div>
 <!-- ログインモーダル -->
 <div class="quiz-bg" id="loginBg"><div class="quiz-box" id="loginBox" style="max-width:380px;text-align:center">
@@ -740,45 +740,45 @@ body.more-open .ar-bar{display:none}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="i18n.js?v=43"></script>
-<script src="tts.js?v=43"></script>
-<script src="vocab-l1.js?v=43"></script>
-<script src="vocab-l2.js?v=43"></script>
-<script src="vocab-l3.js?v=43"></script>
-<script src="vocab-l4.js?v=43"></script>
-<script src="vocab-l5.js?v=43"></script>
-<script src="grammar-l1.js?v=43"></script>
-<script src="grammar-l2.js?v=43"></script>
-<script src="grammar-l3.js?v=43"></script>
-<script src="grammar-l4.js?v=43"></script>
-<script src="grammar-l5.js?v=43"></script>
-<script src="phrases-l1.js?v=43"></script>
-<script src="zhuyin.js?v=43"></script>
-<script src="reading-l1.js?v=43"></script>
-<script src="reading-l2.js?v=43"></script>
-<script src="reading-l3.js?v=43"></script>
-<script src="reading-l4.js?v=43"></script>
-<script src="reading-l5.js?v=43"></script>
-<script src="articles-1.js?v=43"></script>
-<script src="articles-2.js?v=43"></script>
-<script src="articles-3.js?v=43"></script>
-<script src="articles-4.js?v=43"></script>
-<script src="articles-5.js?v=43"></script>
-<script src="articles-6.js?v=43"></script>
-<script src="articles-7.js?v=43"></script>
-<script src="articles-8.js?v=43"></script>
-<script src="articles-9.js?v=43"></script>
-<script src="articles-10.js?v=43"></script>
-<script src="articles-11.js?v=43"></script>
-<script src="articles-12.js?v=43"></script>
-<script src="articles-13.js?v=43"></script>
-<script src="articles-14.js?v=43"></script>
-<script src="articles-15.js?v=43"></script>
-<script src="writing-data.js?v=43"></script>
-<script src="paywall.js?v=43"></script>
-<script src="websync.js?v=43"></script>
-<script src="srs.js?v=43"></script>
-<script src="mock-exam.js?v=43"></script>
+<script src="i18n.js?v=44"></script>
+<script src="tts.js?v=44"></script>
+<script src="vocab-l1.js?v=44"></script>
+<script src="vocab-l2.js?v=44"></script>
+<script src="vocab-l3.js?v=44"></script>
+<script src="vocab-l4.js?v=44"></script>
+<script src="vocab-l5.js?v=44"></script>
+<script src="grammar-l1.js?v=44"></script>
+<script src="grammar-l2.js?v=44"></script>
+<script src="grammar-l3.js?v=44"></script>
+<script src="grammar-l4.js?v=44"></script>
+<script src="grammar-l5.js?v=44"></script>
+<script src="phrases-l1.js?v=44"></script>
+<script src="zhuyin.js?v=44"></script>
+<script src="reading-l1.js?v=44"></script>
+<script src="reading-l2.js?v=44"></script>
+<script src="reading-l3.js?v=44"></script>
+<script src="reading-l4.js?v=44"></script>
+<script src="reading-l5.js?v=44"></script>
+<script src="articles-1.js?v=44"></script>
+<script src="articles-2.js?v=44"></script>
+<script src="articles-3.js?v=44"></script>
+<script src="articles-4.js?v=44"></script>
+<script src="articles-5.js?v=44"></script>
+<script src="articles-6.js?v=44"></script>
+<script src="articles-7.js?v=44"></script>
+<script src="articles-8.js?v=44"></script>
+<script src="articles-9.js?v=44"></script>
+<script src="articles-10.js?v=44"></script>
+<script src="articles-11.js?v=44"></script>
+<script src="articles-12.js?v=44"></script>
+<script src="articles-13.js?v=44"></script>
+<script src="articles-14.js?v=44"></script>
+<script src="articles-15.js?v=44"></script>
+<script src="writing-data.js?v=44"></script>
+<script src="paywall.js?v=44"></script>
+<script src="websync.js?v=44"></script>
+<script src="srs.js?v=44"></script>
+<script src="mock-exam.js?v=44"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -1715,14 +1715,39 @@ const PA = (() => {
   return { render };
 })();
 
+/* ===== 共用：本文中の生詞をタップ可能にする＋タップ辞書シート（読解・記事で共用） ===== */
+function twMarkupVocab(z, vocab){
+  if (!vocab || !vocab.length) return z;
+  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const ws = [...vocab].map(v=>v.w).filter(Boolean).sort((a,b)=>b.length-a.length);
+  let re; try { re = new RegExp("(" + ws.map(esc).join("|") + ")", "g"); } catch(e){ return z; }
+  return z.replace(re, m => `<span class="ar-w" data-w="${m}">${m}</span>`);
+}
+function twBindWords(container, vocab){
+  container.querySelectorAll(".ar-w").forEach(el => el.onclick = e => { e.stopPropagation(); twWord(vocab, el.dataset.w); });
+}
+function twWord(vocab, w){
+  const v = (vocab || []).find(x => x.w === w); if (!v) return;
+  const mk = twMKey();
+  document.getElementById("wsBox").innerHTML = `
+    <div class="ws-top"><div class="ws-w">${v.w}</div><button class="ws-play" onclick="speakZh('${v.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
+    <div class="ws-p">${v.zy}　${v.py}</div>
+    <div class="ws-m">${v.m[mk] || v.m.j}</div>`;
+  document.getElementById("wsBg").classList.add("show");
+  document.getElementById("wsBox").classList.add("show");
+  speakZh(v.w);
+}
+function twCloseWord(){ const bg=document.getElementById("wsBg"), bx=document.getElementById("wsBox"); if(bg)bg.classList.remove("show"); if(bx)bx.classList.remove("show"); }
+
 /* ===== 分級閲読（読解）：台湾のリアルな短文＋逐句音声＋生詞＋理解チェック ===== */
 const RD = (() => {
   const DATA = ["l1","l2","l3","l4","l5"].reduce((o,l)=>{ o[l] = twReading(l); return o; }, {});
   let showPy = false, showTr = false, cur = null;
+  let rdFont = Math.min(28, Math.max(17, +(localStorage.getItem("stw_rd_font") || 21)));
   const box = () => document.getElementById("rdBox");
   const list = () => DATA[currentLevel] || [];
 
-  function render(){ cur = null; renderList(); }
+  function render(){ cur = null; twCloseWord(); renderList(); }
 
   function renderList(){
     const mk = twMKey(), items = list();
@@ -1748,10 +1773,11 @@ const RD = (() => {
   function renderStory(){
     const mk = twMKey(), s = cur;
     const lines = s.lines.map((ln,idx)=>`
-      <div class="rd-line" onclick="RD.line(${idx})" data-idx="${idx}">
-        <div class="rd-z">${ln.z}<svg viewBox="0 0 24 24" class="ic rd-spk"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></div>
+      <div class="rd-line" data-idx="${idx}">
+        <div class="rd-z">${twMarkupVocab(ln.z, s.vocab)}</div>
         <div class="rd-py" style="${showPy?"":"display:none"}">${ln.py}</div>
         <div class="rd-tr" style="${showTr?"":"display:none"}">${ln.m[mk] || ln.m.j}</div>
+        <button class="ar-para-play" onclick="RD.line(${idx})" aria-label="play"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>
       </div>`).join("");
     const vocab = s.vocab.map(v=>`
       <div class="rd-voc" onclick="speakZh('${v.w}')">
@@ -1760,19 +1786,25 @@ const RD = (() => {
         <span class="rd-voc-m">${v.m[mk] || v.m.j}</span>
       </div>`).join("");
     box().innerHTML = `
-      <button class="rd-back" onclick="RD.render()">← ${twT("rdBack")}</button>
+      <div class="ar-top">
+        <button class="ar-back" onclick="RD.render()"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <div class="ar-fontctl"><button onclick="RD.font(-1)">A<small>−</small></button><button onclick="RD.font(1)">A<small>＋</small></button></div>
+      </div>
       <h3 class="rd-title">${s.title[mk] || s.title.j}</h3>
+      <div class="ar-tips">${twT("arTapHint")}</div>
       <div class="rd-toggles">
         <button class="rd-tg ${showPy?"on":""}" onclick="RD.togglePy()">${twT("rdPinyin")}</button>
         <button class="rd-tg ${showTr?"on":""}" onclick="RD.toggleTr()">${twT("rdTrans")}</button>
         <button class="rd-tg" onclick="RD.playAll()">▶ ${twT("rdPlayAll")}</button>
       </div>
-      <div class="rd-story">${lines}</div>
+      <div class="rd-story" style="font-size:${rdFont}px">${lines}</div>
       <h4 class="rd-h4">${twT("rdVocab")}</h4>
       <div class="rd-vocs">${vocab}</div>
       <div id="rdQ"></div>`;
+    twBindWords(box(), s.vocab);
     renderQ();
   }
+  function font(d){ rdFont = Math.min(28, Math.max(17, rdFont + d*2)); localStorage.setItem("stw_rd_font", rdFont); const el = box().querySelector(".rd-story"); if (el) el.style.fontSize = rdFont + "px"; }
 
   function line(idx){
     const ln = cur.lines[idx];
@@ -1814,7 +1846,7 @@ const RD = (() => {
     if (!a.includes(id)){ a.push(id); localStorage.setItem("stw_read", JSON.stringify(a)); if (typeof window.onSRSChange==="function") window.onSRSChange(); }
   }
 
-  return { render, open, line, togglePy, toggleTr, playAll, answer };
+  return { render, open, line, togglePy, toggleTr, playAll, answer, font };
 })();
 
 /* ===== 記事（コラム）：台湾のリアルを深掘りする長文リーディング ===== */
@@ -1874,18 +1906,11 @@ const AR = (() => {
     cur = twArticles()[i]; if (!cur) return; showTr = false; renderArticle(); window.scrollTo({top:0});
   }
 
-  // 段落テキスト内の生詞をタップ可能にハイライト（長い語を優先、重複置換を避ける）
-  function markupVocab(z, vocab){
-    if (!vocab || !vocab.length) return z;
-    const ws = [...vocab].map(v=>v.w).filter(Boolean).sort((a,b)=>b.length-a.length);
-    let re; try { re = new RegExp("(" + ws.map(escRe).join("|") + ")", "g"); } catch(e){ return z; }
-    return z.replace(re, m => `<span class="ar-w" data-w="${m}">${m}</span>`);
-  }
   function renderArticle(){
     const mk = twMKey(), a = cur;
     const paras = a.paras.map((p,idx)=>`
       <div class="ar-para" data-idx="${idx}">
-        <div class="ar-z">${markupVocab(p.z, a.vocab)}</div>
+        <div class="ar-z">${twMarkupVocab(p.z, a.vocab)}</div>
         <div class="ar-py" style="${showPy?"":"display:none"}">${p.py}</div>
         <div class="ar-tr" style="${showTr?"":"display:none"}">${p.m[mk] || p.m.j}</div>
         <button class="ar-para-play" onclick="AR.para(${idx})" aria-label="play"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>
@@ -1910,7 +1935,7 @@ const AR = (() => {
       <div class="ar-note" style="font-size:${Math.max(14,arFont-4)}px"><div class="ar-note-h">${twT("arNote")}</div>${a.note[mk] || a.note.j}</div>
       <div style="height:78px"></div>`;
     renderBar();
-    box().querySelectorAll(".ar-w").forEach(el => el.onclick = e => { e.stopPropagation(); word(el.dataset.w); });
+    twBindWords(box(), a.vocab);
     markRead(a.id);
     if (typeof recordStudy === "function") recordStudy();
   }
@@ -1962,19 +1987,7 @@ const AR = (() => {
     renderBar();
   }
 
-  // タップ辞書
-  function word(w){
-    const v = (cur.vocab || []).find(x => x.w === w); if (!v) return;
-    const mk = twMKey();
-    document.getElementById("wsBox").innerHTML = `
-      <div class="ws-top"><div class="ws-w">${v.w}</div><button class="ws-play" onclick="speakZh('${v.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
-      <div class="ws-p">${v.zy}　${v.py}</div>
-      <div class="ws-m">${v.m[mk] || v.m.j}</div>`;
-    document.getElementById("wsBg").classList.add("show");
-    document.getElementById("wsBox").classList.add("show");
-    speakZh(v.w);
-  }
-  function closeWord(){ document.getElementById("wsBg").classList.remove("show"); document.getElementById("wsBox").classList.remove("show"); }
+  const closeWord = twCloseWord;
 
   function readDone(id){ return parse("stw_art_read", []).includes(id); }
   function markRead(id){ let a=parse("stw_art_read",[]); if(!a.includes(id)){ a.push(id); localStorage.setItem("stw_art_read",JSON.stringify(a)); if(typeof window.onSRSChange==="function")window.onSRSChange(); } }
