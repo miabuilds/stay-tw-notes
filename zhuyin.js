@@ -33,15 +33,15 @@ const ZHUYIN = [
   // ── 韻母（母音・韻）13 ──
   { z:"ㄚ", py:"a",   rep:"啊", ph:"a1",   g:"final" },
   { z:"ㄛ", py:"o",   rep:"喔", ph:"o1",   g:"final" },
-  { z:"ㄜ", py:"e",   rep:"鵝", ph:"e1",   g:"final" },
+  { z:"ㄜ", py:"e",   rep:"婀", ph:"e1",   g:"final" },
   { z:"ㄝ", py:"ê",   rep:"耶", ph:"ye1",  g:"final" },
   { z:"ㄞ", py:"ai",  rep:"哀", ph:"ai1",  g:"final" },
   { z:"ㄟ", py:"ei",  rep:"欸", ph:"ei1",  g:"final" },
-  { z:"ㄠ", py:"ao",  rep:"熬", ph:"ao1",  g:"final" },
+  { z:"ㄠ", py:"ao",  rep:"凹", ph:"ao1",  g:"final" },
   { z:"ㄡ", py:"ou",  rep:"歐", ph:"ou1",  g:"final" },
   { z:"ㄢ", py:"an",  rep:"安", ph:"an1",  g:"final" },
   { z:"ㄣ", py:"en",  rep:"恩", ph:"en1",  g:"final" },
-  { z:"ㄤ", py:"ang", rep:"昂", ph:"ang1", g:"final" },
+  { z:"ㄤ", py:"ang", rep:"骯", ph:"ang1", g:"final" },
   { z:"ㄥ", py:"eng", rep:"鞥", ph:"eng1", g:"final" },
   { z:"ㄦ", py:"er",  rep:"兒", ph:"er2",  g:"final" },
 ];
