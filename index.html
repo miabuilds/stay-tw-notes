@@ -231,6 +231,8 @@ button{font-family:inherit}
 .zy-py-info[open] summary::before{content:"－"}
 .zy-py-body{font-size:13.5px;line-height:1.9;color:var(--tx2);padding:2px 0 14px}
 .zy-py-body b{color:var(--tx);font-weight:700}
+.zy-credit{font-size:11.5px;color:var(--tx3);text-align:center;margin-top:26px;line-height:1.7}
+.zy-credit a{color:var(--tx3);text-decoration:underline}
 
 /* == スピーキング == */
 .spk{max-width:560px;margin:0 auto;text-align:center}
@@ -741,45 +743,45 @@ body.more-open .ar-bar{display:none}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="i18n.js?v=46"></script>
-<script src="tts.js?v=46"></script>
-<script src="vocab-l1.js?v=46"></script>
-<script src="vocab-l2.js?v=46"></script>
-<script src="vocab-l3.js?v=46"></script>
-<script src="vocab-l4.js?v=46"></script>
-<script src="vocab-l5.js?v=46"></script>
-<script src="grammar-l1.js?v=46"></script>
-<script src="grammar-l2.js?v=46"></script>
-<script src="grammar-l3.js?v=46"></script>
-<script src="grammar-l4.js?v=46"></script>
-<script src="grammar-l5.js?v=46"></script>
-<script src="phrases-l1.js?v=46"></script>
-<script src="zhuyin.js?v=46"></script>
-<script src="reading-l1.js?v=46"></script>
-<script src="reading-l2.js?v=46"></script>
-<script src="reading-l3.js?v=46"></script>
-<script src="reading-l4.js?v=46"></script>
-<script src="reading-l5.js?v=46"></script>
-<script src="articles-1.js?v=46"></script>
-<script src="articles-2.js?v=46"></script>
-<script src="articles-3.js?v=46"></script>
-<script src="articles-4.js?v=46"></script>
-<script src="articles-5.js?v=46"></script>
-<script src="articles-6.js?v=46"></script>
-<script src="articles-7.js?v=46"></script>
-<script src="articles-8.js?v=46"></script>
-<script src="articles-9.js?v=46"></script>
-<script src="articles-10.js?v=46"></script>
-<script src="articles-11.js?v=46"></script>
-<script src="articles-12.js?v=46"></script>
-<script src="articles-13.js?v=46"></script>
-<script src="articles-14.js?v=46"></script>
-<script src="articles-15.js?v=46"></script>
-<script src="writing-data.js?v=46"></script>
-<script src="paywall.js?v=46"></script>
-<script src="websync.js?v=46"></script>
-<script src="srs.js?v=46"></script>
-<script src="mock-exam.js?v=46"></script>
+<script src="i18n.js?v=47"></script>
+<script src="tts.js?v=47"></script>
+<script src="vocab-l1.js?v=47"></script>
+<script src="vocab-l2.js?v=47"></script>
+<script src="vocab-l3.js?v=47"></script>
+<script src="vocab-l4.js?v=47"></script>
+<script src="vocab-l5.js?v=47"></script>
+<script src="grammar-l1.js?v=47"></script>
+<script src="grammar-l2.js?v=47"></script>
+<script src="grammar-l3.js?v=47"></script>
+<script src="grammar-l4.js?v=47"></script>
+<script src="grammar-l5.js?v=47"></script>
+<script src="phrases-l1.js?v=47"></script>
+<script src="zhuyin.js?v=47"></script>
+<script src="reading-l1.js?v=47"></script>
+<script src="reading-l2.js?v=47"></script>
+<script src="reading-l3.js?v=47"></script>
+<script src="reading-l4.js?v=47"></script>
+<script src="reading-l5.js?v=47"></script>
+<script src="articles-1.js?v=47"></script>
+<script src="articles-2.js?v=47"></script>
+<script src="articles-3.js?v=47"></script>
+<script src="articles-4.js?v=47"></script>
+<script src="articles-5.js?v=47"></script>
+<script src="articles-6.js?v=47"></script>
+<script src="articles-7.js?v=47"></script>
+<script src="articles-8.js?v=47"></script>
+<script src="articles-9.js?v=47"></script>
+<script src="articles-10.js?v=47"></script>
+<script src="articles-11.js?v=47"></script>
+<script src="articles-12.js?v=47"></script>
+<script src="articles-13.js?v=47"></script>
+<script src="articles-14.js?v=47"></script>
+<script src="articles-15.js?v=47"></script>
+<script src="writing-data.js?v=47"></script>
+<script src="paywall.js?v=47"></script>
+<script src="websync.js?v=47"></script>
+<script src="srs.js?v=47"></script>
+<script src="mock-exam.js?v=47"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -1552,6 +1554,7 @@ const ZY = (() => {
         items.map(z => `<button class="zy-cell" onclick="ZY.play(this,'${z.z}','${z.rep}')"><div class="zy-z">${z.z}</div><div class="zy-py">${z.py}</div></button>`).join("") +
         `</div></div>`;
     }
+    html += `<p class="zy-credit">${twT("zyCredit")} <a href="https://creativecommons.org/licenses/by/4.0/deed.zh_TW" target="_blank" rel="noopener">CC BY 4.0</a></p>`;
     body().innerHTML = html;
   }
   function play(el, sym, rep){
