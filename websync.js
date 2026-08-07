@@ -20,17 +20,20 @@ const STW_WEB = (() => {
   }
 
   async function onCredential(resp){
+    const toast = m => { try { if (typeof window.showToast === "function") window.showToast(m); } catch(e){} };
     try {
+      if (!resp || !resp.credential) { toast("ログインに失敗しました。もう一度お試しください"); return; }
       const r = await fetch(STW_API + "/api/web-login", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: resp.credential }) });
-      const d = await r.json();
-      if (!r.ok) return;
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok || !d.sessionToken) { toast("ログインに失敗しました（サーバー）。少し待って再度お試しください"); return; }
       session = d.sessionToken; localStorage.setItem("stw_session", session);
       user = { email: d.email, name: d.name, picture: d.picture }; localStorage.setItem("stw_user", JSON.stringify(user));
       closeModal(); renderAuth();
-      await pullMerge();
-    } catch (e) {}
+      toast("ログインしました");
+      try { await pullMerge(); } catch(e){}   // 同期失敗してもログイン状態は維持
+    } catch (e) { toast("通信エラー。ネットワークを確認してもう一度"); }
   }
 
   function login(){
