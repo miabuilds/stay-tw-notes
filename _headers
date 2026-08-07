@@ -3,6 +3,6 @@
 /audio/tts/*
   Cache-Control: public, max-age=31536000, immutable
 /audio/manifest.json
-  Cache-Control: public, max-age=3600
+  Cache-Control: public, max-age=300
 /images/*
   Cache-Control: public, max-age=86400
