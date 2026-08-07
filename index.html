@@ -751,45 +751,45 @@ body.more-open .ar-bar{display:none}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="i18n.js?v=48"></script>
-<script src="tts.js?v=48"></script>
-<script src="vocab-l1.js?v=48"></script>
-<script src="vocab-l2.js?v=48"></script>
-<script src="vocab-l3.js?v=48"></script>
-<script src="vocab-l4.js?v=48"></script>
-<script src="vocab-l5.js?v=48"></script>
-<script src="grammar-l1.js?v=48"></script>
-<script src="grammar-l2.js?v=48"></script>
-<script src="grammar-l3.js?v=48"></script>
-<script src="grammar-l4.js?v=48"></script>
-<script src="grammar-l5.js?v=48"></script>
-<script src="phrases-l1.js?v=48"></script>
-<script src="zhuyin.js?v=48"></script>
-<script src="reading-l1.js?v=48"></script>
-<script src="reading-l2.js?v=48"></script>
-<script src="reading-l3.js?v=48"></script>
-<script src="reading-l4.js?v=48"></script>
-<script src="reading-l5.js?v=48"></script>
-<script src="articles-1.js?v=48"></script>
-<script src="articles-2.js?v=48"></script>
-<script src="articles-3.js?v=48"></script>
-<script src="articles-4.js?v=48"></script>
-<script src="articles-5.js?v=48"></script>
-<script src="articles-6.js?v=48"></script>
-<script src="articles-7.js?v=48"></script>
-<script src="articles-8.js?v=48"></script>
-<script src="articles-9.js?v=48"></script>
-<script src="articles-10.js?v=48"></script>
-<script src="articles-11.js?v=48"></script>
-<script src="articles-12.js?v=48"></script>
-<script src="articles-13.js?v=48"></script>
-<script src="articles-14.js?v=48"></script>
-<script src="articles-15.js?v=48"></script>
-<script src="writing-data.js?v=48"></script>
-<script src="paywall.js?v=48"></script>
-<script src="websync.js?v=48"></script>
-<script src="srs.js?v=48"></script>
-<script src="mock-exam.js?v=48"></script>
+<script src="i18n.js?v=49"></script>
+<script src="tts.js?v=49"></script>
+<script src="vocab-l1.js?v=49"></script>
+<script src="vocab-l2.js?v=49"></script>
+<script src="vocab-l3.js?v=49"></script>
+<script src="vocab-l4.js?v=49"></script>
+<script src="vocab-l5.js?v=49"></script>
+<script src="grammar-l1.js?v=49"></script>
+<script src="grammar-l2.js?v=49"></script>
+<script src="grammar-l3.js?v=49"></script>
+<script src="grammar-l4.js?v=49"></script>
+<script src="grammar-l5.js?v=49"></script>
+<script src="phrases-l1.js?v=49"></script>
+<script src="zhuyin.js?v=49"></script>
+<script src="reading-l1.js?v=49"></script>
+<script src="reading-l2.js?v=49"></script>
+<script src="reading-l3.js?v=49"></script>
+<script src="reading-l4.js?v=49"></script>
+<script src="reading-l5.js?v=49"></script>
+<script src="articles-1.js?v=49"></script>
+<script src="articles-2.js?v=49"></script>
+<script src="articles-3.js?v=49"></script>
+<script src="articles-4.js?v=49"></script>
+<script src="articles-5.js?v=49"></script>
+<script src="articles-6.js?v=49"></script>
+<script src="articles-7.js?v=49"></script>
+<script src="articles-8.js?v=49"></script>
+<script src="articles-9.js?v=49"></script>
+<script src="articles-10.js?v=49"></script>
+<script src="articles-11.js?v=49"></script>
+<script src="articles-12.js?v=49"></script>
+<script src="articles-13.js?v=49"></script>
+<script src="articles-14.js?v=49"></script>
+<script src="articles-15.js?v=49"></script>
+<script src="writing-data.js?v=49"></script>
+<script src="paywall.js?v=49"></script>
+<script src="websync.js?v=49"></script>
+<script src="srs.js?v=49"></script>
+<script src="mock-exam.js?v=49"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -822,6 +822,7 @@ document.querySelectorAll(".lv-btn").forEach(b => b.onclick = () => setLevel(b.d
 
 /* ===== タブ（上部タブ＋モバイル下部ナビの両方から呼ぶ） ===== */
 function switchPanel(p){
+  if (window.TTS && TTS.stop) TTS.stop();   // タブ/ページ切替で再生中の音声を止める
   document.querySelectorAll(".tool-btn").forEach(x=>x.classList.toggle("on", x.dataset.panel===p));
   document.querySelectorAll(".panel").forEach(x=>x.classList.remove("on"));
   document.getElementById("panel-"+p).classList.add("on");
@@ -851,6 +852,10 @@ document.querySelectorAll(".bn-item").forEach(b=>{
 document.querySelectorAll("#moreSheet button[data-panel]").forEach(b=>{
   b.onclick = () => { toggleMore(false); switchPanel(b.dataset.panel); };
 });
+// タブを非表示/離脱したら音声を停止（読み上げの連続再生も止める）
+function twStopAllAudio(){ if (window.TTS && TTS.stop) TTS.stop(); try { AR.stopPlay(); } catch(e){} try { RD.stopRead(); } catch(e){} }
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") twStopAllAudio(); });
+window.addEventListener("pagehide", twStopAllAudio);
 
 /* ===== 単語カード（枠内タップで発音＋めくり = 原サイトと同じ）===== */
 let deck = [...getVocabData(currentLevel)], fcIdx = 0;
@@ -2022,7 +2027,7 @@ const AR = (() => {
   function readDone(id){ return parse("stw_art_read", []).includes(id); }
   function markRead(id){ let a=parse("stw_art_read",[]); if(!a.includes(id)){ a.push(id); localStorage.setItem("stw_art_read",JSON.stringify(a)); if(typeof window.onSRSChange==="function")window.onSRSChange(); } }
 
-  return { render, open, para, togglePy, toggleTr, playAll, filter, font, speed, closeWord, hideBar };
+  return { render, open, para, togglePy, toggleTr, playAll, filter, font, speed, closeWord, hideBar, stopPlay };
 })();
 
 /* ===== アイコン（絵文字をやめてミニマルな線アイコンに統一） ===== */
