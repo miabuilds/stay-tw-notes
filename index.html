@@ -349,7 +349,9 @@ button{font-family:inherit}
 .ar-fc{border:1px solid var(--bd);background:var(--bg2);color:var(--tx2);border-radius:999px;padding:5px 13px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
 .ar-fc.on{background:var(--ac);border-color:var(--ac);color:#fff}
 @media(hover:hover){.ar-fc:hover{border-color:var(--ac)}}
-.ar-card{display:block;width:100%;text-align:left;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:11px;cursor:pointer;font-family:inherit;transition:border-color .15s var(--ease)}
+.ar-card{display:block;width:100%;text-align:left;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:13px;cursor:pointer;font-family:inherit;transition:border-color .15s var(--ease),transform .1s var(--ease)}
+.ar-card:active{transform:scale(.99)}
+.ar-card-prev{font-family:var(--serif);font-size:14px;color:var(--tx3);margin-top:8px;line-height:1.6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(hover:hover){.ar-card:hover{border-color:var(--ac)}}
 .ar-card-cat{font-size:11.5px;color:var(--ac);font-weight:700;letter-spacing:.04em;margin-bottom:5px}
 .ar-card-zh{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--tx);line-height:1.35}
@@ -368,6 +370,44 @@ button{font-family:inherit}
 .ar-tr{font-size:14px;color:var(--tx2);margin-top:8px;line-height:1.9}
 .ar-note{margin-top:24px;background:var(--ac-soft);border-radius:14px;padding:16px 18px;font-size:13.5px;color:var(--tx2);line-height:1.95}
 .ar-note-h{font-size:12px;font-weight:700;color:var(--ac);letter-spacing:.06em;margin-bottom:6px}
+/* 記事リーダー（Readle風・大きめUI／タップ辞書） */
+.ar-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.ar-back{width:42px;height:42px;border-radius:50%;border:1px solid var(--bd);background:var(--bg2);color:var(--tx2);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.ar-back .ic{width:22px;height:22px}
+.ar-fontctl{display:flex;gap:8px}
+.ar-fontctl button{width:44px;height:42px;border-radius:12px;border:1px solid var(--bd);background:var(--bg2);color:var(--tx);font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center}
+.ar-fontctl button small{font-size:12px}
+.ar-tips{font-size:12.5px;color:var(--tx3);background:var(--ac-soft);border-radius:9px;padding:8px 12px;margin:14px 0 6px}
+.ar-body{line-height:2.15;color:var(--tx);margin-top:6px}
+.ar-para{position:relative;padding:14px 46px 14px 6px;border-bottom:1px solid var(--line);border-radius:10px;transition:background .2s}
+.ar-para.playing{background:var(--ac-soft)}
+.ar-z{font-family:var(--serif);text-align:justify}
+.ar-w{cursor:pointer;border-bottom:1.5px dotted var(--tx3);padding-bottom:1px;-webkit-tap-highlight-color:transparent}
+.ar-w:active{background:var(--ac-soft)}
+@media(hover:hover){.ar-w:hover{background:var(--ac-soft);border-color:var(--ac)}}
+.ar-para-play{position:absolute;right:6px;top:14px;width:36px;height:36px;border-radius:50%;border:1px solid var(--bd);background:var(--bg2);color:var(--tx3);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.ar-para-play .ic{width:18px;height:18px}
+.ar-py{font-size:.72em;color:var(--tx3);margin-top:8px;line-height:1.7}
+.ar-tr{font-size:.8em;color:var(--tx2);margin-top:10px;line-height:1.85;padding-left:11px;border-left:2px solid var(--bd)}
+/* 置底ツールバー */
+.ar-bar{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(140%);z-index:150;display:flex;gap:8px;background:color-mix(in srgb,var(--bg2) 94%,transparent);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);border:1px solid var(--line);border-radius:999px;padding:7px 9px;box-shadow:0 8px 30px rgba(0,0,0,.18);transition:transform .28s var(--ease)}
+.ar-bar.show{transform:translateX(-50%) translateY(0)}
+body.more-open .ar-bar{display:none}
+.ar-bt{min-width:52px;height:42px;border-radius:999px;border:none;background:transparent;color:var(--tx2);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;padding:0 14px}
+.ar-bt.on{background:var(--ac);color:#fff}
+.ar-bt.play{background:var(--tx);color:var(--bg);font-size:17px;min-width:52px}
+@media(min-width:721px){.ar-bar{bottom:24px}}
+@media(max-width:720px){.ar-bar{bottom:calc(70px + env(safe-area-inset-bottom))}}
+/* タップ辞書シート */
+.wsheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:210;opacity:0;pointer-events:none;transition:opacity .2s var(--ease)}
+.wsheet-bg.show{opacity:1;pointer-events:auto}
+.wsheet{position:fixed;left:0;right:0;bottom:0;z-index:220;background:var(--bg);border-radius:22px 22px 0 0;padding:22px 22px calc(26px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .28s var(--ease);box-shadow:0 -8px 30px rgba(0,0,0,.2);max-width:520px;margin:0 auto}
+.wsheet.show{transform:translateY(0)}
+.ws-top{display:flex;align-items:center;gap:14px}
+.ws-w{font-family:var(--serif);font-size:38px;font-weight:700;line-height:1}
+.ws-play{width:44px;height:44px;border-radius:50%;border:1px solid var(--bd);background:var(--bg2);color:var(--ac);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.ws-p{font-size:16px;color:var(--ac);margin:12px 0 4px}
+.ws-m{font-size:16px;color:var(--tx);line-height:1.8}
 /* 学習パス */
 .pa-lv{font-family:var(--serif);font-size:22px;font-weight:700}
 .pa-lead{color:var(--tx2);font-size:13.5px;line-height:1.8;margin-top:3px}
@@ -639,6 +679,9 @@ button{font-family:inherit}
 <div class="quiz-bg" id="quizBg"><div class="quiz-box" id="quizBox"></div></div>
 <!-- 付費牆モーダル -->
 <div class="quiz-bg" id="pwBg"><div class="quiz-box" id="pwBox" style="max-width:420px"></div></div>
+<!-- 記事：タップした単語の即時辞書シート -->
+<div class="wsheet-bg" id="wsBg" onclick="AR.closeWord()"></div>
+<div class="wsheet" id="wsBox"></div>
 <!-- ログインモーダル -->
 <div class="quiz-bg" id="loginBg"><div class="quiz-box" id="loginBox" style="max-width:380px;text-align:center">
   <button class="qclose" style="float:right" onclick="STW_WEB.closeModal()">✕</button>
@@ -697,45 +740,45 @@ button{font-family:inherit}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="i18n.js?v=41"></script>
-<script src="tts.js?v=41"></script>
-<script src="vocab-l1.js?v=41"></script>
-<script src="vocab-l2.js?v=41"></script>
-<script src="vocab-l3.js?v=41"></script>
-<script src="vocab-l4.js?v=41"></script>
-<script src="vocab-l5.js?v=41"></script>
-<script src="grammar-l1.js?v=41"></script>
-<script src="grammar-l2.js?v=41"></script>
-<script src="grammar-l3.js?v=41"></script>
-<script src="grammar-l4.js?v=41"></script>
-<script src="grammar-l5.js?v=41"></script>
-<script src="phrases-l1.js?v=41"></script>
-<script src="zhuyin.js?v=41"></script>
-<script src="reading-l1.js?v=41"></script>
-<script src="reading-l2.js?v=41"></script>
-<script src="reading-l3.js?v=41"></script>
-<script src="reading-l4.js?v=41"></script>
-<script src="reading-l5.js?v=41"></script>
-<script src="articles-1.js?v=41"></script>
-<script src="articles-2.js?v=41"></script>
-<script src="articles-3.js?v=41"></script>
-<script src="articles-4.js?v=41"></script>
-<script src="articles-5.js?v=41"></script>
-<script src="articles-6.js?v=41"></script>
-<script src="articles-7.js?v=41"></script>
-<script src="articles-8.js?v=41"></script>
-<script src="articles-9.js?v=41"></script>
-<script src="articles-10.js?v=41"></script>
-<script src="articles-11.js?v=41"></script>
-<script src="articles-12.js?v=41"></script>
-<script src="articles-13.js?v=41"></script>
-<script src="articles-14.js?v=41"></script>
-<script src="articles-15.js?v=41"></script>
-<script src="writing-data.js?v=41"></script>
-<script src="paywall.js?v=41"></script>
-<script src="websync.js?v=41"></script>
-<script src="srs.js?v=41"></script>
-<script src="mock-exam.js?v=41"></script>
+<script src="i18n.js?v=42"></script>
+<script src="tts.js?v=42"></script>
+<script src="vocab-l1.js?v=42"></script>
+<script src="vocab-l2.js?v=42"></script>
+<script src="vocab-l3.js?v=42"></script>
+<script src="vocab-l4.js?v=42"></script>
+<script src="vocab-l5.js?v=42"></script>
+<script src="grammar-l1.js?v=42"></script>
+<script src="grammar-l2.js?v=42"></script>
+<script src="grammar-l3.js?v=42"></script>
+<script src="grammar-l4.js?v=42"></script>
+<script src="grammar-l5.js?v=42"></script>
+<script src="phrases-l1.js?v=42"></script>
+<script src="zhuyin.js?v=42"></script>
+<script src="reading-l1.js?v=42"></script>
+<script src="reading-l2.js?v=42"></script>
+<script src="reading-l3.js?v=42"></script>
+<script src="reading-l4.js?v=42"></script>
+<script src="reading-l5.js?v=42"></script>
+<script src="articles-1.js?v=42"></script>
+<script src="articles-2.js?v=42"></script>
+<script src="articles-3.js?v=42"></script>
+<script src="articles-4.js?v=42"></script>
+<script src="articles-5.js?v=42"></script>
+<script src="articles-6.js?v=42"></script>
+<script src="articles-7.js?v=42"></script>
+<script src="articles-8.js?v=42"></script>
+<script src="articles-9.js?v=42"></script>
+<script src="articles-10.js?v=42"></script>
+<script src="articles-11.js?v=42"></script>
+<script src="articles-12.js?v=42"></script>
+<script src="articles-13.js?v=42"></script>
+<script src="articles-14.js?v=42"></script>
+<script src="articles-15.js?v=42"></script>
+<script src="writing-data.js?v=42"></script>
+<script src="paywall.js?v=42"></script>
+<script src="websync.js?v=42"></script>
+<script src="srs.js?v=42"></script>
+<script src="mock-exam.js?v=42"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -781,6 +824,7 @@ function switchPanel(p){
   if (p === "zhuyin") ZY.render();
   if (p === "reading") RD.render();
   if (p === "articles") AR.render();
+  else { try { AR.hideBar(); AR.closeWord(); } catch (e) {} }   // 記事から離れたら再生バー/辞書を閉じる
   if (p === "profile") renderProfile();
   // レベル選択は語彙系のみ関係。注音・フレーズ等では隠す
   const noLevel = ["zhuyin", "phrases", "speak", "write", "profile", "articles"].includes(p);
@@ -1795,10 +1839,14 @@ function twArticles(){
 }
 const AR = (() => {
   let showPy = false, showTr = false, cur = null;
+  let arFont = Math.min(26, Math.max(15, +(localStorage.getItem("stw_ar_font") || 19)));
+  const RATES = [1, 0.8, 1.2]; let rateIdx = 0;
+  let playTimer = null, playIdx = -1;
   const box = () => document.getElementById("arBox");
+  const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const parse = (k,d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v==null?d:v; } catch(e){ return d; } };
 
-  function render(){ cur = null; renderList(); }
+  function render(){ cur = null; hideBar(); closeWord(); renderList(); }
   function locked(i){ return i !== 0 && !Paywall.isPremium(); }   // 最初の1本は無料、以降はプレミアム
   let arFilter = "all", arCats = [];
   function renderList(){
@@ -1810,10 +1858,12 @@ const AR = (() => {
     const cards = items.map((a,i)=>({a,i})).filter(x => arFilter==="all" || x.a.cat.e===arFilter).map(({a,i})=>{
       const lk = locked(i);
       const tag = lk ? `<span class="ar-lock">🔒 ${twT("arLocked")}</span>` : (i===0 ? `<span class="ar-freetag">${twT("arFree")}</span>` : "");
+      const prev = (a.paras && a.paras[0] ? a.paras[0].z : "").slice(0, 46);
       return `<button class="ar-card ${lk?"locked":""}" onclick="AR.open(${i})">
         <div class="ar-card-cat">${a.cat[mk] || a.cat.j}${readDone(a.id) ? ` ・ <span class="rd-ok">${twT("rdRead")}</span>` : ""} ${tag}</div>
         <div class="ar-card-zh">${a.zhTitle}</div>
         <div class="ar-card-t">${a.title[mk] || a.title.j}</div>
+        <div class="ar-card-prev">${prev}…</div>
       </button>`;
     }).join("");
     box().innerHTML = `<p class="rd-lead">${twT("arLead")}</p>` + chips + cards;
@@ -1824,48 +1874,103 @@ const AR = (() => {
     cur = twArticles()[i]; if (!cur) return; showTr = false; renderArticle(); window.scrollTo({top:0});
   }
 
+  // 段落テキスト内の生詞をタップ可能にハイライト（長い語を優先、重複置換を避ける）
+  function markupVocab(z, vocab){
+    if (!vocab || !vocab.length) return z;
+    const ws = [...vocab].map(v=>v.w).filter(Boolean).sort((a,b)=>b.length-a.length);
+    let re; try { re = new RegExp("(" + ws.map(escRe).join("|") + ")", "g"); } catch(e){ return z; }
+    return z.replace(re, m => `<span class="ar-w" data-w="${m}">${m}</span>`);
+  }
   function renderArticle(){
     const mk = twMKey(), a = cur;
     const paras = a.paras.map((p,idx)=>`
-      <div class="ar-para" onclick="AR.para(${idx})" data-idx="${idx}">
-        <div class="ar-z">${p.z}<svg viewBox="0 0 24 24" class="ic rd-spk"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></div>
+      <div class="ar-para" data-idx="${idx}">
+        <div class="ar-z">${markupVocab(p.z, a.vocab)}</div>
         <div class="ar-py" style="${showPy?"":"display:none"}">${p.py}</div>
         <div class="ar-tr" style="${showTr?"":"display:none"}">${p.m[mk] || p.m.j}</div>
+        <button class="ar-para-play" onclick="AR.para(${idx})" aria-label="play"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>
       </div>`).join("");
     const vocab = a.vocab.map(v=>`
       <div class="rd-voc" onclick="speakZh('${v.w}')">
         <span class="rd-voc-w">${v.w}</span><span class="rd-voc-p">${v.zy} ｜ ${v.py}</span>
         <span class="rd-voc-m">${v.m[mk] || v.m.j}</span></div>`).join("");
     box().innerHTML = `
-      <button class="rd-back" onclick="AR.render()">← ${twT("rdBack")}</button>
+      <div class="ar-top">
+        <button class="ar-back" onclick="AR.render()"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <div class="ar-fontctl"><button onclick="AR.font(-1)">A<small>−</small></button><button onclick="AR.font(1)">A<small>＋</small></button></div>
+      </div>
       <div class="ar-cat">${a.cat[mk] || a.cat.j}</div>
       <h3 class="ar-zhtitle">${a.zhTitle}</h3>
       <div class="ar-title">${a.title[mk] || a.title.j}</div>
       <p class="ar-intro">${a.intro[mk] || a.intro.j}</p>
-      <div class="rd-toggles">
-        <button class="rd-tg ${showPy?"on":""}" onclick="AR.togglePy()">${twT("rdPinyin")}</button>
-        <button class="rd-tg ${showTr?"on":""}" onclick="AR.toggleTr()">${twT("rdTrans")}</button>
-        <button class="rd-tg" onclick="AR.playAll()">▶ ${twT("rdPlayAll")}</button>
-      </div>
-      <div class="ar-body">${paras}</div>
+      <div class="ar-tips">${twT("arTapHint")}</div>
+      <div class="ar-body" style="font-size:${arFont}px">${paras}</div>
       <h4 class="rd-h4">${twT("rdVocab")}</h4>
       <div class="rd-vocs">${vocab}</div>
-      <div class="ar-note"><div class="ar-note-h">${twT("arNote")}</div>${a.note[mk] || a.note.j}</div>`;
+      <div class="ar-note" style="font-size:${Math.max(14,arFont-4)}px"><div class="ar-note-h">${twT("arNote")}</div>${a.note[mk] || a.note.j}</div>
+      <div style="height:78px"></div>`;
+    renderBar();
+    box().querySelectorAll(".ar-w").forEach(el => el.onclick = e => { e.stopPropagation(); word(el.dataset.w); });
     markRead(a.id);
     if (typeof recordStudy === "function") recordStudy();
   }
+  // 置底のツールバー（拼音・訳・再生・速度）
+  function renderBar(){
+    let bar = document.getElementById("arBar");
+    if (!bar) { bar = document.createElement("div"); bar.id = "arBar"; bar.className = "ar-bar"; document.body.appendChild(bar); }
+    bar.innerHTML = `
+      <button class="ar-bt ${showPy?"on":""}" onclick="AR.togglePy()">拼音</button>
+      <button class="ar-bt ${showTr?"on":""}" onclick="AR.toggleTr()">${twT("rdTrans")}</button>
+      <button class="ar-bt play" onclick="AR.playAll()">${playTimer ? "⏸" : "▶"}</button>
+      <button class="ar-bt" onclick="AR.speed()">${RATES[rateIdx]}x</button>`;
+    bar.classList.add("show");
+  }
+  function hideBar(){ const b = document.getElementById("arBar"); if (b) b.classList.remove("show"); stopPlay(); }
+
   function para(idx){
-    const p = cur.paras[idx]; speakZh(p.z);
+    stopPlay();
+    const p = cur.paras[idx]; speakZh(p.z, RATES[rateIdx]);
     const el = box().querySelector(`.ar-para[data-idx="${idx}"] .ar-tr`); if (el) el.style.display = "";
   }
   function togglePy(){ showPy = !showPy; renderArticle(); }
   function toggleTr(){ showTr = !showTr; renderArticle(); }
-  function playAll(){ let i=0; const step=()=>{ if(!cur||i>=cur.paras.length)return; speakZh(cur.paras[i].z); i++; setTimeout(step, 5200); }; step(); }
+  function font(d){ arFont = Math.min(26, Math.max(15, arFont + d*2)); localStorage.setItem("stw_ar_font", arFont); const b = box().querySelector(".ar-body"); if (b) b.style.fontSize = arFont + "px"; }
+  function speed(){ rateIdx = (rateIdx + 1) % RATES.length; renderBar(); }
+
+  function stopPlay(){ if (playTimer){ clearTimeout(playTimer); playTimer = null; } if (window.TTS && TTS.stop) TTS.stop(); const el = box() && box().querySelector(".ar-para.playing"); if (el) el.classList.remove("playing"); playIdx = -1; renderBar(); }
+  function playAll(){
+    if (playTimer){ stopPlay(); return; }
+    playIdx = 0; step();
+  }
+  function step(){
+    if (!cur || playIdx >= cur.paras.length){ stopPlay(); return; }
+    box().querySelectorAll(".ar-para.playing").forEach(e=>e.classList.remove("playing"));
+    const pEl = box().querySelector(`.ar-para[data-idx="${playIdx}"]`);
+    if (pEl){ pEl.classList.add("playing"); pEl.scrollIntoView({block:"center",behavior:"smooth"}); const tr = pEl.querySelector(".ar-tr"); if (showTr && tr) tr.style.display=""; }
+    const p = cur.paras[playIdx]; speakZh(p.z, RATES[rateIdx]);
+    const secs = Math.max(3.2, (p.z.replace(/[，。！？、]/g,"").length) * 0.28 / RATES[rateIdx]);
+    playTimer = setTimeout(()=>{ playIdx++; step(); }, secs * 1000);
+    renderBar();
+  }
+
+  // タップ辞書
+  function word(w){
+    const v = (cur.vocab || []).find(x => x.w === w); if (!v) return;
+    const mk = twMKey();
+    document.getElementById("wsBox").innerHTML = `
+      <div class="ws-top"><div class="ws-w">${v.w}</div><button class="ws-play" onclick="speakZh('${v.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
+      <div class="ws-p">${v.zy}　${v.py}</div>
+      <div class="ws-m">${v.m[mk] || v.m.j}</div>`;
+    document.getElementById("wsBg").classList.add("show");
+    document.getElementById("wsBox").classList.add("show");
+    speakZh(v.w);
+  }
+  function closeWord(){ document.getElementById("wsBg").classList.remove("show"); document.getElementById("wsBox").classList.remove("show"); }
 
   function readDone(id){ return parse("stw_art_read", []).includes(id); }
   function markRead(id){ let a=parse("stw_art_read",[]); if(!a.includes(id)){ a.push(id); localStorage.setItem("stw_art_read",JSON.stringify(a)); if(typeof window.onSRSChange==="function")window.onSRSChange(); } }
 
-  return { render, open, para, togglePy, toggleTr, playAll, filter };
+  return { render, open, para, togglePy, toggleTr, playAll, filter, font, speed, closeWord, hideBar };
 })();
 
 /* ===== アイコン（絵文字をやめてミニマルな線アイコンに統一） ===== */
