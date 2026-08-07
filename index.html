@@ -326,7 +326,8 @@ button{font-family:inherit}
 .rd-toggles{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
 .rd-tg{border:1px solid var(--bd);background:var(--bg);color:var(--tx2);border-radius:999px;padding:5px 14px;font-size:13px;cursor:pointer;font-family:inherit}
 .rd-tg.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-.rd-line{position:relative;padding:14px 46px 14px 6px;border-bottom:1px solid var(--line);-webkit-tap-highlight-color:transparent}
+.rd-line{position:relative;padding:14px 46px 14px 6px;border-bottom:1px solid var(--line);border-radius:10px;transition:background .2s;-webkit-tap-highlight-color:transparent}
+.rd-line.playing{background:var(--ac-soft)}
 .rd-z{font-family:var(--serif);line-height:2;color:var(--tx);text-align:justify}
 .rd-spk{width:17px;height:17px;color:var(--tx3);flex:none}
 .rd-py{font-size:13px;color:var(--tx3);margin-top:3px}
@@ -740,45 +741,45 @@ body.more-open .ar-bar{display:none}
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="i18n.js?v=45"></script>
-<script src="tts.js?v=45"></script>
-<script src="vocab-l1.js?v=45"></script>
-<script src="vocab-l2.js?v=45"></script>
-<script src="vocab-l3.js?v=45"></script>
-<script src="vocab-l4.js?v=45"></script>
-<script src="vocab-l5.js?v=45"></script>
-<script src="grammar-l1.js?v=45"></script>
-<script src="grammar-l2.js?v=45"></script>
-<script src="grammar-l3.js?v=45"></script>
-<script src="grammar-l4.js?v=45"></script>
-<script src="grammar-l5.js?v=45"></script>
-<script src="phrases-l1.js?v=45"></script>
-<script src="zhuyin.js?v=45"></script>
-<script src="reading-l1.js?v=45"></script>
-<script src="reading-l2.js?v=45"></script>
-<script src="reading-l3.js?v=45"></script>
-<script src="reading-l4.js?v=45"></script>
-<script src="reading-l5.js?v=45"></script>
-<script src="articles-1.js?v=45"></script>
-<script src="articles-2.js?v=45"></script>
-<script src="articles-3.js?v=45"></script>
-<script src="articles-4.js?v=45"></script>
-<script src="articles-5.js?v=45"></script>
-<script src="articles-6.js?v=45"></script>
-<script src="articles-7.js?v=45"></script>
-<script src="articles-8.js?v=45"></script>
-<script src="articles-9.js?v=45"></script>
-<script src="articles-10.js?v=45"></script>
-<script src="articles-11.js?v=45"></script>
-<script src="articles-12.js?v=45"></script>
-<script src="articles-13.js?v=45"></script>
-<script src="articles-14.js?v=45"></script>
-<script src="articles-15.js?v=45"></script>
-<script src="writing-data.js?v=45"></script>
-<script src="paywall.js?v=45"></script>
-<script src="websync.js?v=45"></script>
-<script src="srs.js?v=45"></script>
-<script src="mock-exam.js?v=45"></script>
+<script src="i18n.js?v=46"></script>
+<script src="tts.js?v=46"></script>
+<script src="vocab-l1.js?v=46"></script>
+<script src="vocab-l2.js?v=46"></script>
+<script src="vocab-l3.js?v=46"></script>
+<script src="vocab-l4.js?v=46"></script>
+<script src="vocab-l5.js?v=46"></script>
+<script src="grammar-l1.js?v=46"></script>
+<script src="grammar-l2.js?v=46"></script>
+<script src="grammar-l3.js?v=46"></script>
+<script src="grammar-l4.js?v=46"></script>
+<script src="grammar-l5.js?v=46"></script>
+<script src="phrases-l1.js?v=46"></script>
+<script src="zhuyin.js?v=46"></script>
+<script src="reading-l1.js?v=46"></script>
+<script src="reading-l2.js?v=46"></script>
+<script src="reading-l3.js?v=46"></script>
+<script src="reading-l4.js?v=46"></script>
+<script src="reading-l5.js?v=46"></script>
+<script src="articles-1.js?v=46"></script>
+<script src="articles-2.js?v=46"></script>
+<script src="articles-3.js?v=46"></script>
+<script src="articles-4.js?v=46"></script>
+<script src="articles-5.js?v=46"></script>
+<script src="articles-6.js?v=46"></script>
+<script src="articles-7.js?v=46"></script>
+<script src="articles-8.js?v=46"></script>
+<script src="articles-9.js?v=46"></script>
+<script src="articles-10.js?v=46"></script>
+<script src="articles-11.js?v=46"></script>
+<script src="articles-12.js?v=46"></script>
+<script src="articles-13.js?v=46"></script>
+<script src="articles-14.js?v=46"></script>
+<script src="articles-15.js?v=46"></script>
+<script src="writing-data.js?v=46"></script>
+<script src="paywall.js?v=46"></script>
+<script src="websync.js?v=46"></script>
+<script src="srs.js?v=46"></script>
+<script src="mock-exam.js?v=46"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -825,6 +826,7 @@ function switchPanel(p){
   if (p === "reading") RD.render();
   if (p === "articles") AR.render();
   else { try { AR.hideBar(); AR.closeWord(); } catch (e) {} }   // 記事から離れたら再生バー/辞書を閉じる
+  if (p !== "reading") { try { RD.stopRead(); twCloseWord(); } catch (e) {} }   // 読解から離れたら読み上げ停止
   if (p === "profile") renderProfile();
   // レベル選択は語彙系のみ関係。注音・フレーズ等では隠す
   const noLevel = ["zhuyin", "phrases", "speak", "write", "profile", "articles"].includes(p);
@@ -1747,7 +1749,7 @@ const RD = (() => {
   const box = () => document.getElementById("rdBox");
   const list = () => DATA[currentLevel] || [];
 
-  function render(){ cur = null; twCloseWord(); renderList(); }
+  function render(){ cur = null; stopRead(); twCloseWord(); renderList(); }
 
   function renderList(){
     const mk = twMKey(), items = list();
@@ -1795,7 +1797,7 @@ const RD = (() => {
       <div class="rd-toggles">
         <button class="rd-tg ${showPy?"on":""}" onclick="RD.togglePy()">${twT("rdPinyin")}</button>
         <button class="rd-tg ${showTr?"on":""}" onclick="RD.toggleTr()">${twT("rdTrans")}</button>
-        <button class="rd-tg" onclick="RD.playAll()">▶ ${twT("rdPlayAll")}</button>
+        <button class="rd-tg" id="rdPlayBtn" onclick="RD.playAll()">▶ ${twT("rdPlayAll")}</button>
       </div>
       <div class="rd-story" style="font-size:${rdFont}px">${lines}</div>
       <h4 class="rd-h4">${twT("rdVocab")}</h4>
@@ -1807,6 +1809,7 @@ const RD = (() => {
   function font(d){ rdFont = Math.min(28, Math.max(17, rdFont + d*2)); localStorage.setItem("stw_rd_font", rdFont); const el = box().querySelector(".rd-story"); if (el) el.style.fontSize = rdFont + "px"; }
 
   function line(idx){
+    stopRead();
     const ln = cur.lines[idx];
     speakZh(ln.z);
     // タップした行の訳をその場で表示（読解しながら答え合わせ）
@@ -1815,10 +1818,21 @@ const RD = (() => {
   }
   function togglePy(){ showPy = !showPy; renderStory(); }
   function toggleTr(){ showTr = !showTr; renderStory(); }
+  let rdPlaying = false, rdPlayIdx = -1;
   function playAll(){
-    let i = 0; const step = () => { if (!cur || i >= cur.lines.length) return; speakZh(cur.lines[i].z); i++; setTimeout(step, 2600); };
-    step();
+    if (rdPlaying){ stopRead(); return; }
+    rdPlaying = true; rdPlayIdx = 0; setPlayBtn(); readStep();
   }
+  // 各行を最後まで読んでから次へ（ended で送り。時計送りで途中で切れる・カクつく問題を解消）
+  function readStep(){
+    if (!rdPlaying || !cur || rdPlayIdx >= cur.lines.length){ stopRead(); return; }
+    box().querySelectorAll(".rd-line.playing").forEach(e=>e.classList.remove("playing"));
+    const el = box().querySelector(`.rd-line[data-idx="${rdPlayIdx}"]`);
+    if (el){ el.classList.add("playing"); el.scrollIntoView({block:"center",behavior:"smooth"}); if (showTr){ const tr = el.querySelector(".rd-tr"); if (tr) tr.style.display=""; } }
+    speakZh(cur.lines[rdPlayIdx].z, 1, () => { if (!rdPlaying) return; rdPlayIdx++; setTimeout(readStep, 350); });
+  }
+  function stopRead(){ rdPlaying = false; rdPlayIdx = -1; if (window.TTS && TTS.stop) TTS.stop(); const b = box(); if (b) b.querySelectorAll(".rd-line.playing").forEach(e=>e.classList.remove("playing")); setPlayBtn(); }
+  function setPlayBtn(){ const b = document.getElementById("rdPlayBtn"); if (b) b.textContent = (rdPlaying ? "⏸ " : "▶ ") + twT("rdPlayAll"); }
 
   function renderQ(){
     const mk = twMKey(), q = cur.q; if (!q) return;
@@ -1846,7 +1860,7 @@ const RD = (() => {
     if (!a.includes(id)){ a.push(id); localStorage.setItem("stw_read", JSON.stringify(a)); if (typeof window.onSRSChange==="function") window.onSRSChange(); }
   }
 
-  return { render, open, line, togglePy, toggleTr, playAll, answer, font };
+  return { render, open, line, togglePy, toggleTr, playAll, answer, font, stopRead };
 })();
 
 /* ===== 記事（コラム）：台湾のリアルを深掘りする長文リーディング ===== */
@@ -1873,7 +1887,7 @@ const AR = (() => {
   let showPy = false, showTr = false, cur = null;
   let arFont = Math.min(26, Math.max(15, +(localStorage.getItem("stw_ar_font") || 19)));
   const RATES = [1, 0.8, 1.2]; let rateIdx = 0;
-  let playTimer = null, playIdx = -1;
+  let playing = false, playIdx = -1;
   const box = () => document.getElementById("arBox");
   const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const parse = (k,d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v==null?d:v; } catch(e){ return d; } };
@@ -1946,7 +1960,7 @@ const AR = (() => {
     bar.innerHTML = `
       <button class="ar-bt ${showPy?"on":""}" onclick="AR.togglePy()">拼音</button>
       <button class="ar-bt ${showTr?"on":""}" onclick="AR.toggleTr()">${twT("rdTrans")}</button>
-      <button class="ar-bt play" onclick="AR.playAll()">${playTimer ? "⏸" : "▶"}</button>
+      <button class="ar-bt play" onclick="AR.playAll()">${playing ? "⏸" : "▶"}</button>
       <button class="ar-bt" onclick="AR.speed()">${RATES[rateIdx]}x</button>`;
     bar.classList.add("show");
   }
@@ -1963,9 +1977,9 @@ const AR = (() => {
   function font(d){ if (!cur) return; arFont = Math.min(26, Math.max(15, arFont + d*2)); localStorage.setItem("stw_ar_font", arFont); const b = box().querySelector(".ar-body"); if (b) b.style.fontSize = arFont + "px"; }
   function speed(){ if (!cur) return; rateIdx = (rateIdx + 1) % RATES.length; renderBar(); }
 
-  // 再生停止：バーは消さず、再生ボタンの表示だけ元に戻す（renderBar を呼ぶと show が戻り消せなくなるため）
+  // 再生停止：バーは消さず、再生ボタンの表示だけ元に戻す
   function stopPlay(){
-    if (playTimer){ clearTimeout(playTimer); playTimer = null; }
+    playing = false;
     if (window.TTS && TTS.stop) TTS.stop();
     const el = box() && box().querySelector(".ar-para.playing"); if (el) el.classList.remove("playing");
     playIdx = -1;
@@ -1973,18 +1987,16 @@ const AR = (() => {
   }
   function playAll(){
     if (!cur) return;
-    if (playTimer){ stopPlay(); return; }
-    playIdx = 0; step();
+    if (playing){ stopPlay(); return; }
+    playing = true; playIdx = 0; renderBar(); step();
   }
+  // その段落を最後まで読んでから（ended イベント）次へ。時計で送らない＝途中で切れない・カクつかない
   function step(){
-    if (!cur || playIdx >= cur.paras.length){ stopPlay(); return; }
+    if (!playing || !cur || playIdx >= cur.paras.length){ stopPlay(); return; }
     box().querySelectorAll(".ar-para.playing").forEach(e=>e.classList.remove("playing"));
     const pEl = box().querySelector(`.ar-para[data-idx="${playIdx}"]`);
     if (pEl){ pEl.classList.add("playing"); pEl.scrollIntoView({block:"center",behavior:"smooth"}); const tr = pEl.querySelector(".ar-tr"); if (showTr && tr) tr.style.display=""; }
-    const p = cur.paras[playIdx]; speakZh(p.z, RATES[rateIdx]);
-    const secs = Math.max(3.2, (p.z.replace(/[，。！？、]/g,"").length) * 0.28 / RATES[rateIdx]);
-    playTimer = setTimeout(()=>{ playIdx++; step(); }, secs * 1000);
-    renderBar();
+    speakZh(cur.paras[playIdx].z, RATES[rateIdx], () => { if (!playing) return; playIdx++; setTimeout(step, 350); });
   }
 
   const closeWord = twCloseWord;
