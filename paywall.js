@@ -23,7 +23,11 @@ const Paywall = (() => {
   }
   function save(q) { localStorage.setItem(QUOTA_KEY, JSON.stringify(q)); }
 
+  // ★ プレビュー無料公開：ソフトローンチ中は Web を全解放（iOS 正式版が出たら false に戻す）。
+  //   Web は課金導線が無いので、ここを true にして試用者に全機能・全記事を開放する。
+  const PREVIEW_FREE = true;
   function isPremium() {
+    if (PREVIEW_FREE) return true;
     if (typeof window !== "undefined" && window.__STW_ENTITLED) return true;
     return localStorage.getItem("stw_premium") === "1";
   }
