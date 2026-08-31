@@ -2,6 +2,10 @@ name = "staytw-api"
 main = "worker.js"
 compatibility_date = "2026-07-01"
 
+[vars]
+# Web「Sign in with Apple」の Services ID（aud 検証用・公開値）。前端 websync.js の STW_APPLE_SERVICE_ID と一致させる。
+APPLE_WEB_SERVICE_ID = "com.staytw.web"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "staytw-db"

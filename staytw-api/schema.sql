@@ -24,3 +24,20 @@ CREATE TABLE IF NOT EXISTS rc_events (
 );
 CREATE INDEX IF NOT EXISTS idx_rc_ts ON rc_events(ts);
 CREATE INDEX IF NOT EXISTS idx_fb_ts ON feedback(ts);
+-- メール購読リスト（iOS 上架・更新通知用。ログイン不要で集める）
+CREATE TABLE IF NOT EXISTS subscribers (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  ts TEXT NOT NULL DEFAULT (datetime('now')),
+  email TEXT UNIQUE NOT NULL,
+  lang TEXT DEFAULT '',
+  source TEXT DEFAULT ''
+);
+-- ログインユーザー（Google/Apple。web-login が INSERT）
+CREATE TABLE IF NOT EXISTS auth_users (
+  uid TEXT PRIMARY KEY,
+  provider TEXT,
+  sub TEXT,
+  email TEXT DEFAULT '',
+  created_at INTEGER,
+  updated_at INTEGER
+);

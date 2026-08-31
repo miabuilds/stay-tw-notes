@@ -1,0 +1,8 @@
+name = "staytw"
+pages_build_output_dir = "."
+compatibility_date = "2026-07-01"
+
+# Service Binding：讓 Pages Function 內部呼叫 staytw-api Worker（避開 workers.dev 公開子請求 1016）
+[[services]]
+binding = "API"
+service = "staytw-api"

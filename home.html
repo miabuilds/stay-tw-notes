@@ -2,14 +2,22 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="google-site-verification" content="9wjeCDTfS5zg3ooXHMMPhWE6gCM1qQJ7eGY6q6rPSkY">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>台湾華語スタディ StayTW Study — 無料の台湾中国語（繁体字）学習ツール｜単語・文法・フレーズ・クイズ</title>
-<meta name="description" content="日本語・英語・韓国語話者のための無料台湾華語学習ツール。TOCFL対応の単語カード・基本文法・場面別フレーズ・クイズ。繁体字＋注音＋拼音、登録不要でブラウザからすぐ使える。">
-<meta property="og:title" content="台湾華語スタディ StayTW Study — 無料の台湾中国語学習ツール">
-<meta property="og:description" content="単語・文法・フレーズ・クイズ。繁体字＋注音＋拼音、すべて無料。">
+<title>台湾華語スタディ StayTW — 繁体字・注音で学ぶ台湾の中国語｜TOCFL対応・無料アプリ</title>
+<meta name="description" content="日本語・英語・韓国語話者のための台湾華語（繁体字＋注音＋台湾読み）学習アプリ。単語1,000＋・文法84・例文のネイティブ音声・タップ辞書、TOCFL L1〜5対応。登録不要・ブラウザで無料。iOSアプリも公開中。">
+<meta property="og:title" content="台湾華語スタディ StayTW — 繁体字・注音で学ぶ台湾の中国語">
+<meta property="og:description" content="繁体字＋注音＋台湾読み。単語1,000＋・例文音声・タップ辞書、TOCFL対応。登録不要で無料、iOSアプリも公開中。">
 <meta property="og:type" content="website">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script src="analytics.js?v=51"></script>
+<script>/* 初回はデバイス言語で自動判定（ja/en/ko）、以降はユーザー選択優先 */
+(function(){ try{ if(!localStorage.getItem("stw-lang")){
+  var ls=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||navigator.userLanguage||""];
+  var pick=""; for(var i=0;i<ls.length;i++){ var l=(ls[i]||"").toLowerCase();
+    if(l.indexOf("ja")===0){pick="ja";break;} if(l.indexOf("ko")===0){pick="ko";break;} if(l.indexOf("en")===0){pick="en";break;} }
+  localStorage.setItem("stw-lang", pick||"en");
+}}catch(e){} })();</script>
 <link rel="apple-touch-icon" href="images/bear.svg">
 <style>
 /* ======================================================
@@ -72,14 +80,27 @@ a:hover{text-decoration:underline}
 .hero-cta:hover{background:var(--ac);color:#fff;text-decoration:none;transform:translateY(-1px)}
 .hero-cta svg{transition:transform .2s var(--ease)}
 .hero-cta:hover svg{transform:translateX(3px)}
+.hero-cta-store{background:var(--ac);color:#fff}
+.hero-cta-store:hover{background:var(--ac);color:#fff;filter:brightness(1.06)}
+.hero-cta-store svg{transition:none}
+.hero-cta-store:hover svg{transform:none}
 .hero-sub{font-size:13px;color:var(--tx-s)}
 .hero-mascot{flex-shrink:0;width:clamp(220px,26vw,340px);position:relative}
 .hero-mascot img{width:100%;height:auto;display:block;filter:drop-shadow(0 12px 32px rgba(0,0,0,.12))}
 .hero-mascot .mascot-name{text-align:center;font-size:12px;color:var(--tx3);letter-spacing:.15em;margin-top:10px}
 @media(max-width:900px){
-  .hero{flex-direction:column;gap:0;padding:calc(var(--hh) + env(safe-area-inset-top) + 28px) 24px 64px}
-  .hero-mascot{width:46vw;max-width:190px;margin:0 auto 10px;order:-1}
+  .hero{flex-direction:column;gap:0;padding:calc(var(--hh) + env(safe-area-inset-top) + 16px) 22px 56px}
+  /* 黒熊は小さめに（ファーストビューに CTA を入れるため） */
+  .hero-mascot{width:96px;max-width:96px;margin:0 auto 6px;order:-1}
   .hero-mascot .mascot-name{display:none}
+  /* モバイルでは CTA（App Store ダウンロード）を説明文より上に出す＝スクロール不要で見える */
+  .hero-inner{display:flex;flex-direction:column}
+  .hero-eyebrow{margin-bottom:12px}
+  .hero-title{margin-bottom:18px}
+  .hero-cta-row{order:1;margin-bottom:22px;gap:12px}
+  .hero-desc{order:2;margin-bottom:0}
+  .hero-cta,.hero-cta-store{flex:1 1 auto;justify-content:center}
+  .hero-sub{order:3;margin-top:14px}
 }
 
 /* == Marquee == */
@@ -169,6 +190,11 @@ a:hover{text-decoration:underline}
   .hero-desc{margin-bottom:26px}
 }
 @media(max-width:480px){.marquee span{font-size:18px}.hero-cta{padding:14px 28px;font-size:14px}}
+#guides .section-title{margin-bottom:28px}
+.guide-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.guide-card{display:flex;align-items:center;gap:8px;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:var(--bg);color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;transition:border-color .15s,transform .15s}
+.guide-card::before{content:"→";color:var(--ac);font-weight:700}
+.guide-card:hover{border-color:var(--ac);transform:translateY(-2px)}
 </style>
 </head>
 <body>
@@ -177,7 +203,7 @@ a:hover{text-decoration:underline}
   <div class="hd-inner">
     <h1><img src="images/bear.svg" alt="" style="width:26px;height:30px;vertical-align:middle;margin-right:6px"><span data-i18n="brand">台湾華語スタディ</span> <span style="color:var(--ac)">StayTW</span></h1>
     <div class="hd-links">
-      <a href="index.html" data-i18n="navTools">学習ツール</a>
+      <a href="/?app=1" data-i18n="navTools">学習ツール</a>
       <a href="tocfl.html" data-i18n="navGuide">TOCFLガイド</a>
       <a href="#about" data-i18n="navAbout">サイトについて</a>
       <button class="lang-btn" id="langBtn" onclick="twCycleLang()">日</button>
@@ -192,10 +218,14 @@ a:hover{text-decoration:underline}
     <div class="hero-eyebrow reveal" data-i18n="heroEyebrow">STAYTW · STUDY</div>
     <h2 class="hero-kana reveal reveal-d1" data-i18n="heroKana">毎日、少しずつ。</h2>
     <h1 class="hero-title reveal reveal-d2"><span data-i18n="heroTitle1">ゼロから、</span><br><em data-i18n="heroTitleEm">台湾華語。</em></h1>
-    <p class="hero-desc reveal reveal-d3" data-i18n="heroDesc">単語 100+・文法 20・場面別フレーズ・クイズ。繁体字＋注音＋拼音、すべて無料。登録もダウンロードも不要、ブラウザで今すぐ。</p>
+    <p class="hero-desc reveal reveal-d3" data-i18n="heroDesc">繁体字＋注音＋台湾読みで学ぶ“台湾の”中国語。単語1,000＋文法84＋辞書つき、登録不要で無料。</p>
     <div class="hero-cta-row reveal reveal-d4">
-      <a href="index.html" class="hero-cta"><span data-i18n="heroCta">無料で始める</span>
+      <a href="/?app=1" class="hero-cta"><span data-i18n="heroCta">無料で始める</span>
         <svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="https://apps.apple.com/app/id6794272037" target="_blank" rel="noopener" class="hero-cta hero-cta-store">
+        <svg style="width:18px;height:18px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.365 1.43c0 1.14-.42 2.2-1.12 2.99-.75.85-1.98 1.5-3.02 1.42-.12-1.1.42-2.26 1.09-3 .74-.83 2.06-1.46 3.05-1.41zM20.5 17.02c-.55 1.27-.82 1.84-1.53 2.96-.98 1.56-2.37 3.5-4.08 3.51-1.52.02-1.91-.99-3.98-.98-2.07.01-2.5.99-4.02.97-1.71-.02-3.02-1.77-4-3.33C-.02 15.9-.3 10.5 2.37 7.9c1.14-1.13 2.62-1.79 4.02-1.79 1.42 0 2.31.98 3.98.98 1.62 0 2.6-.98 4.02-.98 1.24 0 2.55.6 3.5 1.65-3.07 1.68-2.57 6.06.61 7.26z"/></svg>
+        <span data-i18n="heroDownload">App Store で入手</span>
       </a>
       <span class="hero-sub" data-i18n="heroSub">無料・登録不要・ブラウザですぐ使える</span>
     </div>
@@ -297,6 +327,19 @@ a:hover{text-decoration:underline}
 </section>
 
 <!-- FAQ -->
+<!-- メール登録（iOS 版リリース通知） -->
+<section class="section" id="notify" style="background:var(--bg3)">
+  <div class="section-inner" style="max-width:640px;text-align:center">
+    <div class="eyebrow reveal" data-i18n="eyeNotify">COMING SOON · iOS</div>
+    <h2 class="section-title reveal" data-i18n="notifyTitle">iOS アプリ、準備中。</h2>
+    <p class="reveal reveal-d1" style="color:var(--tx2);margin:10px 0 22px" data-i18n="notifyDesc">リリースしたらメールでお知らせします。オフライン学習・発音チェック・毎日リマインダーを準備中。よかったら登録してください（いつでも解除OK）。</p>
+    <a id="dlBtn" class="hero-cta reveal reveal-d2" href="https://apps.apple.com/app/id6794272037" target="_blank" rel="noopener"
+       style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer">
+      <span data-i18n="notifyBtn">App Store でダウンロード</span>
+    </a>
+  </div>
+</section>
+
 <section class="section" id="faq">
   <div class="section-inner">
     <div class="eyebrow reveal" data-i18n="eyeFaq">FAQ · よくある質問</div>
@@ -322,6 +365,29 @@ a:hover{text-decoration:underline}
   </div>
 </section>
 
+<!-- 学習ガイド（比較・入門記事への内部リンク：SEO＋発見性） -->
+<section class="section" id="guides">
+  <div class="section-inner">
+    <h2 class="section-title" id="guidesTitle">学習ガイド</h2>
+    <div class="guide-grid" id="guideGrid">
+      <a class="guide-card" href="compare/zhuyin-guide-ja">注音（ボポモフォ）の読み方</a>
+      <a class="guide-card" href="compare/traditional-vs-simplified-ja">繁体字と簡体字のちがい</a>
+      <a class="guide-card" href="compare/taiwan-vs-china-mandarin-ja">台湾と中国の中国語</a>
+      <a class="guide-card" href="compare/de-particles-ja">的・得・地の使い分け</a>
+      <a class="guide-card" href="compare/taiwan-daily-words-ja">台湾の日常単語</a>
+      <a class="guide-card" href="compare/tocfl-guide-ja">TOCFL 入門ガイド</a>
+    </div>
+  </div>
+</section>
+<script>(function(){
+  var l=(localStorage.getItem("stw-lang")||"ja"); if(["ja","en","ko"].indexOf(l)<0)l="en"; if(l==="ja")return;
+  var T={en:{t:"Learning guides",g:["How Zhuyin (Bopomofo) works","Traditional vs Simplified","Taiwan vs China Mandarin","的, 得, 地 explained","Everyday Taiwan words","TOCFL beginner's guide"]},
+         ko:{t:"학습 가이드",g:["주음(보포모포) 읽는 법","번체자 vs 간체자","대만 vs 중국 중국어","的·得·地 구분","대만 일상 단어","TOCFL 입문 가이드"]}};
+  var slugs=["zhuyin-guide","traditional-vs-simplified","taiwan-vs-china-mandarin","de-particles","taiwan-daily-words","tocfl-guide"];
+  var d=T[l]; if(!d)return; var gt=document.getElementById("guidesTitle"); if(gt)gt.textContent=d.t;
+  document.querySelectorAll("#guideGrid .guide-card").forEach(function(a,i){ a.href="compare/"+slugs[i]+"-"+l; a.textContent=d.g[i]; });
+})();</script>
+
 <!-- Footer -->
 <footer class="ft">
   <div class="ft-inner">
@@ -330,7 +396,8 @@ a:hover{text-decoration:underline}
       <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
     </div>
     <div>
-      <a href="index.html" data-i18n="navTools">学習ツール</a>
+      <a href="/?app=1" data-i18n="navTools">学習ツール</a>
+      <a href="pricing" data-i18n="navPricing">料金・プラン</a>
       <a href="tocfl.html" data-i18n="navGuide">TOCFLガイド</a>
       <a href="contact.html" data-i18n="navContact">ご意見</a>
       <a href="#about" data-i18n="navAbout">サイトについて</a>
@@ -338,7 +405,7 @@ a:hover{text-decoration:underline}
   </div>
 </footer>
 
-<script src="i18n.js?v=29"></script>
+<script src="i18n.js?v=62"></script>
 <script>
 function toggleTheme(){
   const d = document.documentElement.dataset.theme === "dark";
@@ -357,7 +424,27 @@ function toggleTheme(){
   const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } }),{threshold:.12});
   document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
 })();
+// メール登録
+(function(){
+  const f=document.getElementById("subForm"); if(!f) return;
+  const msg=document.getElementById("subMsg");
+  const t=(k,d)=>(typeof twT==="function"?twT(k):"")||d;
+  f.addEventListener("submit", async e=>{
+    e.preventDefault();
+    const email=document.getElementById("subEmail").value.trim();
+    const website=f.website.value;   // ハニーポット
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ msg.style.color="var(--ac)"; msg.textContent=t("notifyBad","メールアドレスを確認してください"); return; }
+    msg.style.color="var(--tx2)"; msg.textContent="…";
+    try{
+      const r=await fetch("/api/subscribe",{method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({email,website,lang:twGetLang(),source:"home"})});
+      if(r.ok){ f.reset(); msg.style.color="var(--ok,#2F7A5D)"; msg.textContent=t("notifyOk","登録しました！リリース時にお知らせします 🎉"); }
+      else { msg.style.color="var(--ac)"; msg.textContent=t("notifyBad","メールアドレスを確認してください"); }
+    }catch(err){ msg.style.color="var(--ac)"; msg.textContent=t("notifyErr","通信エラー。あとでもう一度お試しください"); }
+  });
+})();
 </script>
-<script>try{fetch("https://staytw-api.abc83327.workers.dev/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname,ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
+<script>try{fetch("/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname,ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
+<script src="inapp-hint.js?v=1"></script>
 </body>
 </html>

@@ -2,7 +2,22 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="google-site-verification" content="9wjeCDTfS5zg3ooXHMMPhWE6gCM1qQJ7eGY6q6rPSkY">
+<script>
+/* ルート(/)に来たブラウザ訪問者はランディング(/home)へ誘導。
+   ネイティブアプリ（WEB_URL が "/"）とアプリ起動リンク（?app=1）は除外し、
+   無限ループと「アプリ内でランディングが開く」事故を防ぐ。二重の判定で誤爆防止。 */
+(function(){try{
+  var native = window.STAYTW_NATIVE || window.ReactNativeWebView;
+  var p = location.pathname, q = location.search || "";
+  if (!native && (p === "/" || p === "/index.html") && q.indexOf("app=") === -1) {
+    location.replace("/home");
+  }
+}catch(e){}})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<style>html,body{touch-action:manipulation}</style>
+<script>document.addEventListener("gesturestart",function(e){e.preventDefault();},{passive:false});</script>
 <title>台湾華語スタディ StayTW Study — 学習ツール｜単語・文法・フレーズ・クイズ・復習・模試</title>
 <meta name="description" content="台湾華語（繁体字中国語）の無料学習ツール。TOCFL Level 1〜5 の単語カード・文法・場面別フレーズ・クイズ・SRS復習・模擬試験。注音＋拼音つき、日本語・英語・韓国語対応。">
 <!-- SNS シェア用（脆/Threads・LINE・X などのリンクプレビュー） -->
@@ -55,10 +70,13 @@ button{font-family:inherit}
 /* == Header == */
 .hd{position:fixed;top:0;left:0;right:0;background:color-mix(in srgb,var(--bg) 88%,transparent);z-index:100;border-bottom:1px solid var(--line);backdrop-filter:saturate(140%) blur(14px);-webkit-backdrop-filter:saturate(140%) blur(14px);padding-top:env(safe-area-inset-top)}
 .hd-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;padding:0 24px;height:var(--hh);gap:10px}
-.hd h1{color:var(--tx);font-size:15px;font-weight:700;white-space:nowrap;letter-spacing:.02em;font-family:var(--serif);display:flex;align-items:center;gap:8px}
-.hd h1 a{color:inherit;display:flex;align-items:center;gap:8px}
-.hd h1 img{width:26px;height:30px}
-.hd-links{display:flex;gap:12px;margin-left:auto;align-items:center}
+.hd h1{color:var(--tx);font-size:15px;font-weight:700;white-space:nowrap;letter-spacing:.02em;font-family:var(--serif);display:flex;align-items:center;gap:8px;min-width:0}
+.hd h1 a{color:inherit;display:flex;align-items:center;gap:8px;min-width:0}
+.hd h1 img{width:26px;height:30px;flex-shrink:0}
+/* 長い英語ブランド名は詰まったら省略（…）。StayTW と右側のボタン群は絶対に切らない */
+.hd h1 a [data-i18n="brand"]{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hd h1 a > span:not([data-i18n]){flex-shrink:0}
+.hd-links{display:flex;gap:12px;margin-left:auto;align-items:center;flex-shrink:0}
 .hd-links a{color:var(--tx2);font-size:13px;font-weight:500;white-space:nowrap}
 @media(hover:hover){.hd-links a:hover{color:var(--tx)}}
 .lang-btn{background:var(--bg3);border:1px solid var(--bd);cursor:pointer;color:var(--tx2);padding:2px 10px;font-size:12px;font-weight:600;border-radius:8px;white-space:nowrap}
@@ -194,6 +212,20 @@ button{font-family:inherit}
 .qz-opt.ng{background:var(--ac);border-color:var(--ac);color:#fff;opacity:.85}
 .qz-opt:disabled{cursor:default}
 .qz-score{font-size:14px;color:var(--tx2);margin:16px 0}
+.qz-fb{margin-top:18px;padding:14px 16px;border-radius:12px;border:1px solid var(--bd);background:var(--bg2);text-align:center}
+.qz-fb.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 8%,var(--bg2))}
+.qz-fb.ng{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 8%,var(--bg2))}
+.wb-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;display:flex;align-items:flex-end;justify-content:center}
+.wb-panel{background:var(--bg);width:100%;max-width:560px;max-height:82vh;border-radius:18px 18px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));overflow-y:auto}
+@media(min-width:560px){.wb-modal{align-items:center}.wb-panel{border-radius:18px}}
+.wb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:17px}
+.wb-x{background:none;border:none;font-size:18px;color:var(--tx3);cursor:pointer}
+.wb-item{position:relative;background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:12px 40px 12px 14px;margin-bottom:10px}
+.wb-q{font-size:15px;color:var(--tx)}
+.wb-a{font-family:var(--serif);font-size:19px;color:var(--ac);cursor:pointer}
+.wb-d{font-size:13px;color:var(--tx2);margin-top:4px}
+.wb-del{position:absolute;right:8px;top:10px;background:none;border:none;color:var(--tx3);cursor:pointer;font-size:14px}
+.wb-link{background:none;border:1px solid var(--bd);color:var(--tx2);border-radius:999px;padding:8px 16px;font-size:13px;cursor:pointer;margin-top:12px}
 .qz-big{font-family:var(--serif);font-size:44px;font-weight:700;color:var(--ac)}
 
 /* == 注音 ㄅㄆㄇ == */
@@ -299,6 +331,14 @@ button{font-family:inherit}
 .pf-acc{display:flex;align-items:center;gap:14px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
 .pf-avatar{width:46px;height:46px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;flex:none}
 .pf-logout{background:none;border:1px solid var(--bd);color:var(--tx2);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;flex:none}
+.pf-upgrade{display:block;width:100%;box-sizing:border-box;background:linear-gradient(135deg,var(--ac),#8f2820);color:#fff;border:none;border-radius:14px;padding:15px;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:14px;box-shadow:0 6px 20px rgba(184,54,42,.28);letter-spacing:.02em}
+.pf-upgrade:active{transform:translateY(1px)}
+.pf-del{background:none;border:none;color:var(--tx3);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;text-decoration:underline;padding:6px;letter-spacing:.02em}
+.pf-del:active{color:#c0392b}
+@media(hover:hover){.pf-del:hover{color:#c0392b}}
+.dax-btn{width:100%;padding:12px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;border:none}
+.dax-del{background:#c0392b;color:#fff}
+.dax-cancel{background:var(--bg3);color:var(--tx);border:1px solid var(--bd)}
 .pf-sync{font-size:12px;color:#2F7A5D;margin:8px 0 0;text-align:center}
 [data-theme="dark"] .pf-sync{color:#4C9B7A}
 .pf-h{font-size:13px;letter-spacing:.05em;color:var(--tx2);font-weight:700;margin:24px 0 12px}
@@ -313,6 +353,20 @@ button{font-family:inherit}
 .pf-streak-n small{font-size:15px;font-weight:600;margin-left:3px}
 .pf-streak-lbl b{display:block;font-size:15px}
 .pf-streak-lbl span{font-size:12.5px;opacity:.85}
+.pf-hm{margin-top:16px;background:var(--bg2);border:1px solid var(--bd);border-radius:14px;padding:14px 14px 12px;overflow-x:auto}
+.pf-hm-h{font-size:13px;font-weight:700;color:var(--tx2);margin-bottom:10px}
+.hm-grid{display:inline-flex;flex-direction:column;gap:3px;min-width:min-content}
+.hm-row{display:flex;gap:3px}
+.hm-months{margin-bottom:1px}
+.hm-m{width:11px;font-size:9px;color:var(--tx3);flex:none;white-space:nowrap;overflow:visible}
+.hm-c{width:11px;height:11px;border-radius:2px;flex:none;background:var(--bg3)}
+.hm-c[data-l="0"]{background:color-mix(in srgb,var(--tx3) 16%,var(--bg2))}
+.hm-c[data-l="1"]{background:color-mix(in srgb,var(--ac) 35%,var(--bg2))}
+.hm-c[data-l="2"]{background:color-mix(in srgb,var(--ac) 65%,var(--bg2))}
+.hm-c[data-l="3"]{background:var(--ac)}
+.hm-c[data-l="x"]{background:transparent}
+.hm-legend{display:flex;align-items:center;gap:3px;justify-content:flex-end;margin-top:9px;font-size:11px;color:var(--tx3)}
+.hm-legend .hm-c{width:10px;height:10px}
 .srs-stat b{font-family:var(--serif);font-size:26px;display:block;line-height:1.2}
 .srs-stat span{font-size:11.5px;color:var(--tx3)}
 .srs-stat.hot b{color:var(--ac)}
@@ -381,7 +435,7 @@ button{font-family:inherit}
 .ar-title{font-size:14px;color:var(--tx3);margin-top:5px}
 .ar-intro{font-size:14px;color:var(--tx2);line-height:1.9;margin:14px 0 4px;padding-left:12px;border-left:2px solid var(--bd)}
 .ar-para{padding:14px 4px;border-bottom:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent}
-.ar-z{font-family:var(--serif);font-size:19px;line-height:2;color:var(--tx);text-align:justify}
+.ar-z{font-family:var(--serif);font-size:19px;line-height:2;color:var(--tx);text-align:left}
 .ar-z .rd-spk{width:16px;height:16px;color:var(--tx3);margin-left:6px;vertical-align:middle}
 .ar-py{font-size:12.5px;color:var(--tx3);margin-top:6px;line-height:1.8}
 .ar-tr{font-size:14px;color:var(--tx2);margin-top:8px;line-height:1.9}
@@ -392,6 +446,10 @@ button{font-family:inherit}
 @media(hover:hover){.rd-report a:hover{color:var(--ac);border-color:var(--ac)}}
 /* 記事リーダー（Readle風・大きめUI／タップ辞書） */
 .ar-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+/* 長文をスクロールした時だけ出る「浮かぶ戻る」ボタン（読解・記事。上部の戻るが流れて見えなくなっても戻れる） */
+.stw-backfab{position:fixed;left:14px;top:calc(var(--hh) + env(safe-area-inset-top) + 12px);z-index:140;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:color-mix(in srgb,var(--bg2) 92%,transparent);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);color:var(--tx);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 6px 20px rgba(0,0,0,.16);opacity:0;transform:translateY(-6px) scale(.9);pointer-events:none;transition:opacity .2s var(--ease),transform .2s var(--ease)}
+.stw-backfab.show{opacity:1;transform:none;pointer-events:auto}
+.stw-backfab .ic{width:22px;height:22px}
 .ar-back{width:42px;height:42px;border-radius:50%;border:1px solid var(--bd);background:var(--bg2);color:var(--tx2);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
 .ar-back .ic{width:22px;height:22px}
 .ar-fontctl{display:flex;gap:8px}
@@ -401,17 +459,51 @@ button{font-family:inherit}
 .ar-body{line-height:2.15;color:var(--tx);margin-top:6px}
 .ar-para{position:relative;padding:14px 46px 14px 6px;border-bottom:1px solid var(--line);border-radius:10px;transition:background .2s}
 .ar-para.playing{background:var(--ac-soft)}
-.ar-z{font-family:var(--serif);text-align:justify}
+.ar-z{font-family:var(--serif);text-align:left}
 .ar-w{cursor:pointer;border-bottom:1.5px dotted var(--tx3);padding-bottom:1px;-webkit-tap-highlight-color:transparent}
 .ar-w:active{background:var(--ac-soft)}
 @media(hover:hover){.ar-w:hover{background:var(--ac-soft);border-color:var(--ac)}}
-.ar-para-play{position:absolute;right:6px;top:14px;width:36px;height:36px;border-radius:50%;border:1px solid var(--bd);background:var(--bg2);color:var(--tx3);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+/* 逐字ルビ：1 文字ごとに読み（拼音/注音）を真上に。文字・読み・ハイライトが縦にそろう */
+.rc{display:inline-flex;flex-direction:column;align-items:center;justify-content:flex-end;vertical-align:bottom;border-radius:5px;padding:0 1px;transition:background .1s,color .1s;-webkit-tap-highlight-color:transparent}
+.rc .rcr{font-size:.5em;line-height:1.15;color:var(--tx3);font-weight:500;letter-spacing:.02em;white-space:nowrap;margin-bottom:.05em}
+.rc .rcr.rcr2{display:flex;flex-direction:column;align-items:center;line-height:1.08;margin-bottom:.06em}
+.rc .rcr-z{white-space:nowrap}
+.rc .rcr-p{white-space:nowrap;opacity:.8;font-size:.92em}
+.rd-story.rmboth,.ar-body.rmboth{line-height:2.75}
+.rc .rct{line-height:1.18;display:block}
+.rc.rc-h{margin:0 .5px}
+.rc.tapc.rc-h{cursor:pointer}
+.rc.said .rct{color:var(--tx2)}
+.rc.said .rcr{color:var(--tx3);opacity:.6}
+.rc.on{background:var(--ac)}
+.rc.on .rct{color:#fff}
+.rc.on .rcr{color:#fff;opacity:1}
+.ar-pctl{position:absolute;right:6px;top:12px;display:flex;flex-direction:column;gap:6px;align-items:center}
+.ar-para-play{width:36px;height:36px;border-radius:50%;border:1px solid var(--bd);background:var(--bg2);color:var(--tx3);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
 .ar-para-play .ic{width:18px;height:18px}
+.ar-pt{width:36px;height:30px;border-radius:9px;border:1px solid var(--bd);background:var(--bg2);color:var(--tx3);cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;display:flex;align-items:center;justify-content:center;padding:0}
+.ar-pt.on{color:var(--ac);border-color:var(--ac)}
+.aq-wrap{max-width:520px;margin:0 auto;text-align:center;padding:8px 0 30px}
+.aq-word{font-family:var(--serif);font-size:40px;font-weight:700;margin:18px 0 6px;cursor:pointer;color:var(--tx)}
+.aq-wrap .qz-opts{margin-top:18px;text-align:left}
+.poly-home{max-width:480px;margin:0 auto;text-align:center;padding:30px 18px}
+.poly-hero{width:84px;height:84px;border-radius:24px;background:var(--ac-soft);color:var(--ac);font-family:var(--serif);font-size:46px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+.poly-h{font-size:22px;margin:0 0 8px;color:var(--tx)}
+.poly-sub{font-size:14px;color:var(--tx2);line-height:1.7;margin:0 0 22px}
+.poly-word{font-family:var(--serif);font-size:38px;font-weight:700;margin:16px 0 4px;text-align:center;color:var(--tx)}
+.poly-hi{color:var(--ac);border-bottom:3px solid var(--ac);padding:0 2px}
+.poly-r{border:1px solid var(--bd);border-radius:12px;padding:11px 13px;margin-bottom:9px;background:var(--bg2)}
+.poly-r.cur{border-color:var(--ac);background:var(--ac-soft)}
+.poly-r-h{font-size:15px;color:var(--tx)}
+.poly-r-h b{font-family:var(--serif);font-size:19px;color:var(--ac)}
+.poly-r-ex{margin-top:7px;display:flex;gap:7px;flex-wrap:wrap}
+.poly-ex{background:none;border:1px solid var(--bd);border-radius:999px;padding:5px 11px;font-size:14px;font-family:var(--serif);color:var(--tx);cursor:pointer}
+.poly-ex:active{background:var(--ac-soft)}
 .ar-py{font-size:.72em;color:var(--tx3);margin-top:8px;line-height:1.7}
 .ar-tr{font-size:.8em;color:var(--tx2);margin-top:10px;line-height:1.85;padding-left:11px;border-left:2px solid var(--bd)}
 /* 置底ツールバー */
-.ar-bar{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(140%);z-index:150;display:flex;gap:8px;background:color-mix(in srgb,var(--bg2) 94%,transparent);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);border:1px solid var(--line);border-radius:999px;padding:7px 9px;box-shadow:0 8px 30px rgba(0,0,0,.18);transition:transform .28s var(--ease)}
-.ar-bar.show{transform:translateX(-50%) translateY(0)}
+.ar-bar{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(160%);opacity:0;pointer-events:none;z-index:150;display:flex;gap:8px;background:color-mix(in srgb,var(--bg2) 94%,transparent);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);border:1px solid var(--line);border-radius:999px;padding:7px 9px;box-shadow:0 8px 30px rgba(0,0,0,.18);transition:transform .28s var(--ease),opacity .2s var(--ease)}
+.ar-bar.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
 body.more-open .ar-bar{display:none}
 .ar-bt{min-width:52px;height:42px;border-radius:999px;border:none;background:transparent;color:var(--tx2);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;padding:0 14px}
 .ar-bt.on{background:var(--ac);color:#fff}
@@ -428,6 +520,14 @@ body.more-open .ar-bar{display:none}
 .ws-play{width:44px;height:44px;border-radius:50%;border:1px solid var(--bd);background:var(--bg2);color:var(--ac);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
 .ws-p{font-size:16px;color:var(--ac);margin:12px 0 4px}
 .ws-m{font-size:16px;color:var(--tx);line-height:1.8}
+.ws-def{margin-top:7px;font-size:14px;color:var(--tx2);line-height:1.75}
+.ws-def::before{content:"漢 ";font-size:10.5px;color:var(--tx3);vertical-align:1px;letter-spacing:.5px}
+.ws-ex{margin-top:14px;padding-top:13px;border-top:1px dashed var(--line);font-family:var(--serif);font-size:16px;line-height:1.95;color:var(--tx);cursor:pointer}
+.ws-ex .py{display:block;font-family:inherit;font-size:12.5px;color:var(--ac);margin-top:3px;letter-spacing:.01em}
+.ws-ex .tr{display:block;font-family:inherit;font-size:13px;color:var(--tx2);margin-top:4px;line-height:1.7}
+.ws-srs{margin-top:18px;width:100%;padding:13px;border-radius:12px;border:1px solid var(--ac);background:var(--ac-soft);color:var(--ac);font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.02em}
+.ws-srs:active{transform:translateY(1px)}
+.ws-srs.added{border-color:var(--bd);background:var(--bg3);color:var(--tx3);cursor:default}
 /* 学習パス */
 .pa-lv{font-family:var(--serif);font-size:22px;font-weight:700}
 .pa-lead{color:var(--tx2);font-size:13.5px;line-height:1.8;margin-top:3px}
@@ -436,6 +536,14 @@ body.more-open .ar-bar{display:none}
 .pa-mini-i b{font-family:var(--serif);font-size:22px;display:block;line-height:1.1}
 .pa-mini-i span{font-size:11.5px;color:var(--tx3)}
 .pa-mini-i.ok b{color:var(--ok)}
+.pa-upgrade{display:flex;align-items:center;gap:13px;width:100%;box-sizing:border-box;margin:16px 0 4px;padding:15px 16px;border:none;border-radius:15px;background:linear-gradient(135deg,var(--ac),#8f2820);color:#fff;cursor:pointer;font-family:inherit;text-align:left;box-shadow:0 6px 20px rgba(184,54,42,.28)}
+.pa-upgrade:active{transform:translateY(1px)}
+.pa-up-ic{font-size:22px;line-height:1;flex-shrink:0}
+.pa-up-tx{flex:1;min-width:0}
+.pa-up-tx b{display:block;font-size:15.5px;font-weight:700;letter-spacing:.02em}
+.pa-up-tx span{display:block;font-size:12.5px;opacity:.9;margin-top:2px}
+.pa-up-ch{width:20px;height:20px;flex-shrink:0;fill:none;stroke:#fff;stroke-width:2.2;opacity:.85}
+.pa-upgrade.pa-prem{background:linear-gradient(135deg,#2e7d5b,#1f5e43);box-shadow:0 6px 20px rgba(46,125,91,.25)}
 .pa-found-h{font-size:11.5px;font-weight:700;color:var(--tx3);letter-spacing:.04em;margin:6px 0 9px}
 .pa-found{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 10%,var(--bg2)),var(--bg2));border:1px solid var(--ac);border-radius:16px;padding:15px 16px;cursor:pointer;font-family:inherit;margin-bottom:20px;transition:transform .1s var(--ease)}
 .pa-found:active{transform:scale(.99)}
@@ -495,6 +603,9 @@ body.more-open .ar-bar{display:none}
 @media(hover:hover){.ex-passage:hover{border-color:var(--ac)}}
 .ex-stem{font-size:18px;font-weight:600;margin-bottom:16px;line-height:1.8;cursor:pointer}
 .ex-stem.big{font-family:var(--serif);font-size:40px;text-align:center;font-weight:700}
+.ex-stem.mean{font-size:22px;text-align:center;font-weight:700;color:var(--tx)}
+.ex-prompt{font-size:13px;color:var(--tx3);text-align:center;margin-bottom:8px}
+.qz-opts.zy .qz-opt{font-family:var(--serif);font-size:20px;letter-spacing:.05em}
 .ex-listen{text-align:center;padding:26px 0 20px}
 .ex-play{width:84px;height:84px;border-radius:50%;border:none;background:var(--ac);color:#fff;font-size:34px;cursor:pointer;box-shadow:0 6px 20px rgba(184,54,42,.3);transition:transform .15s var(--ease)}
 @media(hover:hover){.ex-play:hover{transform:scale(1.06)}}
@@ -530,6 +641,8 @@ body.more-open .ar-bar{display:none}
 .sheet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .sheet-item{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:14px 6px;text-align:center;font-size:12px;font-weight:600;color:var(--tx);cursor:pointer;font-family:inherit;text-decoration:none;display:block;-webkit-tap-highlight-color:transparent}
 .sheet-item .bi{display:block;font-size:22px;margin-bottom:5px}
+.sheet-premium{grid-column:1/-1;background:linear-gradient(135deg,var(--ac),#8f2820);border:none;color:#fff;box-shadow:0 5px 16px rgba(184,54,42,.3);font-size:14.5px;font-weight:700;letter-spacing:.02em}
+.sheet-premium .bi{color:#fff}
 .bn-item .bi svg,.sheet-item .bi svg{stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;display:block;margin:0 auto}
 .bn-item .bi{height:24px;display:flex;align-items:center;justify-content:center;font-size:20px}
 .bn-item .bi svg{width:23px;height:23px}
@@ -564,8 +677,18 @@ body.more-open .ar-bar{display:none}
 }
 </style>
 <script>
+/* 初回アクセスはデバイス/ブラウザ言語で自動判定（ja/en/ko）。以降はユーザー選択を優先。
+   これが無いと非日本語ユーザーも既定で日本語表示になってしまう。 */
+(function(){ try{ if(!localStorage.getItem("stw-lang")){
+  var ls=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||navigator.userLanguage||""];
+  var pick=""; for(var i=0;i<ls.length;i++){ var l=(ls[i]||"").toLowerCase();
+    if(l.indexOf("ja")===0){pick="ja";break;} if(l.indexOf("ko")===0){pick="ko";break;} if(l.indexOf("vi")===0){pick="vi";break;} if(l.indexOf("id")===0||l.indexOf("in")===0){pick="id";break;} if(l.indexOf("en")===0){pick="en";break;} }
+  localStorage.setItem("stw-lang", pick||"en");   // ja/en/ko/vi/id 以外は英語を既定に
+}}catch(e){} })();
+// vi/id なら内容訳マップを同期ロード(init の正規化より前に間に合わせる)。他言語では読み込まない＝軽い。
+(function(){ try{ var l=localStorage.getItem("stw-lang"); if(l==="vi"||l==="id"){ document.write('<script src="content-'+l+'.js?v=2"><\/script>'); } }catch(e){} })();
 /* Google ログインボタンの言語をアプリ言語に合わせて読み込む（hl はスクリプト読込時に決まるため） */
-(function(){ var hl=({ja:"ja",en:"en",ko:"ko"})[localStorage.getItem("stw-lang")]||"ja";
+(function(){ var hl=({ja:"ja",en:"en",ko:"ko",vi:"vi",id:"id"})[localStorage.getItem("stw-lang")]||"ja";
   var s=document.createElement("script"); s.src="https://accounts.google.com/gsi/client?hl="+hl; s.async=true; s.defer=true; document.head.appendChild(s); })();
 </script>
 </head>
@@ -609,6 +732,7 @@ body.more-open .ar-bar{display:none}
     <button class="tool-btn" data-panel="fc"><span class="ti">🃏</span><span data-i18n="toolVocabCard">単語カード</span></button>
     <button class="tool-btn" data-panel="list"><span class="ti">📚</span><span data-i18n="toolVocabList">単語リスト</span></button>
     <button class="tool-btn" data-panel="zhuyin"><span class="ti">ㄅ</span><span data-i18n="toolZhuyin">注音</span></button>
+    <button class="tool-btn" data-panel="polyphone"><span class="ti">破</span><span data-i18n="toolPoly">破音字</span></button>
     <button class="tool-btn" data-panel="grammar"><span class="ti">✏️</span><span data-i18n="toolGrammar">文法</span></button>
     <button class="tool-btn" data-panel="phrases"><span class="ti">💬</span><span data-i18n="toolPhrases">フレーズ</span></button>
     <button class="tool-btn" data-panel="reading"><span class="ti">📖</span><span data-i18n="toolReading">読解</span></button>
@@ -648,6 +772,9 @@ body.more-open .ar-bar{display:none}
       <button class="tts-btn" onclick="event.stopPropagation();speakZh(deck[fcIdx].w)" title="発音"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>
       <button class="btn primary" onclick="fcMove(1)" data-i18n="btnNext">次へ →</button>
       <button class="btn" onclick="fcShuffle()" data-i18n="btnShuffle">シャッフル</button>
+      <button class="btn" id="fcFav" onclick="event.stopPropagation();toggleFavCard()" aria-pressed="false" data-i18n-aria="favToggle" aria-label="収藏" style="min-width:44px;font-size:18px;line-height:1">♡</button>
+      <button class="btn js-spd" onclick="event.stopPropagation();cycleTtsSpeed()" data-i18n-aria="speedToggle" aria-label="再生速度" title="再生速度" style="min-width:48px">1x</button>
+      <button class="btn js-ruby" onclick="event.stopPropagation();cycleRuby()" title="拼音／注音" aria-label="拼音／注音" style="min-width:44px">拼</button>
     </div>
     <div class="fc-prog" id="fcProg"></div>
     <div class="kbd-hint" data-i18n="kbdHint">⌨️ Space:めくる ／ ←→:前後 ／ 1・2・3:評価</div>
@@ -669,6 +796,9 @@ body.more-open .ar-bar{display:none}
     </div>
     <div id="zyBody"></div>
   </section>
+
+  <!-- 破音字 -->
+  <section class="panel" id="panel-polyphone"><div id="polyBox"></div></section>
 
   <!-- マイページ -->
   <section class="panel" id="panel-profile"><div id="pfBody"></div></section>
@@ -718,6 +848,24 @@ body.more-open .ar-bar{display:none}
   <h3 style="font-family:var(--serif);font-size:20px;font-weight:700;margin:6px 0 6px" data-i18n="loginTitle">ログインして同期</h3>
   <p style="font-size:13.5px;color:var(--tx2);margin-bottom:20px;line-height:1.8" data-i18n="loginDesc">ログインすると、復習・模試・作文の進度がすべての端末で同期されます。</p>
   <div id="gLoginBtn" style="display:flex;justify-content:center"></div>
+  <button id="aLoginBtn" onclick="STW_WEB.loginApple()" style="display:none;align-items:center;justify-content:center;gap:8px;width:240px;height:40px;margin:10px auto 0;background:#000;color:#fff;border:none;border-radius:999px;font-size:15px;font-weight:600;cursor:pointer;font-family:-apple-system,'Hiragino Sans',sans-serif">
+    <svg viewBox="0 0 24 24" width="17" height="17" fill="#fff" aria-hidden="true"><path d="M17.05 12.53c-.02-2.03 1.66-3.01 1.74-3.06-.95-1.39-2.42-1.58-2.94-1.6-1.25-.13-2.44.73-3.08.73-.63 0-1.61-.71-2.65-.69-1.36.02-2.62.79-3.32 2.01-1.42 2.46-.36 6.1 1.02 8.1.67.98 1.47 2.08 2.52 2.04 1.01-.04 1.39-.65 2.62-.65 1.22 0 1.57.65 2.65.63 1.09-.02 1.78-1 2.45-1.98.77-1.13 1.09-2.23 1.11-2.29-.02-.01-2.13-.82-2.15-3.24zM15.1 6.57c.56-.68.94-1.62.83-2.57-.81.03-1.79.54-2.37 1.22-.52.6-.97 1.56-.85 2.48.9.07 1.83-.46 2.39-1.13z"/></svg>
+    <span data-i18n="loginApple">Sign in with Apple</span>
+  </button>
+  <div id="inAppNote" style="display:none;text-align:left;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-top:4px">
+    <div style="font-weight:700;margin-bottom:8px" data-i18n="inAppTitle">⚠️ アプリ内ブラウザでは Google ログインできません</div>
+    <p style="font-size:13px;color:var(--tx2);line-height:1.9;margin-bottom:12px" data-i18n="inAppMsg">LINE・Threads・Instagram などのアプリ内ブラウザは Google ログインをブロックします。右上か右下の「…」メニューから「ブラウザで開く（Safari / Chrome）」を選んで、そちらでログインしてください。</p>
+    <button class="btn primary" style="width:100%" onclick="STW_WEB.copyUrl()"><span data-i18n="inAppCopy">🔗 リンクをコピー</span></button>
+  </div>
+</div></div>
+
+<div class="quiz-bg" id="delAccBg"><div class="quiz-box" style="max-width:360px">
+  <h3 style="font-family:var(--serif);font-size:19px;font-weight:700;margin:0 0 10px" data-i18n="delAccTitle">アカウントを削除しますか？</h3>
+  <p style="font-size:13.5px;color:var(--tx2);line-height:1.85;margin-bottom:20px" data-i18n="delAccBody">学習進度・購読情報・アカウントデータはすべて完全に削除され、元に戻せません。</p>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <button class="dax-btn dax-del" onclick="twDoDeleteAccount()" data-i18n="delAccBtn">削除</button>
+    <button class="dax-btn dax-cancel" onclick="twCloseDelAcc()" data-i18n="delAccCancel">キャンセル</button>
+  </div>
 </div></div>
 
 <!-- 初回：目的をきいてレベルを提案 -->
@@ -737,6 +885,13 @@ body.more-open .ar-bar{display:none}
 </div></div>
 <!-- トースト -->
 <div class="toast" id="toast"></div>
+<!-- 錯題複習 overlay -->
+<div id="wrongModal" class="wb-modal" style="display:none" onclick="if(event.target===this)closeWrongBook()">
+  <div class="wb-panel">
+    <div class="wb-head"><b>📕 <span id="wbTitle"></span></b><button class="wb-x" onclick="closeWrongBook()">✕</button></div>
+    <div id="wrongBox"></div>
+  </div>
+</div>
 
 <!-- モバイル下部ナビ -->
 <nav class="bnav">
@@ -749,6 +904,7 @@ body.more-open .ar-bar{display:none}
 <div class="sheet-bg" onclick="toggleMore(false)"></div>
 <div class="sheet" id="moreSheet">
   <div class="sheet-grid">
+    <button class="sheet-item sheet-premium" data-panel="__premium"><span class="bi">✨</span><span data-i18n="navPremium">プレミアム</span></button>
     <button class="sheet-item" data-panel="list"><span class="bi">📚</span><span data-i18n="toolVocabList">単語リスト</span></button>
     <button class="sheet-item" data-panel="zhuyin"><span class="bi">ㄅ</span><span data-i18n="toolZhuyin">注音</span></button>
     <button class="sheet-item" data-panel="profile"><span class="bi"></span><span data-i18n="toolProfile">マイページ</span></button>
@@ -765,17 +921,38 @@ body.more-open .ar-bar{display:none}
 
 <footer class="ft">
   <div style="font-family:var(--serif);font-size:13px;color:var(--tx2)">© 2026 StayTW Study</div>
-  <div style="margin-top:6px"><a href="contact.html" style="color:var(--tx2)" data-i18n="navContact">ご意見・不具合報告</a></div>
+  <div style="margin-top:6px">
+    <a href="pricing" id="ftPricing" style="color:var(--tx2)" data-i18n="navPricing">料金・プラン</a>
+    <span id="ftPricingSep" style="color:var(--tx3)"> · </span>
+    <a href="contact.html" style="color:var(--tx2)" data-i18n="navContact">ご意見・不具合報告</a>
+  </div>
   <div data-i18n="footNote">本サイトは個人が作った学習用まとめです。誤りを見つけたらぜひ教えてください。</div>
 </footer>
+<script>
+// 料金リンクは Web のみ表示。App（WebView）内では非表示（App Store 3.1.1 反導流）。
+(function(){try{ if(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp){
+  var p=document.getElementById('ftPricing'), s=document.getElementById('ftPricingSep');
+  if(p)p.style.display='none'; if(s)s.style.display='none';
+}}catch(e){}})();
+</script>
 
-<script src="i18n.js?v=52"></script>
-<script src="tts.js?v=52"></script>
+<script src="i18n.js?v=71"></script>
+<script src="tts.js?v=61"></script>
 <script src="vocab-l1.js?v=52"></script>
 <script src="vocab-l2.js?v=52"></script>
 <script src="vocab-l3.js?v=52"></script>
 <script src="vocab-l4.js?v=52"></script>
 <script src="vocab-l5.js?v=52"></script>
+<script src="vocab-l1-b.js?v=53"></script>
+<script src="vocab-l2-b.js?v=53"></script>
+<script src="vocab-l3-b.js?v=53"></script>
+<script src="vocab-l4-b.js?v=53"></script>
+<script src="vocab-l5-b.js?v=53"></script>
+<script src="vocab-l1-c.js?v=57"></script>
+<script src="vocab-l2-c.js?v=57"></script>
+<script src="vocab-l3-c.js?v=57"></script>
+<script src="vocab-l4-c.js?v=57"></script>
+<script src="vocab-l5-c.js?v=57"></script>
 <script src="grammar-l1.js?v=52"></script>
 <script src="grammar-l2.js?v=52"></script>
 <script src="grammar-l3.js?v=52"></script>
@@ -803,11 +980,15 @@ body.more-open .ar-bar{display:none}
 <script src="articles-13.js?v=52"></script>
 <script src="articles-14.js?v=52"></script>
 <script src="articles-15.js?v=52"></script>
+<script src="articles-16.js?v=52"></script>
+<script src="articles-17.js?v=52"></script>
+<script src="articles-18.js?v=56"></script>
 <script src="writing-data.js?v=52"></script>
-<script src="paywall.js?v=52"></script>
-<script src="websync.js?v=52"></script>
-<script src="srs.js?v=52"></script>
-<script src="mock-exam.js?v=52"></script>
+<script src="paywall.js?v=58"></script>
+<script src="websync.js?v=61"></script>
+<script src="srs.js?v=56"></script>
+<script src="mock-exam.js?v=55"></script>
+<script src="polyphone.js?v=1"></script>
 <script>
 /* ===== テーマ ===== */
 function toggleTheme(){
@@ -822,19 +1003,117 @@ function toggleTheme(){
 })();
 
 /* ===== レベルデータ ===== */
-const VOCAB_BY_LEVEL   = { l1: VOCAB_L1, l2: VOCAB_L2, l3: VOCAB_L3, l4: VOCAB_L4, l5: VOCAB_L5 };
+const _cat = (...xs) => xs.filter(x => Array.isArray(x)).flat();
+const VOCAB_BY_LEVEL   = {
+  l1: _cat(VOCAB_L1, typeof VOCAB_L1_B!=="undefined"&&VOCAB_L1_B, typeof VOCAB_L1_C!=="undefined"&&VOCAB_L1_C),
+  l2: _cat(VOCAB_L2, typeof VOCAB_L2_B!=="undefined"&&VOCAB_L2_B, typeof VOCAB_L2_C!=="undefined"&&VOCAB_L2_C),
+  l3: _cat(VOCAB_L3, typeof VOCAB_L3_B!=="undefined"&&VOCAB_L3_B, typeof VOCAB_L3_C!=="undefined"&&VOCAB_L3_C),
+  l4: _cat(VOCAB_L4, typeof VOCAB_L4_B!=="undefined"&&VOCAB_L4_B, typeof VOCAB_L4_C!=="undefined"&&VOCAB_L4_C),
+  l5: _cat(VOCAB_L5, typeof VOCAB_L5_B!=="undefined"&&VOCAB_L5_B, typeof VOCAB_L5_C!=="undefined"&&VOCAB_L5_C),
+};
 const GRAMMAR_BY_LEVEL = { l1: GRAMMAR_L1, l2: GRAMMAR_L2, l3: GRAMMAR_L3, l4: GRAMMAR_L4, l5: GRAMMAR_L5 };
 function getVocabData(lv){ return VOCAB_BY_LEVEL[lv] || []; }
 function getGrammarData(lv){ return GRAMMAR_BY_LEVEL[lv] || []; }
+// ===== 全域辞書インデックス：全レベルの語彙を word → entry(+_lv) で引く =====
+// タップ辞書（twWord / .tapc）と「復習に追加」が参照。低レベル優先＝より基本的な語の級を採用。
+const STW_DICT = (() => {
+  const map = Object.create(null);
+  for (const lv of ["l1","l2","l3","l4","l5"]) {
+    for (const v of (VOCAB_BY_LEVEL[lv] || [])) {
+      if (v && v.w && !map[v.w]) map[v.w] = Object.assign({}, v, { _lv: lv });
+    }
+  }
+  return map;
+})();
+if (typeof window !== "undefined") window.STW_DICT = STW_DICT;
+// ===== 拡張辞書（萌典＋CC-CEDICT、約4900語：注音・拼音・英語・中国語釈義）を遅延ロード =====
+// 語彙表(1618語)に無い語もタップで引けるようにする。読解・記事に入る時に読み込む。
+let STW_DICT_EXT = null, _extLoading = null;
+function stwLoadExt(cb){
+  if (STW_DICT_EXT) { cb && cb(); return; }
+  if (_extLoading) { if (cb) _extLoading.push(cb); return; }
+  _extLoading = cb ? [cb] : [];
+  fetch("data/dict-ext.json?v=2").then(r => r.json()).then(j => {
+    STW_DICT_EXT = j; if (typeof window !== "undefined") window.STW_DICT_EXT = j;
+    const cbs = _extLoading; _extLoading = null; cbs.forEach(f => { try { f(); } catch(e){} });
+  }).catch(() => {
+    STW_DICT_EXT = {}; const cbs = _extLoading || []; _extLoading = null; cbs.forEach(f => { try { f(); } catch(e){} });
+  });
+}
+// 拡張辞書エントリを共通形({w,zy,py,_ext,e,d})に正規化
+function stwExtEntry(w){ const x = STW_DICT_EXT && STW_DICT_EXT[w]; return x ? { w:w, zy:x.zy||"", py:x.py||"", _ext:true, e:x.e||"", d:x.d||"", j:x.j||"", k:x.k||"" } : null; }
+function stwLookup(w){
+  if (!w) return null;
+  if (STW_DICT[w]) return STW_DICT[w];
+  return stwExtEntry(w);
+}
+// 手動追加した拡張語のカード（復習用）。SRS.start がこの store から内容を引く。
+let STW_CUSTOM = (() => { try { return JSON.parse(localStorage.getItem("stw_custom_cards") || "{}"); } catch(e){ return {}; } })();
+if (typeof window !== "undefined") window.STW_CUSTOM = STW_CUSTOM;
+function stwSaveCustomCard(v){
+  try { STW_CUSTOM[v.w] = { w:v.w, zy:v.zy||"", py:v.py||"", e:v.e||"", d:v.d||"", j:v.j||"", k:v.k||"", _ext:true };
+    localStorage.setItem("stw_custom_cards", JSON.stringify(STW_CUSTOM)); window.STW_CUSTOM = STW_CUSTOM;
+    if (typeof window.onSRSChange === "function") window.onSRSChange();
+  } catch(e){}
+}
+// 初期表示の邪魔をしないよう少し遅らせて拡張辞書をプリフェッチ（タップ辞書を即応させる）
+setTimeout(() => { try { stwLoadExt(); } catch(e){} }, 1500);
 let currentLevel = localStorage.getItem("stw-level") || "l1";
 
+// ── 錯題本：所有測驗答錯都記進來，可回頭複習（使用者要求）──
+const WrongBook = (() => {
+  const KEY = "stw-wrongbook";
+  function all(){ try{ return JSON.parse(localStorage.getItem(KEY)||"[]"); }catch(e){ return []; } }
+  function save(l){ try{ localStorage.setItem(KEY, JSON.stringify(l.slice(0,300))); }catch(e){} }
+  // item: {type, word, q(問題), correct(正解), detail(注音/拼音/理由)}
+  function add(item){ const l=all(); l.unshift(Object.assign({lv:currentLevel, ts:Date.now()+Math.random()}, item)); save(l); }
+  function forLevel(lv){ return all().filter(x=>x.lv===lv); }
+  function removeTs(ts){ save(all().filter(x=>x.ts!==ts)); }
+  function clearLevel(lv){ save(all().filter(x=>x.lv!==lv)); }
+  return { all, add, forLevel, removeTs, clearLevel };
+})();
+function closeWrongBook(){ const m=document.getElementById("wrongModal"); if(m) m.style.display="none"; }
+function openWrongBook(lv){
+  lv = lv || currentLevel;
+  const m=document.getElementById("wrongModal"); if(m) m.style.display="flex";
+  const tt=document.getElementById("wbTitle"); if(tt) tt.textContent=twT("wbTitle");
+  const list = WrongBook.forLevel(lv);
+  const box = document.getElementById("wrongBox"); if(!box) return;
+  if(!list.length){ box.innerHTML = `<p class="muted" style="text-align:center;color:var(--tx2);padding:30px 0">${twT("wbEmpty")}</p>`; return; }
+  box.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div style="font-size:13px;color:var(--tx3)">${list.length} ${twT("wbCount")}</div>
+      <button class="btn sm" onclick="if(confirm(twT('wbClearAsk'))){WrongBook.clearLevel('${lv}');openWrongBook('${lv}');}">${twT("wbClear")}</button></div>` +
+    list.map((x)=>`<div class="wb-item">
+      <div class="wb-q">${x.q?esc(x.q)+' → ':''}<b class="wb-a" onclick="speakZh('${(x.word||'').replace(/'/g,"")}')">${esc(x.correct||"")}</b>
+        ${x.word?`<button class="tts-btn" style="width:26px;height:26px;font-size:11px" onclick="speakZh('${(x.word||'').replace(/'/g,"")}')">🔊</button>`:''}</div>
+      ${x.detail?`<div class="wb-d">${esc(x.detail)}</div>`:''}
+      <button class="wb-del" onclick="WrongBook.removeTs(${x.ts});openWrongBook('${lv}')">🗑</button></div>`).join("");
+}
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+// 切 level 時，目前正在看的那個 panel 也要即時重刷（reading/articles/write/zhuyin/path/phrases 之前會漏）
+function refreshActivePanel(){
+  const on = document.querySelector(".panel.on"); if(!on) return;
+  try{
+    switch(on.id){
+      case "panel-reading":  if(typeof RD!=="undefined"&&RD.render) RD.render(); break;
+      case "panel-articles": if(typeof AR!=="undefined"&&AR.render) AR.render(); break;
+      case "panel-write":    if(typeof WR!=="undefined"&&WR.render) WR.render(); break;
+      case "panel-zhuyin":   if(typeof ZY!=="undefined"&&ZY.render) ZY.render(); break;
+      case "panel-path":     if(typeof PA!=="undefined"&&PA.render) PA.render(); break;
+      case "panel-phrases":  renderPhrases(); break;
+      case "panel-speak":    if(typeof SPK!=="undefined"&&SPK.render) SPK.render(); break;
+    }
+  }catch(e){}
+}
 function setLevel(lv){
   currentLevel = lv;
   localStorage.setItem("stw-level", lv);
   document.querySelectorAll(".lv-btn").forEach(b => b.classList.toggle("on", b.dataset.lv === lv));
-  deck = [...getVocabData(lv)]; fcIdx = 0; posFilter = "all";
-  renderCard(); renderPosRow(); renderList(); renderGrammar(); renderSrsHome(); renderExamHome();
+  deck = [...getVocabData(lv)]; fcIdx = restoreFcIdx(); posFilter = "all";
+  renderCard(); renderPosRow(); renderList(); renderGrammar(); renderPhrases(); renderSrsHome(); renderExamHome();
   qzReset(); SPK.reset();
+  refreshActivePanel();   // 目前顯示中的 tab 立刻反映新 level
 }
 document.querySelectorAll(".lv-btn").forEach(b => b.onclick = () => setLevel(b.dataset.lv));
 
@@ -852,6 +1131,8 @@ function switchPanel(p){
   if (p === "write") WR.render();
   if (p === "path") PA.render();
   if (p === "zhuyin") ZY.render();
+  if (p === "polyphone" && typeof POLY !== "undefined") POLY.render();
+  if (p === "reading" || p === "articles") stwLoadExt();   // 拡張辞書を確保（タップ辞書のため）
   if (p === "reading") RD.render();
   if (p === "articles") AR.render();
   else { try { AR.hideBar(); AR.closeWord(); } catch (e) {} }   // 記事から離れたら再生バー/辞書を閉じる
@@ -862,13 +1143,38 @@ function switchPanel(p){
   const lv = document.querySelector(".levels"); if (lv) lv.style.display = noLevel ? "none" : "";
   window.scrollTo({top:0});
 }
+// 読解・記事で下にスクロールした時だけ「浮かぶ戻る」を出す（上部の戻るが流れても、いつでも一覧へ戻れる）
+(function(){
+  var fab=null;
+  function ensureFab(){
+    if (fab) return fab;
+    fab=document.createElement("button");
+    fab.className="stw-backfab"; fab.setAttribute("aria-label","Back");
+    fab.innerHTML='<svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg>';
+    fab.onclick=function(){
+      var p=document.querySelector(".panel.on"), id=p&&p.id;
+      try { if (id==="panel-reading") RD.render(); else if (id==="panel-articles") AR.render(); } catch(e){}
+      fab.classList.remove("show");   // 一覧に戻ったら即座に隠す
+      window.scrollTo({top:0});
+    };
+    document.body.appendChild(fab);
+    return fab;
+  }
+  function upd(){
+    var p=document.querySelector(".panel.on");
+    var detail = p && (p.id==="panel-reading"||p.id==="panel-articles") && p.querySelector(".ar-top");
+    ensureFab().classList.toggle("show", !!detail && window.scrollY > 240);
+  }
+  window.addEventListener("scroll", upd, {passive:true});
+  window.addEventListener("resize", upd, {passive:true});
+})();
 document.querySelectorAll(".tool-btn").forEach(b=>{ b.onclick = () => switchPanel(b.dataset.panel); });
 function toggleMore(show){ document.body.classList.toggle("more-open", show); }
 document.querySelectorAll(".bn-item").forEach(b=>{
   b.onclick = () => { if (b.dataset.bn === "more") { toggleMore(true); return; } switchPanel(b.dataset.bn); };
 });
 document.querySelectorAll("#moreSheet button[data-panel]").forEach(b=>{
-  b.onclick = () => { toggleMore(false); switchPanel(b.dataset.panel); };
+  b.onclick = () => { toggleMore(false); if (b.dataset.panel === "__premium") { twUpgrade(); } else { switchPanel(b.dataset.panel); } };
 });
 // タブを非表示/離脱したら音声を停止（読み上げの連続再生も止める）
 function twStopAllAudio(){ if (window.TTS && TTS.stop) TTS.stop(); try { AR.stopPlay(); } catch(e){} try { RD.stopRead(); } catch(e){} }
@@ -877,6 +1183,73 @@ window.addEventListener("pagehide", twStopAllAudio);
 
 /* ===== 単語カード（枠内タップで発音＋めくり = 原サイトと同じ）===== */
 let deck = [...getVocabData(currentLevel)], fcIdx = 0;
+
+/* ===== 収藏・レジューム（前回位置）・レベル読了 ===== */
+const FAV_KEY="stw_fav", POS_KEY="stw_fc_pos", SEEN_KEY="stw_fc_seen", DONE_KEY="stw_fc_done";
+const _lsGet=(k,d)=>{ try{ const v=JSON.parse(localStorage.getItem(k)); return v==null?d:v; }catch(e){ return d; } };
+const _lsSet=(k,v)=>{ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
+const favKey=(lv,w)=>lv+":"+w;
+const isFav=(lv,w)=>_lsGet(FAV_KEY,[]).includes(favKey(lv,w));
+function toggleFav(lv,w){ const a=_lsGet(FAV_KEY,[]), k=favKey(lv,w), i=a.indexOf(k); if(i>=0)a.splice(i,1); else a.push(k); _lsSet(FAV_KEY,a); return i<0; }
+function saveFcPos(){ const p=_lsGet(POS_KEY,{}); if(deck[fcIdx]) p[currentLevel]=deck[fcIdx].w; _lsSet(POS_KEY,p); }
+function restoreFcIdx(){ const w=_lsGet(POS_KEY,{})[currentLevel]; if(!w) return 0; const i=deck.findIndex(x=>x.w===w); return i>=0?i:0; }
+function markSeen(){
+  if(!deck[fcIdx]) return;
+  const s=_lsGet(SEEN_KEY,{}), arr=s[currentLevel]||[], w=deck[fcIdx].w;
+  if(!arr.includes(w)) arr.push(w);
+  s[currentLevel]=arr; _lsSet(SEEN_KEY,s);
+  const done=_lsGet(DONE_KEY,[]);
+  if(arr.length>=getVocabData(currentLevel).length && !done.includes(currentLevel)){
+    done.push(currentLevel); _lsSet(DONE_KEY,done);
+    setTimeout(()=>showToast(twT("lvDone")), 400);
+  }
+}
+function toggleFavCard(){ const w=deck[fcIdx].w; const now=toggleFav(currentLevel,w); updateFavBtn(); showToast(now?twT("favAdded"):twT("favRemoved")); if(document.getElementById("panel-list")?.classList.contains("on")) renderList(); }
+function updateFavBtn(){ const b=document.getElementById("fcFav"); if(!b||!deck[fcIdx]) return; const on=isFav(currentLevel,deck[fcIdx].w); b.textContent=on?"★":"♡"; b.classList.toggle("primary",on); b.setAttribute("aria-pressed",on); }
+
+/* ===== 例文の注音表示（拼音⇄注音の切替。ユーザー要望：拼音を知らない人向け）===== */
+let EX_ZY = null, EX_ZY_LOADING = false;
+let RUBY = (function(){ try { return localStorage.getItem("stw_ruby") || "both"; } catch(e){ return "both"; } })();
+function loadExZy(cb){
+  if (EX_ZY) { if (cb) cb(); return; }
+  if (EX_ZY_LOADING) return;
+  EX_ZY_LOADING = true;
+  fetch("data/ex-zhuyin.json?v=2").then(r => r.ok ? r.json() : null).then(m => { EX_ZY = m || {}; EX_ZY_LOADING = false; if (cb) cb(); }).catch(() => { EX_ZY_LOADING = false; });
+}
+function exRuby(z, py){
+  const zy = (EX_ZY && EX_ZY[z]) ? EX_ZY[z] : "";
+  if (RUBY === "zy") return zy || py;
+  if (RUBY === "both") return (zy ? `<span style="display:block">${zy}</span>` : "") + `<span style="display:block;opacity:.62">${py}</span>`;
+  return py;   // "py"
+}
+// ── 逐字ルビ（読解・記事の本文で「1 文字ずつ真上に読み」を出す） ──
+// data/reading-ruby.json = { "<原文>": {p:[逐字拼音], z:[逐字注音]} }（pypinyin で文脈込み・破音字も正しい）
+let RUBYMAP = null, RUBYMAP_LOADING = false;
+// ルビ表示モード：zy=注音 / py=拼音 / both=両方 / off=隠す。台湾華語なので既定は「注音」。
+let TW_RUBY_MODE = (function(){ try { const v = localStorage.getItem("stw_ruby_mode"); return ["zy","py","both","off"].includes(v) ? v : "zy"; } catch(e){ return "zy"; } })();
+function loadRubyMap(cb){
+  if (RUBYMAP) { if (cb) cb(); return; }
+  if (RUBYMAP_LOADING) return;
+  RUBYMAP_LOADING = true;
+  fetch("data/reading-ruby.json?v=4").then(r => r.ok ? r.json() : null).then(m => { RUBYMAP = m || {}; RUBYMAP_LOADING = false; if (cb) cb(); }).catch(() => { RUBYMAP_LOADING = false; });
+}
+// その文字（通し番号 ci）のルビ HTML を返す。both は注音（上）＋拼音（下）の 2 行。
+function twRubyHtml(ruby, ci){
+  if (!ruby || TW_RUBY_MODE === "off") return "";
+  const p = (ruby.p && ruby.p[ci]) || "", z = (ruby.z && ruby.z[ci]) || "";
+  if (TW_RUBY_MODE === "py") return p;
+  if (TW_RUBY_MODE === "zy") return z;
+  if (!p && !z) return "";   // both
+  return `<span class="rcr-z">${z}</span><span class="rcr-p">${p}</span>`;
+}
+function refreshRubyLabels(){ document.querySelectorAll(".js-ruby").forEach(b => { b.textContent = RUBY === "both" ? "ㄅ拼" : RUBY === "zy" ? "ㄅ" : "拼"; b.classList.toggle("on", RUBY !== "py"); }); }
+function cycleRuby(){
+  RUBY = RUBY === "both" ? "zy" : RUBY === "zy" ? "py" : "both";   // ㄅ拼 → ㄅ → 拼 → …
+  try { localStorage.setItem("stw_ruby", RUBY); } catch(e){}
+  refreshRubyLabels();
+  const rerender = () => { try { renderCard(); } catch(e){} try { renderList(); } catch(e){} };
+  if (RUBY !== "py") loadExZy(rerender); else rerender();
+}
 function renderCard(){
   const w = deck[fcIdx], mk = twMKey();
   document.getElementById("fc").classList.remove("flip");
@@ -884,12 +1257,17 @@ function renderCard(){
   document.getElementById("fcZy").textContent = w.zy;
   document.getElementById("fcPy").textContent = w.py;
   document.getElementById("fcPos").textContent = w.c;
-  document.getElementById("fcMean").textContent = w.m[mk] || w.m.j;
+  document.getElementById("fcMean").textContent = w.m[mk] || w.m.e || w.m.j;
   document.getElementById("fcEx").innerHTML =
-    `<span>${w.ex.z} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></span><span class="py">${w.ex.py}</span><span class="tr">${w.ex[mk] || w.ex.j}</span>`;
+    `<span>${w.ex.z} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></span><span class="py">${exRuby(w.ex.z, w.ex.py)}</span><span class="tr">${w.ex[mk] || w.ex.e || w.ex.j}</span>`;
   document.getElementById("fcEx").onclick = e => { e.stopPropagation(); speakZh(w.ex.z); };
   document.getElementById("fcProg").textContent = `${fcIdx+1} / ${deck.length}`;
+  updateFavBtn(); markSeen(); saveFcPos(); refreshSpeedLabels(); refreshRubyLabels();
 }
+/* ===== 再生速度（全音声共通・localStorage 永続） ===== */
+const TTS_SPEEDS = [1, 0.75, 1.25, 1.5];
+function refreshSpeedLabels(){ if (typeof TTS === "undefined" || !TTS.getRate) return; const r = TTS.getRate() + "x"; document.querySelectorAll(".js-spd").forEach(b => b.textContent = r); }
+function cycleTtsSpeed(){ if (typeof TTS === "undefined" || !TTS.getRate) return; let i = TTS_SPEEDS.indexOf(TTS.getRate()); if (i < 0) i = 0; TTS.setRate(TTS_SPEEDS[(i + 1) % TTS_SPEEDS.length]); refreshSpeedLabels(); }
 function flipCard(){
   const el = document.getElementById("fc");
   el.classList.toggle("flip");
@@ -969,8 +1347,10 @@ function renderLevelLabels(){
 let posFilter = "all";
 function renderPosRow(){
   const cats = [...new Set(getVocabData(currentLevel).map(v=>v.c))];
+  const favN = _lsGet(FAV_KEY,[]).filter(k=>k.indexOf(currentLevel+":")===0).length;
   document.getElementById("posRow").innerHTML =
-    [`<button class="pos-btn ${posFilter==="all"?"on":""}" onclick="setPos('all')">${twT("posAll")}</button>`]
+    [`<button class="pos-btn ${posFilter==="all"?"on":""}" onclick="setPos('all')">${twT("posAll")}</button>`,
+     `<button class="pos-btn ${posFilter==="fav"?"on":""}" onclick="setPos('fav')">★ ${twT("favTab")}${favN?` (${favN})`:""}</button>`]
     .concat(cats.map(c=>`<button class="pos-btn ${posFilter===c?"on":""}" onclick="setPos('${c}')">${c}</button>`)).join("");
 }
 function setPos(c){ posFilter = c; renderPosRow(); renderList(); }
@@ -978,24 +1358,36 @@ function renderList(){
   const q = (document.getElementById("vSearch").value || "").toLowerCase();
   const mk = twMKey();
   const rows = getVocabData(currentLevel).filter(v =>
-    (posFilter === "all" || v.c === posFilter) &&
+    (posFilter === "fav" ? isFav(currentLevel, v.w) : (posFilter === "all" || v.c === posFilter)) &&
     (!q || v.w.includes(q) || v.py.toLowerCase().includes(q) ||
       Object.values(v.m).some(s=>s.toLowerCase().includes(q)))
   );
+  if (posFilter === "fav" && !rows.length) {
+    document.getElementById("vList").innerHTML = `<div style="text-align:center;color:var(--tx3);padding:40px 20px">${twT("favEmpty")}</div>`;
+    return;
+  }
   document.getElementById("vList").innerHTML = rows.map((v,i)=>`
     <div class="vcard" data-i="${i}">
       <div class="vcard-top">
         <span class="vcard-w">${v.w}</span>
         <span><span class="vcard-zy">${v.zy}</span><br><span class="vcard-py">${v.py}</span></span>
+        <button class="vcard-fav" data-fav="${i}" aria-label="収藏" style="background:none;border:none;cursor:pointer;font-size:19px;padding:2px 6px;color:${isFav(currentLevel,v.w)?"var(--ac)":"var(--tx3)"}">${isFav(currentLevel,v.w)?"★":"♡"}</button>
         <span class="vcard-pos">${v.c}</span>
       </div>
-      <div class="vcard-m">${v.m[mk] || v.m.j}</div>
-      <div class="vcard-ex" data-ex="1"><b>${v.ex.z}</b> <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg><br>${v.ex.py}<br>${v.ex[mk] || v.ex.j}</div>
+      <div class="vcard-m">${v.m[mk] || v.m.e || v.m.j}</div>
+      <div class="vcard-ex" data-ex="1"><b>${v.ex.z}</b> <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg><br>${exRuby(v.ex.z, v.ex.py)}<br>${v.ex[mk] || v.ex.e || v.ex.j}</div>
     </div>`).join("");
   // 枠内タップで発音（例文部分は例文を読む）
   document.querySelectorAll("#vList .vcard").forEach(card=>{
     const v = rows[+card.dataset.i];
-    card.onclick = e => speakZh(e.target.closest(".vcard-ex") ? v.ex.z : v.w);
+    card.onclick = e => {
+      if (e.target.closest(".vcard-fav")) return;   // ♡ は別処理
+      speakZh(e.target.closest(".vcard-ex") ? v.ex.z : v.w);
+    };
+  });
+  document.querySelectorAll("#vList .vcard-fav").forEach(btn=>{
+    const v = rows[+btn.dataset.fav];
+    btn.onclick = e => { e.stopPropagation(); toggleFav(currentLevel, v.w); if(deck[fcIdx]&&deck[fcIdx].w===v.w) updateFavBtn(); renderList(); renderPosRow(); };
   });
 }
 
@@ -1004,13 +1396,13 @@ function renderGrammar(){
   const mk = twMKey();
   document.getElementById("gList").innerHTML = getGrammarData(currentLevel).map(g=>`
     <details class="gcard">
-      <summary><span class="g-cat">${twGCat(g.cat)}</span><span class="g-title">${g.t}${g.g ? `<span style="font-weight:400;color:var(--tx2);font-size:.85em">（${g.g[mk] || g.g.j}）</span>` : ""}</span></summary>
+      <summary><span class="g-cat">${twGCat(g.cat)}</span><span class="g-title">${g.t}${g.g ? `<span style="font-weight:400;color:var(--tx2);font-size:.85em">（${g.g[mk] || g.g.e || g.g.j}）</span>` : ""}</span></summary>
       <div class="g-body">
-        <div class="g-pattern">${typeof g.p === "object" ? (g.p[mk] || g.p.j) : g.p}</div>
-        <div class="g-ex">${g.ex[mk] || g.ex.j}</div>
+        <div class="g-pattern">${typeof g.p === "object" ? (g.p[mk] || g.p.e || g.p.j) : g.p}</div>
+        <div class="g-ex">${g.ex[mk] || g.ex.e || g.ex.j}</div>
         <div class="g-eg">${g.eg.map(e=>`
           <span class="zh" onclick="speakZh(this.dataset.z)" data-z="${e.z.replace(/<[^>]+>/g,"")}">${e.z} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></span>
-          <span class="py">${e.py}</span><span class="tr">${e[mk] || e.j}</span>`).join("")}
+          <span class="py">${e.py}</span><span class="tr">${e[mk] || e.e || e.j}</span>`).join("")}
         </div>
       </div>
     </details>`).join("");
@@ -1032,7 +1424,7 @@ function renderPhrases(){
         <div class="ph-main">
           <div class="ph-z">${it.z}</div>
           <div class="ph-py">${it.py}</div>
-          <div class="ph-m">${it.m[mk] || it.m.j}</div>
+          <div class="ph-m">${it.m[mk] || it.m.e || it.m.j}</div>
           ${it.note ? `<div class="ph-note">💡 ${it.note[ck] || it.note.j}</div>` : ""}
         </div>
         <button class="tts-btn" onclick="event.stopPropagation();speakZh('${it.z}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>
@@ -1053,7 +1445,8 @@ function qzReset(){
   document.getElementById("qzBox").innerHTML =
     `<p style="color:var(--tx2);margin:30px 0 8px">${qzMode==="type" ? twT("qzTypeHint") : twT("quizQ")}</p>
      ${Paywall.quotaBadge("quiz")}
-     <div style="margin-top:12px"><button class="btn primary" onclick="Paywall.gate('quiz',qzStart)">${twT("quizStart")}</button></div>`;
+     <div style="margin-top:12px"><button class="btn primary" onclick="Paywall.gate('quiz',qzStart)">${twT("quizStart")}</button></div>
+     ${WrongBook.forLevel(currentLevel).length?`<div><button class="wb-link" onclick="openWrongBook()">📕 ${twT("wbReview")} (${WrongBook.forLevel(currentLevel).length})</button></div>`:""}`;
 }
 function qzStart(){
   quizStarted = true; qzScore = 0; qzIdx = 0;
@@ -1085,7 +1478,7 @@ function qzNext(){
   if (qzMode === "type") {
     document.getElementById("qzBox").innerHTML = `
       <div style="font-size:13px;color:var(--tx3)">${qzIdx+1} / ${qzOrder.length}　${twT("quizScore")}: ${qzScore}</div>
-      <div style="font-size:24px;font-weight:700;margin:22px 0 4px">${w.m[mk] || w.m.j}</div>
+      <div style="font-size:24px;font-weight:700;margin:22px 0 4px">${w.m[mk] || w.m.e || w.m.j}</div>
       <div style="margin-bottom:18px"><button class="tts-btn" onclick="speakZh('${w.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
       <input class="search" id="qzInput" style="max-width:320px;text-align:center;font-size:18px" placeholder="${twT("qzTypePh")}" autocomplete="off">
       <div style="margin-top:14px"><button class="btn primary" onclick="qzTypeAnswer()">${twT("qzSubmit")}</button></div>
@@ -1103,7 +1496,7 @@ function qzNext(){
     <div class="qz-word" onclick="speakZh('${w.w}')">${w.w}</div>
     <div class="qz-py">${w.zy}　${w.py}　<button class="tts-btn" style="width:30px;height:30px;font-size:13px" onclick="speakZh('${w.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
     <div class="qz-opts">${opts.map(o=>
-      `<button class="qz-opt" data-ok="${o.w===w.w}" onclick="qzAnswer(this)">${o.m[mk] || o.m.j}</button>`).join("")}
+      `<button class="qz-opt" data-ok="${o.w===w.w}" onclick="qzAnswer(this)">${o.m[mk] || o.m.e || o.m.j}</button>`).join("")}
     </div>`;
   speakZh(w.w);
 }
@@ -1122,14 +1515,21 @@ function qzTypeAnswer(){
   SRS.record(currentLevel, w.w, ok);
   updateSrsBadges();
   if (ok) qzScore++;
+  else WrongBook.add({type:"type", word:w.w, q:(w.m[twMKey()] || w.m.e || w.m.j), correct:w.w, detail:w.zy+"｜"+w.py+(raw?"　✗"+raw:"")});
   inp.disabled = true;
+  const mk = twMKey();
+  const ex = (w.ex && w.ex.z) ? `<div style="font-size:13px;color:var(--tx2);margin-top:6px">${w.ex.z}<br>${w.ex[mk] || w.ex.e || w.ex.j||""}</div>` : "";
   document.getElementById("qzTypeResult").innerHTML =
-    `<div style="font-size:15px;font-weight:700;color:${ok ? "var(--ok)" : "var(--ac)"}">${ok ? "⭕" : "❌"}　${twT("qzCorrectIs")}<span style="font-family:var(--serif);font-size:22px">${w.w}</span>（${w.zy}｜${w.py}）</div>`;
-  setTimeout(()=>{ qzIdx++; qzNext(); }, ok ? 1000 : 2200);
+    `<div class="qz-fb ${ok?'ok':'ng'}">
+      <div style="font-size:15px;font-weight:700">${ok ? "⭕ "+twT("qzRight") : "❌ "+twT("qzWrong")}</div>
+      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${w.zy}｜${w.py}）</div>
+      <div style="font-size:14px;color:var(--tx2);margin-top:2px">${w.m[mk] || w.m.e || w.m.j}</div>${ex}
+      <div style="margin-top:16px"><button class="btn primary" onclick="qzAdvance()">${twT("quizNext")} ›</button></div>
+    </div>`;
 }
 function qzAnswer(btn){
   const ok = btn.dataset.ok === "true";
-  const w = qzOrder[qzIdx];
+  const w = qzOrder[qzIdx], mk = twMKey();
   SRS.record(currentLevel, w.w, ok);
   recordStudy();
   updateSrsBadges();
@@ -1137,37 +1537,76 @@ function qzAnswer(btn){
     b.disabled = true;
     if (b.dataset.ok === "true") b.classList.add("ok");
   });
-  if (ok) qzScore++; else btn.classList.add("ng");
-  setTimeout(()=>{ qzIdx++; qzNext(); }, ok ? 700 : 1400);
+  if (ok) qzScore++;
+  else { btn.classList.add("ng"); WrongBook.add({type:"quiz", word:w.w, q:(w.m[mk] || w.m.e || w.m.j), correct:w.w, detail:w.zy+"｜"+w.py}); }
+  qzShowFeedback(w, ok);   // 停住:顯示正解+詳解+「下一題」，不自動跳
 }
+function qzShowFeedback(w, ok){
+  const mk = twMKey();
+  const ex = (w.ex && w.ex.z) ? `<div style="font-size:13px;color:var(--tx2);margin-top:6px">${w.ex.z}<br>${w.ex[mk] || w.ex.e || w.ex.j||""}</div>` : "";
+  document.getElementById("qzBox").insertAdjacentHTML("beforeend",
+    `<div class="qz-fb ${ok?'ok':'ng'}">
+      <div style="font-weight:700;font-size:15px">${ok?"⭕ "+twT("qzRight"):"❌ "+twT("qzWrong")}</div>
+      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${w.zy}｜${w.py}）</div>
+      <div style="font-size:14px;color:var(--tx2);margin-top:2px">${w.m[mk] || w.m.e || w.m.j}</div>${ex}
+      <div style="margin-top:16px"><button class="btn primary" onclick="qzAdvance()">${twT("quizNext")} ›</button></div>
+    </div>`);
+  const fb=document.querySelector("#qzBox .qz-fb"); if(fb) fb.scrollIntoView({block:"nearest",behavior:"smooth"});
+}
+function qzAdvance(){ qzIdx++; qzNext(); }
 function qzDone(){
+  const nWrong = WrongBook.forLevel(currentLevel).length;
   document.getElementById("qzBox").innerHTML = `
     <p style="margin:26px 0 8px;color:var(--tx2)">${twT("quizDone")}</p>
     <div class="qz-big">${qzScore} / ${qzOrder.length}</div>
-    <div style="margin-top:22px"><button class="btn primary" onclick="Paywall.gate('quiz',qzStart)">${twT("quizRetry")}</button></div>`;
+    <div style="margin-top:22px"><button class="btn primary" onclick="Paywall.gate('quiz',qzStart)">${twT("quizRetry")}</button></div>
+    ${nWrong?`<div><button class="wb-link" onclick="openWrongBook()">📕 ${twT("wbReview")} (${nWrong})</button></div>`:""}`;
 }
 
 /* ===== スピーキング（跟読・音声認識で判定）===== */
 const SPK = (() => {
   const SRCls = window.SpeechRecognition || window.webkitSpeechRecognition;
+  // App(WKWebView)は Web Speech 認識が無い → ネイティブ橋接（SFSpeechRecognizer）を使う
+  const IS_NATIVE = () => !!(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp);
+  const spkPost = obj => { try { window.ReactNativeWebView && window.ReactNativeWebView.postMessage(JSON.stringify(obj)); } catch (e) {} };
   let src = "vocab", items = [], idx = 0, rec = null, recording = false;
 
   function buildItems(){
     const mk = twMKey();
     if (src === "phrase") {
-      items = PHRASES_L1.flatMap(s => s.items.map(it => ({ z: it.z, py: it.py, tr: it.m[mk] || it.m.j })));
+      items = PHRASES_L1.flatMap(s => s.items.map(it => ({ z: it.z, py: it.py, tr: it.m[mk] || it.m.e || it.m.j })));
     } else {
-      items = getVocabData(currentLevel).map(v => ({ z: v.ex.z, py: v.ex.py, tr: v.ex[mk] || v.ex.j }));
+      items = getVocabData(currentLevel).map(v => ({ z: v.ex.z, py: v.ex.py, tr: v.ex[mk] || v.ex.e || v.ex.j }));
     }
     items.sort(() => Math.random() - .5);
     idx = 0;
   }
   const strip = s => String(s).replace(/[，。！？；：、,.!?;:\s（）()「」『』…—～\d０-９a-zA-Z]/g, "");
 
-  // LCS で「どの字が言えたか」を判定
+  // 漢字→拼音（トーンなし）マップを遅延読込。採点を「文字一致」→「音一致」にするため。
+  // これで zh-TW 音声認識が簡体字で返しても（現↔现）、同音異字を拾っても、減点されない。
+  let PYMAP = null, SENTMAP = null, pymapPromise = null;
+  function loadPyMap(){
+    if (!pymapPromise) pymapPromise = Promise.all([
+      fetch("data/hanzi-pinyin.json").then(r => r.json()),
+      fetch("data/sentence-pinyin.json").then(r => r.json()).catch(() => ({})),   // 文単位の正確な読み（任意）
+    ]).then(([m, s]) => { PYMAP = m; SENTMAP = s; return m; })
+      .catch(() => { pymapPromise = null; return null; });   // 失敗時は次回リトライ
+    return pymapPromise;
+  }
+  // heard（認識結果）側:1字ずつ generic map で音に。無い字は文字のまま（従来フォールバック）。
+  const heardPy = str => [...strip(str)].map(c => (PYMAP && PYMAP[c]) || c);
+  // target（お手本）側:文単位の前計算があれば多音字も正確。無ければ generic map。
+  function targetToks(z){
+    const chars = [...strip(z)];
+    if (SENTMAP && SENTMAP[z]) { const syl = SENTMAP[z].split(" "); if (syl.length === chars.length) return { chars, py: syl }; }
+    return { chars, py: chars.map(c => (PYMAP && PYMAP[c]) || c) };
+  }
+
+  // LCS で「どの音が言えたか」を判定（1漢字=1音節なので hit は元の漢字位置に対応）
   function diff(target, heard){
-    const a = strip(target), b = strip(heard);
-    const m = a.length, n = b.length;
+    const T = targetToks(target), b = heardPy(heard);
+    const a = T.py, m = a.length, n = b.length;
     const dp = Array.from({length: m+1}, () => new Array(n+1).fill(0));
     for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
       dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] + 1 : Math.max(dp[i-1][j], dp[i][j-1]);
@@ -1177,16 +1616,19 @@ const SPK = (() => {
       if (a[i-1] === b[j-1]) { hit[i-1] = true; i--; j--; }
       else if (dp[i-1][j] >= dp[i][j-1]) i--; else j--;
     }
-    const score = m ? Math.round(dp[m][n] / m * 100) : 0;
-    return { chars: [...a].map((c, k) => ({ c, hit: hit[k] })), score };
+    // max(目標,聽到) を分母に → 足りない音も「余計に言った音」も両方減点（recall だけにしない）
+    const denom = Math.max(m, n);
+    const score = denom ? Math.round(dp[m][n] / denom * 100) : 0;
+    return { chars: T.chars.map((c, k) => ({ c, hit: hit[k] })), score };
   }
 
   function render(){
     if (!items.length) buildItems();
+    loadPyMap();   // 発音採点用の音マップを先読み（録音までに間に合う）
     const it = items[idx];
     document.getElementById("spkBox").innerHTML = `
       <p style="font-size:14px;color:var(--tx2);line-height:1.9;text-align:left">${twT("spkIntro")}</p>
-      ${SRCls ? "" : `<p style="font-size:12.5px;color:var(--ac);background:var(--ac-soft);border-radius:8px;padding:8px 12px">${twT("spkNoSupport")}</p>`}
+      ${(SRCls || IS_NATIVE()) ? "" : `<p style="font-size:12.5px;color:var(--ac);background:var(--ac-soft);border-radius:8px;padding:8px 12px">${twT("spkNoSupport")}</p>`}
       ${SRCls && /Edg\//.test(navigator.userAgent) ? `<p style="font-size:12.5px;color:var(--ac);background:var(--ac-soft);border-radius:8px;padding:8px 12px">${twT("spkEdgeNote")}</p>` : ""}
       <div class="spk-src">
         <button class="pos-btn ${src==="vocab"?"on":""}" onclick="SPK.setSrc('vocab')">${twT("spkSourceVocab")}</button>
@@ -1196,7 +1638,7 @@ const SPK = (() => {
         <div class="spk-z" onclick="speakZh(this.dataset.z)" data-z="${it.z}">${it.z} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></div>
         <div class="spk-py">${it.py}</div>
         <div class="spk-tr">${it.tr}</div>
-        ${SRCls ? `<button class="spk-mic" id="spkMic" onclick="SPK.toggle()">🎤</button>
+        ${IS_NATIVE() ? `<button class="spk-mic" id="spkMic" onclick="SPK.toggle()">🎤</button>
         <div class="spk-status" id="spkStatus">${twT("spkRecord")}</div>` : ""}
         <div id="spkResult"></div>
       </div>
@@ -1207,7 +1649,8 @@ const SPK = (() => {
       <div style="font-size:13px;color:var(--tx3);margin-top:10px">${idx+1} / ${items.length}</div>`;
   }
 
-  function showResult(heard){
+  async function showResult(heard){
+    await loadPyMap();   // 音マップの読込完了を待ってから採点（初回タップのレースで文字比較に落ちるのを防ぐ）
     const it = items[idx];
     const { chars, score } = diff(it.z, heard);
     const verdict = score >= 90 ? twT("spkPerfect") : score >= 60 ? twT("spkGood") : twT("spkTry");
@@ -1225,11 +1668,37 @@ const SPK = (() => {
 
   let stopTimer = null;
   function toggle(){
-    if (recording) { try { rec && rec.stop(); } catch (e) {} return; }
+    if (recording) {
+      if (IS_NATIVE()) spkPost({ type: "SPEECH_STOP" });   // App:原生停止
+      else { try { rec && rec.stop(); } catch (e) {} }
+      return;
+    }
     Paywall.gate("speak", startRec); // 録音1回 = 無料枠1消費
+  }
+  // App 内:ネイティブ音声認識（SFSpeechRecognizer）。web.tsx が結果を stwSpeechResult/stwSpeechEnd で注入。
+  let spkFinal = "";
+  function startRecNative(mic, st){
+    spkFinal = "";
+    recording = true; mic.classList.add("rec"); st.textContent = twT("spkListening");
+    clearTimeout(stopTimer);
+    stopTimer = setTimeout(() => { spkPost({ type: "SPEECH_STOP" }); }, 8000);
+    window.stwSpeechResult = (transcript, isFinal) => {
+      if (isFinal) { if (transcript) spkFinal = transcript; }
+      else if (transcript) st.textContent = "… " + transcript;
+    };
+    window.stwSpeechEnd = (err) => {
+      recording = false; mic.classList.remove("rec"); clearTimeout(stopTimer);
+      if (spkFinal) { st.textContent = twT("spkRecord"); showResult(spkFinal); return; }
+      if (err === "not-allowed") st.textContent = twT("spkErrMic");
+      else if (err === "network") st.textContent = twT("spkErrNet");
+      else st.textContent = twT("spkErrNoSpeech");
+    };
+    spkPost({ type: "SPEECH_START", lang: "zh-TW" });
   }
   async function startRec(){
     const mic = document.getElementById("spkMic"), st = document.getElementById("spkStatus");
+    TTS.stop(); // お手本再生を止めてから録音
+    if (IS_NATIVE()) { startRecNative(mic, st); return; }   // App:原生語音辨識
     if (!SRCls) return;
     // マイク許可は SpeechRecognition 自身に任せる。
     // （以前の getUserMedia 事前チェックは「許可を二重に求める＋一瞬録音が点いて消える」
@@ -1396,7 +1865,43 @@ function bumpDaily(){
   d = (d && d.d === t) ? d : { d: t, n: 0 };
   d.n = (d.n || 0) + 1;
   localStorage.setItem("stw_daily", JSON.stringify(d));
+  // 每日動作數の履歴（ヒートマップの強度用）。過去分は stw_streak(二値)で補完。
+  try { const lg = JSON.parse(localStorage.getItem("stw_daylog") || "{}"); lg[t] = (lg[t] || 0) + 1; localStorage.setItem("stw_daylog", JSON.stringify(lg)); } catch (e) {}
 }
+// ヒートマップ HTML（直近 91 日・GitHub 風）。強度は stw_daylog の回数、無ければ stw_streak の学習日を level 1 に。
+function buildHeatmap(){
+  let log = {}, streakDays = [];
+  try { log = JSON.parse(localStorage.getItem("stw_daylog") || "{}"); } catch (e) {}
+  try { streakDays = JSON.parse(localStorage.getItem("stw_streak") || "[]"); } catch (e) {}
+  const streakSet = new Set(streakDays);
+  const level = (key) => { const n = log[key] || 0; if (n === 0) return streakSet.has(key) ? 1 : 0; if (n <= 5) return 1; if (n <= 15) return 2; return 3; };
+  const end = new Date(); const start = new Date(); start.setDate(end.getDate() - 90);
+  start.setDate(start.getDate() - start.getDay());   // 週頭(日)に揃える
+  const weeks = Math.ceil((end - start) / 6048e5) + 1;
+  const monthLbl = twMonthShort();
+  let months = "", lastM = -1, lastLblW = -3;
+  for (let w = 0; w < weeks; w++){ const d = new Date(start); d.setDate(d.getDate() + w * 7); const m = d.getMonth(); const show = m !== lastM && (w - lastLblW) >= 3; if (m !== lastM) lastM = m; if (show) lastLblW = w; months += `<span class="hm-m">${show ? monthLbl[m] : ""}</span>`; }
+  let rows = "";
+  for (let dow = 0; dow < 7; dow++){
+    rows += `<div class="hm-row">`;
+    for (let w = 0; w < weeks; w++){
+      const d = new Date(start); d.setDate(d.getDate() + w * 7 + dow);
+      if (d > end) { rows += `<span class="hm-c" data-l="x"></span>`; continue; }
+      const key = dayStr(d);
+      rows += `<span class="hm-c" data-l="${level(key)}" title="${key}${log[key]?("・"+log[key]):""}"></span>`;
+    }
+    rows += `</div>`;
+  }
+  return `<div class="pf-hm"><div class="pf-hm-h">${twT("hmTitle")}</div>
+    <div class="hm-grid"><div class="hm-row hm-months">${months}</div>${rows}</div>
+    <div class="hm-legend"><span>${twT("hmLess")}</span><span class="hm-c" data-l="0"></span><span class="hm-c" data-l="1"></span><span class="hm-c" data-l="2"></span><span class="hm-c" data-l="3"></span><span>${twT("hmMore")}</span></div></div>`;
+}
+function twMonthShort(){ const l = (typeof twGetLang==="function"?twGetLang():"ja");
+  if (l==="en") return ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  if (l==="ko") return ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"];
+  if (l==="vi") return ["Th1","Th2","Th3","Th4","Th5","Th6","Th7","Th8","Th9","Th10","Th11","Th12"];
+  if (l==="id") return ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+  return ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"]; }
 // 学習1アクション＝ストリーク記録＋今日のカウント。フラッシュカード評価・クイズ回答・読解などから呼ぶ。
 function recordStudy(){ recordStudyDay(); bumpDaily(); }
 
@@ -1416,16 +1921,19 @@ function renderProfile(){
   if (li && u) {
     const label = (u.name || u.email || "?").trim().slice(0, 1).toUpperCase();
     acc = `<div class="pf-acc"><div class="pf-avatar">${label}</div>
-      <div style="flex:1;min-width:0"><b style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.name || u.email || ""}</b><span style="font-size:12.5px;color:var(--tx3)">${u.email || ""}</span></div>
+      <div style="flex:1;min-width:0;overflow:hidden"><b style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.name || u.email || ""}</b><span style="display:block;font-size:12.5px;color:var(--tx3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.email || ""}</span></div>
       <button class="pf-logout" onclick="STW_WEB.logout();renderProfile()">${twT("acLogout")}</button></div>
-      <p class="pf-sync">✓ ${twT("pfSynced")}</p>`;
+      <p class="pf-sync">✓ ${twT("pfSynced")}</p>
+      <div style="text-align:center;margin-top:2px"><button class="pf-del" onclick="twDeleteAccount()">${twT("acDelete")}</button></div>`;
   } else {
-    acc = `<div class="pf-acc"><img src="images/bear.svg" style="width:46px;height:auto">
-      <div style="flex:1"><b style="display:block">${twT("loginTitle")}</b><span style="font-size:12.5px;color:var(--tx2)">${twT("pfGuest")}</span></div>
-      <button class="btn primary" style="padding:9px 18px" onclick="STW_WEB.login()">${twT("navLogin")}</button></div>`;
+    acc = `<div class="pf-acc"><img src="images/bear.svg" style="width:46px;height:auto;flex-shrink:0">
+      <div style="flex:1;min-width:0"><b style="display:block;margin-bottom:2px">${twT("loginTitle")}</b><span style="font-size:12.5px;color:var(--tx2);line-height:1.5">${twT("pfGuest")}</span></div>
+      <button class="btn primary" style="padding:9px 18px;flex-shrink:0;white-space:nowrap" onclick="STW_WEB.login()">${twT("navLogin")}</button></div>`;
   }
   const streak = getStreak(), daily = getDaily();
-  document.getElementById("pfBody").innerHTML = `${acc}
+  const isPrem = !!(window.Paywall && Paywall.isPremium && Paywall.isPremium());
+  const upBtn = isPrem ? "" : `<button class="pf-upgrade" onclick="twUpgrade()">${twT("pfUpgrade")}</button>`;
+  document.getElementById("pfBody").innerHTML = `${upBtn}${acc}
     <div class="pf-streak">
       <div class="pf-streak-n">${streak.cur}<small>${twT("pfStreakUnit")}</small></div>
       <div class="pf-streak-lbl"><b>${twT("pfStreak")}</b><span>${twT("pfStreakTotal").replace("{n}", streak.total)}</span></div>
@@ -1434,7 +1942,8 @@ function renderProfile(){
       <div class="pf-daily-top"><b>${twT("pfDaily")}</b><span>${daily.done ? twT("pfDailyDone") : `${daily.n} / ${daily.goal}`}</span></div>
       <div class="pf-daily-bar"><i style="width:${daily.pct}%"></i></div>
       <div class="pf-daily-set">${twT("pfDailyGoal")}: ${[10,20,30,50].map(n=>`<button class="pf-goal ${daily.goal===n?"on":""}" onclick="setGoalTarget(${n});renderProfile()">${n}</button>`).join("")}</div>
-    </div>`;
+    </div>
+    ${buildHeatmap()}`;
   document.getElementById("pfBody").innerHTML += `
     <div class="srs-stats-grid" style="margin-top:16px">
       <div class="srs-stat"><b>${total}</b><span>${twT("pfLearned")}</span></div>
@@ -1447,6 +1956,31 @@ function renderProfile(){
       `<div class="pf-lv"><span class="pf-lvn">${lvName[lv]}</span><div class="pf-bar"><i style="width:${per[lv].t ? Math.min(100, per[lv].m / per[lv].t * 100) : 0}%"></i></div><span class="pf-lvc">${per[lv].m} / ${per[lv].t}</span></div>`).join("")}</div>
     ${exam.length ? `<h3 class="pf-h">${twT("exHistory")}</h3><div class="ex-hist">${exam.slice(-8).reverse().map(h =>
       `<div class="ex-hist-item"><span>${new Date(h.ts).toLocaleDateString()}</span><b>${h.score} / ${h.total}</b><span>${Math.round(h.score / h.total * 100)}%</span></div>`).join("")}</div>` : ""}`;
+}
+// ログイン状態が変わったら呼ぶ（websync が renderAuth 内から呼ぶ）。プロフィール面の
+// 「ログイン/ログアウト」表示を最新化する。これが無いと sign in 後もカードが「Sign in」のままだった。
+window.twRerenderAll = function(){ try { if (document.getElementById("pfBody")) renderProfile(); } catch(e){} };
+// アカウント削除（Apple 5.1.1(v)）：確認ダイアログ → サーバー削除 → ログアウト状態へ
+function twDeleteAccount(){
+  if (!(window.STW_WEB && STW_WEB.isLoggedIn && STW_WEB.isLoggedIn())) return;
+  document.getElementById("delAccBg").classList.add("show");
+}
+function twCloseDelAcc(){ document.getElementById("delAccBg").classList.remove("show"); }
+// プロフィールの「アップグレード」入口。App 内なら原生 paywall を直接開く(審査員が内購をすぐ見つけられる)、Web なら方案シート。
+function twUpgrade(){
+  if (!window.Paywall) return;
+  if (window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp && Paywall.openNative) Paywall.openNative();
+  else Paywall.show("profile");
+}
+async function twDoDeleteAccount(){
+  const btn = document.querySelector("#delAccBg .dax-del");
+  if (btn){ btn.disabled = true; btn.textContent = "…"; }
+  let ok = false;
+  try { ok = await STW_WEB.deleteAccount(); } catch(e){}
+  if (btn){ btn.disabled = false; btn.textContent = twT("delAccBtn"); }
+  twCloseDelAcc();
+  try { renderProfile(); } catch(e){}
+  try { if (window.showToast) showToast(twT(ok ? "delAccDone" : "delAccFail")); } catch(e){}
 }
 
 function renderSrsHome(){
@@ -1502,6 +2036,23 @@ function onLangChange(){
   renderCard(); renderPosRow(); renderList(); renderGrammar(); renderPhrases();
   renderSrsHome(); renderExamHome(); qzReset(); SPK.reset();
   renderLevelLabels();
+  // 今開いているパネルも即座に新しい言語へ（従来はここが漏れており、ページを切り替えるまで訳が古い言語のままだった）
+  try {
+    const active = document.querySelector(".panel.on");
+    const id = active && active.id;
+    if (id === "panel-reading" && typeof RD !== "undefined" && RD.relang) RD.relang();
+    else if (id === "panel-articles" && typeof AR !== "undefined" && AR.relang) AR.relang();
+    else if (id === "panel-zhuyin" && typeof ZY !== "undefined" && ZY.render) ZY.render();
+    else if (id === "panel-path" && typeof PA !== "undefined" && PA.render) PA.render();
+    else if (id === "panel-profile" && typeof renderProfile === "function") renderProfile();
+    // 開いている辞書カードも更新（単語カードが表示中なら今の言語で引き直す）
+    const ws = document.getElementById("wsBox");
+    if (ws && ws.classList.contains("show")) {
+      const w = (ws.querySelector(".ws-w") || {}).textContent;
+      const hit = (typeof stwLookup === "function") ? stwLookup(w) : null;
+      if (hit && typeof twShowWordCard === "function") twShowWordCard(hit, { silent: true });
+    }
+  } catch(e){}
 }
 
 /* ===== 注音 ㄅㄆㄇ ===== */
@@ -1628,7 +2179,7 @@ const ZY = (() => {
     const ok = accepts(z).has(val) || accepts(z).has(val.replace(/v/g,"u"));
     const fb = document.getElementById("zyFb");
     if (ok){ correct++; fb.className = "zy-fb ok"; fb.textContent = "✓ " + z.z + " = " + z.py; }
-    else { fb.className = "zy-fb ng"; fb.textContent = "✗ " + z.z + " = " + z.py; }
+    else { fb.className = "zy-fb ng"; fb.textContent = "✗ " + z.z + " = " + z.py; if (typeof WrongBook !== "undefined") WrongBook.add({type:"zhuyin", word:(z.rep||z.z), q:z.z, correct:z.z+" = "+z.py, detail:(val?"✗"+val:"")}); }
     document.getElementById("zyIn").disabled = true;
     document.getElementById("zyGo").textContent = twT("quizNext");
     locked = true;
@@ -1656,8 +2207,9 @@ const ZY = (() => {
     if (!ok) document.querySelectorAll(".zy-opt").forEach(o => { if (o.dataset.z === answer) o.classList.add("ok"); });
     const fb = document.getElementById("zyFb");
     fb.className = "zy-fb " + (ok ? "ok" : "ng");
-    fb.textContent = (ok ? "✓ " : "✗ ") + z.z + " = " + z.py;
-    setTimeout(next, 1100);
+    fb.innerHTML = (ok ? "✓ " : "✗ ") + z.z + " = " + z.py +
+      `<div style="margin-top:12px"><button class="btn primary" onclick="ZY.next()">${twT("quizNext")} ›</button></div>`;
+    if (!ok && typeof WrongBook !== "undefined") WrongBook.add({type:"zhuyin", word:(z.rep||z.z), q:twT("zyListenHint"), correct:z.z+" = "+z.py, detail:""});
   }
 
   function next(){
@@ -1675,7 +2227,7 @@ const ZY = (() => {
 
   document.querySelectorAll(".zy-tab").forEach(t => t.onclick = () => { mode = t.dataset.zy; render(); });
 
-  return { render, play, submitType, pick, again, wClear, wGuide: wGuideToggle, wMove };
+  return { render, play, submitType, pick, next, again, wClear, wGuide: wGuideToggle, wMove };
 })();
 
 /* 読み物データはファイル毎に const 宣言（window に載らない）ので名前で引く */
@@ -1738,7 +2290,16 @@ const PA = (() => {
         <div class="pa-frac">${x.frac}</div>
       </button>`;
     }).join("");
+    const paIsPrem = !!(window.Paywall && Paywall.isPremium && Paywall.isPremium());
+    // 会員には出さない(首頁をすっきり)。非会員のみアップグレード CTA を表示。
+    // 会員がプランを管理したいときは「その他 → プレミアム」から。
+    const upBanner = paIsPrem ? "" : `<button class="pa-upgrade" onclick="twUpgrade()">
+        <div class="pa-up-ic">✨</div>
+        <div class="pa-up-tx"><b>${twT("pfUpgrade").replace("✨ ","")}</b><span>${twT("paUpgradeSub")}</span></div>
+        <svg viewBox="0 0 24 24" class="pa-up-ch"><path d="M9 6l6 6-6 6"/></svg>
+      </button>`;
     document.getElementById("paBody").innerHTML = `
+      ${upBanner}
       <div class="pa-head">
         <div><div class="pa-lv">TOCFL ${lvName}</div><p class="pa-lead">${twT("paLead")}</p></div>
       </div>
@@ -1758,35 +2319,143 @@ const PA = (() => {
   return { render };
 })();
 
-/* ===== 共用：本文中の生詞をタップ可能にする＋タップ辞書シート（読解・記事で共用） ===== */
-function twMarkupVocab(z, vocab){
-  if (!vocab || !vocab.length) return z;
+/* ===== 共用：本文中の生詞をタップ可能にする＋逐字ハイライト（読解・記事で共用） ===== */
+// 再生ボタンのアイコン（スピーカー⇄一時停止）。再生中はボタンを一時停止表示に差し替える。
+const TW_ICON_PLAY  = '<svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg>';
+const TW_ICON_PAUSE = '<svg viewBox="0 0 24 24" class="ic"><path d="M7 5h3.4v14H7z"/><path d="M13.6 5H17v14h-3.4z"/></svg>';
+
+// 1 文字ずつ <span class="rc"> に包む（逐字ハイライト＋逐字ルビ用）。ci は原文中の通し番号。
+// 漢字には rc-h を付け（＝発音される音節。ハイライトの時間割りに使う）、真上にルビ .rcr を出す。
+const TW_HAN_RE = /[㐀-鿿豈-﫿]/;
+function twCharSpans(str, ci, extra, ruby){
+  let html = "";
+  for (const ch of str){
+    const c = ch === "&" ? "&amp;" : ch === "<" ? "&lt;" : ch === ">" ? "&gt;" : ch;
+    const han = TW_HAN_RE.test(ch);
+    const rb = han ? twRubyHtml(ruby, ci) : "";
+    const cls = "rc" + (han ? " rc-h" : "") + (extra || "");
+    const rcls = "rcr" + (TW_RUBY_MODE === "both" ? " rcr2" : "");
+    html += `<span class="${cls}" data-ci="${ci}">${rb ? `<span class="${rcls}">${rb}</span>` : ""}<span class="rct">${c}</span></span>`;
+    ci++;
+  }
+  return { html, ci };
+}
+// 本文を「逐字 span＋逐字ルビ＋生詞タップ」に整形。生詞語は .ar-w で辞書、それ以外の漢字は .tapc で発音。
+function twRenderZh(z, vocab, ruby){
+  const ws = [...(vocab||[])].map(v=>v.w).filter(w=>w).sort((a,b)=>b.length-a.length);
+  let ci = 0, out = "";
+  if (!ws.length){ return twCharSpans(z, 0, " tapc", ruby).html; }
   const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const ws = [...vocab].map(v=>v.w).filter(Boolean).sort((a,b)=>b.length-a.length);
-  let re; try { re = new RegExp("(" + ws.map(esc).join("|") + ")", "g"); } catch(e){ return z; }
-  return z.replace(re, m => `<span class="ar-w" data-w="${m}">${m}</span>`);
+  let re; try { re = new RegExp("(" + ws.map(esc).join("|") + ")", "g"); } catch(e){ return twCharSpans(z, 0, " tapc", ruby).html; }
+  let last = 0, m;
+  while ((m = re.exec(z))){
+    if (m.index === re.lastIndex) { re.lastIndex++; continue; }
+    if (m.index > last){ const r = twCharSpans(z.slice(last, m.index), ci, " tapc", ruby); out += r.html; ci = r.ci; }
+    const r = twCharSpans(m[0], ci, "", ruby); ci = r.ci;
+    out += `<span class="ar-w" data-w="${m[0]}">${r.html}</span>`;
+    last = m.index + m[0].length;
+  }
+  if (last < z.length){ out += twCharSpans(z.slice(last), ci, " tapc", ruby).html; }
+  return out;
+}
+// 生詞リストに「その本文に出てくる同レベルの単語」も足してタップ可能語を増やす（2 文字以上のみ・誤爆防止）
+function twMergeVocab(base, text){
+  const out = [...(base||[])], seen = new Set(out.map(v=>v.w));
+  // 全レベルの辞書から、この本文に出てくる 2 文字以上の語をタップ可能に足す（誤爆防止で 1 字は除く）
+  const bank = (typeof STW_DICT!=="undefined") ? Object.values(STW_DICT) : [];
+  for (const v of bank){ if (v && v.w && v.w.length>=2 && !seen.has(v.w) && text.indexOf(v.w)>=0){ seen.add(v.w); out.push(v); } }
+  // 拡張辞書（ロード済みなら）の語もタップ可能に足す
+  if (STW_DICT_EXT){ for (const w in STW_DICT_EXT){ if (w.length>=2 && !seen.has(w) && text.indexOf(w)>=0){ seen.add(w); out.push(stwExtEntry(w)); } } }
+  return out;
 }
 function twBindWords(container, vocab){
   container.querySelectorAll(".ar-w").forEach(el => el.onclick = e => { e.stopPropagation(); twWord(vocab, el.dataset.w); });
+  // 生詞以外の漢字も 1 字タップで発音（「押せる所」を増やす）。.rct から文字だけ取る（ルビは除く）
+  container.querySelectorAll(".rc.tapc.rc-h").forEach(el => el.onclick = e => {
+    e.stopPropagation();
+    const t = (el.querySelector(".rct") || el).textContent;
+    if (!t || !TW_HAN_RE.test(t)) return;
+    const hit = stwLookup(t);                 // 1 字でも辞書にあれば意味カードを出す（我・你・吃…）
+    if (hit) { twShowWordCard(hit); }
+    else { if (window.TTS && TTS.stop) TTS.stop(); speakZh(t); }
+    el.classList.add("on"); setTimeout(()=>el.classList.remove("on"), 500);
+  });
 }
+// 逐字ハイライト driver：音節（漢字＝rc-h）の並びに frac(0..1) を割り付け、読んでいる漢字だけを光らせる。
+// 記号は時間割りに含めない＝ポーズで先走らない。手前の全 .rc は「読了(said)」にする。
+function twKaraoke(el){
+  if (!el) return function(){};
+  const all = el.querySelectorAll(".rc");
+  const hans = el.querySelectorAll(".rc.rc-h"), n = hans.length; let last = -1;
+  return function(frac){
+    if (!n) return;
+    let i = frac >= 1 ? n - 1 : Math.min(n - 1, Math.floor(frac * n));
+    if (i === last) return;
+    last = i;
+    const onEl = hans[i];
+    const onCi = onEl ? +onEl.dataset.ci : 1e9;
+    for (const c of all){ const ci = +c.dataset.ci; c.classList.toggle("on", c === onEl); c.classList.toggle("said", ci < onCi); }
+  };
+}
+function twClearKaraoke(container){ if (container) container.querySelectorAll(".rc.on,.rc.said").forEach(c=>c.classList.remove("on","said")); }
+// 読解・記事のルビ切替（注音 → 拼音 → 両方 → 隠す → …）。rerender は各モジュールの再描画関数。
+const TW_RUBY_ORDER = ["zy","py","both","off"];
+function twCycleReadingRuby(rerender){
+  TW_RUBY_MODE = TW_RUBY_ORDER[(TW_RUBY_ORDER.indexOf(TW_RUBY_MODE) + 1) % TW_RUBY_ORDER.length];
+  try { localStorage.setItem("stw_ruby_mode", TW_RUBY_MODE); } catch(e){}
+  const go = () => { try { rerender(); } catch(e){} };
+  if (TW_RUBY_MODE !== "off") loadRubyMap(go); else go();
+}
+function twReadingRubyLabel(){ return twT({ zy:"rubyZy", py:"rubyPy", both:"rubyBoth", off:"rubyOff" }[TW_RUBY_MODE] || "rubyZy"); }
 function twWord(vocab, w){
-  const v = (vocab || []).find(x => x.w === w); if (!v) return;
+  const v = (vocab || []).find(x => x.w === w) || stwLookup(w); if (!v) return;
+  twShowWordCard(v);
+}
+// 辞書カード本体（読解・記事のタップ辞書、1 字タップ、どこからでも同じ見た目）
+function twShowWordCard(v, opts){
+  if (!v) return;
   const mk = twMKey();
+  const isExt = !!v._ext;
+  const lv = v._lv || (STW_DICT[v.w] && STW_DICT[v.w]._lv) || (isExt ? "ext" : currentLevel);
+  const inSrs = !!(window.SRS && SRS.getData && SRS.getData()[lv + ":" + v.w]);
+  const py = v.py || "", zy = v.zy || "";
+  let meanHtml = "", exHtml = "";
+  if (isExt) {
+    // 拡張辞書：表示言語のグロス（日/韓/英）＋中国語釈義（例文なし）。未訳なら英語→中国語にフォールバック。
+    const gloss = ({ j:v.j, e:v.e, k:v.k }[mk]) || v.e || v.j || "";
+    if (gloss) meanHtml += `<div class="ws-m">${gloss}</div>`;
+    if (v.d) meanHtml += `<div class="ws-def">${v.d}</div>`;
+    if (!gloss && !v.d) meanHtml = `<div class="ws-m" style="color:var(--tx3)">${twT("dictNoDef")}</div>`;
+  } else {
+    meanHtml = `<div class="ws-m">${v.m ? (v.m[mk] || v.m.e || v.m.j || "") : ""}</div>`;
+    if (v.ex && v.ex.z) exHtml = `<div class="ws-ex" onclick="event.stopPropagation();speakZh('${String(v.ex.z).replace(/'/g,"\\'")}')">${v.ex.z}<span class="py">${v.ex.py||""}</span><span class="tr">${v.ex[mk] || v.ex.e || v.ex.j||""}</span></div>`;
+  }
+  const srsBtn = `<button class="ws-srs${inSrs?" added":""}" id="wsSrsBtn"${inSrs?" disabled":` onclick="twAddWordSrs('${v.w}','${lv}')"`}>${twT(inSrs?"dictAdded":"dictAddSrs")}</button>`;
   document.getElementById("wsBox").innerHTML = `
     <div class="ws-top"><div class="ws-w">${v.w}</div><button class="ws-play" onclick="speakZh('${v.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
-    <div class="ws-p">${v.zy}　${v.py}</div>
-    <div class="ws-m">${v.m[mk] || v.m.j}</div>`;
+    <div class="ws-p">${zy}　${py}</div>
+    ${meanHtml}${exHtml}${srsBtn}`;
   document.getElementById("wsBg").classList.add("show");
   document.getElementById("wsBox").classList.add("show");
-  speakZh(v.w);
+  if (!(opts && opts.silent)) speakZh(v.w);   // 言語切替の再描画では発音し直さない
 }
-function twCloseWord(){ const bg=document.getElementById("wsBg"), bx=document.getElementById("wsBox"); if(bg)bg.classList.remove("show"); if(bx)bx.classList.remove("show"); }
+// 辞書カードから「復習に追加」：SRS に今すぐ復習期限で登録。拡張語は内容を custom store に保存して復習画面から引けるようにする。
+function twAddWordSrs(w, lv){
+  if (!(window.SRS && SRS.addWord)) return;
+  if (lv === "ext") { const e = stwLookup(w); if (e && e._ext) stwSaveCustomCard(e); }
+  const added = SRS.addWord(lv, w);
+  const btn = document.getElementById("wsSrsBtn");
+  if (btn){ btn.classList.add("added"); btn.disabled = true; btn.removeAttribute("onclick"); btn.textContent = twT("dictAdded"); }
+  if (added && typeof updateSrsBadges === "function") updateSrsBadges();
+  try { if (window.showToast) showToast(twT(added ? "dictAddedToast" : "dictAlready")); } catch(e){}
+}
+function twCloseWord(){ if(window.TTS&&TTS.stop)TTS.stop(); const bg=document.getElementById("wsBg"), bx=document.getElementById("wsBox"); if(bg)bg.classList.remove("show"); if(bx)bx.classList.remove("show"); }
 
 /* ===== 分級閲読（読解）：台湾のリアルな短文＋逐句音声＋生詞＋理解チェック ===== */
 const RD = (() => {
   const DATA = ["l1","l2","l3","l4","l5"].reduce((o,l)=>{ o[l] = twReading(l); return o; }, {});
   let showPy = false, showTr = false, cur = null;
-  let rdFont = Math.min(28, Math.max(17, +(localStorage.getItem("stw_rd_font") || 21)));
+  let rdFont = Math.min(34, Math.max(17, +(localStorage.getItem("stw_rd_font") || 21)));
   const box = () => document.getElementById("rdBox");
   const list = () => DATA[currentLevel] || [];
 
@@ -1800,7 +2469,7 @@ const RD = (() => {
     box().innerHTML = `<p class="rd-lead">${twT("rdLead")}</p>` + items.map((s,i)=>{
       const done = readDone(s.id);
       return `<button class="rd-card" onclick="RD.open(${i})">
-        <div class="rd-card-t">${s.title[mk] || s.title.j}</div>
+        <div class="rd-card-t">${s.title[mk] || s.title.e || s.title.j}</div>
         <div class="rd-card-meta">${s.lines.length} ${twT("rdSentences")}${done ? ` ・ <span class="rd-ok">${twT("rdRead")}</span>` : ""}</div>
       </button>`;
     }).join("");
@@ -1815,50 +2484,60 @@ const RD = (() => {
 
   function renderStory(){
     const mk = twMKey(), s = cur;
+    if (TW_RUBY_MODE !== "off" && !RUBYMAP && !RUBYMAP_LOADING) loadRubyMap(renderStory);   // ルビ未ロードなら取得後に再描画
+    const mergedVoc = twMergeVocab(s.vocab, s.lines.map(l=>l.z).join(""));
     const lines = s.lines.map((ln,idx)=>`
       <div class="rd-line" data-idx="${idx}">
-        <div class="rd-z">${twMarkupVocab(ln.z, s.vocab)}</div>
-        <div class="rd-py" style="${showPy?"":"display:none"}">${ln.py}</div>
-        <div class="rd-tr" style="${showTr?"":"display:none"}">${ln.m[mk] || ln.m.j}</div>
+        <div class="rd-z">${twRenderZh(ln.z, mergedVoc, RUBYMAP && RUBYMAP[ln.z])}</div>
+        <div class="rd-tr" style="${showTr?"":"display:none"}">${ln.m[mk] || ln.m.e || ln.m.j}</div>
         <button class="ar-para-play" onclick="RD.line(${idx})" aria-label="play"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>
       </div>`).join("");
     const vocab = s.vocab.map(v=>`
       <div class="rd-voc" onclick="speakZh('${v.w}')">
         <span class="rd-voc-w">${v.w}</span>
         <span class="rd-voc-p">${v.zy} ｜ ${v.py}</span>
-        <span class="rd-voc-m">${v.m[mk] || v.m.j}</span>
+        <span class="rd-voc-m">${v.m[mk] || v.m.e || v.m.j}</span>
       </div>`).join("");
     box().innerHTML = `
       <div class="ar-top">
         <button class="ar-back" onclick="RD.render()"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button>
         <div class="ar-fontctl"><button onclick="RD.font(-1)">A<small>−</small></button><button onclick="RD.font(1)">A<small>＋</small></button></div>
       </div>
-      <h3 class="rd-title">${s.title[mk] || s.title.j}</h3>
+      <h3 class="rd-title">${s.title[mk] || s.title.e || s.title.j}</h3>
       <div class="ar-tips">${twT("arTapHint")}</div>
       <div class="rd-toggles">
-        <button class="rd-tg ${showPy?"on":""}" onclick="RD.togglePy()">${twT("rdPinyin")}</button>
+        <button class="rd-tg ${TW_RUBY_MODE!=="off"?"on":""}" onclick="RD.rubyBtn()">${twReadingRubyLabel()}</button>
         <button class="rd-tg ${showTr?"on":""}" onclick="RD.toggleTr()">${twT("rdTrans")}</button>
         <button class="rd-tg" id="rdPlayBtn" onclick="RD.playAll()">▶ ${twT("rdPlayAll")}</button>
+        <button class="rd-tg js-spd" onclick="cycleTtsSpeed()" title="再生速度">${typeof TTS!=="undefined"&&TTS.getRate?TTS.getRate():1}x</button>
       </div>
-      <div class="rd-story" style="font-size:${rdFont}px">${lines}</div>
+      <div class="rd-story ${TW_RUBY_MODE==="both"?"rmboth":""}" style="font-size:${rdFont}px">${lines}</div>
       <h4 class="rd-h4">${twT("rdVocab")}</h4>
       <div class="rd-vocs">${vocab}</div>
       <div id="rdQ"></div>
       <div class="rd-report"><a href="contact.html">${twT("reportError")}</a></div>`;
-    twBindWords(box(), s.vocab);
+    twBindWords(box(), mergedVoc);
     renderQ();
   }
-  function font(d){ rdFont = Math.min(28, Math.max(17, rdFont + d*2)); localStorage.setItem("stw_rd_font", rdFont); const el = box().querySelector(".rd-story"); if (el) el.style.fontSize = rdFont + "px"; }
+  function font(d){ rdFont = Math.min(34, Math.max(17, rdFont + d*2)); localStorage.setItem("stw_rd_font", rdFont); const el = box().querySelector(".rd-story"); if (el) el.style.fontSize = rdFont + "px"; }
 
+  let rdLineIdx = -1;
   function line(idx){
+    if (rdLineIdx === idx){ stopRead(); return; }   // 同じ行の再生ボタンをもう一度 → 即時に一時停止
     stopRead();
-    const ln = cur.lines[idx];
-    speakZh(ln.z);
-    // タップした行の訳をその場で表示（読解しながら答え合わせ）
-    const el = box().querySelector(`.rd-line[data-idx="${idx}"] .rd-tr`);
-    if (el) el.style.display = "";
+    rdLineIdx = idx;
+    const lineEl = box().querySelector(`.rd-line[data-idx="${idx}"]`);
+    if (!lineEl) return;
+    const btn = lineEl.querySelector(".ar-para-play"); if (btn) btn.innerHTML = TW_ICON_PAUSE;   // ▶ → ⏸
+    lineEl.classList.add("playing");
+    const tr = lineEl.querySelector(".rd-tr"); if (tr) tr.style.display = "";   // 訳をその場で表示
+    const prog = twKaraoke(lineEl.querySelector(".rd-z"));
+    speakZh(cur.lines[idx].z, 1, () => {
+      rdLineIdx = -1; if (btn) btn.innerHTML = TW_ICON_PLAY; lineEl.classList.remove("playing"); twClearKaraoke(lineEl);
+    }, prog);
   }
   function togglePy(){ showPy = !showPy; renderStory(); }
+  function rubyBtn(){ twCycleReadingRuby(renderStory); }
   function toggleTr(){ showTr = !showTr; renderStory(); }
   let rdPlaying = false, rdPlayIdx = -1;
   function playAll(){
@@ -1869,19 +2548,21 @@ const RD = (() => {
   function readStep(){
     if (!rdPlaying || !cur || rdPlayIdx >= cur.lines.length){ stopRead(); return; }
     box().querySelectorAll(".rd-line.playing").forEach(e=>e.classList.remove("playing"));
+    twClearKaraoke(box());
     const el = box().querySelector(`.rd-line[data-idx="${rdPlayIdx}"]`);
-    if (el){ el.classList.add("playing"); el.scrollIntoView({block:"center",behavior:"smooth"}); if (showTr){ const tr = el.querySelector(".rd-tr"); if (tr) tr.style.display=""; } }
-    speakZh(cur.lines[rdPlayIdx].z, 1, () => { if (!rdPlaying) return; rdPlayIdx++; setTimeout(readStep, 350); });
+    let prog = function(){};
+    if (el){ el.classList.add("playing"); el.scrollIntoView({block:"center",behavior:"smooth"}); if (showTr){ const tr = el.querySelector(".rd-tr"); if (tr) tr.style.display=""; } prog = twKaraoke(el.querySelector(".rd-z")); }
+    speakZh(cur.lines[rdPlayIdx].z, 1, () => { if (!rdPlaying) return; rdPlayIdx++; setTimeout(readStep, 350); }, prog);
   }
-  function stopRead(){ rdPlaying = false; rdPlayIdx = -1; if (window.TTS && TTS.stop) TTS.stop(); const b = box(); if (b) b.querySelectorAll(".rd-line.playing").forEach(e=>e.classList.remove("playing")); setPlayBtn(); }
+  function stopRead(){ rdPlaying = false; rdPlayIdx = -1; rdLineIdx = -1; if (window.TTS && TTS.stop) TTS.stop(); const b = box(); if (b){ b.querySelectorAll(".rd-line.playing").forEach(e=>e.classList.remove("playing")); b.querySelectorAll(".ar-para-play").forEach(x=>x.innerHTML=TW_ICON_PLAY); twClearKaraoke(b); } setPlayBtn(); }
   function setPlayBtn(){ const b = document.getElementById("rdPlayBtn"); if (b) b.textContent = (rdPlaying ? "⏸ " : "▶ ") + twT("rdPlayAll"); }
 
   function renderQ(){
     const mk = twMKey(), q = cur.q; if (!q) return;
     document.getElementById("rdQ").innerHTML = `
       <h4 class="rd-h4">${twT("rdCheck")}</h4>
-      <div class="rd-q">${q.ask[mk] || q.ask.j}</div>
-      <div class="rd-opts">${q.opts.map((o,i)=>`<button class="rd-opt" data-i="${i}" onclick="RD.answer(${i})">${o[mk] || o.j}</button>`).join("")}</div>
+      <div class="rd-q">${q.ask[mk] || q.ask.e || q.ask.j}</div>
+      <div class="rd-opts">${q.opts.map((o,i)=>`<button class="rd-opt" data-i="${i}" onclick="RD.answer(${i})">${o[mk] || o.e || o.j}</button>`).join("")}</div>
       <div class="rd-why" id="rdWhy"></div>`;
   }
   function answer(i){
@@ -1890,7 +2571,7 @@ const RD = (() => {
     if (!ok) box().querySelectorAll(".rd-opt")[i].classList.add("ng");
     const why = document.getElementById("rdWhy");
     why.className = "rd-why " + (ok?"ok":"ng");
-    why.innerHTML = `<b>${ok?"⭕":"❌"}</b> ${q.why[mk] || q.why.j}`;
+    why.innerHTML = `<b>${ok?"⭕":"❌"}</b> ${q.why[mk] || q.why.e || q.why.j}`;
     markRead(cur.id);
     recordStudy();   // ストリーク＋今日の学習数
   }
@@ -1902,7 +2583,9 @@ const RD = (() => {
     if (!a.includes(id)){ a.push(id); localStorage.setItem("stw_read", JSON.stringify(a)); if (typeof window.onSRSChange==="function") window.onSRSChange(); }
   }
 
-  return { render, open, line, togglePy, toggleTr, playAll, answer, font, stopRead };
+  // 言語切替時：開いている本文はその場で（今の言語で）再描画。一覧なら一覧を再描画。
+  function relang(){ if (cur) renderStory(); else renderList(); }
+  return { render, open, line, togglePy, rubyBtn, toggleTr, playAll, answer, font, stopRead, relang };
 })();
 
 /* ===== 記事（コラム）：台湾のリアルを深掘りする長文リーディング ===== */
@@ -1923,14 +2606,18 @@ function twArticles(){
     (typeof ARTICLES_13 !== "undefined" ? ARTICLES_13 : []),
     (typeof ARTICLES_14 !== "undefined" ? ARTICLES_14 : []),
     (typeof ARTICLES_15 !== "undefined" ? ARTICLES_15 : []),
+    (typeof ARTICLES_16 !== "undefined" ? ARTICLES_16 : []),
+    (typeof ARTICLES_17 !== "undefined" ? ARTICLES_17 : []),
+    (typeof ARTICLES_18 !== "undefined" ? ARTICLES_18 : []),
   ].flat();
 }
 const AR = (() => {
   let showPy = false, showTr = false, cur = null;
-  let arFont = Math.min(26, Math.max(15, +(localStorage.getItem("stw_ar_font") || 19)));
+  let arFont = Math.min(32, Math.max(15, +(localStorage.getItem("stw_ar_font") || 20)));
   const RATES = [1, 0.8, 1.2]; let rateIdx = 0;
-  let playing = false, playIdx = -1;
+  let playing = false, playIdx = -1, arRepeat = false;
   const box = () => document.getElementById("arBox");
+  const arShuf = a => a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
   const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const parse = (k,d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v==null?d:v; } catch(e){ return d; } };
 
@@ -1948,13 +2635,15 @@ const AR = (() => {
       const tag = lk ? `<span class="ar-lock">🔒 ${twT("arLocked")}</span>` : (i===0 ? `<span class="ar-freetag">${twT("arFree")}</span>` : "");
       const prev = (a.paras && a.paras[0] ? a.paras[0].z : "").slice(0, 46);
       return `<button class="ar-card ${lk?"locked":""}" onclick="AR.open(${i})">
-        <div class="ar-card-cat">${a.cat[mk] || a.cat.j}${readDone(a.id) ? ` ・ <span class="rd-ok">${twT("rdRead")}</span>` : ""} ${tag}</div>
+        <div class="ar-card-cat">${a.cat[mk] || a.cat.e || a.cat.j}${readDone(a.id) ? ` ・ <span class="rd-ok">${twT("rdRead")}</span>` : ""} ${tag}</div>
         <div class="ar-card-zh">${a.zhTitle}</div>
-        <div class="ar-card-t">${a.title[mk] || a.title.j}</div>
+        <div class="ar-card-t">${a.title[mk] || a.title.e || a.title.j}</div>
         <div class="ar-card-prev">${prev}…</div>
       </button>`;
     }).join("");
-    box().innerHTML = `<p class="rd-lead">${twT("arLead")}</p>` + chips + cards;
+    const nFav = artFavList().length;
+    const favBtn = `<div style="text-align:center;margin:2px 0 10px"><button class="wb-link" onclick="AR.openFav()">★ ${twT("arFavTitle")}${nFav?` (${nFav})`:""}</button></div>`;
+    box().innerHTML = `<p class="rd-lead">${twT("arLead")}</p>` + favBtn + chips + cards;
   }
   function filter(ci){ arFilter = ci < 0 ? "all" : arCats[ci]; renderList(); }
   function open(i){
@@ -1964,35 +2653,41 @@ const AR = (() => {
 
   function renderArticle(){
     const mk = twMKey(), a = cur;
+    if (TW_RUBY_MODE !== "off" && !RUBYMAP && !RUBYMAP_LOADING) loadRubyMap(renderArticle);   // ルビ未ロードなら取得後に再描画
+    const mergedVoc = twMergeVocab(a.vocab, a.paras.map(p=>p.z).join(""));
     const paras = a.paras.map((p,idx)=>`
       <div class="ar-para" data-idx="${idx}">
-        <div class="ar-z">${twMarkupVocab(p.z, a.vocab)}</div>
-        <div class="ar-py" style="${showPy?"":"display:none"}">${p.py}</div>
-        <div class="ar-tr" style="${showTr?"":"display:none"}">${p.m[mk] || p.m.j}</div>
-        <button class="ar-para-play" onclick="AR.para(${idx})" aria-label="play"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>
+        <div class="ar-z">${twRenderZh(p.z, mergedVoc, RUBYMAP && RUBYMAP[p.z])}</div>
+        <div class="ar-tr" style="${showTr?"":"display:none"}">${p.m[mk] || p.m.e || p.m.j}</div>
+        <div class="ar-pctl">
+          <button class="ar-para-play" onclick="AR.para(${idx})" aria-label="play"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>
+          <button class="ar-pt" onclick="AR.trOne(${idx})" aria-label="translate">訳</button>
+          <button class="ar-pt ar-favp ${artFavHas(p.z)?"on":""}" onclick="AR.favPara(${idx},this)" aria-label="save">${artFavHas(p.z)?"★":"☆"}</button>
+        </div>
       </div>`).join("");
     const vocab = a.vocab.map(v=>`
       <div class="rd-voc" onclick="speakZh('${v.w}')">
         <span class="rd-voc-w">${v.w}</span><span class="rd-voc-p">${v.zy} ｜ ${v.py}</span>
-        <span class="rd-voc-m">${v.m[mk] || v.m.j}</span></div>`).join("");
+        <span class="rd-voc-m">${v.m[mk] || v.m.e || v.m.j}</span></div>`).join("");
     box().innerHTML = `
       <div class="ar-top">
         <button class="ar-back" onclick="AR.render()"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button>
         <div class="ar-fontctl"><button onclick="AR.font(-1)">A<small>−</small></button><button onclick="AR.font(1)">A<small>＋</small></button></div>
       </div>
-      <div class="ar-cat">${a.cat[mk] || a.cat.j}</div>
+      <div class="ar-cat">${a.cat[mk] || a.cat.e || a.cat.j}</div>
       <h3 class="ar-zhtitle">${a.zhTitle}</h3>
-      <div class="ar-title">${a.title[mk] || a.title.j}</div>
-      <p class="ar-intro">${a.intro[mk] || a.intro.j}</p>
+      <div class="ar-title">${a.title[mk] || a.title.e || a.title.j}</div>
+      <p class="ar-intro">${a.intro[mk] || a.intro.e || a.intro.j}</p>
       <div class="ar-tips">${twT("arTapHint")}</div>
-      <div class="ar-body" style="font-size:${arFont}px">${paras}</div>
+      <div class="ar-body ${TW_RUBY_MODE==="both"?"rmboth":""}" style="font-size:${arFont}px">${paras}</div>
       <h4 class="rd-h4">${twT("rdVocab")}</h4>
       <div class="rd-vocs">${vocab}</div>
-      <div class="ar-note" style="font-size:${Math.max(14,arFont-4)}px"><div class="ar-note-h">${twT("arNote")}</div>${a.note[mk] || a.note.j}</div>
+      ${(a.vocab&&a.vocab.length)?`<div style="text-align:center;margin:20px 0 4px"><button class="btn primary" onclick="AR.quiz()">📝 ${twT("arQuiz")}</button></div>`:""}
+      <div class="ar-note" style="font-size:${Math.max(14,arFont-4)}px"><div class="ar-note-h">${twT("arNote")}</div>${a.note[mk] || a.note.e || a.note.j}</div>
       <div class="rd-report"><a href="contact.html">${twT("reportError")}</a></div>
       <div style="height:78px"></div>`;
     renderBar();
-    twBindWords(box(), a.vocab);
+    twBindWords(box(), mergedVoc);
     markRead(a.id);
     if (typeof recordStudy === "function") recordStudy();
   }
@@ -2001,30 +2696,44 @@ const AR = (() => {
     let bar = document.getElementById("arBar");
     if (!bar) { bar = document.createElement("div"); bar.id = "arBar"; bar.className = "ar-bar"; document.body.appendChild(bar); }
     bar.innerHTML = `
-      <button class="ar-bt ${showPy?"on":""}" onclick="AR.togglePy()">拼音</button>
+      <button class="ar-bt ${TW_RUBY_MODE!=="off"?"on":""}" onclick="AR.rubyBtn()">${twReadingRubyLabel()}</button>
       <button class="ar-bt ${showTr?"on":""}" onclick="AR.toggleTr()">${twT("rdTrans")}</button>
       <button class="ar-bt play" onclick="AR.playAll()">${playing ? "⏸" : "▶"}</button>
-      <button class="ar-bt" onclick="AR.speed()">${RATES[rateIdx]}x</button>`;
+      <button class="ar-bt ${arRepeat?"on":""}" onclick="AR.toggleRepeat()" title="${twT("arRepeat")}">🔁</button>
+      <button class="ar-bt js-spd" onclick="cycleTtsSpeed()">${typeof TTS !== "undefined" && TTS.getRate ? TTS.getRate() : 1}x</button>`;
     bar.classList.add("show");
   }
   function hideBar(){ stopPlay(); const b = document.getElementById("arBar"); if (b) b.classList.remove("show"); }
 
+  let paraIdx = -1;
   function para(idx){
     if (!cur) return;
+    if (paraIdx === idx){ stopPlay(); return; }   // 同じ段落の再生ボタンをもう一度 → 即時に一時停止
     stopPlay();
-    const p = cur.paras[idx]; speakZh(p.z, RATES[rateIdx]);
-    const el = box().querySelector(`.ar-para[data-idx="${idx}"] .ar-tr`); if (el) el.style.display = "";
+    paraIdx = idx;
+    const pEl = box().querySelector(`.ar-para[data-idx="${idx}"]`); if (!pEl) return;
+    const btn = pEl.querySelector(".ar-para-play"); if (btn) btn.innerHTML = TW_ICON_PAUSE;   // ▶ → ⏸
+    pEl.classList.add("playing");
+    const tr = pEl.querySelector(".ar-tr"); if (tr) tr.style.display = "";
+    const prog = twKaraoke(pEl.querySelector(".ar-z"));
+    const finish = () => {
+      if (arRepeat && paraIdx === idx) { const prog2 = twKaraoke(pEl.querySelector(".ar-z")); speakZh(cur.paras[idx].z, 1, finish, prog2); return; }   // 重複播放:同段落再讀一次
+      paraIdx = -1; if (btn) btn.innerHTML = TW_ICON_PLAY; pEl.classList.remove("playing"); twClearKaraoke(pEl);
+    };
+    speakZh(cur.paras[idx].z, 1, finish, prog);
   }
   function togglePy(){ if (!cur) return; showPy = !showPy; renderArticle(); }
+  function rubyBtn(){ if (!cur) return; twCycleReadingRuby(renderArticle); }
   function toggleTr(){ if (!cur) return; showTr = !showTr; renderArticle(); }
-  function font(d){ if (!cur) return; arFont = Math.min(26, Math.max(15, arFont + d*2)); localStorage.setItem("stw_ar_font", arFont); const b = box().querySelector(".ar-body"); if (b) b.style.fontSize = arFont + "px"; }
+  function font(d){ if (!cur) return; arFont = Math.min(32, Math.max(15, arFont + d*2)); localStorage.setItem("stw_ar_font", arFont); const b = box().querySelector(".ar-body"); if (b) b.style.fontSize = arFont + "px"; }
   function speed(){ if (!cur) return; rateIdx = (rateIdx + 1) % RATES.length; renderBar(); }
 
   // 再生停止：バーは消さず、再生ボタンの表示だけ元に戻す
   function stopPlay(){
-    playing = false;
+    playing = false; paraIdx = -1;
     if (window.TTS && TTS.stop) TTS.stop();
-    const el = box() && box().querySelector(".ar-para.playing"); if (el) el.classList.remove("playing");
+    const b = box();
+    if (b){ b.querySelectorAll(".ar-para.playing").forEach(e=>e.classList.remove("playing")); b.querySelectorAll(".ar-para-play").forEach(x=>x.innerHTML=TW_ICON_PLAY); twClearKaraoke(b); }
     playIdx = -1;
     const pb = document.querySelector("#arBar .ar-bt.play"); if (pb) pb.textContent = "▶";
   }
@@ -2035,11 +2744,15 @@ const AR = (() => {
   }
   // その段落を最後まで読んでから（ended イベント）次へ。時計で送らない＝途中で切れない・カクつかない
   function step(){
+    if (playing && arRepeat && cur && playIdx >= cur.paras.length) playIdx = 0;   // 全文重複播放
     if (!playing || !cur || playIdx >= cur.paras.length){ stopPlay(); return; }
     box().querySelectorAll(".ar-para.playing").forEach(e=>e.classList.remove("playing"));
+    twClearKaraoke(box());
     const pEl = box().querySelector(`.ar-para[data-idx="${playIdx}"]`);
-    if (pEl){ pEl.classList.add("playing"); pEl.scrollIntoView({block:"center",behavior:"smooth"}); const tr = pEl.querySelector(".ar-tr"); if (showTr && tr) tr.style.display=""; }
-    speakZh(cur.paras[playIdx].z, RATES[rateIdx], () => { if (!playing) return; playIdx++; setTimeout(step, 350); });
+    let prog = function(){};
+    if (pEl){ pEl.classList.add("playing"); pEl.scrollIntoView({block:"center",behavior:"smooth"}); const tr = pEl.querySelector(".ar-tr"); if (showTr && tr) tr.style.display=""; prog = twKaraoke(pEl.querySelector(".ar-z")); }
+    // 段落まるごと自然な神経音声 mp3 で読む(mp3 なので一時停止は即時。prosody も文単位より自然)
+    speakZh(cur.paras[playIdx].z, RATES[rateIdx], () => { if (!playing) return; playIdx++; setTimeout(step, 250); }, prog);
   }
 
   const closeWord = twCloseWord;
@@ -2047,7 +2760,84 @@ const AR = (() => {
   function readDone(id){ return parse("stw_art_read", []).includes(id); }
   function markRead(id){ let a=parse("stw_art_read",[]); if(!a.includes(id)){ a.push(id); localStorage.setItem("stw_art_read",JSON.stringify(a)); if(typeof window.onSRSChange==="function")window.onSRSChange(); } }
 
-  return { render, open, para, togglePy, toggleTr, playAll, filter, font, speed, closeWord, hideBar, stopPlay };
+  function toggleRepeat(){ arRepeat = !arRepeat; renderBar(); }
+  // 単段落の訳だけ表示切替（單句對照）
+  function trOne(idx){ const t = box().querySelector(`.ar-para[data-idx="${idx}"] .ar-tr`); if (t) t.style.display = (t.style.display === "none" ? "" : "none"); }
+  // ── 文章句子の収藏（localStorage）──
+  function artFavList(){ return parse("stw-art-fav", []); }
+  function artFavHas(z){ return artFavList().some(x => x.z === z); }
+  function favPara(idx, btn){
+    const p = cur && cur.paras[idx]; if (!p) return; const mk = twMKey();
+    let l = artFavList(); const i = l.findIndex(x => x.z === p.z);
+    if (i >= 0) l.splice(i, 1); else l.unshift({ z: p.z, m: p.m[mk] || p.m.e || p.m.j, art: cur.zhTitle, ts: Date.now() });
+    localStorage.setItem("stw-art-fav", JSON.stringify(l.slice(0, 200)));
+    const on = i < 0; if (btn){ btn.classList.toggle("on", on); btn.textContent = on ? "★" : "☆"; }
+    if (typeof showToast === "function") showToast(on ? twT("arFavAdded") : twT("arFavRemoved"));
+  }
+  function favDel(i){ let l = artFavList(); l.splice(i, 1); localStorage.setItem("stw-art-fav", JSON.stringify(l)); openFav(); }
+  function openFav(){
+    hideBar(); cur = null;
+    const l = artFavList();
+    const items = l.length ? l.map((x, i) => `<div class="wb-item">
+        <div class="wb-q"><b class="wb-a" onclick="speakZh('${x.z.replace(/'/g,"")}')">${x.z}</b>
+          <button class="tts-btn" style="width:26px;height:26px;font-size:11px" onclick="speakZh('${x.z.replace(/'/g,"")}')">🔊</button></div>
+        ${x.m ? `<div class="wb-d">${x.m}</div>` : ""}${x.art ? `<div class="wb-d" style="opacity:.7">— ${x.art}</div>` : ""}
+        <button class="wb-del" onclick="AR.favDel(${i})">🗑</button></div>`).join("") : `<p class="rd-empty">${twT("arFavEmpty")}</p>`;
+    box().innerHTML = `<div class="ar-top"><button class="ar-back" onclick="AR.render()"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button></div>
+      <h3 class="ar-zhtitle">★ ${twT("arFavTitle")}</h3><div style="margin-top:16px">${items}</div><div style="height:40px"></div>`;
+  }
+  // ── 文章後クイズ（記事の単語で意味当て。誤答は解説＋間違いノート記録）──
+  let aq = null;
+  function artIdx(id){ const arr = twArticles(); for (let i = 0; i < arr.length; i++) if (arr[i].id === id) return i; return 0; }
+  function quiz(){
+    if (!cur || !cur.vocab || !cur.vocab.length) return;
+    const pool = cur.vocab.slice();
+    const qs = arShuf(pool).slice(0, Math.min(8, pool.length)).map(w => {
+      const others = arShuf(pool.filter(v => v.w !== w.w)).slice(0, 3);
+      const opts = arShuf([w, ...others]);
+      return { w, opts, ans: opts.indexOf(w) };
+    });
+    aq = { qs, i: 0, score: 0, id: cur.id };
+    hideBar(); aqRender();
+  }
+  function aqRender(){
+    if (!aq) return; if (aq.i >= aq.qs.length) return aqDone();
+    const mk = twMKey(), q = aq.qs[aq.i], w = q.w;
+    box().innerHTML = `<div class="ar-top"><button class="ar-back" onclick="AR.open(${artIdx(aq.id)})"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button></div>
+      <div class="aq-wrap">
+        <div style="font-size:13px;color:var(--tx3)">${aq.i+1} / ${aq.qs.length}　✓ ${aq.score}</div>
+        <div class="aq-word" onclick="speakZh('${w.w}')">${w.w}</div>
+        <div class="qz-py">${w.zy}　${w.py}　<button class="tts-btn" style="width:30px;height:30px;font-size:13px" onclick="speakZh('${w.w}')">🔊</button></div>
+        <div class="qz-opts" id="aqOpts">${q.opts.map((o,i)=>`<button class="qz-opt" data-i="${i}" data-ok="${i===q.ans}" onclick="AR.aqAnswer(${i})">${o.m[mk] || o.m.e || o.m.j}</button>`).join("")}</div>
+        <div id="aqFb"></div></div>`;
+    speakZh(w.w);
+  }
+  function aqAnswer(i){
+    const mk = twMKey(), q = aq.qs[aq.i], w = q.w, ok = i === q.ans;
+    document.querySelectorAll("#aqOpts .qz-opt").forEach(b => { b.disabled = true; if (b.dataset.ok === "true") b.classList.add("ok"); });
+    if (ok) aq.score++;
+    else { document.querySelectorAll("#aqOpts .qz-opt")[i].classList.add("ng"); if (typeof WrongBook !== "undefined") WrongBook.add({ type:"article", word:w.w, q:(w.m[mk] || w.m.e || w.m.j), correct:w.w, detail:w.zy+"｜"+w.py }); }
+    document.getElementById("aqFb").innerHTML = `<div class="qz-fb ${ok?"ok":"ng"}">
+      <div style="font-weight:700;font-size:15px">${ok ? "⭕ "+twT("qzRight") : "❌ "+twT("qzWrong")}</div>
+      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${w.zy}｜${w.py}）</div>
+      <div style="font-size:14px;color:var(--tx2);margin-top:2px">${w.m[mk] || w.m.e || w.m.j}</div>
+      <div style="margin-top:16px"><button class="btn primary" onclick="AR.aqNext()">${twT("quizNext")} ›</button></div></div>`;
+  }
+  function aqNext(){ if (!aq) return; aq.i++; aqRender(); }
+  function aqDone(){
+    const nWrong = (typeof WrongBook !== "undefined") ? WrongBook.forLevel(currentLevel).length : 0;
+    box().innerHTML = `<div class="aq-wrap"><p style="color:var(--tx2);margin:26px 0 8px">${twT("quizDone")}</p>
+      <div class="qz-big">${aq.score} / ${aq.qs.length}</div>
+      <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn primary" onclick="AR.quiz()">${twT("quizRetry")}</button>
+        <button class="btn" onclick="AR.open(${artIdx(aq.id)})">${twT("arBackToArticle")}</button></div>
+      ${nWrong?`<div><button class="wb-link" onclick="openWrongBook()">📕 ${twT("wbReview")} (${nWrong})</button></div>`:""}</div>`;
+  }
+
+  // 言語切替時：開いている記事はその場で再描画。一覧なら一覧を再描画。
+  function relang(){ if (cur) renderArticle(); else renderList(); }
+  return { render, open, para, togglePy, rubyBtn, toggleTr, playAll, filter, font, speed, closeWord, hideBar, stopPlay, relang,
+           toggleRepeat, trOne, favPara, favDel, openFav, quiz, aqAnswer, aqNext, artFavHas, artFavList };
 })();
 
 /* ===== アイコン（絵文字をやめてミニマルな線アイコンに統一） ===== */
@@ -2073,6 +2863,7 @@ function applyIcons(){
   document.querySelectorAll(".bn-item").forEach(b => { const bi = b.querySelector(".bi"); if (bi) bi.innerHTML = ICONS[b.dataset.bn] || ""; });
   document.querySelectorAll(".sheet-item").forEach(b => {
     const bi = b.querySelector(".bi"); if (!bi) return;
+    if (b.dataset.panel === "__premium") return;   // ✨ はそのまま(ICONS に無いので上書きしない)
     const k = b.dataset.panel || "contact";
     if (k === "zhuyin") { bi.textContent = "ㄅ"; bi.style.fontFamily = "var(--serif)"; bi.style.fontWeight = "700"; }
     else bi.innerHTML = ICONS[k] || "";
@@ -2080,16 +2871,40 @@ function applyIcons(){
 }
 
 /* ===== 初期化 ===== */
+// 内容の釈義に vi/id が無ければ英語(e)で埋める＝vi/id 表示時に日本語/undefined に化けない。
+// Phase2 で単語データに本物の vi/id が入れば、そちらが優先(未定義の時だけ埋めるため)。
+function twFillViId(node, seen){
+  if(!node || typeof node!=="object" || seen.has(node)) return; seen.add(node);
+  if(Array.isArray(node)){ for(const x of node) twFillViId(x, seen); return; }
+  if(typeof node.e==="string" && (node.j!==undefined || node.k!==undefined)){
+    const VI=(typeof window!=="undefined"&&window.STW_VI_CONTENT), ID=(typeof window!=="undefined"&&window.STW_ID_CONTENT);
+    if(node.vi===undefined) node.vi = (VI && VI[node.e]) || node.e;   // 訳マップにあれば vi、無ければ英語
+    if(node.id===undefined) node.id = (ID && ID[node.e]) || node.e;
+  }
+  for(const k in node){ const v=node[k]; if(v && typeof v==="object") twFillViId(v, seen); }
+}
+let _twNormDone=false;
+function twNormalizeContent(){
+  if(_twNormDone) return; _twNormDone=true; const s=new WeakSet();
+  try{ twFillViId(VOCAB_BY_LEVEL, s); }catch(e){}
+  try{ twFillViId(GRAMMAR_BY_LEVEL, s); }catch(e){}
+  try{ if(typeof PHRASES_L1!=="undefined") twFillViId(PHRASES_L1, s); }catch(e){}
+  try{ [typeof READING_L1!=="undefined"&&READING_L1,typeof READING_L2!=="undefined"&&READING_L2,typeof READING_L3!=="undefined"&&READING_L3,typeof READING_L4!=="undefined"&&READING_L4,typeof READING_L5!=="undefined"&&READING_L5].forEach(r=>r&&twFillViId(r,s)); }catch(e){}
+  try{ twFillViId(twArticles(), s); }catch(e){}
+}
 (function init(){
+  twNormalizeContent();
   const lang = twGetLang();
-  document.getElementById("langBtn").textContent = {ja:"日",en:"EN",ko:"한"}[lang];
+  document.getElementById("langBtn").textContent = {ja:"日",en:"EN",ko:"한",vi:"VI",id:"ID"}[lang] || "EN";
   document.documentElement.lang = lang;
   twApplyI18n();
   applyIcons();
   document.querySelectorAll(".lv-btn").forEach(b => b.classList.toggle("on", b.dataset.lv === currentLevel));
+  fcIdx = restoreFcIdx();   // 前回の続きから
   renderCard(); renderPosRow(); renderList(); renderGrammar(); renderPhrases();
   renderSrsHome(); renderExamHome(); qzReset(); updateSrsBadges(); PA.render();
-  renderLevelLabels();
+  renderLevelLabels(); refreshRubyLabels();
+  if (RUBY !== "py") loadExZy(() => { try { renderCard(); renderList(); } catch(e){} });
   fillVoiceSel();
   if (!localStorage.getItem("stw-onboarded")) {
     if (!localStorage.getItem("stw_persona")) document.getElementById("personaBg").classList.add("show");
@@ -2098,6 +2913,15 @@ function applyIcons(){
   if ("speechSynthesis" in window) speechSynthesis.onvoiceschanged = () => { TTS.refresh(); fillVoiceSel(); };
 })();
 </script>
-<script>try{fetch("https://staytw-api.abc83327.workers.dev/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname,ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
+<script>try{fetch("/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname,ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
+<script>
+/* 発音チェック（録音）はブラウザの音声認識だと不安定なため、Web ではスピーキング機能を非表示。App（原生音声認識）でのみ表示。 */
+(function(){ try{ if(!(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp)){
+  document.querySelectorAll('[data-panel="speak"]').forEach(function(el){ el.style.display='none'; });
+  // 直リンク等で speak パネルに来た場合は単語へ退避
+  if(typeof switchPanel==='function'){ var _sp=switchPanel; window.switchPanel=function(p){ return _sp(p==='speak'?'fc':p); }; }
+}}catch(e){} })();
+</script>
+<script src="inapp-hint.js?v=1"></script>
 </body>
 </html>

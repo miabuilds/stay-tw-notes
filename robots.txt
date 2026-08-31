@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# 学習ツール本体は ?app=1 のクエリで動くので、クロールは不要
+Disallow: /*?app=1
+
+Sitemap: https://staytw.pages.dev/sitemap.xml

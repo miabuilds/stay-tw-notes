@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 情境対話｜StayTW（テスト版）</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#FAF8F3;--bg2:#FFF;--bg3:#F2EEE5;--tx:#1C1C1E;--tx2:#6A6A6A;--tx3:#A9A9A9;--ac:#B8362A;--ac-soft:rgba(184,54,42,.08);--ok:#2F7A5D;--bd:#E5DECF;--line:#DDD5C0;--ease:cubic-bezier(.25,.1,.25,1);--serif:"Hiragino Mincho ProN","Noto Serif JP","Songti TC",serif}
+[data-theme="dark"]{--bg:#121113;--bg2:#1B1A1C;--bg3:#1F1E20;--tx:#EDE8DE;--tx2:#8F8A7E;--tx3:#5D5A53;--ac:#E4715F;--ac-soft:rgba(228,113,95,.1);--ok:#4C9B7A;--bd:#2C2A27;--line:#2C2A27}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP","PingFang TC",system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.65;font-size:16px;-webkit-font-smoothing:antialiased}
+.app{max-width:560px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.hd{position:sticky;top:0;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:10;display:flex;align-items:center;gap:10px;padding:12px 18px}
+.hd .brand{font-family:var(--serif);font-size:15px;font-weight:700}
+.hd .badge{font-size:10.5px;color:var(--ac);border:1px solid var(--ac);border-radius:999px;padding:1px 8px;font-weight:700}
+.hd .lang{margin-left:auto;background:var(--bg3);border:1px solid var(--bd);color:var(--tx2);padding:3px 11px;font-size:12px;font-weight:600;border-radius:8px;cursor:pointer;font-family:inherit}
+.hd .back{background:none;border:none;color:var(--tx2);font-size:20px;cursor:pointer;padding:0 4px;font-family:inherit}
+main{flex:1;padding:18px}
+/* シーン選択 */
+.intro h1{font-family:var(--serif);font-size:22px;text-align:center;margin:10px 0 4px}
+.intro p{font-size:13.5px;color:var(--tx2);text-align:center;margin-bottom:22px}
+.scenes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.scene{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:20px 14px;text-align:center;cursor:pointer;transition:.15s var(--ease)}
+.scene:active{transform:translateY(1px)}
+@media(hover:hover){.scene:hover{border-color:var(--ac)}}
+.scene .em{font-size:32px;display:block;margin-bottom:8px}
+.scene .nm{font-size:14px;font-weight:700}
+.scene .rl{font-size:11.5px;color:var(--tx3);margin-top:2px}
+/* チャット */
+.chat{display:flex;flex-direction:column;gap:14px;padding-bottom:8px}
+.msg{max-width:88%}
+.msg.ai{align-self:flex-start}
+.msg.me{align-self:flex-end}
+.bub{border-radius:16px;padding:12px 15px;font-size:16px}
+.msg.ai .bub{background:var(--bg2);border:1px solid var(--line);border-bottom-left-radius:5px}
+.msg.me .bub{background:var(--ac);color:#fff;border-bottom-right-radius:5px}
+.bub .zh{font-family:var(--serif);font-size:18px;line-height:1.6}
+.bub .zy{font-size:11.5px;color:var(--ac);margin-top:4px;line-height:1.5}
+.bub .tr{font-size:13px;color:var(--tx2);margin-top:7px;padding-top:7px;border-top:1px dashed var(--line);display:none}
+.bub .tr.show{display:block}
+.mrow{display:flex;gap:8px;align-items:center;margin-top:6px;padding-left:4px}
+.mrow button{background:none;border:none;color:var(--tx3);font-size:11.5px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:3px}
+.mrow button:active{color:var(--ac)}
+.ic{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2}
+.corr{align-self:flex-start;max-width:88%;background:#FFF6E5;border:1px solid #E9D9A8;border-radius:12px;padding:9px 13px;font-size:13px;color:#7a5c17}
+[data-theme="dark"] .corr{background:#2a2410;border-color:#4a3f18;color:#d8c98a}
+.typing{align-self:flex-start;color:var(--tx3);font-size:14px;padding:8px 4px}
+.typing span{animation:blink 1.2s infinite}.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,60%,100%{opacity:.25}30%{opacity:1}}
+.err{align-self:center;color:var(--ac);font-size:13px;text-align:center;padding:6px}
+/* 入力バー */
+.hints{padding:14px 18px 14px}
+.hints:empty{display:none}
+.hint-toggle{background:var(--bg2);border:1px solid var(--bd);color:var(--tx2);border-radius:999px;padding:8px 15px;font-size:13px;font-family:var(--serif);cursor:pointer}
+.hints-lb{font-size:12px;color:var(--tx2);margin-bottom:9px}
+.hint-row{display:flex;gap:9px;flex-wrap:wrap}
+.hint-wrap{display:inline-flex;align-items:stretch;border:1px solid var(--ac);border-radius:999px;overflow:hidden}
+.hint-chip{background:var(--ac-soft);color:var(--ac);border:none;padding:8px 8px 8px 15px;font-size:14px;font-family:var(--serif);cursor:pointer;line-height:1.3}
+.hint-chip:active{transform:translateY(1px)}
+.hint-spk{background:var(--ac-soft);color:var(--ac);border:none;border-left:1px solid var(--ac);padding:0 12px;cursor:pointer;font-size:13px}
+.hint-spk:active{background:var(--ac);color:#fff}
+.inbar{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:12px 14px calc(12px + env(safe-area-inset-bottom));display:flex;gap:10px}
+.inbar input{flex:1;border:1px solid var(--bd);background:var(--bg2);color:var(--tx);border-radius:999px;padding:12px 18px;font-size:16px;font-family:var(--serif)}
+.inbar input:focus{outline:none;border-color:var(--ac)}
+.inbar button{flex:none;width:46px;height:46px;border-radius:50%;background:var(--ac);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.inbar button:disabled{opacity:.4}
+.inbar button.mic{background:var(--bg2);color:var(--tx);border:1px solid var(--bd)}
+.inbar button.mic svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.inbar button.mic.rec{background:#e5484d;color:#fff;border-color:#e5484d;animation:micpulse 1s infinite}
+@keyframes micpulse{0%,100%{box-shadow:0 0 0 0 rgba(229,72,77,.5)}50%{box-shadow:0 0 0 8px rgba(229,72,77,0)}}
+.micnote{display:none;font-size:12px;color:var(--tx2);text-align:center;padding:6px 14px 0}
+.favstar.on{color:var(--ac)}
+.favwrap{max-width:640px;margin:0 auto;padding:20px 18px 40px}
+.favh{font-size:19px;margin:6px 0 16px;color:var(--tx)}
+.favitem{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid var(--bd);border-radius:14px;padding:13px 15px;margin-bottom:10px}
+.favitem .fzh{font-size:17px;color:var(--tx);font-family:var(--serif)}
+.favitem .fzy{font-size:12px;color:var(--ac);margin-top:3px}
+.favitem .ftr{font-size:13px;color:var(--tx2);margin-top:5px}
+.favact{display:flex;gap:6px;flex:none}
+.favact button{background:none;border:1px solid var(--bd);border-radius:9px;padding:6px 9px;cursor:pointer;font-size:14px}
+.favempty{color:var(--tx2);text-align:center;padding:40px 0;font-size:14px}
+.favlink{margin-top:14px;background:none;border:1px solid var(--bd);color:var(--tx2);border-radius:999px;padding:8px 16px;font-size:13px;font-family:var(--serif);cursor:pointer}
+.intro-links{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.endbtn{margin-left:auto;background:var(--ac);color:#fff;border:none;border-radius:999px;padding:7px 14px;font-size:13px;font-family:var(--serif);cursor:pointer;white-space:nowrap}
+.endbtn:active{opacity:.85}
+.rvwrap{max-width:560px;margin:0 auto;padding:20px 18px 40px}
+.rv-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.ring{width:66px;height:66px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;font-weight:700;flex:none}
+.rv-htext{font-size:16px;font-weight:700;color:var(--tx)}
+.rv-line{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:14.5px;color:var(--tx);line-height:1.6}
+.rv-line .lb{display:inline-block;font-size:11px;font-weight:700;color:var(--ac);border:1px solid var(--ac);border-radius:6px;padding:1px 7px;margin-right:8px;vertical-align:1px}
+.rv-enc{color:var(--ok);font-weight:600;text-align:center;padding:8px 0 0}
+.rv-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.rv-btns button{flex:1;min-width:120px;border-radius:999px;padding:11px;font-size:14px;font-family:var(--serif);cursor:pointer;border:1px solid var(--ac)}
+.rv-btns .primary{background:var(--ac);color:#fff;border:none}
+.rv-btns .ghost{background:none;color:var(--ac)}
+.logitem{width:100%;text-align:left;display:flex;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:12px 14px;margin-bottom:10px;cursor:pointer;font-family:var(--serif)}
+.logscore{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;flex:none}
+.logmeta{flex:1;min-width:0}
+.logmeta .lt{font-size:15px;color:var(--tx)}
+.logmeta .ld{font-size:12px;color:var(--tx2);margin-top:2px}
+.logdel{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:15px;flex:none}
+.micnote.on{display:block}
+.cta{margin:20px 18px;border:2px solid var(--ac);border-radius:14px;padding:18px;background:var(--bg2);text-align:center}
+.cta p{font-size:13.5px;color:var(--tx2);margin-bottom:12px}
+.cta a{display:inline-block;background:var(--ac);color:#fff;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hd">
+    <button class="back" id="backBtn" onclick="onBack()" style="display:none">‹</button>
+    <span class="brand">台湾華語スタディ</span><span class="badge">TEST</span>
+    <button class="endbtn" id="endBtn" onclick="endReview()" style="display:none"></button>
+    <button class="lang" id="langBtn" onclick="cycleLang()">日</button>
+  </header>
+  <main id="main"></main>
+  <div class="hints" id="hints"></div>
+  <div id="micNote" class="micnote"></div>
+  <div class="inbar" id="inbar" style="display:none">
+    <button id="micBtn" class="mic" onclick="toggleRec()" title="🎤"><svg viewBox="0 0 24 24" class="ic" style="width:20px;height:20px"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M19 12a7 7 0 0 1-14 0M12 19v3"/></svg></button>
+    <input id="inp" placeholder="…" autocomplete="off">
+    <button id="sendBtn" onclick="send()"><svg viewBox="0 0 24 24" class="ic" style="width:20px;height:20px"><path d="M4 12l16-8-6 8 6 8z"/></svg></button>
+  </div>
+</div>
+<script>
+const T = {
+  ja:{ h1:"AI と台湾華語で会話", sub:"シーンを選んで、繁体字＋台湾の言い方で実際に話してみよう。AI が優しく直してくれます。", ph:"台湾華語で入力…", showTr:"訳", play:"再生", startOver:"別のシーン", quota:"本日の無料体験を使い切りました。アプリでもっと話せます。", ctaP:"実際に「使える」まで練習するなら。単語タップで意味・注音、間違えたら自動で復習。", ctaBtn:"StayTW を無料で試す →", err:"通信エラー。もう一度試してください。", micOn:"🎤 聞いています…台湾華語で話してみて（話し終わったらもう一度タップ）", micNo:"このブラウザは音声入力に非対応。入力欄に打ってね（スマホの Chrome / Safari は対応）", micDenied:"🎤 マイクがブロックされています。サイトのマイク許可をオンにして再試行。", micErr:"🎤 認識が中断。もう一度マイクをタップ。", hintToggle:"💡 なんて返す?ヒントを見る", hintLabel:"💬 こう言えます（タップで入力欄に、直してから送信OK）:", hearIt:"聞く", save:"保存", favTitle:"保存した文", favEmpty:"まだありません。会話中に「☆保存」でお気に入りの言い回しを貯めよう。", endBtn:"終了・採点", capMsg:"たくさん話せました！採点します", reviewing:"あなたの表現を整理中…", rvHead:"今回の会話の出来", rvGood:"良かった点", rvImprove:"改善点", rvTip:"アドバイス", again:"もう一度", logsTitle:"会話の記録", logsEmpty:"まだ記録がありません。会話を終えて採点を見ると、ここに保存されます。", turns:"往復", logConvo:"会話の内容",
+    scenes:[
+      {id:"boba", em:"🧋", nm:"ドリンク店", rl:"あなた=お客", scene:"A Taiwanese bubble tea shop (珍珠奶茶店). The learner is a customer ordering a drink. Ask about sweetness (甜度) and ice (冰塊)."},
+      {id:"mrt", em:"🚇", nm:"捷運で道案内", rl:"あなた=旅行者", scene:"At a Taipei MRT (捷運) station. The learner is a traveler asking how to get somewhere and how to use the 悠遊卡."},
+      {id:"night", em:"🏮", nm:"夜市で注文", rl:"あなた=お客", scene:"A lively Taiwan night market (夜市) food stall. The learner orders street food and asks the price."},
+      {id:"friend", em:"🙋", nm:"台湾の友達", rl:"あなた=初対面", scene:"Meeting a friendly Taiwanese person for the first time. Casual small talk: name, where you're from, why you're learning Chinese."},
+      {id:"conv", em:"🏪", nm:"コンビニ", rl:"あなた=お客", scene:"A Taiwanese convenience store (便利商店). The learner buys something, tops up an 悠遊卡, or picks up a package."},
+      {id:"rest", em:"🍜", nm:"レストラン", rl:"あなた=お客", scene:"A Taiwan restaurant. The learner is seated, orders a meal, asks for recommendations."}
+    ]},
+  ko:{ h1:"AI와 대만 중국어로 대화", sub:"상황을 골라 번체자＋대만식 표현으로 실제로 말해보세요. AI가 부드럽게 고쳐줍니다.", ph:"대만 중국어로 입력…", showTr:"번역", play:"재생", startOver:"다른 상황", quota:"오늘의 무료 체험을 다 썼어요. 앱에서 더 대화할 수 있어요.", ctaP:"실제로 '쓸 수 있을' 때까지 연습하려면. 단어 탭하면 뜻·주음, 틀리면 자동 복습.", ctaBtn:"StayTW 무료로 시작 →", err:"통신 오류. 다시 시도해 주세요.", micOn:"🎤 듣고 있어요… 대만 중국어로 말해보세요 (끝나면 다시 탭)", micNo:"이 브라우저는 음성 입력을 지원하지 않아요. 직접 입력하세요 (모바일 Chrome / Safari 지원).", micDenied:"🎤 마이크가 차단됐어요. 사이트 마이크 권한을 허용하고 다시 시도.", micErr:"🎤 인식이 중단됐어요. 마이크를 다시 탭하세요.", hintToggle:"💡 뭐라고 답하지? 힌트 보기", hintLabel:"💬 이렇게 말할 수 있어요 (탭하면 입력창에, 고쳐서 보내도 OK):", hearIt:"듣기", save:"저장", favTitle:"저장한 문장", favEmpty:"아직 없어요. 대화 중 '☆저장'으로 마음에 드는 표현을 모아보세요.", endBtn:"종료・채점", capMsg:"충분히 대화했어요! 채점해 드릴게요", reviewing:"당신의 표현을 정리하는 중…", rvHead:"이번 대화의 결과", rvGood:"잘한 점", rvImprove:"개선할 점", rvTip:"팁", again:"다시 하기", logsTitle:"대화 기록", logsEmpty:"아직 기록이 없어요. 대화를 마치고 채점을 보면 여기에 저장됩니다.", turns:"번", logConvo:"대화 내용",
+    scenes:[
+      {id:"boba", em:"🧋", nm:"버블티 가게", rl:"당신=손님", scene:"A Taiwanese bubble tea shop (珍珠奶茶店). The learner is a customer ordering a drink. Ask about sweetness (甜度) and ice (冰塊)."},
+      {id:"mrt", em:"🚇", nm:"MRT 길 묻기", rl:"당신=여행자", scene:"At a Taipei MRT (捷運) station. The learner is a traveler asking how to get somewhere and how to use the 悠遊卡."},
+      {id:"night", em:"🏮", nm:"야시장 주문", rl:"당신=손님", scene:"A lively Taiwan night market (夜市) food stall. The learner orders street food and asks the price."},
+      {id:"friend", em:"🙋", nm:"대만 친구", rl:"당신=초면", scene:"Meeting a friendly Taiwanese person for the first time. Casual small talk: name, where you're from, why you're learning Chinese."},
+      {id:"conv", em:"🏪", nm:"편의점", rl:"당신=손님", scene:"A Taiwanese convenience store (便利商店). The learner buys something, tops up an 悠遊卡, or picks up a package."},
+      {id:"rest", em:"🍜", nm:"식당", rl:"당신=손님", scene:"A Taiwan restaurant. The learner is seated, orders a meal, asks for recommendations."}
+    ]},
+  en:{ h1:"Chat in Taiwan Mandarin with AI", sub:"Pick a scene and actually talk — traditional characters, Taiwan phrasing. The AI gently corrects you.", ph:"Type in Taiwan Mandarin…", showTr:"Translate", play:"Play", startOver:"New scene", quota:"You've used today's free practice. The app lets you chat more.", ctaP:"Practice until you can really use it. Tap any word for meaning & zhuyin; mistakes go to review.", ctaBtn:"Try StayTW free →", err:"Network error. Please try again.", micOn:"🎤 Listening… speak in Taiwan Mandarin (tap again when done)", micNo:"This browser doesn't support voice input — please type instead (mobile Chrome / Safari work).", micDenied:"🎤 Microphone blocked: allow mic access for this site and try again.", micErr:"🎤 Recognition stopped — tap the mic to retry.", hintToggle:"💡 Not sure how to reply? See hints", hintLabel:"💬 You could say (tap to fill in, then edit before sending):", hearIt:"Hear it", save:"Save", favTitle:"Saved sentences", favEmpty:"Nothing yet. Tap ☆ Save during a chat to collect phrases you like.", endBtn:"Finish & score", capMsg:"Great chat! Let's see your score", reviewing:"Reviewing your performance…", rvHead:"How this chat went", rvGood:"Well done", rvImprove:"To improve", rvTip:"Tip", again:"Chat again", logsTitle:"Chat history", logsEmpty:"No records yet. Finish a chat and view the score — it will be saved here.", turns:"turns", logConvo:"The conversation",
+    scenes:[
+      {id:"boba", em:"🧋", nm:"Bubble tea", rl:"You = customer", scene:"A Taiwanese bubble tea shop (珍珠奶茶店). The learner is a customer ordering a drink. Ask about sweetness (甜度) and ice (冰塊)."},
+      {id:"mrt", em:"🚇", nm:"MRT directions", rl:"You = traveler", scene:"At a Taipei MRT (捷運) station. The learner is a traveler asking how to get somewhere and how to use the 悠遊卡."},
+      {id:"night", em:"🏮", nm:"Night market", rl:"You = customer", scene:"A lively Taiwan night market (夜市) food stall. The learner orders street food and asks the price."},
+      {id:"friend", em:"🙋", nm:"Make a friend", rl:"You = new", scene:"Meeting a friendly Taiwanese person for the first time. Casual small talk: name, where you're from, why you're learning Chinese."},
+      {id:"conv", em:"🏪", nm:"Convenience store", rl:"You = customer", scene:"A Taiwanese convenience store (便利商店). The learner buys something, tops up an 悠遊卡, or picks up a package."},
+      {id:"rest", em:"🍜", nm:"Restaurant", rl:"You = customer", scene:"A Taiwan restaurant. The learner is seated, orders a meal, asks for recommendations."}
+    ]}
+};
+let LANG=(function(){try{var s=localStorage.getItem("stw-lang");return(s&&T[s])?s:"ja";}catch(e){return"ja";}})();
+function tt(k){return(T[LANG]||T.ja)[k];}
+function scenes(){return(T[LANG]||T.ja).scenes;}
+(function(){try{var th=localStorage.getItem("stw-theme");if(th==="dark"||(!th&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.dataset.theme="dark";}catch(e){}document.getElementById("langBtn").textContent={ja:"日",en:"EN",ko:"한"}[LANG];document.documentElement.lang=LANG;})();
+function cycleLang(){LANG={ja:"en",en:"ko",ko:"ja"}[LANG];try{localStorage.setItem("stw-lang",LANG);}catch(e){}document.getElementById("langBtn").textContent={ja:"日",en:"EN",ko:"한"}[LANG];document.documentElement.lang=LANG;document.getElementById("inp").placeholder=tt("ph");if(!curScene)toIntro();}
+
+function bestVoice(){
+  try{ var vs=speechSynthesis.getVoices();
+    var tw=vs.filter(v=>/zh-TW|zh_TW|cmn-Hant|Taiwan/i.test(v.lang)||/Mei-?Jia|美佳|台/i.test(v.name));
+    if(!tw.length) tw=vs.filter(v=>/^zh/i.test(v.lang));
+    tw.sort((a,b)=>(/enhanced|premium|siri|neural|natural|美佳|Mei-?Jia/i.test(b.name)?1:0)-(/enhanced|premium|siri|neural|natural|美佳|Mei-?Jia/i.test(a.name)?1:0));
+    return tw[0]||null;
+  }catch(e){ return null; }
+}
+// 唸法修正:知名地名/數字被 TTS 唸錯的先換掉(台北101→一零一 等)。瀏覽器音與 Google TTS 都受惠。
+const TTS_FIX=[[/[台臺]北101/g,"台北一零一"],[/101大樓/g,"一零一大樓"],[/microsoft|Microsoft/g,"微軟"]];
+function ttsText(t){ t=String(t||""); TTS_FIX.forEach(function(p){ t=t.replace(p[0],p[1]); }); return t; }
+function browserSpeak(txt){try{if(!txt)return;speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(ttsText(txt));u.rate=.96;u.pitch=1.02;var v=bestVoice();if(v){u.voice=v;u.lang=v.lang;}else{u.lang="zh-TW";}speechSynthesis.speak(u);}catch(e){}}
+// 自然人聲:先打 /api/tts(Google Cloud TTS cmn-TW)。沒設 key / 失敗就退回瀏覽器內建音。
+let _ttsCache={}, _audio=null, _ttsSeq=0;
+async function speak(txt, voice){
+  if(!txt) return; if(recording) return;   // 錄音中不播音,以免切斷使用者講話
+  var say=ttsText(txt);
+  var seq=++_ttsSeq, key=(voice||"f")+"|"+say;
+  try{
+    var b64=_ttsCache[key];
+    if(b64===undefined){
+      var r=await fetch("/api/tts",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:say,voice:voice||"f"})});
+      b64 = r.ok ? ((await r.json()).audio||null) : null;
+      _ttsCache[key]=b64;
+    }
+    if(seq!==_ttsSeq) return;
+    if(b64){ speechSynthesis.cancel(); if(!_audio)_audio=new Audio(); _audio.src="data:audio/mp3;base64,"+b64; _audio.play().catch(function(){ browserSpeak(txt); }); return; }
+  }catch(e){}
+  browserSpeak(txt);
+}
+// タップ(ユーザー操作)の瞬間に無音を鳴らして自動再生ロックを解除。以降 AI の返答が自動で喋る。
+function primeAudio(){
+  try{var w=new SpeechSynthesisUtterance("　");w.volume=0;speechSynthesis.speak(w);}catch(e){}
+  try{ if(!_audio)_audio=new Audio(); _audio.muted=true; _audio.play().then(function(){_audio.pause();_audio.muted=false;}).catch(function(){_audio.muted=false;}); }catch(e){}
+}
+// ── 麥克風語音輸入(瀏覽器 SpeechRecognition, zh-TW)。App WebView 不支援時提示打字。
+let _rec=null, recording=false, _recBase="";
+function micNote(t){var n=document.getElementById("micNote"); if(!n)return; n.textContent=t||""; n.classList.toggle("on",!!t);}
+function updateMic(){var b=document.getElementById("micBtn"); if(b)b.classList.toggle("rec",recording);}
+function toggleRec(){ recording ? stopRec() : startRec(); }
+function startRec(){
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ micNote(tt("micNo")); return; }
+  try{ if(_rec){ _rec.onresult=null;_rec.onend=null;_rec.onerror=null;_rec.abort(); } }catch(e){}
+  try{ if(_audio){ _audio.pause(); } }catch(e){}   // 收音前先停播音
+  _rec=new SR(); _rec.lang="zh-TW"; _rec.interimResults=true; _rec.continuous=false; _rec.maxAlternatives=1;
+  _recBase=(document.getElementById("inp").value||"");
+  _rec.onresult=function(e){
+    var fin="",intr="";
+    for(var i=e.resultIndex;i<e.results.length;i++){ var rr=e.results[i]; if(rr.isFinal) fin+=rr[0].transcript; else intr+=rr[0].transcript; }
+    if(fin) _recBase+=fin;
+    document.getElementById("inp").value=_recBase+intr;
+  };
+  _rec.onerror=function(e){ var c=e&&e.error; if(c==="not-allowed"||c==="service-not-allowed") micNote(tt("micDenied")); else if(c&&c!=="aborted"&&c!=="no-speech") micNote(tt("micErr")); recording=false; updateMic(); };
+  _rec.onend=function(){ recording=false; updateMic(); if(document.getElementById("micNote").textContent===tt("micOn")) micNote(""); };
+  try{ _rec.start(); recording=true; updateMic(); micNote(tt("micOn")); }
+  catch(e){ recording=false; updateMic(); }
+}
+function stopRec(){ try{ _rec&&_rec.stop(); }catch(e){} recording=false; updateMic(); micNote(""); }
+
+let curScene=null, history=[], busy=false, _reviewBusy=false;
+const MAX_TURNS=10;   // 每場最多 10 輪→自動收尾(成本天花板)
+const main=()=>document.getElementById("main");
+
+function hideEnd(){document.getElementById("endBtn").style.display="none";}
+function toIntro(){
+  curScene=null; history=[]; stopRec(); micNote(""); hideEnd();
+  document.getElementById("backBtn").style.display="none";
+  document.getElementById("inbar").style.display="none";
+  document.getElementById("hints").innerHTML="";
+  main().innerHTML='<div class="intro"><h1>'+tt("h1")+'</h1><p>'+tt("sub")+'</p><div class="scenes">'+
+    scenes().map(s=>'<div class="scene" onclick="startScene(\''+s.id+'\')"><span class="em">'+s.em+'</span><span class="nm">'+s.nm+'</span><div class="rl">'+s.rl+'</div></div>').join("")+'</div>'+
+    '<div class="intro-links"><button class="favlink" onclick="openLogs()">📋 '+tt("logsTitle")+(logList().length?' ('+logList().length+')':'')+'</button>'+
+    '<button class="favlink" onclick="openFav()">⭐ '+tt("favTitle")+(favList().length?' ('+favList().length+')':'')+'</button></div></div>';
+}
+// 早退/換主題也要評分:對話中按 ‹,若已聊過就進評分頁,否則直接回首頁
+function onBack(){ if(curScene && history.some(m=>m.role==="me")) endReview(); else toIntro(); }
+function startScene(id){
+  curScene=scenes().find(s=>s.id===id); if(!curScene)return;
+  primeAudio();   // タップの瞬間に音声ロック解除 → AI の挨拶が自動で喋る
+  history=[];
+  document.getElementById("backBtn").style.display="";
+  document.getElementById("inbar").style.display="";
+  var eb=document.getElementById("endBtn"); eb.textContent=tt("endBtn"); eb.style.display="";
+  document.getElementById("inp").placeholder=tt("ph");
+  main().innerHTML='<div class="chat" id="chat"></div>';
+  callAI();   // AI から挨拶で開始
+}
+function esc(s){return String(s==null?"":s).replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function renderChat(){
+  const c=document.getElementById("chat"); if(!c)return;
+  c.innerHTML=history.map((m,i)=>{
+    if(m.role==="me") return '<div class="msg me"><div class="bub"><div class="zh">'+esc(m.text)+'</div></div></div>';
+    if(m.role==="corr") return '<div class="corr">💡 '+esc(m.text)+'</div>';
+    return '<div class="msg ai"><div class="bub"><div class="zh">'+esc(m.reply)+'</div>'+(m.zhuyin?'<div class="zy">'+esc(m.zhuyin)+'</div>':'')+(m.translation?'<div class="tr" id="tr'+i+'">'+esc(m.translation)+'</div>':'')+'</div>'+
+      '<div class="mrow"><button onclick="speak(\''+String(m.reply).replace(/'/g,"\\'")+'\')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg>'+tt("play")+'</button>'+(m.translation?'<button onclick="document.getElementById(\'tr'+i+'\').classList.toggle(\'show\')">'+tt("showTr")+'</button>':'')+'<button class="favstar'+(isFav(m.reply)?' on':'')+'" onclick="toggleFav(this,'+i+')">'+(isFav(m.reply)?"★":"☆")+' '+tt("save")+'</button></div></div>';
+  }).join("");
+  c.scrollIntoView(false); window.scrollTo(0,document.body.scrollHeight);
+}
+function showTyping(on){const c=document.getElementById("chat");if(!c)return;let t=document.getElementById("typing");if(on){if(!t){c.insertAdjacentHTML("beforeend",'<div class="typing" id="typing"><span>●</span><span>●</span><span>●</span></div>');}}else if(t)t.remove();window.scrollTo(0,document.body.scrollHeight);}
+// 推薦句:預設收合(不一直餵答案),展開後「點=填入可再改」不直接送,每句有 🔊 先聽。──StayJP 做法
+let _hints=[];
+function renderHints(hints){
+  _hints=(hints||[]).map(String).filter(h=>h.trim());
+  const box=document.getElementById("hints"); if(!box)return;
+  box.innerHTML=_hints.length?'<button class="hint-toggle" onclick="expandHints()">'+tt("hintToggle")+'</button>':"";
+}
+function expandHints(){
+  const box=document.getElementById("hints"); if(!box||!_hints.length)return;
+  box.innerHTML='<div class="hints-lb">'+tt("hintLabel")+'</div><div class="hint-row">'+
+    _hints.slice(0,3).map(h=>{ const j=JSON.stringify(h).replace(/"/g,"&quot;");
+      return '<span class="hint-wrap"><button class="hint-chip" onclick="useHint('+j+')">'+esc(h)+'</button>'+
+        '<button class="hint-spk" title="'+tt("hearIt")+'" onclick="event.stopPropagation();speak('+j+')">🔊</button></span>';
+    }).join("")+'</div>';
+}
+function useHint(h){ const inp=document.getElementById("inp"); inp.value=h; inp.focus(); }
+// ── 收藏句(localStorage)。測試頁不登入,先存本機。
+const FAV_KEY="stw-fav-sents";
+function favList(){try{return JSON.parse(localStorage.getItem(FAV_KEY)||"[]");}catch(e){return[];}}
+function favSaveAll(l){try{localStorage.setItem(FAV_KEY,JSON.stringify(l));}catch(e){}}
+function isFav(t){return favList().some(x=>x.reply===t);}
+function toggleFav(btn,i){
+  const m=history[i]; if(!m||!m.reply)return; const l=favList(); const idx=l.findIndex(x=>x.reply===m.reply);
+  if(idx>=0) l.splice(idx,1); else l.unshift({reply:m.reply,zhuyin:m.zhuyin||"",translation:m.translation||"",t:Date.now()});
+  favSaveAll(l); const on=idx<0; btn.classList.toggle("on",on); btn.innerHTML=(on?"★":"☆")+" "+tt("save");
+}
+function removeFav(i){ const l=favList(); l.splice(i,1); favSaveAll(l); openFav(); }
+function openFav(){
+  curScene=null; history=[]; stopRec(); micNote(""); hideEnd();
+  document.getElementById("inbar").style.display="none";
+  document.getElementById("hints").innerHTML="";
+  document.getElementById("backBtn").style.display="";
+  const l=favList();
+  const body=l.length? l.map((x,i)=>'<div class="favitem"><div class="favtx"><div class="fzh">'+esc(x.reply)+'</div>'+(x.zhuyin?'<div class="fzy">'+esc(x.zhuyin)+'</div>':'')+(x.translation?'<div class="ftr">'+esc(x.translation)+'</div>':'')+'</div><div class="favact"><button onclick="speak('+JSON.stringify(x.reply).replace(/"/g,"&quot;")+')">🔊</button><button onclick="removeFav('+i+')">🗑</button></div></div>').join("") : '<div class="favempty">'+tt("favEmpty")+'</div>';
+  main().innerHTML='<div class="favwrap"><h2 class="favh">'+tt("favTitle")+'</h2>'+body+'</div>';
+}
+
+// ── 結束 → 點評評分（參考 StayJP endChat）──
+function scoreColor(sc){ return sc>=85?"var(--ok)":sc>=60?"#C98A00":"var(--ac)"; }
+async function endReview(){
+  if(busy||_reviewBusy) return;
+  if(!curScene || !history.some(m=>m.role==="me")){ toIntro(); return; }
+  _reviewBusy=true; stopRec(); micNote(""); hideEnd();
+  const sc=curScene;   // 保存,渲染紀錄用
+  document.getElementById("inbar").style.display="none";
+  document.getElementById("hints").innerHTML="";
+  document.getElementById("backBtn").style.display="";
+  main().innerHTML='<div class="rvwrap"><div class="muted" style="padding:30px 0;text-align:center;color:var(--tx2)">'+tt("reviewing")+'</div></div>';
+  try{
+    const r=await fetch("/api/speak-review",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({scene:sc.scene,userRole:sc.rl,level:"L2",lang:LANG,
+        history:history.filter(m=>m.role==="ai"||m.role==="me").map(m=>({role:m.role==="me"?"me":"ai",text:m.role==="me"?m.text:m.reply}))})});
+    if(!r.ok){ let d={};try{d=await r.json();}catch(e){} main().innerHTML='<div class="rvwrap"><div class="err">'+(d.error==="quota"?tt("quota"):tt("err"))+'</div><div class="rv-btns"><button class="ghost" onclick="toIntro()">'+tt("startOver")+'</button></div></div>'; return; }
+    const rv=await r.json();
+    saveLogEntry(sc, rv);
+    renderReviewScreen(sc, rv);
+  }catch(e){ main().innerHTML='<div class="rvwrap"><div class="err">'+tt("err")+'</div><div class="rv-btns"><button class="ghost" onclick="toIntro()">'+tt("startOver")+'</button></div></div>'; }
+  finally{ _reviewBusy=false; }
+}
+function reviewLinesHTML(rv){
+  return (rv.good?'<div class="rv-line"><span class="lb">'+tt("rvGood")+'</span>'+esc(rv.good)+'</div>':'')
+    +(rv.improve?'<div class="rv-line"><span class="lb">'+tt("rvImprove")+'</span>'+esc(rv.improve)+'</div>':'')
+    +(rv.tip?'<div class="rv-line"><span class="lb">'+tt("rvTip")+'</span>'+esc(rv.tip)+'</div>':'')
+    +(rv.encourage?'<div class="rv-enc">'+esc(rv.encourage)+'</div>':'');
+}
+function renderReviewScreen(sc, rv){
+  const has=rv.score!=null, s=Number(rv.score)||0;
+  const head=has?'<div class="rv-head"><div class="ring" style="background:'+scoreColor(s)+'">'+s+'</div><div class="rv-htext">'+tt("rvHead")+'</div></div>':'';
+  main().innerHTML='<div class="rvwrap">'+head+reviewLinesHTML(rv)+
+    '<div class="rv-btns"><button class="primary" onclick="startScene(\''+sc.id+'\')">'+tt("again")+'</button>'+
+    '<button class="ghost" onclick="toIntro()">'+tt("startOver")+'</button>'+
+    '<button class="ghost" onclick="openLogs()">📋 '+tt("logsTitle")+'</button></div></div>';
+}
+// ── 對話紀錄(localStorage,最近20場)──
+const LOG_KEY="stw-chat-logs";
+function logList(){try{return JSON.parse(localStorage.getItem(LOG_KEY)||"[]");}catch(e){return[];}}
+function logSaveAll(l){try{localStorage.setItem(LOG_KEY,JSON.stringify(l.slice(0,20)));}catch(e){}}
+function saveLogEntry(sc, rv){
+  const msgs=history.filter(m=>m.role==="me"||m.role==="ai").map(m=>m.role==="me"
+    ?{r:"me",t:m.text||""}:{r:"ai",t:m.reply||"",zy:m.zhuyin||"",tr:m.translation||""}).filter(m=>m.t);
+  if(!msgs.length) return;
+  const l=logList();
+  l.unshift({t:Date.now(),id:sc.id,em:sc.em||"💬",nm:sc.nm||"",score:(rv.score==null?null:Number(rv.score)),
+    good:rv.good||"",improve:rv.improve||"",tip:rv.tip||"",encourage:rv.encourage||"",msgs});
+  logSaveAll(l);
+}
+function removeLog(i){ const l=logList(); l.splice(i,1); logSaveAll(l); openLogs(); }
+function openLogs(){
+  curScene=null; history=[]; stopRec(); micNote(""); hideEnd();
+  document.getElementById("inbar").style.display="none";
+  document.getElementById("hints").innerHTML="";
+  document.getElementById("backBtn").style.display="";
+  const l=logList();
+  const body=l.length? l.map((x,i)=>{ const has=x.score!=null;
+    const ring=has?'<div class="logscore" style="background:'+scoreColor(x.score)+'">'+x.score+'</div>':'<div class="logscore" style="background:var(--tx3)">–</div>';
+    const d=new Date(x.t); const dd=(d.getMonth()+1)+"/"+d.getDate();
+    return '<div class="logitem" onclick="viewLog('+i+')">'+ring+'<div class="logmeta"><div class="lt">'+esc(x.em+" "+x.nm)+'</div><div class="ld">'+dd+' ・ '+x.msgs.filter(m=>m.r==="me").length+' '+tt("turns")+'</div></div><button class="logdel" onclick="event.stopPropagation();removeLog('+i+')">🗑</button></div>';
+  }).join("") : '<div class="favempty">'+tt("logsEmpty")+'</div>';
+  main().innerHTML='<div class="favwrap"><h2 class="favh">📋 '+tt("logsTitle")+'</h2>'+body+'</div>';
+}
+function viewLog(i){
+  const x=logList()[i]; if(!x)return;
+  document.getElementById("backBtn").style.display="";
+  const chat=x.msgs.map(m=>m.r==="me"
+    ?'<div class="msg me"><div class="bub"><div class="zh">'+esc(m.t)+'</div></div></div>'
+    :'<div class="msg ai"><div class="bub"><div class="zh">'+esc(m.t)+'</div>'+(m.zy?'<div class="zy">'+esc(m.zy)+'</div>':'')+(m.tr?'<div class="tr show">'+esc(m.tr)+'</div>':'')+'</div><div class="mrow"><button onclick="speak('+JSON.stringify(m.t).replace(/"/g,"&quot;")+')">🔊 '+tt("play")+'</button></div></div>').join("");
+  const has=x.score!=null;
+  const head=has?'<div class="rv-head"><div class="ring" style="background:'+scoreColor(x.score)+'">'+x.score+'</div><div class="rv-htext">'+esc(x.em+" "+x.nm)+'</div></div>':'';
+  main().innerHTML='<div class="rvwrap">'+head+reviewLinesHTML(x)+'<div style="margin:16px 0 6px;font-size:12px;color:var(--tx2)">'+tt("logConvo")+'</div><div class="chat">'+chat+'</div><div class="rv-btns"><button class="ghost" onclick="openLogs()">‹ '+tt("logsTitle")+'</button></div></div>';
+}
+
+async function callAI(){
+  if(busy)return; busy=true; document.getElementById("sendBtn").disabled=true;
+  renderChat(); showTyping(true); renderHints([]);
+  try{
+    const r=await fetch("/api/speak-chat",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({scene:curScene.scene,userRole:curScene.rl,level:"L2",lang:LANG,
+        history:history.filter(m=>m.role==="ai"||m.role==="me").map(m=>({role:m.role==="me"?"user":"ai",text:m.role==="me"?m.text:m.reply}))})});
+    showTyping(false);
+    if(!r.ok){ let d={};try{d=await r.json();}catch(e){} const c=document.getElementById("chat"); if(c)c.insertAdjacentHTML("beforeend",'<div class="err">'+(d.error==="quota"?tt("quota"):tt("err"))+'</div>'); if(d.error==="quota")showCta(); return; }
+    const ai=await r.json(); ai.role="ai"; history.push(ai);
+    if(ai.correction){ history.splice(history.length-1,0,{role:"corr",text:ai.correction}); }
+    renderChat(); renderHints(ai.hints); speak(ai.reply);
+    if(history.filter(m=>m.role==="me").length>=MAX_TURNS){   // 輪數到頂→自動收尾看評分(成本天花板)
+      const c=document.getElementById("chat"); if(c)c.insertAdjacentHTML("beforeend",'<div class="corr">🎉 '+tt("capMsg")+'</div>');
+      window.scrollTo(0,document.body.scrollHeight);
+      setTimeout(function(){ if(curScene) endReview(); }, 1600);
+    }
+  }catch(e){ showTyping(false); const c=document.getElementById("chat"); if(c)c.insertAdjacentHTML("beforeend",'<div class="err">'+tt("err")+'</div>'); }
+  finally{ busy=false; document.getElementById("sendBtn").disabled=false; }
+}
+function send(){
+  if(recording) stopRec();
+  const inp=document.getElementById("inp"); const v=(inp.value||"").trim(); if(!v||busy)return;
+  inp.value=""; history.push({role:"me",text:v}); callAI();
+}
+function showCta(){document.getElementById("inbar").style.display="none";document.getElementById("hints").innerHTML="";
+  main().insertAdjacentHTML("beforeend",'<div class="cta"><p>'+tt("ctaP")+'</p><a href="/?utm_source=speakchat&lang='+LANG+'">'+tt("ctaBtn")+'</a></div>');}
+document.getElementById("inp").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();send();}});
+if("speechSynthesis" in window)speechSynthesis.getVoices();
+toIntro();
+</script>
+</body>
+</html>

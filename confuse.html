@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>易混淆チャレンジ｜StayTW（テスト版）</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#FAF8F3;--bg2:#FFF;--bg3:#F2EEE5;--tx:#1C1C1E;--tx2:#6A6A6A;--tx3:#A9A9A9;--ac:#B8362A;--ac-soft:rgba(184,54,42,.08);--ok:#2F7A5D;--bd:#E5DECF;--line:#DDD5C0;--ease:cubic-bezier(.25,.1,.25,1);--serif:"Hiragino Mincho ProN","Noto Serif JP","Songti TC",serif}
+[data-theme="dark"]{--bg:#121113;--bg2:#1B1A1C;--bg3:#1F1E20;--tx:#EDE8DE;--tx2:#8F8A7E;--tx3:#5D5A53;--ac:#E4715F;--ac-soft:rgba(228,113,95,.1);--ok:#4C9B7A;--bd:#2C2A27;--line:#2C2A27}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP","PingFang TC",system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.7;font-size:16px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding:24px 20px 100px;min-height:100vh}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.top .brand{font-family:var(--serif);font-size:15px;font-weight:700}
+.top .lang{margin-left:auto;background:var(--bg3);border:1px solid var(--bd);color:var(--tx2);padding:3px 11px;font-size:12px;font-weight:600;border-radius:8px;cursor:pointer;font-family:inherit}
+.badge{font-size:11px;color:var(--ac);border:1px solid var(--ac);border-radius:999px;padding:1px 9px;font-weight:700}
+.prog{height:6px;background:var(--bg3);border-radius:999px;overflow:hidden;margin:16px 0 6px}
+.prog i{display:block;height:100%;background:var(--ac);border-radius:999px;transition:width .4s var(--ease)}
+.meta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--tx3);margin-bottom:22px}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:26px 22px;box-shadow:0 2px 12px rgba(0,0,0,.03)}
+.qtype{font-size:12px;font-weight:700;color:var(--ac);letter-spacing:.04em;margin-bottom:14px}
+.q{font-family:var(--serif);font-size:26px;line-height:1.7;font-weight:700;text-align:center;margin:6px 0 8px}
+.q .bl{color:var(--ac);border-bottom:2px dashed var(--ac);padding:0 14px}
+.qtr{font-size:13.5px;color:var(--tx2);text-align:center;margin-bottom:22px}
+.opts{display:flex;flex-direction:column;gap:11px}
+.opt{background:var(--bg);border:1.5px solid var(--bd);border-radius:12px;padding:14px 18px;font-size:19px;font-family:var(--serif);font-weight:700;cursor:pointer;text-align:center;transition:.15s var(--ease);color:var(--tx)}
+.opt:active{transform:translateY(1px)}
+@media(hover:hover){.opt:hover{border-color:var(--ac)}}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--bg2));color:var(--ok)}
+.opt.ng{border-color:var(--ac);background:var(--ac-soft);color:var(--ac)}
+.opt.dim{opacity:.5}
+.fb{margin-top:20px;border-top:1px dashed var(--line);padding-top:18px;display:none}
+.fb.show{display:block;animation:fade .3s var(--ease)}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.fb-r{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.fb-r.ok{color:var(--ok)}.fb-r.ng{color:var(--ac)}
+.ans{font-family:var(--serif);font-size:17px;background:var(--bg3);border-radius:10px;padding:11px 14px;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:10px}
+.ans .zy{font-size:12.5px;color:var(--ac)}
+.ans .play{margin-left:auto;width:32px;height:32px;border-radius:50%;border:1px solid var(--bd);background:var(--bg2);color:var(--ac);flex:none;display:flex;align-items:center;justify-content:center}
+.expl{font-size:14.5px;color:var(--tx);line-height:1.85}
+.btn{display:block;width:100%;margin-top:20px;background:var(--ac);color:#fff;border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.02em}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:var(--bg2);color:var(--tx);border:1px solid var(--bd)}
+.done{text-align:center;padding:40px 10px}
+.done .em{font-size:52px}
+.done h2{font-family:var(--serif);font-size:24px;margin:14px 0 6px}
+.done .sc{font-size:15px;color:var(--tx2);margin-bottom:6px}
+.done .sc b{color:var(--ac);font-size:34px;font-family:var(--serif)}
+.cta{margin-top:26px;border:2px solid var(--ac);border-radius:14px;padding:20px;background:var(--bg2)}
+.cta p{font-size:14px;color:var(--tx2);margin-bottom:12px}
+.cta a{display:inline-block;background:var(--ac);color:#fff;font-weight:700;font-size:14.5px;padding:11px 24px;border-radius:999px;text-decoration:none}
+.ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <span class="brand">台湾華語スタディ</span><span class="badge" id="badge">TEST</span>
+    <button class="lang" id="langBtn" onclick="cycleLang()">日</button>
+  </div>
+  <div class="prog"><i id="progBar" style="width:0"></i></div>
+  <div class="meta"><span id="mIdx">1 / 12</span><span id="mScore">0</span></div>
+  <div id="stage"></div>
+</div>
+<script>
+/* ===== 三語 UI ===== */
+const T = {
+  ja:{ title:"よく混同する台湾華語", sub:"一字の差で外国人っぽくなるポイントを集中特訓", start:"チャレンジ開始", correct:"正解！", wrong:"惜しい！", answer:"正解", next:"次へ", finish:"結果を見る", scoreLabel:"正解数", again:"もう一度", ctaHead:"間違えた語を「復習」に入れて定着", ctaP:"StayTW なら単語をタップで意味・注音・音声、間違えたら自動で復習リストへ。登録不要・無料。", ctaBtn:"StayTW を無料で試す →", perfect:"完璧！ネイティブ級", good:"いい調子！", keep:"この調子で復習しよう" },
+  ko:{ title:"자주 헷갈리는 대만 중국어", sub:"한 글자 차이로 외국인 티 나는 포인트 집중 훈련", start:"챌린지 시작", correct:"정답!", wrong:"아쉬워요!", answer:"정답", next:"다음", finish:"결과 보기", scoreLabel:"맞힌 개수", again:"다시 하기", ctaHead:"틀린 단어를 '복습'에 넣어 확실하게", ctaP:"StayTW는 단어를 탭하면 뜻·주음·음성, 틀리면 자동으로 복습 목록에. 가입 없이 무료.", ctaBtn:"StayTW 무료로 시작 →", perfect:"완벽! 원어민급", good:"좋아요!", keep:"이대로 복습해봐요" },
+  en:{ title:"Commonly Confused Taiwan Mandarin", sub:"Drill the one-character mix-ups that give learners away", start:"Start challenge", correct:"Correct!", wrong:"So close!", answer:"Answer", next:"Next", finish:"See results", scoreLabel:"Correct", again:"Try again", ctaHead:"Send missed words to your review list", ctaP:"On StayTW, tap any word for meaning, zhuyin and audio — get it wrong and it goes into spaced review automatically. Free, no sign-up.", ctaBtn:"Try StayTW free →", perfect:"Perfect — native level!", good:"Nice work!", keep:"Keep reviewing and you'll nail these" },
+};
+let LANG = (function(){ try{ var s=localStorage.getItem("stw-lang"); return (s&&T[s])?s:"ja"; }catch(e){ return "ja"; } })();
+function tt(k){ return (T[LANG]||T.ja)[k]; }
+function cycleLang(){ LANG = {ja:"en",en:"ko",ko:"ja"}[LANG]; try{localStorage.setItem("stw-lang",LANG);}catch(e){} document.getElementById("langBtn").textContent={ja:"日",en:"EN",ko:"한"}[LANG]; document.documentElement.lang=LANG; render(); }
+(function(){ try{ var th=localStorage.getItem("stw-theme"); if(th==="dark"||(!th&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.dataset.theme="dark"; }catch(e){} document.getElementById("langBtn").textContent={ja:"日",en:"EN",ko:"한"}[LANG]; document.documentElement.lang=LANG; })();
+
+/* ===== 音声（台湾華語 zh-TW）===== */
+function speak(txt){ try{ speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(txt); u.lang="zh-TW"; u.rate=.9; var vs=speechSynthesis.getVoices(); var v=vs.find(x=>/zh-TW|zh_TW|Mei-Jia|Taiwan/i.test(x.lang+x.name)); if(v)u.voice=v; speechSynthesis.speak(u); }catch(e){} }
+
+/* ===== 問題バンク（台湾華語の正確な用法）=====
+   q: 空欄は ___。a: 正解 index。full: 音声用の正しい文。zy: 注音。ex: 三語解説 */
+const BANK = [
+ { type:{ja:"是 と 在",ko:"是 vs 在",en:"是 vs 在"}, q:"我___台灣人。", tr:{ja:"私は台湾人です。",ko:"저는 대만 사람이에요.",en:"I am Taiwanese."}, opts:["是","在"], a:0, full:"我是台灣人", zy:"ㄨㄛˇ ㄕˋ ㄊㄞˊ ㄨㄢ ㄖㄣˊ",
+   ex:{ja:"「是」＝〜です（A=B のイコール）。「在」は場所・進行（我在台北＝台北にいる）。身分・属性なら是。",ko:"「是」＝~이다(A=B). 「在」는 장소·진행(我在台北＝타이베이에 있다). 신분·속성이면 是.",en:"是 = \"to be\" (A equals B). 在 = location/ongoing (我在台北 = I'm in Taipei). For identity, use 是."} },
+ { type:{ja:"是 と 在",ko:"是 vs 在",en:"是 vs 在"}, q:"他___家裡休息。", tr:{ja:"彼は家で休んでいる。",ko:"그는 집에서 쉬고 있어요.",en:"He is resting at home."}, opts:["是","在"], a:1, full:"他在家裡休息", zy:"ㄊㄚ ㄗㄞˋ ㄐㄧㄚ ㄌㄧˇ ㄒㄧㄡ ㄒㄧˊ",
+   ex:{ja:"場所＋動作は「在」。「他是家裡」は不自然（彼＝家 になってしまう）。",ko:"장소＋동작은 「在」. 「他是家裡」는 어색(그＝집 이 됨).",en:"Location + action takes 在. 他是家裡 is wrong (would mean \"he equals home\")."} },
+ { type:{ja:"的・得・地",ko:"的·得·地",en:"的 / 得 / 地"}, q:"他跑___很快。", tr:{ja:"彼は走るのが速い。",ko:"그는 빨리 달려요.",en:"He runs fast."}, opts:["的","得","地"], a:1, full:"他跑得很快", zy:"ㄊㄚ ㄆㄠˇ ㄉㄜ˙ ㄏㄣˇ ㄎㄨㄞˋ",
+   ex:{ja:"動詞の後ろで程度を説明するのは「得」。名詞の前は「的」、動詞の前で様子は「地」。",ko:"동사 뒤에서 정도 설명은 「得」. 명사 앞은 「的」, 동사 앞 방식은 「地」.",en:"After a verb, describing degree → 得. Before a noun → 的; before a verb (manner) → 地."} },
+ { type:{ja:"的・得・地",ko:"的·得·地",en:"的 / 得 / 地"}, q:"她慢慢___走過來。", tr:{ja:"彼女はゆっくり歩いてくる。",ko:"그녀는 천천히 걸어와요.",en:"She walks over slowly."}, opts:["的","得","地"], a:2, full:"她慢慢地走過來", zy:"ㄊㄚ ㄇㄢˋ ㄇㄢˋ ㄉㄜ˙ ㄗㄡˇ ㄍㄨㄛˋ ㄌㄞˊ",
+   ex:{ja:"動詞の前で「どう動くか」を説明するのは「地」（慢慢地走）。",ko:"동사 앞에서 '어떻게' 하는지 설명은 「地」(慢慢地走).",en:"Before a verb, describing how the action happens → 地 (慢慢地走)."} },
+ { type:{ja:"二 と 兩",ko:"二 vs 兩",en:"二 vs 兩"}, q:"我要___杯珍奶。", tr:{ja:"タピオカ2杯ください。",ko:"버블티 두 잔 주세요.",en:"Two bubble teas, please."}, opts:["二","兩"], a:1, full:"我要兩杯珍奶", zy:"ㄨㄛˇ ㄧㄠˋ ㄌㄧㄤˇ ㄅㄟ ㄓㄣ ㄋㄞˇ",
+   ex:{ja:"量詞（杯・個・隻…）の前は「兩」。「二杯」は言わない。数字そのもの・順番は「二」（二樓）。",ko:"양사(杯·個·隻…) 앞은 「兩」. '二杯'는 안 씀. 숫자 자체·순서는 「二」(二樓).",en:"Before a measure word (杯/個…) use 兩, not 二. Pure numbers/order use 二 (二樓 = 2nd floor)."} },
+ { type:{ja:"二 と 兩",ko:"二 vs 兩",en:"二 vs 兩"}, q:"我住在___樓。", tr:{ja:"私は2階に住んでいる。",ko:"저는 2층에 살아요.",en:"I live on the 2nd floor."}, opts:["二","兩"], a:0, full:"我住在二樓", zy:"ㄨㄛˇ ㄓㄨˋ ㄗㄞˋ ㄦˋ ㄌㄡˊ",
+   ex:{ja:"階数・番号・順番は「二」（二樓・二號）。「兩樓」とは言わない。",ko:"층수·번호·순서는 「二」(二樓·二號). 「兩樓」라고 안 함.",en:"Floors/numbers/order use 二 (二樓, 二號). Not 兩樓."} },
+ { type:{ja:"台湾語彙",ko:"대만 어휘",en:"Taiwan vocab"}, q:"我坐___去夜市。", tr:{ja:"MRTで夜市へ行く。",ko:"MRT 타고 야시장에 가요.",en:"I take the MRT to the night market."}, opts:["地鐵","捷運"], a:1, full:"我坐捷運去夜市", zy:"ㄨㄛˇ ㄗㄨㄛˋ ㄐㄧㄝˊ ㄩㄣˋ ㄑㄩˋ ㄧㄝˋ ㄕˋ",
+   ex:{ja:"台湾では地下鉄＝「捷運」。「地鐵」は中国本土の言い方。",ko:"대만에서 지하철＝「捷運」. 「地鐵」은 중국 본토 표현.",en:"In Taiwan the metro is 捷運. 地鐵 is the mainland term."} },
+ { type:{ja:"台湾語彙",ko:"대만 어휘",en:"Taiwan vocab"}, q:"我用___付錢。", tr:{ja:"悠遊カードで払う。",ko:"유유카드로 결제해요.",en:"I pay with my EasyCard."}, opts:["悠遊卡","公交卡"], a:0, full:"我用悠遊卡付錢", zy:"ㄨㄛˇ ㄩㄥˋ ㄧㄡ ㄧㄡˊ ㄎㄚˇ ㄈㄨˋ ㄑㄧㄢˊ",
+   ex:{ja:"台湾のICカードは「悠遊卡（EasyCard）」。捷運・バス・コンビニで使える。",ko:"대만 교통카드는 「悠遊卡(EasyCard)」. MRT·버스·편의점에서 사용.",en:"Taiwan's transit card is the 悠遊卡 (EasyCard) — MRT, bus, convenience stores."} },
+ { type:{ja:"會・能・可以",ko:"會·能·可以",en:"會 / 能 / 可以"}, q:"我___說一點中文。", tr:{ja:"私は少し中国語が話せる（習得した能力）。",ko:"저는 중국어를 조금 할 줄 알아요.",en:"I can speak a little Chinese (learned skill)."}, opts:["會","可以"], a:0, full:"我會說一點中文", zy:"ㄨㄛˇ ㄏㄨㄟˋ ㄕㄨㄛ ㄧˋ ㄉㄧㄢˇ ㄓㄨㄥ ㄨㄣˊ",
+   ex:{ja:"習って身につけた能力は「會」。許可・可能性は「可以」。",ko:"배워서 익힌 능력은 「會」. 허가·가능성은 「可以」.",en:"A learned ability → 會. Permission/possibility → 可以."} },
+ { type:{ja:"才 と 就",ko:"才 vs 就",en:"才 vs 就"}, q:"他八點___起床，好早！", tr:{ja:"彼は8時にはもう起きた、早い！",ko:"그는 8시에 벌써 일어났어요, 빨라요!",en:"He got up at 8 already — so early!"}, opts:["才","就"], a:1, full:"他八點就起床", zy:"ㄊㄚ ㄅㄚ ㄉㄧㄢˇ ㄐㄧㄡˋ ㄑㄧˇ ㄔㄨㄤˊ",
+   ex:{ja:"「就」＝早い・すぐ（予想より早い）。「才」＝遅い・やっと（予想より遅い）。八點才起床なら『やっと8時に起きた（遅い）』。",ko:"「就」＝빠름·바로(예상보다 이름). 「才」＝늦음·겨우(예상보다 늦음). 八點才起床이면 '겨우 8시에 일어남(늦다)'.",en:"就 = early/right away (sooner than expected). 才 = late/only then (later than expected). 八點才起床 = \"didn't get up until 8\"."} },
+ { type:{ja:"儿化なし",ko:"얼화 없음",en:"No erhua"}, q:"再等一___就好。", tr:{ja:"もう少し待って。",ko:"조금만 더 기다려요.",en:"Wait just a little."}, opts:["點兒","點點"], a:1, full:"再等一點點就好", zy:"ㄗㄞˋ ㄉㄥˇ ㄧˋ ㄉㄧㄢˇ ㄉㄧㄢˇ ㄐㄧㄡˋ ㄏㄠˇ",
+   ex:{ja:"台湾は儿化（一點兒）をほぼ使わない。「一點點」が自然。",ko:"대만은 얼화(一點兒)를 거의 안 씀. 「一點點」이 자연스러움.",en:"Taiwan rarely uses erhua (一點兒). 一點點 sounds natural."} },
+ { type:{ja:"有 と 是",ko:"有 vs 是",en:"有 vs 是"}, q:"桌子上___一本書。", tr:{ja:"机の上に本が1冊ある。",ko:"책상 위에 책이 한 권 있어요.",en:"There is a book on the desk."}, opts:["有","是"], a:0, full:"桌子上有一本書", zy:"ㄓㄨㄛ ㄗ˙ ㄕㄤˋ ㄧㄡˇ ㄧˋ ㄅㄣˇ ㄕㄨ",
+   ex:{ja:"存在「〜がある」は「有」。「是」はイコール。場所＋有＋物 の形。",ko:"존재 '~가 있다'는 「有」. 「是」는 이퀄. 장소＋有＋사물 형태.",en:"Existence \"there is\" → 有. 是 equates things. Pattern: place + 有 + object."} },
+];
+
+let idx=0, score=0, answered=false, mode="intro";
+const stage=()=>document.getElementById("stage");
+
+function render(){
+  document.getElementById("mIdx").textContent=(Math.min(idx+1,BANK.length))+" / "+BANK.length;
+  document.getElementById("mScore").textContent="★ "+score;
+  document.getElementById("progBar").style.width=(mode==="done"?100:(idx/BANK.length*100))+"%";
+  if(mode==="intro") return renderIntro();
+  if(mode==="done") return renderDone();
+  renderQ();
+}
+function renderIntro(){
+  document.getElementById("mIdx").textContent="";document.getElementById("mScore").textContent="";
+  stage().innerHTML='<div class="done"><div class="em">🎯</div><h2>'+tt("title")+'</h2><p class="sc" style="margin:8px 0 24px">'+tt("sub")+'</p><button class="btn" onclick="startQ()">'+tt("start")+'</button></div>';
+}
+function startQ(){ idx=0;score=0;mode="q";render(); }
+function renderQ(){
+  answered=false; const it=BANK[idx];
+  const qhtml=it.q.replace("___",'<span class="bl">?</span>');
+  stage().innerHTML=
+    '<div class="card"><div class="qtype">'+it.type[LANG]+'</div>'+
+    '<div class="q">'+qhtml+'</div><div class="qtr">'+it.tr[LANG]+'</div>'+
+    '<div class="opts" id="opts">'+it.opts.map((o,i)=>'<button class="opt" onclick="pick('+i+')">'+o+'</button>').join("")+'</div>'+
+    '<div class="fb" id="fb"></div></div>';
+}
+function pick(i){
+  if(answered) return; answered=true;
+  const it=BANK[idx], ok=i===it.a;
+  if(ok) score++;
+  const btns=document.querySelectorAll("#opts .opt");
+  btns.forEach((b,bi)=>{ b.classList.add(bi===it.a?"ok":(bi===i&&!ok?"ng":"dim")); b.onclick=null; });
+  const last=idx===BANK.length-1;
+  document.getElementById("mScore").textContent="★ "+score;
+  const fb=document.getElementById("fb");
+  fb.innerHTML=
+    '<div class="fb-r '+(ok?"ok":"ng")+'">'+(ok?"⭕ "+tt("correct"):"❌ "+tt("wrong"))+'</div>'+
+    '<div class="ans" onclick="speak(\''+it.full+'\')"><span>'+it.full+'</span><span class="zy">'+it.zy+'</span>'+
+      '<span class="play"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></span></div>'+
+    '<div class="expl">'+it.ex[LANG]+'</div>'+
+    '<button class="btn" onclick="nextQ()">'+(last?tt("finish"):tt("next"))+'</button>';
+  fb.classList.add("show");
+  speak(it.full);
+}
+function nextQ(){ if(idx>=BANK.length-1){ mode="done"; } else { idx++; } render(); }
+function renderDone(){
+  const pct=score/BANK.length;
+  const msg=pct===1?tt("perfect"):pct>=.7?tt("good"):tt("keep");
+  document.getElementById("mIdx").textContent="";document.getElementById("mScore").textContent="";
+  stage().innerHTML=
+    '<div class="done"><div class="em">'+(pct===1?"🏆":pct>=.7?"🎉":"💪")+'</div>'+
+    '<h2>'+msg+'</h2><p class="sc">'+tt("scoreLabel")+'<br><b>'+score+'</b> / '+BANK.length+'</p>'+
+    '<button class="btn ghost" style="max-width:220px;margin:22px auto 0" onclick="startQ()">'+tt("again")+'</button>'+
+    '<div class="cta"><p><strong>'+tt("ctaHead")+'</strong><br>'+tt("ctaP")+'</p>'+
+    '<a href="/?utm_source=confuse&lang='+LANG+'">'+tt("ctaBtn")+'</a></div></div>';
+}
+if("speechSynthesis" in window) speechSynthesis.getVoices();
+render();
+</script>
+</body>
+</html>

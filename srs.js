@@ -66,6 +66,15 @@ const SRS = (() => {
     save(d);
   }
 
+  // 辞書カードから手動で復習に追加：今すぐ復習期限で新規登録（既にあれば何もしない）
+  function addWord(level, word) {
+    const d = getData(), key = k(level, word);
+    if (d[key]) return false;
+    d[key] = { interval: 0, ease: 2.5, reviews: 0, correct: 0, nextReviewTs: Date.now(), lastReview: today() };
+    save(d);
+    return true;
+  }
+
   // 全レベル横断で復習期限が来た単語
   function getAllDue() {
     const d = getData(), now = Date.now(), out = [];
@@ -107,8 +116,10 @@ const SRS = (() => {
     const nw = getNew(lvl, 10);
     queue = [];
     allDue.forEach(x => {
-      const v = (getVocabData(x.level) || []).find(w => w.w === x.word);
-      if (v) queue.push({ ...v, level: x.level, isNew: false });
+      let v = (getVocabData(x.level) || []).find(w => w.w === x.word);
+      // 語彙表に無い語（辞書から手動追加した拡張語）は custom store から内容を引く
+      if (!v && typeof window !== "undefined" && window.STW_CUSTOM) v = window.STW_CUSTOM[x.word];
+      if (v) queue.push(Object.assign({}, v, { level: x.level, isNew: false }));
     });
     nw.forEach(v => queue.push({ ...v, level: lvl, isNew: true }));
     if (!queue.length) { alert(twT("srsNoReview")); return; }
@@ -132,8 +143,10 @@ const SRS = (() => {
         <div id="srsBack" style="display:none">
           <div class="qmain">${item.w}</div>
           <div class="qsub">${item.zy}　${item.py}</div>
-          <div class="srs-meaning">${item.m[mk] || item.m.j}</div>
-          <div class="srs-ex" onclick="event.stopPropagation();speakZh('${item.ex.z}')">${item.ex.z}<span class="py">${item.ex.py}</span><span class="tr">${item.ex[mk] || item.ex.j}</span></div>
+          <div class="srs-meaning">${item.m ? (item.m[mk] || item.m.j) : (({ j:item.j, e:item.e, k:item.k }[mk]) || item.e || item.j || item.d || "")}</div>
+          ${item.ex && item.ex.z
+            ? `<div class="srs-ex" onclick="event.stopPropagation();speakZh('${String(item.ex.z).replace(/'/g,"\\'")}')">${item.ex.z}<span class="py">${item.ex.py}</span><span class="tr">${item.ex[mk] || item.ex.j}</span></div>`
+            : (item.d && !item.m ? `<div class="srs-ex" style="cursor:default">${item.d}</div>` : "")}
           <div class="srs-btns">
             <button class="srs-btn srs-ng" onclick="event.stopPropagation();SRS.rate('unknown')">${twT("srsG3")}</button>
             <button class="srs-btn srs-mid" onclick="event.stopPropagation();SRS.rate('soso')">${twT("srsG2")}</button>
@@ -176,6 +189,10 @@ const SRS = (() => {
     if ("speechSynthesis" in window) speechSynthesis.cancel();
   }
 
-  return { start, record, recordGrade, flip, rate, close, getDueCount, getAllDue, getStats, isDue, getData, GRADES,
+  return { start, record, recordGrade, addWord, flip, rate, close, getDueCount, getAllDue, getStats, isDue, getData, GRADES,
            _import(d) { localStorage.setItem(KEY, JSON.stringify(d)); } };
 })();
+// ★重要：SRS は const 宣言なので window に自動では乗らない（TTS / STW_WEB / Paywall と同じ罠）。
+//   index.html は `window.SRS && …` で参照しているため、掛けないと辞書の「復習に追加」や
+//   クイズの due 優先選抜が黙って効かなくなる。
+if (typeof window !== "undefined") window.SRS = SRS;

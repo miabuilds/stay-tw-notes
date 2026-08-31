@@ -3,7 +3,9 @@
 <title>利用規約 — StayTW Study</title><link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script src="analytics.js?v=51"></script>
 <style>body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;max-width:720px;margin:0 auto;padding:48px 24px;line-height:1.9;color:#1C1C1E;background:#FAF8F3}h1{font-size:24px;margin-bottom:24px}h2{font-size:17px;margin:28px 0 8px}p,li{font-size:14.5px;color:#444}a{color:#2F5D7A}#langToggle{font:inherit;font-size:13px;color:#2F5D7A;background:transparent;border:1px solid #d8d2c4;border-radius:8px;padding:4px 12px;cursor:pointer}#langToggle:hover{background:#f0ebe0}</style></head><body>
-<div style="text-align:right;margin-bottom:8px"><button id="langToggle" data-i18n="langBtn" onclick="cycleLang()" aria-label="Language">日本語</button></div>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+<button onclick="stwBack()" aria-label="Back" style="font:inherit;font-size:14px;color:#2F5D7A;background:transparent;border:1px solid #d8d2c4;border-radius:8px;padding:5px 13px;cursor:pointer;display:inline-flex;align-items:center;gap:5px"><span style="font-size:16px;line-height:1">←</span> <span id="backTxt">Back</span></button>
+<button id="langToggle" data-i18n="langBtn" onclick="cycleLang()" aria-label="Language">日本語</button></div>
 <h1 data-i18n="h1">利用規約</h1>
 <p data-i18n="intro">本規約は、StayTW Study（以下「本サービス」）の利用条件を定めるものです。ユーザーは本サービスを利用することで、本規約に同意したものとみなされます。</p>
 <h2 data-i18n="h2_1">1. サービス内容</h2><p data-i18n="p1">本サービスは台湾華語（繁体字中国語）の学習コンテンツと練習ツールを提供します。コンテンツの閲覧は無料、練習ツールには1日の無料利用枠があり、プレミアムプラン（サブスクリプションまたは買い切り）で無制限にご利用いただけます。</p>
@@ -14,6 +16,24 @@
 <p style="margin-top:36px;font-size:13px;color:#888" data-i18n-html="footer">最終更新：2026年7月<br>お問い合わせ：<a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a></p>
 <script>
 const T={
+zh:{
+langBtn:"繁體中文",
+h1:"服務條款",
+intro:"本條款規範 StayTW Study（以下稱「本服務」）的使用。使用本服務即視為同意本條款。",
+h2_1:"一、服務內容",
+p1:"本服務提供台灣華語（繁體中文）學習內容與練習工具。內容瀏覽免費，練習工具每日有免費額度，付費方案（訂閱或買斷）可無限使用。",
+h2_2:"二、購買、取消與退款",
+p2:"網頁版付費由「統一金流 PayUni」處理；iOS App 內購買由 App Store 處理。訂閱採自動續訂，可於當期結束前隨時取消。退款依本站退款政策辦理（詳見退款政策頁）。",
+h2_3:"三、禁止事項",
+li1:"未經授權複製、再散布或轉售內容",
+li2:"妨礙本服務運作的行為",
+li3:"逆向工程等分析行為",
+h2_4:"四、免責聲明",
+p4:"本服務提供學習參考資訊，不保證通過任何考試。內容力求正確，如有錯誤，營運者不對因此產生的損害負責。本服務為個人經營之服務，與 TOCFL、SC-TOP 無關。",
+h2_5:"五、條款變更",
+p5:"本條款得視需要變更，重要變更將於服務內公告。",
+footer:'最後更新：2026 年 8 月<br>聯絡：<a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a>'
+},
 ja:{
 langBtn:"日本語",
 h1:"利用規約",
@@ -69,10 +89,16 @@ p5:"본 약관은 필요에 따라 변경될 수 있습니다. 중요한 변경 
 footer:'최종 업데이트: 2026년 7월<br>문의: <a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a>'
 }
 };
+function pickLang(){
+  var q=(new URLSearchParams(location.search)).get("lang");
+  if(q){q=q.toLowerCase(); if(q.indexOf("zh")===0||q==="tw")return"zh"; if(T[q])return q;}
+  var s=localStorage.getItem("stw-lang"); return (s&&T[s])?s:"ja";
+}
 function applyLang(){
-  const lang=localStorage.getItem("stw-lang")||"ja";
+  const lang=pickLang();
   document.documentElement.lang=lang;
   const dict=T[lang]||T.ja;
+  var _b=document.getElementById("backTxt"); if(_b)_b.textContent=({zh:"返回",ja:"戻る",en:"Back",ko:"뒤로"})[lang]||"Back";
   document.querySelectorAll("[data-i18n]").forEach(function(el){
     const k=el.getAttribute("data-i18n");
     const v=(dict[k]!==undefined)?dict[k]:T.ja[k];
@@ -91,6 +117,7 @@ function cycleLang(){
   localStorage.setItem("stw-lang",next);
   applyLang();
 }
+function stwBack(){ if(history.length>1){ history.back(); } else { location.href="index.html"; } }
 applyLang();
 </script>
 </body></html>

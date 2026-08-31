@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>方案與價目表｜台灣華語 StayTW</title>
+<meta name="description" content="台灣華語 StayTW 方案與價目表。基礎內容免費，付費解鎖無限練習工具與完整內容。">
+<style>
+:root{--bg:#FAF8F3;--bg2:#FFFFFF;--tx:#1C1C1E;--tx2:#6A6A6A;--tx3:#9A948A;--ac:#B8362A;--line:#DDD5C0}
+@media(prefers-color-scheme:dark){:root{--bg:#121113;--bg2:#1B1A1C;--tx:#EDE8DE;--tx2:#8F8A7E;--tx3:#6a655c;--line:#33302c}}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,"PingFang TC","Hiragino Sans","Apple SD Gothic Neo",system-ui,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:24px 20px 80px}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+.top .logo{width:40px;height:40px;border-radius:11px;background:var(--bg2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:22px}
+.top b{font-size:18px}
+.langs{margin-left:auto;display:flex;gap:6px}
+.langs button{border:1px solid var(--line);background:var(--bg2);color:var(--tx2);border-radius:999px;padding:5px 12px;font-size:13px;cursor:pointer;font-family:inherit}
+.langs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+h1{font-size:30px;font-weight:800;margin:26px 0 6px;letter-spacing:.5px}
+.lead{color:var(--tx2);font-size:15px;margin-bottom:24px}
+.free{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:26px}
+.free h3{font-size:16px;margin-bottom:6px}
+.free p{color:var(--tx2);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:12px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.plan{position:relative;background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:24px 20px;display:flex;flex-direction:column}
+.plan.hot{border:2px solid var(--ac)}
+.tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--ac);color:#fff;font-size:11px;font-weight:700;border-radius:999px;padding:3px 12px;white-space:nowrap}
+.pname{font-size:15px;font-weight:700;margin-bottom:10px}
+.price{font-size:32px;font-weight:800;line-height:1}
+.price .cur{font-size:16px;color:var(--tx2);margin-right:2px}
+.price .unit{font-size:14px;font-weight:600;color:var(--tx2);margin-left:3px}
+.cycle{color:var(--tx3);font-size:12.5px;margin:6px 0 14px;min-height:18px}
+.plan ul{list-style:none;margin:0 0 18px;font-size:13.5px;color:var(--tx2)}
+.plan ul li{padding:4px 0 4px 20px;position:relative}
+.plan ul li::before{content:"✓";position:absolute;left:0;color:var(--ac);font-weight:800}
+.cta{margin-top:auto;text-align:center;background:var(--ac);color:#fff;font-weight:700;border-radius:999px;padding:12px;font-size:15px;cursor:pointer;border:none;width:100%;font-family:inherit}
+.cta.ghost{background:transparent;color:var(--ac);border:1.5px solid var(--ac)}
+.feat{margin-top:34px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.feat h3{font-size:16px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.frow{display:flex;justify-content:space-between;gap:12px;padding:11px 20px;font-size:14px;border-bottom:1px solid var(--line)}
+.frow:last-child{border-bottom:none}
+.frow .v{color:var(--tx2);white-space:nowrap;text-align:right}
+.frow .v.paid{color:var(--ac);font-weight:700}
+.rules{margin-top:30px;font-size:13px;color:var(--tx2)}
+.rules h3{font-size:15px;color:var(--tx);margin-bottom:8px}
+.rules li{margin:4px 0 4px 18px}
+.links{margin-top:24px;font-size:13.5px}
+.links a{color:var(--ac);text-decoration:none;margin-right:16px;white-space:nowrap}
+footer{margin-top:36px;font-size:12.5px;color:var(--tx3);border-top:1px solid var(--line);padding-top:18px}
+footer a{color:var(--tx2)}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top">
+    <button onclick="stwBack()" aria-label="Back" style="font:inherit;font-size:14px;color:var(--tx2);background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:6px 12px;cursor:pointer;line-height:1;display:inline-flex;align-items:center;gap:5px"><span style="font-size:16px">←</span> <span id="backTxt"></span></button>
+    <div class="logo">🐻</div>
+    <b>台灣華語 StayTW</b>
+    <div class="langs" id="langs"></div>
+  </div>
+  <h1 id="h1"></h1>
+  <p class="lead" id="lead"></p>
+  <div class="free"><h3 id="freeH"></h3><p id="freeP"></p></div>
+  <div class="grid" id="grid"></div>
+  <div class="feat"><h3 id="featH"></h3><div id="featBody"></div></div>
+  <div class="rules"><h3 id="rulesH"></h3><ul id="rulesBody"></ul>
+    <div class="links" id="links"></div>
+  </div>
+  <footer id="foot"></footer>
+</main>
+
+<script>
+// 幣別以日幣（App 內購價）為基準換算：¥980 / ¥5,800 / ¥12,800
+var CUR={
+  ja:{sym:'¥',   m:'980',   y:'5,800',   l:'12,800',  pm:'483'},
+  zh:{sym:'NT$', m:'210',   y:'1,290',   l:'2,790',   pm:'108'},
+  en:{sym:'US$', m:'6.99',  y:'39.99',   l:'84.99',   pm:'3.33'},
+  ko:{sym:'₩',   m:'9,900', y:'58,000',  l:'128,000', pm:'4,833'}
+};
+var T={
+ ja:{name:'日本語',title:'プランと料金',lead:'基礎コンテンツは無料。練習ツールを無制限に使いたい・全コンテンツを解放したいときに有料プランへ。',
+   freeH:'✅ 無料で使える',freeP:'単語カード・単語リスト・注音（ㄅㄆㄇ）・文法・場面別フレーズ・分級リーディング —— 登録不要・無料。',
+   mN:'月額',yN:'年額',lN:'買い切り',
+   mC:'自動更新・いつでも解約可',yC:(pm)=>'月あたり '+CUR.ja.sym+pm+' ・自動更新',lC:'一度きり・更新なし',
+   f1:['練習ツールすべて無制限','記事すべて解放','学習履歴のクラウド同期'],
+   f2:['月額と同じ全機能','1年分でお得','学習履歴のクラウド同期'],
+   f3:['現機能を買い切り','以後の課金なし','学習履歴のクラウド同期'],
+   cta1:'月額に登録',cta2:'年額に登録',cta3:'買い切る',best:'いちばん人気',
+   featH:'無料 vs 有料',rows:[['単語・注音・文法・フレーズ・読解','無料',0],['クイズ','有料無制限（無料 1日3回）',1],['復習（SRS）','有料無制限（無料 1日1回）',1],['模試','有料無制限（無料 1日1回）',1],['発音チェック','有料無制限（無料 1日5文）',1],['ライティング','有料無制限（無料 1日1回）',1],['深掘り記事','有料で全解放（無料 1本目）',1]],
+   rulesH:'サブスクとお支払いについて',rules:['本サービスはデジタル学習コンテンツで、決済後すぐに利用開始・即時提供されます。','サブスクは自動更新。期間終了前ならいつでも解約でき、解約後は課金されません。','iOS アプリ内は Apple のアプリ内課金、Web はクレジットカード決済で購入できます。'],
+   lTerms:'利用規約',lRefund:'返金ポリシー',lPriv:'プライバシー',lContact:'お問い合わせ',
+   foot:'台灣華語 StayTW · 台湾華語（繁体字）オンライン学習'},
+ zh:{name:'繁中',title:'方案與價目表',lead:'基礎學習內容永久免費。想無限次使用練習工具、解鎖全部內容，再升級付費方案即可。',
+   freeH:'✅ 免費開放',freeP:'單字卡與單字列表、注音（ㄅㄆㄇ）、文法、生活情境片語、分級閱讀 —— 免付費、免註冊即可使用。',
+   mN:'月費訂閱',yN:'年費訂閱',lN:'買斷方案',
+   mC:'自動續扣，可隨時取消',yC:(pm)=>'平均每月 '+CUR.zh.sym+pm+' ・自動續扣',lC:'一次付清・永不續扣',
+   f1:['全部練習工具無限使用','全部深度文章解鎖','學習記錄雲端同步'],
+   f2:['與月費相同的全部功能','一年份、更省','學習記錄雲端同步'],
+   f3:['買斷現有全部功能','不再扣款','學習記錄雲端同步'],
+   cta1:'訂閱月費',cta2:'訂閱年費',cta3:'一次買斷',best:'最划算',
+   featH:'免費 vs 付費',rows:[['單字・注音・文法・片語・閱讀','免費',0],['測驗（Quiz）','付費無限（免費每日 3 次）',1],['複習（SRS）','付費無限（免費每日 1 次）',1],['模擬考','付費無限（免費每日 1 次）',1],['口說發音評分','付費無限（免費每日 5 句）',1],['寫作練習','付費無限（免費每日 1 次）',1],['深度文章','付費全解鎖（免費第 1 篇）',1]],
+   rulesH:'訂閱與付款說明',rules:['本服務為線上數位學習內容，付款成功後即時開通、立即交付使用。','訂閱方案採自動續扣，可於期滿前隨時取消，取消後不再收費。','iOS App 內走 Apple 內購；網頁版信用卡付款由「統一金流 PayUni」處理，退款依退款政策辦理。'],
+   lTerms:'服務條款',lRefund:'退款政策',lPriv:'隱私權政策',lContact:'聯絡我們',
+   foot:'台灣華語 StayTW · 線上台灣華語（繁體中文）學習平台'},
+ en:{name:'EN',title:'Plans & Pricing',lead:'Core content is free forever. Upgrade when you want unlimited practice tools and all content unlocked.',
+   freeH:'✅ Free to use',freeP:'Flashcards & word list, Zhuyin (ㄅㄆㄇ), grammar, situational phrases, graded reading —— free, no sign-up.',
+   mN:'Monthly',yN:'Yearly',lN:'Lifetime',
+   mC:'Auto-renews, cancel anytime',yC:(pm)=>'≈ '+CUR.en.sym+pm+' / month · auto-renews',lC:'One-time · no renewal',
+   f1:['All practice tools, unlimited','All articles unlocked','Cloud sync of progress'],
+   f2:['Everything in Monthly','A full year, better value','Cloud sync of progress'],
+   f3:['Buy out current features','No further charges','Cloud sync of progress'],
+   cta1:'Subscribe Monthly',cta2:'Subscribe Yearly',cta3:'Buy Lifetime',best:'Best value',
+   featH:'Free vs Premium',rows:[['Vocab · Zhuyin · Grammar · Phrases · Reading','Free',0],['Quiz','Unlimited (free 3/day)',1],['Review (SRS)','Unlimited (free 1/day)',1],['Mock exam','Unlimited (free 1/day)',1],['Speaking score','Unlimited (free 5/day)',1],['Writing','Unlimited (free 1/day)',1],['In-depth articles','All unlocked (1st free)',1]],
+   rulesH:'Subscription & payment',rules:['This is a digital learning service; access is granted immediately after payment.','Subscriptions auto-renew and can be canceled anytime before renewal; no charge after cancellation.','In the iOS app, purchases use Apple In-App Purchase; on the web, card payments are handled by PayUni. Refunds follow our refund policy.'],
+   lTerms:'Terms',lRefund:'Refund Policy',lPriv:'Privacy',lContact:'Contact',
+   foot:'StayTW · Learn Taiwan Mandarin (Traditional Chinese) online'},
+ ko:{name:'한국어',title:'요금제',lead:'기본 콘텐츠는 무료. 연습 도구를 무제한으로 쓰고 모든 콘텐츠를 열려면 유료 플랜으로 업그레이드하세요.',
+   freeH:'✅ 무료 이용',freeP:'단어 카드·단어 목록, 주음(ㄅㄆㄇ), 문법, 상황별 표현, 등급별 읽기 —— 무료, 가입 불필요.',
+   mN:'월간',yN:'연간',lN:'평생',
+   mC:'자동 갱신, 언제든 해지',yC:(pm)=>'월 약 '+CUR.ko.sym+pm+' · 자동 갱신',lC:'1회 결제 · 갱신 없음',
+   f1:['모든 연습 도구 무제한','모든 아티클 잠금 해제','학습 기록 클라우드 동기화'],
+   f2:['월간과 동일한 전 기능','1년치, 더 저렴','학습 기록 클라우드 동기화'],
+   f3:['현재 기능 평생 이용','추가 결제 없음','학습 기록 클라우드 동기화'],
+   cta1:'월간 구독',cta2:'연간 구독',cta3:'평생 구매',best:'가장 이득',
+   featH:'무료 vs 유료',rows:[['단어·주음·문법·표현·읽기','무료',0],['퀴즈','무제한 (무료 하루 3회)',1],['복습(SRS)','무제한 (무료 하루 1회)',1],['모의고사','무제한 (무료 하루 1회)',1],['발음 채점','무제한 (무료 하루 5문장)',1],['작문','무제한 (무료 하루 1회)',1],['심화 아티클','전체 잠금 해제 (무료 1편)',1]],
+   rulesH:'구독 및 결제 안내',rules:['본 서비스는 디지털 학습 콘텐츠로, 결제 후 즉시 이용 가능합니다.','구독은 자동 갱신되며 갱신 전 언제든 해지할 수 있고, 해지 후에는 청구되지 않습니다.','iOS 앱 내에서는 Apple 인앱결제, 웹에서는 카드 결제(PayUni)로 구매합니다. 환불은 환불 정책을 따릅니다.'],
+   lTerms:'이용약관',lRefund:'환불 정책',lPriv:'개인정보',lContact:'문의',
+   foot:'StayTW · 대만 화어(번체자) 온라인 학습'}
+};
+
+function pick(){
+  var q=(new URLSearchParams(location.search)).get('lang');
+  if(q){q=q.toLowerCase(); if(q.indexOf('zh')===0||q==='tw')return'zh'; if(T[q])return q;}
+  var s=(function(){try{return localStorage.getItem('stw-lang')}catch(e){return null}})();
+  if(s&&T[s])return s;
+  return 'zh'; // 預設繁中/NT$（金流審核情境）
+}
+var lang=pick();
+
+function render(){
+  var t=T[lang], c=CUR[lang];
+  document.documentElement.lang=lang==='zh'?'zh-Hant':lang;
+  var _b=document.getElementById('backTxt'); if(_b)_b.textContent=({zh:'返回',ja:'戻る',en:'Back',ko:'뒤로'})[lang]||'返回';
+  // langs
+  document.getElementById('langs').innerHTML=Object.keys(T).map(function(k){
+    return '<button data-l="'+k+'" class="'+(k===lang?'on':'')+'">'+T[k].name+'</button>';}).join('');
+  document.querySelectorAll('#langs button').forEach(function(b){b.onclick=function(){lang=b.dataset.l;try{if(lang!=='zh')localStorage.setItem('stw-lang',lang)}catch(e){} render();};});
+  document.getElementById('h1').textContent=t.title;
+  document.getElementById('lead').textContent=t.lead;
+  document.getElementById('freeH').textContent=t.freeH;
+  document.getElementById('freeP').textContent=t.freeP;
+  var P=function(v){return '<span class="cur">'+c.sym+'</span>'+v;};
+  document.getElementById('grid').innerHTML=
+   plan('monthly',t.mN,P(c.m),'<span class="unit">/ '+({ja:'月',zh:'月',en:'mo',ko:'월'}[lang])+'</span>',t.mC,t.f1,t.cta1,'ghost','')+
+   plan('yearly',t.yN,P(c.y),'<span class="unit">/ '+({ja:'年',zh:'年',en:'yr',ko:'년'}[lang])+'</span>',t.yC(c.pm),t.f2,t.cta2,'',t.best)+
+   plan('lifetime',t.lN,P(c.l),'',t.lC,t.f3,t.cta3,'ghost','');
+  document.getElementById('featH').textContent=t.featH;
+  document.getElementById('featBody').innerHTML=t.rows.map(function(r){
+    return '<div class="frow"><span class="k">'+r[0]+'</span><span class="v'+(r[2]?' paid':'')+'">'+r[1]+'</span></div>';}).join('');
+  document.getElementById('rulesH').textContent=t.rulesH;
+  document.getElementById('rulesBody').innerHTML=t.rules.map(function(x){return '<li>'+x+'</li>';}).join('');
+  var q='?lang='+lang;
+  document.getElementById('links').innerHTML=
+    '<a href="/terms'+q+'">'+t.lTerms+'</a><a href="/refund'+q+'">'+t.lRefund+'</a><a href="/privacy'+q+'">'+t.lPriv+'</a><a href="/contact'+q+'">'+t.lContact+'</a>';
+  document.getElementById('foot').innerHTML=t.foot+'<br>'+({ja:'お問い合わせ',zh:'客服信箱',en:'Contact',ko:'문의'}[lang])+'：<a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a>';
+}
+function plan(id,name,price,unit,cycle,feats,cta,cls,tag){
+  return '<div class="plan'+(tag?' hot':'')+'" data-plan="'+id+'">'+(tag?'<div class="tag">'+tag+'</div>':'')+
+    '<div class="pname">'+name+'</div><div class="price">'+price+unit+'</div><div class="cycle">'+cycle+'</div>'+
+    '<ul>'+feats.map(function(f){return '<li>'+f+'</li>';}).join('')+'</ul>'+
+    '<button class="cta '+cls+'" onclick="return startSubscribe(this)">'+cta+'</button></div>';
+}
+render();
+
+// ── iOS/Android App（WebView）內：App 內數位訂閱只能走原生內購（App Store 3.1.1／Google 規定），
+//    不可導向外部金流。偵測到在 App 內 → 整頁清成中性 placeholder 並自動開原生付費牆，
+//    移除所有外部金流字眼與價格（反導流合規）。
+function stwBack(){ if(history.length>1){ history.back(); } else { location.href="index.html"; } }
+function stwScrubPricing(){
+  try{
+    if(!(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp)) return;
+    var main=document.querySelector('main.wrap');
+    if(!main) return;
+    main.innerHTML='<div id="iapGo" style="max-width:480px;margin:90px auto;text-align:center;color:var(--tx2);cursor:pointer">…</div>';
+    function iapOpen(){try{if(!(window.ReactNativeWebView && window.ReactNativeWebView.postMessage))return;var lng=(function(){try{return localStorage.getItem('stw-lang')}catch(e){return null}})()||'ja';window.ReactNativeWebView.postMessage(JSON.stringify({type:'OPEN_PAYWALL',lang:lng}));}catch(_){}}
+    var g=document.getElementById('iapGo'); if(g)g.onclick=iapOpen; iapOpen();
+  }catch(_){}
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',stwScrubPricing);else stwScrubPricing();
+
+// ── 點「訂閱／買斷」
+function startSubscribe(btn){
+  var card=btn.closest('.plan'), plan=card&&card.dataset.plan;
+  if(!plan)return false;
+  // 原生 App：一律通知原生開內購付費牆，絕不走網頁金流（Apple/Google 合規）
+  if(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp){
+    try{if(window.ReactNativeWebView && window.ReactNativeWebView.postMessage){var lng=(function(){try{return localStorage.getItem('stw-lang')}catch(e){return null}})()||'ja';window.ReactNativeWebView.postMessage(JSON.stringify({type:'OPEN_PAYWALL',plan:plan,lang:lng}));}}catch(_){}
+    return false;
+  }
+  // 一般瀏覽器：走統一金流 PayUni。
+  // TODO(PayUni): 商店審核通過後，改為 POST /api/payuni/create-order → 導向回傳的付款網址。
+  try{localStorage.setItem('stw_pending_plan',plan);}catch(_){}
+  showNotice(); return false;
+}
+function showNotice(){
+  var msg={ja:'ご選択ありがとうございます！Web のカード決済（PayUni）は近日開通予定です 🙌',zh:'感謝您的選擇！網頁信用卡結帳（統一金流 PayUni）即將開通 🙌',en:'Thanks! Web card checkout (PayUni) is coming soon 🙌',ko:'감사합니다! 웹 카드 결제(PayUni)가 곧 열립니다 🙌'}[lang];
+  var n=document.getElementById('stwNotice');
+  if(!n){n=document.createElement('div');n.id='stwNotice';n.style.cssText='position:fixed;left:50%;bottom:26px;transform:translateX(-50%);max-width:90%;background:var(--tx);color:var(--bg);padding:13px 20px;border-radius:12px;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:999;text-align:center;line-height:1.6';document.body.appendChild(n);}
+  n.innerHTML=msg+'<br><a href="mailto:stayjpplan@gmail.com" style="color:#ffb3ac">stayjpplan@gmail.com</a>';
+  n.style.display='block';clearTimeout(window.__stwNoticeT);window.__stwNoticeT=setTimeout(function(){n.style.display='none';},6000);
+}
+</script>
+</body>
+</html>

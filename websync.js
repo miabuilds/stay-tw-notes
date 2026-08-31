@@ -2,8 +2,15 @@
 // ・ログイン：Google Identity Services → /api/web-login → StayTW session
 // ・同期：ログイン時に /api/progress を取得してローカルとマージ→押し戻し。以後は離脱時に保存。
 // ・同期対象：SRS 復習・模試履歴・作文下書き・レベル
-const STW_API = "https://staytw-api.abc83327.workers.dev";
+const STW_API = ""; // 同源：走 pages.dev/api/* 代理到 Worker（避開 workers.dev 被擋）
 const STW_WEB_CLIENT_ID = "949214636130-e2dl3h0t1l789fggve3vsd6pu670lnb1.apps.googleusercontent.com";
+// ── Web「Sign in with Apple」──
+// Apple Developer で Services ID を作成し（例 com.staytw.web）、Sign in with Apple を有効化・
+// ドメイン(staytw.pages.dev)と Return URL(下の REDIRECT と完全一致)を登録・ドメイン検証したら、
+// ここに Services ID を入れる。空のあいだはボタン非表示（＝壊れない）。
+// ※ Worker 側も secret APPLE_WEB_SERVICE_ID を同じ値にすること（aud 検証用）。
+const STW_APPLE_SERVICE_ID = "com.staytw.web";
+const STW_APPLE_REDIRECT = "https://staytw.pages.dev/";
 const SYNC_KEYS = ["stw_srs", "stw_exam_history", "stw_writing", "stw_wr_opened", "stw-level", "stw_streak", "stw_read", "stw_goal", "stw_art_read"];
 
 const STW_WEB = (() => {
@@ -36,10 +43,56 @@ const STW_WEB = (() => {
     } catch (e) { toast("通信エラー。ネットワークを確認してもう一度"); }
   }
 
+  // アプリ内ブラウザ（Line/FB/IG/Threads/微信/Twitter/TikTok/Kakao/Naver…）は Google ログインをブロック → 白画面になる。
+  function isInApp(){
+    return /FBAN|FBAV|FB_IAB|Instagram|Line\/|MicroMessenger|Twitter|TikTok|KAKAOTALK|NAVER|Barcelona|BytedanceWebview/i.test(navigator.userAgent || "");
+  }
+  function copyUrl(){
+    const url = location.href.split("#")[0];
+    const msg = (typeof twT === "function" ? twT("inAppCopied") : "コピーしました");
+    const done = () => { try { if (typeof window.showToast === "function") window.showToast(msg); } catch(e){} };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, done);
+    else { const i=document.createElement("input"); i.value=url; document.body.appendChild(i); i.select(); try{document.execCommand("copy");}catch(e){} i.remove(); done(); }
+  }
+  // ── iOS/Android アプリ内（WebView）ブリッジ ──
+  // 埋め込み WebView は Google/Apple OAuth を実行できない（Google が disallowed_useragent で拒否）。
+  // → ネイティブ側で Apple/Google ログイン → /api/native-login → StayTW session を下の stwNativeLogin() で注入。
+  const isNative = () => typeof window !== "undefined" && !!(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp);
+  const postNative = obj => { try { window.ReactNativeWebView && window.ReactNativeWebView.postMessage(JSON.stringify(obj)); } catch (e) {} };
+
+  // ネイティブが native-login 成功後に呼ぶ:worker session を受け取りログイン状態にする
+  function applyNativeSession(sessionToken, u){
+    if (!sessionToken) return;
+    session = sessionToken; localStorage.setItem("stw_session", session);
+    user = { email: (u && u.email) || "", name: (u && u.name) || "", picture: (u && u.picture) || "" };
+    localStorage.setItem("stw_user", JSON.stringify(user));
+    closeModal(); renderAuth();
+    postNative({ type: "RC_LOGIN", payload: { uid: (u && u.uid) || "" } });   // RevenueCat を同 uid に紐付け
+    try { if (typeof window.showToast === "function") window.showToast("ログインしました"); } catch (e) {}
+    try { pullMerge(); } catch (e) {}
+  }
+  if (typeof window !== "undefined") window.stwNativeLogin = applyNativeSession;
+
   function login(){
+    if (isNative()) {   // アプリ内:GIS は不可 → ネイティブの Apple/Google シートを開く
+      postNative({ type: "OPEN_LOGIN", lang: localStorage.getItem("stw-lang") || "ja" });
+      return;
+    }
     const bg = document.getElementById("loginBg"); if (!bg) return;
     bg.classList.add("show");
-    renderGoogleBtn();
+    const note = document.getElementById("inAppNote"), gbtn = document.getElementById("gLoginBtn"), abtn = document.getElementById("aLoginBtn");
+    if (isInApp()) {   // アプリ内ブラウザ:Google/Apple ボタンは白画面になるので、代わりに案内を出す
+      if (note) note.style.display = "";
+      if (gbtn) gbtn.style.display = "none";
+      if (abtn) abtn.style.display = "none";
+    } else {
+      if (note) note.style.display = "none";
+      if (gbtn) gbtn.style.display = "flex";
+      renderGoogleBtn();
+      // Apple ボタンは Services ID を設定済みのときだけ出す（未設定なら壊れないよう非表示）
+      if (abtn) abtn.style.display = STW_APPLE_SERVICE_ID ? "flex" : "none";
+      if (STW_APPLE_SERVICE_ID) loadAppleSdk();
+    }
   }
   function renderGoogleBtn(){
     if (gBtnRendered) return;
@@ -50,11 +103,65 @@ const STW_WEB = (() => {
       { theme: "filled_black", size: "large", text: "signin_with", shape: "pill", width: 240, locale });
     gBtnRendered = true;
   }
+
+  // ── Web Apple ログイン（Services ID の設定後に有効化）──
+  let appleSdkLoading = false, appleSdkReady = false;
+  function loadAppleSdk(cb){
+    if (appleSdkReady || (window.AppleID && window.AppleID.auth)) { appleSdkReady = true; if (cb) cb(); return; }
+    if (appleSdkLoading) return;
+    appleSdkLoading = true;
+    const s = document.createElement("script");
+    s.src = "https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js";
+    s.async = true; s.onload = () => { appleSdkReady = true; if (cb) cb(); };
+    document.head.appendChild(s);
+  }
+  async function loginApple(){
+    const toast = m => { try { if (typeof window.showToast === "function") window.showToast(m); } catch(e){} };
+    if (!STW_APPLE_SERVICE_ID) return;
+    loadAppleSdk(async () => {
+      try {
+        window.AppleID.auth.init({ clientId: STW_APPLE_SERVICE_ID, scope: "name email", redirectURI: STW_APPLE_REDIRECT, usePopup: true });
+        const res = await window.AppleID.auth.signIn();
+        const idToken = res && res.authorization && res.authorization.id_token;
+        if (!idToken) { toast("ログインに失敗しました。もう一度お試しください"); return; }
+        const r = await fetch(STW_API + "/api/web-login", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ provider: "apple", token: idToken }) });
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok || !d.sessionToken) { toast("ログインに失敗しました（サーバー）。少し待って再度お試しください"); return; }
+        session = d.sessionToken; localStorage.setItem("stw_session", session);
+        // Apple は初回のみ name を返す。以後は既存表示を保持。
+        user = { email: d.email || (user && user.email) || "", name: d.name || (user && user.name) || "", picture: "" };
+        localStorage.setItem("stw_user", JSON.stringify(user));
+        closeModal(); renderAuth(); toast("ログインしました");
+        try { await pullMerge(); } catch(e){}
+      } catch (e) {
+        // ユーザーが自分でポップアップを閉じた等は無視
+        const m = String((e && e.error) || (e && e.message) || e);
+        if (!/popup_closed|user_cancelled|user_trigger_new_signin_flow|cancel/i.test(m)) toast("通信エラー。ネットワークを確認してもう一度");
+      }
+    });
+  }
   function closeModal(){ document.getElementById("loginBg")?.classList.remove("show"); }
+  // アカウント削除（Apple 5.1.1(v)）：本人 session でサーバーの全データ削除 → ローカルも消してログアウト
+  async function deleteAccount(){
+    if (!session) return false;
+    try {
+      const r = await fetch(STW_API + "/api/delete-account", { method: "POST", headers: { Authorization: "Bearer " + session } });
+      if (!r.ok) return false;
+      session = null; user = null;
+      localStorage.removeItem("stw_session"); localStorage.removeItem("stw_user");
+      try { google.accounts.id.disableAutoSelect(); } catch (e) {}
+      if (isNative()) postNative({ type: "NATIVE_LOGOUT" });
+      renderAuth();
+      return true;
+    } catch (e) { return false; }
+  }
   function logout(){
     session = null; user = null;
     localStorage.removeItem("stw_session"); localStorage.removeItem("stw_user");
     try { google.accounts.id.disableAutoSelect(); } catch (e) {}
+    if (isNative()) postNative({ type: "NATIVE_LOGOUT" });   // ネイティブ側も signOut + RevenueCat を匿名へ
     renderAuth();
   }
 
@@ -69,6 +176,8 @@ const STW_WEB = (() => {
     } else {
       el.innerHTML = `<button class="lang-btn" onclick="STW_WEB.login()">${(typeof twT==="function"?twT("navLogin"):"ログイン")}</button>`;
     }
+    // ログイン状態に依存する画面（プロフィールの sign in/out 表示）も一緒に更新
+    if (typeof window.twRerenderAll === "function") { try { window.twRerenderAll(); } catch(e){} }
   }
 
   // ── 同期 ──
@@ -155,5 +264,9 @@ const STW_WEB = (() => {
   if (session) pullMerge();
   initGoogle();
 
-  return { login, logout, closeModal, initGoogle, isLoggedIn: () => !!session, getUser: () => user, sync: pullMerge };
+  return { login, logout, closeModal, initGoogle, copyUrl, isInApp, loginApple, deleteAccount, isLoggedIn: () => !!session, getUser: () => user, sync: pullMerge };
 })();
+// ★重要：STW_WEB は const 宣言なので window に自動では乗らない。renderProfile 等が
+//   `window.STW_WEB && STW_WEB.isLoggedIn()` でログイン判定しており、window.STW_WEB が
+//   undefined だと「ログイン済みでも常にゲスト表示（Sign in のまま・ログアウト無し）」になる。
+if (typeof window !== "undefined") window.STW_WEB = STW_WEB;

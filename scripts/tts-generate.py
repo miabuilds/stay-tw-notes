@@ -30,6 +30,7 @@ const texts = new Set();
 });
 require("./phrases-l1.js").PHRASES_L1.forEach(s => s.items.forEach(i => texts.add(i.z)));
 ["l1","l2","l3","l4","l5"].forEach(l => { try { require("./reading-" + l + ".js")["READING_" + l.toUpperCase()].forEach(s => { s.lines.forEach(x => texts.add(x.z)); s.vocab.forEach(v => texts.add(v.w)); }); } catch(e){} });
+for (let n = 1; n <= 30; n++) { try { require("./articles-" + n + ".js")["ARTICLES_" + n].forEach(a => { a.paras.forEach(p => texts.add(p.z)); a.vocab.forEach(v => texts.add(v.w)); }); } catch(e){} }
 console.log(JSON.stringify([...texts]));
 """
 

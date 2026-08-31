@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>退款政策 — StayTW Study</title><link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script src="analytics.js?v=51"></script>
+<style>body{font-family:-apple-system,"PingFang TC","Hiragino Sans","Noto Sans JP",sans-serif;max-width:720px;margin:0 auto;padding:48px 24px;line-height:1.9;color:#1C1C1E;background:#FAF8F3}h1{font-size:24px;margin-bottom:24px}h2{font-size:17px;margin:28px 0 8px}p,li{font-size:14.5px;color:#444}a{color:#2F5D7A}#langToggle{font:inherit;font-size:13px;color:#2F5D7A;background:transparent;border:1px solid #d8d2c4;border-radius:8px;padding:4px 12px;cursor:pointer}#langToggle:hover{background:#f0ebe0}</style></head><body>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+<button onclick="stwBack()" aria-label="Back" style="font:inherit;font-size:14px;color:#2F5D7A;background:transparent;border:1px solid #d8d2c4;border-radius:8px;padding:5px 13px;cursor:pointer;display:inline-flex;align-items:center;gap:5px"><span style="font-size:16px;line-height:1">←</span> <span id="backTxt">返回</span></button>
+<button id="langToggle" onclick="cycleLang()" aria-label="Language">繁體中文</button></div>
+<h1 data-i18n="h1">退款政策</h1>
+<p data-i18n="intro"></p>
+<h2 data-i18n="h2_1"></h2><p data-i18n="p1"></p>
+<h2 data-i18n="h2_2"></h2><p data-i18n="p2"></p>
+<h2 data-i18n="h2_3"></h2><p data-i18n="p3"></p>
+<h2 data-i18n="h2_4"></h2><p data-i18n="p4"></p>
+<h2 data-i18n="h2_5"></h2><p data-i18n-html="p5"></p>
+<p style="margin-top:36px;font-size:13px;color:#888" data-i18n="footer"></p>
+<script>
+const T={
+zh:{langBtn:"繁體中文",h1:"退款政策",
+ intro:"本頁說明 StayTW（台灣華語線上學習服務）的付款與退款規定。購買前請詳細閱讀。",
+ h2_1:"一、服務性質",
+ p1:"本服務為線上數位學習內容與工具（單字、注音、文法、閱讀、練習等），付款成功後即時開通、立即提供使用，並無實體商品寄送。",
+ h2_2:"二、訂閱與扣款",
+ p2:"訂閱方案（月費／年費）採自動續訂，您可於當期結束前隨時取消，取消後即不再對後續期間收費，已完成的當期費用恕不退還。買斷方案為一次性付款、不再續扣。網頁版信用卡付款由「統一金流 PayUni」處理。",
+ h2_3:"三、七日猶豫期之例外",
+ p3:"依《消費者保護法》及《通訊交易解除權合理例外情事適用準則》，本服務屬「非以有形媒介提供之數位內容，或一經提供即為完成之線上服務，並經消費者事先同意」者，於購買並開通後不適用七日猶豫期（七天鑑賞期）。",
+ h2_4:"四、可退款情形",
+ p4:"如遇重複扣款、系統錯誤、付款成功但未開通等情形，請於發現後 7 日內來信客服並附上交易資訊（訂單編號、付款時間、金額）。我們將協助查明，確認屬實後於合理期間內辦理退款。",
+ h2_5:"五、聯絡方式",
+ p5:'退款或付款相關問題，請來信：<a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a>，我們會盡快回覆處理。',
+ footer:"最後更新：2026 年 8 月"},
+ja:{langBtn:"日本語",h1:"返金ポリシー",
+ intro:"本ページは StayTW（台湾華語オンライン学習サービス）の支払いと返金の規定を説明します。ご購入前にお読みください。",
+ h2_1:"1. サービスの性質",
+ p1:"本サービスはオンラインのデジタル学習コンテンツとツール（単語・注音・文法・読解・練習など）で、決済完了後すぐに開通・即時提供され、物品の配送はありません。",
+ h2_2:"2. サブスクと課金",
+ p2:"サブスク（月額／年額）は自動更新です。期間終了前ならいつでも解約でき、解約後は次期間以降の課金はありません。すでに完了した当期分の料金は返金いたしかねます。買い切りは一度きりの支払いで、更新はありません。Web のクレジットカード決済は「PayUni（統一金流）」が処理します。",
+ h2_3:"3. クーリングオフ（7日）の例外",
+ p3:"デジタルコンテンツ、または提供完了により役務が完了するオンラインサービスで、利用者が事前に同意したものについては、購入・開通後の7日間クーリングオフは適用されません（台湾の関連法令に基づく）。",
+ h2_4:"4. 返金の対象",
+ p4:"二重決済、システムエラー、決済成功したが開通されない等の場合は、発見後7日以内に取引情報（注文番号・決済日時・金額）を添えてお問い合わせください。確認のうえ、合理的な期間内に返金対応いたします。",
+ h2_5:"5. お問い合わせ",
+ p5:'返金・支払いに関するお問い合わせ：<a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a>。できるだけ早く対応いたします。',
+ footer:"最終更新：2026年8月"},
+en:{langBtn:"English",h1:"Refund Policy",
+ intro:"This page explains the payment and refund terms of StayTW (an online Taiwanese Mandarin learning service). Please read before purchasing.",
+ h2_1:"1. Nature of the Service",
+ p1:"The Service is online digital learning content and tools (vocabulary, Zhuyin, grammar, reading, practice, etc.), activated immediately upon successful payment. No physical goods are shipped.",
+ h2_2:"2. Subscriptions and Billing",
+ p2:"Subscription plans (monthly/yearly) auto-renew. You may cancel anytime before the end of the current period; after cancellation you will not be charged for future periods, and fees already charged for the current period are non-refundable. The lifetime plan is a one-time payment with no renewal. Web card payments are processed by PayUni.",
+ h2_3:"3. Exception to the 7-Day Cooling-Off Period",
+ p3:"Under Taiwan's Consumer Protection Act and related rules, this Service is digital content or an online service that is completed upon delivery, provided with the consumer's prior consent; therefore the 7-day cooling-off period does not apply after purchase and activation.",
+ h2_4:"4. Eligible Refund Cases",
+ p4:"In cases such as duplicate charges, system errors, or a successful payment that was not activated, please contact us within 7 days of discovery with your transaction details (order number, payment time, amount). We will investigate and, once confirmed, process a refund within a reasonable period.",
+ h2_5:"5. Contact",
+ p5:'For refund or payment questions, email: <a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a>. We will respond as soon as possible.',
+ footer:"Last updated: August 2026"},
+ko:{langBtn:"한국어",h1:"환불 정책",
+ intro:"본 페이지는 StayTW(대만 화어 온라인 학습 서비스)의 결제 및 환불 규정을 설명합니다. 구매 전에 읽어 주세요.",
+ h2_1:"1. 서비스의 성격",
+ p1:"본 서비스는 온라인 디지털 학습 콘텐츠 및 도구(단어·주음·문법·읽기·연습 등)로, 결제 완료 후 즉시 개통·제공되며 실물 배송은 없습니다.",
+ h2_2:"2. 구독 및 청구",
+ p2:"구독 플랜(월/연)은 자동 갱신됩니다. 현재 기간 종료 전 언제든 해지할 수 있으며, 해지 후에는 이후 기간에 대해 청구되지 않고 이미 청구된 당기 요금은 환불되지 않습니다. 평생 플랜은 1회 결제로 갱신이 없습니다. 웹 카드 결제는 PayUni가 처리합니다.",
+ h2_3:"3. 7일 청약철회 예외",
+ p3:"대만 소비자보호법 및 관련 규정에 따라, 본 서비스는 소비자의 사전 동의를 받아 제공되는 디지털 콘텐츠 또는 제공 완료로 완료되는 온라인 서비스에 해당하므로, 구매·개통 후 7일 청약철회가 적용되지 않습니다.",
+ h2_4:"4. 환불 가능 사유",
+ p4:"중복 청구, 시스템 오류, 결제는 성공했으나 개통되지 않은 경우 등에는 발견 후 7일 이내에 거래 정보(주문번호·결제일시·금액)를 첨부하여 문의해 주세요. 확인 후 합리적인 기간 내에 환불을 처리합니다.",
+ h2_5:"5. 문의",
+ p5:'환불·결제 관련 문의: <a href="mailto:stayjpplan@gmail.com">stayjpplan@gmail.com</a>. 최대한 빨리 답변드리겠습니다.',
+ footer:"최종 업데이트: 2026년 8월"}
+};
+function curLang(){
+  var q=(new URLSearchParams(location.search)).get("lang");
+  if(q){q=q.toLowerCase(); if(q.indexOf("zh")===0||q==="tw")return"zh"; if(T[q])return q;}
+  var s=localStorage.getItem("stw-lang"); if(s&&T[s])return s;
+  return "zh";
+}
+var LANG=curLang();
+function applyLang(){
+  document.documentElement.lang=(LANG==="zh")?"zh-Hant":LANG;
+  var d=T[LANG]||T.zh;
+  document.getElementById("langToggle").textContent=d.langBtn;
+  var _b=document.getElementById("backTxt"); if(_b)_b.textContent=({zh:"返回",ja:"戻る",en:"Back",ko:"뒤로"})[LANG]||"返回";
+  document.querySelectorAll("[data-i18n]").forEach(function(el){var k=el.getAttribute("data-i18n");if(d[k]!==undefined)el.textContent=d[k];});
+  document.querySelectorAll("[data-i18n-html]").forEach(function(el){var k=el.getAttribute("data-i18n-html");if(d[k]!==undefined)el.innerHTML=d[k];});
+}
+function cycleLang(){var o=["zh","ja","en","ko"];LANG=o[(o.indexOf(LANG)+1)%o.length];if(LANG!=="zh")localStorage.setItem("stw-lang",LANG);applyLang();}
+function stwBack(){ if(history.length>1){ history.back(); } else { location.href="index.html"; } }
+applyLang();
+</script>
+</body></html>
