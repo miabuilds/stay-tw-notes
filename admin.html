@@ -63,13 +63,27 @@ a{color:#2F5D7A}
 
     <h2>使用者回饋</h2>
     <div class="tbl"><table id="fb"><thead><tr><th>時間(UTC)</th><th>類型</th><th>內容</th><th>email</th></tr></thead><tbody></tbody></table></div>
+
+    <h2>メール購読リスト <span class="muted" id="subsCount"></span></h2>
+    <div class="tbl"><table id="subs"><thead><tr><th>時間(UTC)</th><th>email</th><th>言語</th><th>來源</th></tr></thead><tbody></tbody></table></div>
+    <button class="btn" style="margin-top:10px" onclick="copyEmails('subs')">📋 全メールをコピー</button>
+
+    <h2>登録ユーザー（Google 登入） <span class="muted" id="usersCount"></span></h2>
+    <div class="tbl"><table id="users"><thead><tr><th>最終ログイン(UTC)</th><th>email</th><th>プロバイダ</th></tr></thead><tbody></tbody></table></div>
+    <button class="btn" style="margin-top:10px" onclick="copyEmails('users')">📋 全メールをコピー</button>
     <p class="muted" style="margin-top:20px">來源：RevenueCat webhook → Cloudflare D1。更完整的圖表看 <a href="https://app.revenuecat.com/projects/5b67fb57/overview" target="_blank">RevenueCat 儀表板</a>。金額為 RC 換算美金；日圓實收以 App Store Connect 為準。</p>
     <button class="btn" style="margin-top:14px" onclick="localStorage.removeItem('stw_admin_tok');location.reload()">登出</button>
   </div>
 </div>
 <script>
-const API="https://staytw-api.abc83327.workers.dev";
+// 同源代理（pages.dev/api/* → Service Binding → Worker）。某些網路連不到 workers.dev、但 pages.dev 通。
+const API="";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function copyEmails(tblId){
+  const emails=[...document.querySelectorAll("#"+tblId+" tbody tr td:nth-child(2)")].map(td=>td.textContent.trim()).filter(x=>x&&x.indexOf("@")>=0);
+  if(!emails.length){ alert("メールがありません"); return; }
+  navigator.clipboard.writeText(emails.join(", ")).then(()=>alert(emails.length+" 件のメールをコピーしました"),()=>alert("コピー失敗"));
+}
 const WEB_CLIENT_ID="949214636130-e2dl3h0t1l789fggve3vsd6pu670lnb1.apps.googleusercontent.com";
 async function onGoogleCredential(resp){
   const err=document.getElementById("loginErr"); err.textContent="";
@@ -94,7 +108,7 @@ async function load(){
   const tok=localStorage.getItem("stw_admin_tok");
   if(!tok) return;
   try{
-    const [sum, events, fb, traf]=await Promise.all([api("/api/admin/summary"),api("/api/admin/events"),api("/api/admin/feedback"),api("/api/admin/traffic")]);
+    const [sum, events, fb, traf, subs, users]=await Promise.all([api("/api/admin/summary"),api("/api/admin/events"),api("/api/admin/feedback"),api("/api/admin/traffic"),api("/api/admin/subscribers"),api("/api/admin/users")]);
     document.getElementById("login").style.display="none";
     document.getElementById("dash").style.display="";
     document.getElementById("cards").innerHTML=`
@@ -114,6 +128,10 @@ async function load(){
     document.querySelector("#trCountry tbody").innerHTML=(traf.countries||[]).map(r=>`<tr><td>${esc(r.country)}</td><td>${r.n}</td></tr>`).join("")||"<tr><td colspan=2 class=muted>—</td></tr>";
     document.querySelector("#trPath tbody").innerHTML=(traf.paths||[]).map(r=>`<tr><td>${esc(r.path)}</td><td>${r.n}</td></tr>`).join("")||"<tr><td colspan=2 class=muted>—</td></tr>";
     document.querySelector("#trDaily tbody").innerHTML=(traf.daily||[]).map(r=>`<tr><td>${esc(r.d)}</td><td>${r.n}</td></tr>`).join("")||"<tr><td colspan=2 class=muted>還沒有流量</td></tr>";
+    document.getElementById("subsCount").textContent = "（"+(subs.count??0)+" 件）";
+    document.querySelector("#subs tbody").innerHTML=(subs.list||[]).map(r=>`<tr><td>${esc(r.ts)}</td><td>${esc(r.email)}</td><td>${esc(r.lang)}</td><td>${esc(r.source)}</td></tr>`).join("")||"<tr><td colspan=4 class=muted>還沒有訂閱</td></tr>";
+    document.getElementById("usersCount").textContent = "（"+(users.count??0)+" 人）";
+    document.querySelector("#users tbody").innerHTML=(users.list||[]).map(r=>`<tr><td>${esc(r.last)}</td><td>${esc(r.email)}</td><td>${esc(r.provider)}</td></tr>`).join("")||"<tr><td colspan=3 class=muted>還沒有登入者</td></tr>";
   }catch(e){
     document.getElementById("loginErr").textContent = e.message==="unauthorized" ? "セッション切れ。もう一度ログインしてください。" : "載入失敗："+e.message;
     localStorage.removeItem("stw_admin_tok");

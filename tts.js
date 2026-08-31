@@ -8,6 +8,13 @@ const TTS = (() => {
   // ── 事前生成 mp3（scripts/tts-generate.py）があれば最優先で使う ──
   // manifest: { "原文テキスト": "ハッシュ.mp3" }。無い環境では Web Speech にフォールバック。
   let MANIFEST = null;
+  // 音檔位置。"" = 本站相對路徑（現況、Pages で配信）。
+  // 将来ファイルが Pages の 2 万件上限に近づいたら、ここを R2 の公開ドメイン（末尾 / つき、
+  // 例 "https://media.example.com/"）にするだけで R2 配信に切替できる。それ以外は無変更。
+  const TTS_BASE = "";
+  let playToken = 0;   // stop() で増やし、読込中に解決した play() を無効化（＝押した瞬間に止める）
+  // 再生速度（全音声共通。0.5〜2 倍、localStorage で永続）
+  let SPD = 1; try { SPD = Math.max(0.5, Math.min(2, parseFloat(localStorage.getItem("stw_tts_rate")) || 1)); } catch (e) {}
   const audioEl = typeof Audio !== "undefined" ? new Audio() : null;
   if (typeof fetch !== "undefined") {
     fetch("audio/manifest.json")
@@ -15,24 +22,38 @@ const TTS = (() => {
       .then(m => { MANIFEST = m; })
       .catch(() => {});
   }
-  function playMp3(text, rate, onend) {
+  function playMp3(text, rate, onend, onprog) {
     if (!MANIFEST || !audioEl) return false;
     const f = MANIFEST[text];
     if (!f) return false;
     if ("speechSynthesis" in window && speechSynthesis.speaking) speechSynthesis.cancel();
-    audioEl.playbackRate = rate || 1;
+    audioEl.playbackRate = SPD;
     // 再生完了で次へ進めるよう ended を通知（読み上げの自動送り用）
-    audioEl.onended = () => { if (onend) onend(); };
-    audioEl.onerror = () => { if (onend) onend(); };
+    audioEl.onended = () => { if (onprog) onprog(1); if (onend) onend(); };
+    // mp3 が読めない（弱い回線など）→ Web Speech にフォールバック（無音防止）
+    audioEl.onerror = () => { synthSpeak(text, onend, onprog); };
     // 同じ音声を連打したときは読み込み直さず頭出しだけ（連続タップのカクつき防止）
     if (audioEl.dataset.f === f && audioEl.readyState >= 2) {
       try { audioEl.currentTime = 0; } catch (e) {}
     } else {
-      audioEl.src = "audio/tts/" + f;
+      audioEl.src = TTS_BASE + "audio/tts/" + f;
       audioEl.dataset.f = f;
     }
+    const myToken = ++playToken;
     const p = audioEl.play();
-    if (p && p.catch) p.catch(() => {});   // 連打で前の再生が中断されても無視
+    // 読込に時間がかかり、その間に stop() されたら、再生開始した瞬間に止める（＝一時停止が空振りしない）
+    if (p && p.then) p.then(() => { if (myToken !== playToken) { try { audioEl.pause(); } catch (e) {} } }).catch(() => {});
+    // 逐字ハイライト（karaoke）：音源の再生位置から「今どの文字か」を毎フレーム通知。
+    // 中国語は 1 漢字＝ほぼ 1 音節でテンポが均一なので、時間比で十分正確に追える。
+    if (onprog) {
+      const tick = () => {
+        if (myToken !== playToken) return;                 // stop / 次の再生が来たら止める
+        const d = audioEl.duration;
+        if (d && isFinite(d) && d > 0) onprog(Math.min(1, audioEl.currentTime / d));
+        if (!audioEl.paused && !audioEl.ended && myToken === playToken) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
     return true;
   }
 
@@ -82,9 +103,13 @@ const TTS = (() => {
       .trim();
   }
 
-  function speak(text, rate, onend) {
+  function speak(text, rate, onend, onprog) {
     if (!text) { if (onend) onend(); return; }
-    if (playMp3(text, rate, onend)) return;      // 高音質 mp3 があればそちらを再生（ended で送り）
+    if (playMp3(text, rate, onend, onprog)) return;      // 高音質 mp3 があればそちらを再生（ended で送り）
+    synthSpeak(text, onend, onprog);
+  }
+  // Web Speech（mp3 が無い/読めない時のフォールバック）
+  function synthSpeak(text, onend, onprog) {
     if (!("speechSynthesis" in window)) { if (onend) onend(); return; }
     text = sanitize(text);
     if (!text) { if (onend) onend(); return; }
@@ -93,9 +118,11 @@ const TTS = (() => {
     u.lang = "zh-TW";
     const v = best();
     if (v) { u.voice = v; u.lang = v.lang; }
-    u.rate = rate || 0.95;
+    u.rate = SPD;
     u.pitch = 1.05;
-    let done = false; const fin = () => { if (done) return; done = true; if (onend) onend(); };
+    // 逐字ハイライト：boundary で読み上げ位置（文字インデックス）を通知（対応ブラウザのみ）
+    if (onprog) u.onboundary = e => { if (e.charIndex != null) onprog(Math.min(1, e.charIndex / (text.length || 1))); };
+    let done = false; const fin = () => { if (done) return; done = true; if (onprog) onprog(1); if (onend) onend(); };
     u.onend = fin; u.onerror = fin;
     speechSynthesis.speak(u);
   }
@@ -121,11 +148,27 @@ const TTS = (() => {
     speechSynthesis.onvoiceschanged = refresh;
   }
   function stop() {
-    if (audioEl) audioEl.pause();
-    if ("speechSynthesis" in window) speechSynthesis.cancel();
+    playToken++;   // 読込中の play() を無効化（押した瞬間に止める）
+    if (audioEl) {
+      try {
+        audioEl.onended = null; audioEl.onerror = null;   // ★ 先に外す（src 除去の onerror→synthSpeak を防ぐ）
+        audioEl.pause();
+        // iOS では pause() だけだと「今の一文を読み切る」ことがある → 音源を外して load() で完全停止
+        audioEl.removeAttribute("src");
+        audioEl.load();
+        audioEl.dataset.f = "";   // 次回は読み込み直す
+      } catch (e) {}
+    }
+    if ("speechSynthesis" in window) { try { speechSynthesis.cancel(); speechSynthesis.cancel(); } catch (e) {} }
   }
 
-  return { speak, speakKey, stop, options, setVoice, currentURI, refresh };
+  function setRate(r){ SPD = Math.max(0.5, Math.min(2, +r || 1)); try { localStorage.setItem("stw_tts_rate", SPD); } catch (e) {} if (audioEl) { try { audioEl.playbackRate = SPD; } catch (e) {} } }
+  function getRate(){ return SPD; }
+  return { speak, speakKey, stop, options, setVoice, currentURI, refresh, setRate, getRate };
 })();
 // 既存コードとの互換用グローバル
-function speakZh(text, rate, onend) { TTS.speak(text, rate, onend); }
+// ★重要：TTS は const 宣言なので window に自動では乗らない。全画面の一時停止は
+//   `if (window.TTS && TTS.stop) TTS.stop()` で守られており、window.TTS が undefined だと
+//   停止が一度も呼ばれない（＝暫停が効かない）。ここで明示的に公開して全ガードを有効化する。
+if (typeof window !== "undefined") { window.TTS = TTS; }
+function speakZh(text, rate, onend, onprog) { TTS.speak(text, rate, onend, onprog); }

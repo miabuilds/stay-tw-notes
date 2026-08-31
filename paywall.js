@@ -23,11 +23,24 @@ const Paywall = (() => {
   }
   function save(q) { localStorage.setItem(QUOTA_KEY, JSON.stringify(q)); }
 
-  // ★ プレビュー無料公開：ソフトローンチ中は Web を全解放（iOS 正式版が出たら false に戻す）。
-  //   Web は課金導線が無いので、ここを true にして試用者に全機能・全記事を開放する。
-  const PREVIEW_FREE = true;
+  // ★ Web 無料公開フラグ：以前は Web 全解放だったが、iOS アプリ公開後は Web でも
+  //   無料枠を適用し、上限に達したら「アプリで解鎖」へ誘導する（課金は App 内 IAP のみ）。
+  //   コンテンツ（単語・文法・フレーズ・注音・辞書）は gate() を通さないので常に無料。
+  const PREVIEW_FREE = false;
+  // 無料開放するアカウント（メールのハッシュで判定。生メールを公開JSに載せないため）
+  const WHITELIST_HASHES = ["81d521e5"];   // abc83327@gmail.com
+  function fnv1a(s) { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193); } return (h >>> 0).toString(16).padStart(8, "0"); }
+  function isWhitelisted() {
+    try {
+      const u = JSON.parse(localStorage.getItem("stw_user") || "null");
+      const email = u && u.email ? String(u.email).trim().toLowerCase() : "";
+      return !!email && WHITELIST_HASHES.includes(fnv1a(email));
+    } catch (e) { return false; }
+  }
   function isPremium() {
-    if (PREVIEW_FREE) return true;
+    // Web は課金導線が無いので常に全解放（集客ファネル）。iOS アプリ内だけ課金を強制する。
+    if (PREVIEW_FREE && !(typeof window !== "undefined" && window.ReactNativeWebView)) return true;
+    if (isWhitelisted()) return true;                       // 指定アカウントは常に解鎖
     if (typeof window !== "undefined" && window.__STW_ENTITLED) return true;
     return localStorage.getItem("stw_premium") === "1";
   }
@@ -101,8 +114,8 @@ const Paywall = (() => {
     try { window.ReactNativeWebView.postMessage(JSON.stringify({ type: "OPEN_PAYWALL", lang: twGetLang() })); } catch (e) {}
   }
   function openStore() {
-    // App Store URL（上架後に差し替え）
-    window.open("https://apps.apple.com/app/staytw", "_blank");
+    // App Store の StayTW ページ（id6794272037）。Web の無料枠を使い切ったらここへ誘導。
+    window.open("https://apps.apple.com/app/id6794272037", "_blank");
   }
 
   // ネイティブ側から window.stwSetEntitled(true/false) を注入して呼ぶ
@@ -110,3 +123,6 @@ const Paywall = (() => {
 
   return { gate, isPremium, setEntitled, quotaBadge, left, show, close, openNative, openStore, LIMITS };
 })();
+// ★重要：Paywall は const 宣言なので window に自動では乗らない。renderProfile / twUpgrade が
+//   window.Paywall で判定・呼び出しており、undefined だと「アップグレード無反応」になる（TTS/STW_WEB と同じ罠）。
+if (typeof window !== "undefined") window.Paywall = Paywall;
