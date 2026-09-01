@@ -97,6 +97,8 @@ export default {
       if (b.website) return json({ ok: true }, 200, h);                    // 蜜罐：機器人填了就默默丟掉
       const msg = String(b.message || "").trim().slice(0, 3000);
       if (msg.length < 5) return json({ error: "message too short" }, 400, h);
+      const email = String(b.email || "").trim().slice(0, 200);   // email 必須：ログイン中は自動付与、匿名は入力必須
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: "email required" }, 400, h);
       const type = ["bug", "content", "feature", "other"].includes(b.type) ? b.type : "other";
       // 限流：1 IP 1 日 15 件まで（それ以上は静かに破棄＝スパム防止、正規ユーザーには成功に見せる）
       const fip = req.headers.get("CF-Connecting-IP") || "unknown", fday = new Date().toISOString().slice(0, 10);
@@ -106,7 +108,7 @@ export default {
       await env.DB.prepare("INSERT INTO chat_quota (key,count,day) VALUES (?1,1,?2) ON CONFLICT(key) DO UPDATE SET count=count+1, day=?2").bind(fkey, fday).run();
       await env.DB.prepare(
         "INSERT INTO feedback (type, message, email, lang, ua) VALUES (?1, ?2, ?3, ?4, ?5)"
-      ).bind(type, msg, String(b.email || "").slice(0, 200), String(b.lang || "").slice(0, 8),
+      ).bind(type, msg, email, String(b.lang || "").slice(0, 8),
              (req.headers.get("User-Agent") || "").slice(0, 300)).run();
       return json({ ok: true }, 200, h);
     }
