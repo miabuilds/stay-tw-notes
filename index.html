@@ -1239,7 +1239,7 @@ function loadRubyMap(cb){
   if (RUBYMAP) { if (cb) cb(); return; }
   if (RUBYMAP_LOADING) return;
   RUBYMAP_LOADING = true;
-  fetch("data/reading-ruby.json?v=4").then(r => r.ok ? r.json() : null).then(m => { RUBYMAP = m || {}; RUBYMAP_LOADING = false; if (cb) cb(); }).catch(() => { RUBYMAP_LOADING = false; });
+  fetch("data/reading-ruby.json?v=5").then(r => r.ok ? r.json() : null).then(m => { RUBYMAP = m || {}; RUBYMAP_LOADING = false; if (cb) cb(); }).catch(() => { RUBYMAP_LOADING = false; });
 }
 // その文字（通し番号 ci）のルビ HTML を返す。both は注音（上）＋拼音（下）の 2 行。
 function twRubyHtml(ruby, ci){
@@ -2343,7 +2343,11 @@ function twCharSpans(str, ci, extra, ruby){
     const rb = han ? twRubyHtml(ruby, ci) : "";
     const cls = "rc" + (han ? " rc-h" : "") + (extra || "");
     const rcls = "rcr" + (TW_RUBY_MODE === "both" ? " rcr2" : "");
-    html += `<span class="${cls}" data-ci="${ci}">${rb ? `<span class="${rcls}">${rb}</span>` : ""}<span class="rct">${c}</span></span>`;
+    // 逐字の文脈正音（reading-ruby.json）を data 属性に持たせ、辞書カードが辞書の単独本調でなく
+    // 文脈の読み（不+四声=二声、破音字…）を表示できるようにする。
+    const dz = (han && ruby && ruby.z && ruby.z[ci]) ? ` data-z="${ruby.z[ci]}"` : "";
+    const dp = (han && ruby && ruby.p && ruby.p[ci]) ? ` data-p="${String(ruby.p[ci]).replace(/"/g,"&quot;")}"` : "";
+    html += `<span class="${cls}" data-ci="${ci}"${dz}${dp}>${rb ? `<span class="${rcls}">${rb}</span>` : ""}<span class="rct">${c}</span></span>`;
     ci++;
   }
   return { html, ci };
@@ -2377,17 +2381,27 @@ function twMergeVocab(base, text){
   return out;
 }
 function twBindWords(container, vocab){
-  container.querySelectorAll(".ar-w").forEach(el => el.onclick = e => { e.stopPropagation(); twWord(vocab, el.dataset.w); });
+  container.querySelectorAll(".ar-w").forEach(el => el.onclick = e => { e.stopPropagation(); twWord(vocab, el.dataset.w, el); });
   // 生詞以外の漢字も 1 字タップで発音（「押せる所」を増やす）。.rct から文字だけ取る（ルビは除く）
   container.querySelectorAll(".rc.tapc.rc-h").forEach(el => el.onclick = e => {
     e.stopPropagation();
     const t = (el.querySelector(".rct") || el).textContent;
     if (!t || !TW_HAN_RE.test(t)) return;
     const hit = stwLookup(t);                 // 1 字でも辞書にあれば意味カードを出す（我・你・吃…）
-    if (hit) { twShowWordCard(hit); }
+    if (hit) { twShowWordCard(hit, twCtxReading(el)); }   // 文脈の読み（data-z/-p）で本調を上書き
     else { if (window.TTS && TTS.stop) TTS.stop(); speakZh(t); }
     el.classList.add("on"); setTimeout(()=>el.classList.remove("on"), 500);
   });
+}
+// タップした語（.ar-w）/字（.rc-h）の配下 .rc-h から文脈正音を集めて {zy,py} を作る。
+// 全漢字に data-z が揃った時だけ上書き（欠けは辞書本調に任せる＝不整合を出さない）。
+function twCtxReading(el){
+  if (!el) return null;
+  const hans = el.classList && el.classList.contains("rc-h") ? [el] : [...el.querySelectorAll(".rc-h")];
+  if (!hans.length) return null;
+  const zs = [], ps = [];
+  for (const c of hans){ const z = c.dataset.z, p = c.dataset.p; if (!z) return null; zs.push(z); if (p) ps.push(p); }
+  return { zy: zs.join(" "), py: ps.join(" ") };
 }
 // 逐字ハイライト driver：音節（漢字＝rc-h）の並びに frac(0..1) を割り付け、読んでいる漢字だけを光らせる。
 // 記号は時間割りに含めない＝ポーズで先走らない。手前の全 .rc は「読了(said)」にする。
@@ -2415,9 +2429,9 @@ function twCycleReadingRuby(rerender){
   if (TW_RUBY_MODE !== "off") loadRubyMap(go); else go();
 }
 function twReadingRubyLabel(){ return twT({ zy:"rubyZy", py:"rubyPy", both:"rubyBoth", off:"rubyOff" }[TW_RUBY_MODE] || "rubyZy"); }
-function twWord(vocab, w){
+function twWord(vocab, w, el){
   const v = (vocab || []).find(x => x.w === w) || stwLookup(w); if (!v) return;
-  twShowWordCard(v);
+  twShowWordCard(v, twCtxReading(el));   // 文脈の読みがあれば辞書本調を上書き
 }
 // 辞書カード本体（読解・記事のタップ辞書、1 字タップ、どこからでも同じ見た目）
 function twShowWordCard(v, opts){
@@ -2426,7 +2440,8 @@ function twShowWordCard(v, opts){
   const isExt = !!v._ext;
   const lv = v._lv || (STW_DICT[v.w] && STW_DICT[v.w]._lv) || (isExt ? "ext" : currentLevel);
   const inSrs = !!(window.SRS && SRS.getData && SRS.getData()[lv + ":" + v.w]);
-  const py = v.py || "", zy = v.zy || "";
+  // 文脈正音（opts.zy/py）があれば辞書の単独本調より優先（不+四声=二声・破音字…を文章と一致させる）。
+  const py = (opts && opts.py) || v.py || "", zy = (opts && opts.zy) || v.zy || "";
   let meanHtml = "", exHtml = "";
   if (isExt) {
     // 拡張辞書：表示言語のグロス（日/韓/英）＋中国語釈義（例文なし）。未訳なら英語→中国語にフォールバック。
