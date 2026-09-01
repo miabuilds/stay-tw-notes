@@ -223,8 +223,11 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       const row = await env.DB.prepare("SELECT count FROM chat_quota WHERE key=?1").bind(qkey).first();
       if (row && row.count >= DAILY) return json({ error: "quota" }, 429, h);
       await env.DB.prepare("INSERT INTO chat_quota (key,count,day) VALUES (?1,1,?2) ON CONFLICT(key) DO UPDATE SET count=count+1, day=?2").bind(qkey, day).run();
+      // 破音字強制読み：呼び出し側が [{c:字, py:"dei3"}] を渡すと、その字を SSML phoneme で必ず正しく読む。
+      // phoneme は Google の pinyin alphabet が確実なので、force があるときは Azure を飛ばして Google を使う。
+      const wantForce = hasGoogle && Array.isArray(b.force) && b.force.some(f => f && f.c && f.py);
       try {
-        if (hasAzure) {
+        if (hasAzure && !wantForce) {
           const region = env.AZURE_SPEECH_REGION || "japaneast";
           const AZ = { f: "zh-TW-HsiaoChenNeural", m: "zh-TW-YunJheNeural", f2: "zh-TW-HsiaoYuNeural" };
           const voice = AZ[b.voice] || AZ.f;
@@ -246,7 +249,17 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
         // 多音字修正（TTS 常唸錯的）。用 SSML phoneme 強制正確台灣讀音，只在特定詞情境套用。
         const gesc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         const ph = (py) => (ch) => `<phoneme alphabet='pinyin' ph='${py}'>${ch}</phoneme>`;
-        let ssmlText = gesc(text)
+        let ssmlText;
+        if (wantForce) {
+          // 呼び出し側が指定した読みを最優先（破音字練習：POLYPHONE の検証済み読音をそのまま強制）。
+          ssmlText = gesc(text);
+          for (const f of b.force) {
+            if (!f || !f.c || !f.py) continue;
+            const c = gesc(String(f.c)), py = String(f.py).replace(/[^a-z0-9]/gi, "");
+            if (c && py) ssmlText = ssmlText.split(c).join(ph(py)(c));
+          }
+        } else {
+        ssmlText = gesc(text)
           .replace(/少(?=[冰糖鹽油辣子放量])/g, ph("shao3")("少"))                 // 少冰/少糖/少子…=三聲
           .replace(/(?<=音|聲|管|弦)樂|樂(?=器|團|曲|譜)/g, ph("yue4")("樂"))         // 音樂/樂器…樂=yuè
           .replace(/重(?=複|新|來|逢|疊|播)/g, ph("chong2")("重"))                    // 重複/重新…重=chóng
@@ -268,6 +281,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
           .replace(/(?<=災|苦|患|罹|避|危)難|難(?=民)/g, ph("nan4")("難"))                // 災難/難民…難=nàn
           .replace(/便(?=宜)/g, ph("pian2")("便"))                                     // 便宜…便=pián
           .replace(/(?<=首)都|都(?=市)/g, ph("du1")("都"));                             // 首都/都市…都=dū
+        }
         const tr = await fetch("https://texttospeech.googleapis.com/v1/text:synthesize?key=" + env.GOOGLE_TTS_KEY, {
           method: "POST", headers: { "content-type": "application/json" },
           body: JSON.stringify({ input: { ssml: "<speak>" + ssmlText + "</speak>" }, voice: { languageCode: "cmn-TW", name }, audioConfig: { audioEncoding: "MP3", speakingRate: 1.0, pitch: 0 } }),

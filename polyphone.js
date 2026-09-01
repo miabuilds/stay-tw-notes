@@ -112,12 +112,49 @@ const POLY = (() => {
   const box = () => document.getElementById("polyBox");
   const shuf = a => a.map(x => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map(p => p[1]);
 
+  // ── 収藏（破音字ごと。localStorage "stw_poly_fav" = 字の配列）──
+  const PF_KEY = "stw_poly_fav";
+  const pfGet = () => { try { return JSON.parse(localStorage.getItem(PF_KEY)) || []; } catch (e) { return []; } };
+  const pfHas = c => pfGet().includes(c);
+  function pfToggle(c) { const a = pfGet(), i = a.indexOf(c); if (i >= 0) a.splice(i, 1); else a.push(c); try { localStorage.setItem(PF_KEY, JSON.stringify(a)); } catch (e) {} return i < 0; }
+  const favBtn = c => `<button class="poly-fav-btn" onclick="event.stopPropagation();POLY.fav('${c}')" aria-label="収藏" style="background:none;border:none;cursor:pointer;font-size:20px;padding:2px 6px;color:${pfHas(c) ? "var(--ac)" : "var(--tx3)"}">${pfHas(c) ? "★" : "♡"}</button>`;
+  // 破音字1字の詳細（読音ごとに zy/py/意味/例詞🔊）＋収藏ボタン。
+  function polyDetail(p) {
+    const mk = twMKey();
+    const rows = p.r.map(r => `<div class="poly-r">
+      <div class="poly-r-h"><b>${r.zy}</b> <span style="color:var(--tx3)">${r.py}</span> — ${r.m[mk] || r.m.e || r.m.j}</div>
+      <div class="poly-r-ex">${r.ex.map(w => `<button class="poly-ex" onclick="POLY.say('${w}','${p.c}','${r.py}')">${w} 🔊</button>`).join("")}</div></div>`).join("");
+    return `<div class="poly-card"><div class="poly-card-h"><b style="font-size:26px">${p.c}</b>${favBtn(p.c)}</div>${rows}</div>`;
+  }
+  // 一覧 / 収藏だけ。fav=true で収藏のみ。
+  let _listFav = false;
+  function list(fav) {
+    _listFav = !!fav;
+    const arr = fav ? POLYPHONE.filter(p => pfHas(p.c)) : POLYPHONE;
+    const body = arr.length ? arr.map(polyDetail).join("") : `<p style="color:var(--tx2);text-align:center;margin:30px 12px">${twT("polyFavEmpty")}</p>`;
+    box().innerHTML = `<div class="aq-wrap"><div class="poly-list-top">
+      <button class="btn" onclick="POLY.home()">‹ ${twT("polyTitle")}</button>
+      <div class="poly-seg"><button class="${!fav ? "on" : ""}" onclick="POLY.list(false)">${twT("polyAll")} (${POLYPHONE.length})</button><button class="${fav ? "on" : ""}" onclick="POLY.list(true)">★ ${pfGet().length}</button></div>
+    </div><div class="poly-list">${body}</div></div>`;
+  }
+  function fav(c) {
+    const now = pfToggle(c);
+    if (typeof showToast === "function") showToast(now ? twT("favAdded") : twT("favRemoved"));
+    // 表示中のボタンを更新（一覧なら再描画、詳解ならその場更新）
+    document.querySelectorAll(".poly-fav-btn").forEach(b => { if ((b.getAttribute("onclick") || "").indexOf("'" + c + "'") >= 0) { b.textContent = pfHas(c) ? "★" : "♡"; b.style.color = pfHas(c) ? "var(--ac)" : "var(--tx3)"; } });
+    const lt = document.querySelector(".poly-list-top"); if (lt) list(_listFav);   // 収藏一覧は件数・絞り込みを更新
+  }
+
   function home() {
     box().innerHTML = `<div class="poly-home">
       <div class="poly-hero">破</div>
       <h2 class="poly-h">${twT("polyTitle")}</h2>
       <p class="poly-sub">${twT("polySub")}</p>
       <button class="btn primary" onclick="POLY.start()">${twT("polyStart")}</button>
+      <div class="poly-home-links">
+        <button class="btn" onclick="POLY.list(false)">📋 ${twT("polyAll")} (${POLYPHONE.length})</button>
+        <button class="btn" onclick="POLY.list(true)">★ ${twT("polySaved")} (${pfGet().length})</button>
+      </div>
       ${(typeof WrongBook!=="undefined" && WrongBook.forLevel("poly").length) ? `<div><button class="wb-link" onclick="openWrongBook('poly')">📕 ${twT("wbReview")} (${WrongBook.forLevel("poly").length})</button></div>` : ""}
     </div>`;
   }
@@ -139,7 +176,7 @@ const POLY = (() => {
     const wordHtml = it.word.split("").map(ch => ch === p.c ? `<b class="poly-hi">${ch}</b>` : ch).join("");
     box().innerHTML = `<div class="aq-wrap">
       <div style="font-size:13px;color:var(--tx3)">${qi+1} / ${deck.length}　✓ ${score}</div>
-      <div class="poly-word" onclick="POLY.say('${it.word}')">${wordHtml} <button class="tts-btn" style="width:30px;height:30px;font-size:13px" onclick="event.stopPropagation();POLY.say('${it.word}')">🔊</button></div>
+      <div class="poly-word" onclick="POLY.say('${it.word}','${p.c}','${p.r[it.ri].py}')">${wordHtml} <button class="tts-btn" style="width:30px;height:30px;font-size:13px" onclick="event.stopPropagation();POLY.say('${it.word}','${p.c}','${p.r[it.ri].py}')">🔊</button></div>
       <div class="ex-prompt">${twT("polyAsk").replace("%c", p.c)}</div>
       <div class="qz-opts zy" id="polyOpts">${it.opts.map(oi => `<button class="qz-opt" data-i="${oi}" data-ok="${oi===it.ri}" onclick="POLY.answer(${oi})">${p.r[oi].zy}</button>`).join("")}</div>
       <div id="polyFb"></div></div>`;
@@ -155,13 +192,13 @@ const POLY = (() => {
     // 詳解:列出這個字的所有讀音 + 例詞 + 🔊
     const rows = p.r.map((r, i) => `<div class="poly-r ${i===it.ri?'cur':''}">
       <div class="poly-r-h"><b>${r.zy}</b> <span style="color:var(--tx3)">${r.py}</span> — ${r.m[mk] || r.m.j}</div>
-      <div class="poly-r-ex">${r.ex.map(w => `<button class="poly-ex" onclick="POLY.say('${w}')">${w} 🔊</button>`).join("")}</div></div>`).join("");
+      <div class="poly-r-ex">${r.ex.map(w => `<button class="poly-ex" onclick="POLY.say('${w}','${p.c}','${r.py}')">${w} 🔊</button>`).join("")}</div></div>`).join("");
     document.getElementById("polyFb").innerHTML = `<div class="qz-fb ${ok?'ok':'ng'}">
       <div style="font-weight:700;font-size:15px">${ok ? "⭕ "+twT("qzRight") : "❌ "+twT("qzWrong")}</div>
-      <div style="margin:8px 0 4px">${twT("polyIn").replace("%w", it.word)}<b style="font-size:20px">${p.c}</b> ＝ <b style="font-size:20px;color:var(--ac)">${p.r[it.ri].zy}</b>（${p.r[it.ri].py}）</div>
+      <div style="margin:8px 0 4px">${twT("polyIn").replace("%w", it.word)}<b style="font-size:20px">${p.c}</b> ＝ <b style="font-size:20px;color:var(--ac)">${p.r[it.ri].zy}</b>（${p.r[it.ri].py}）${favBtn(p.c)}</div>
       <div style="text-align:left;margin-top:10px">${rows}</div>
       <div style="margin-top:14px"><button class="btn primary" onclick="POLY.next()">${twT("quizNext")} ›</button></div></div>`;
-    say(it.word);
+    say(it.word, p.c, p.r[it.ri].py);
   }
   function next() { qi++; q(); }
   function done() {
@@ -173,15 +210,25 @@ const POLY = (() => {
         <button class="btn" onclick="POLY.render()">${twT("startOver")||"OK"}</button></div>
       ${nWrong?`<div><button class="wb-link" onclick="openWrongBook('poly')">📕 ${twT("wbReview")} (${nWrong})</button></div>`:""}</div>`;
   }
-  // 破音字要唸對:走已修正的 /api/tts(Google+破音字phoneme);失敗退回瀏覽器音。
+  // 破音字要唸對:走 /api/tts,並把「該字的檢証済み読音」用 force 強制(SSML phoneme)。失敗退回瀏覽器音。
+  // py(注音資料の diacritic 拼音,例"děi")→ Google phoneme 用の番号調("dei3")。
+  function toneNum(py) {
+    if (!py) return "";
+    const T = { "̄": 1, "́": 2, "̌": 3, "̀": 4 };
+    let tone = 5, base = "";
+    for (const ch of String(py).normalize("NFD")) { if (T[ch]) tone = T[ch]; else base += ch; }
+    base = base.normalize("NFC").toLowerCase().replace(/ü/g, "v").replace(/['’]/g, "");
+    return base ? base + tone : "";
+  }
   let _pa = null;
-  async function say(w) {
+  async function say(w, ch, py) {
+    const force = (ch && py) ? [{ c: ch, py: toneNum(py) }] : undefined;
     try {
-      const r = await fetch("/api/tts", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: w }) });
+      const r = await fetch("/api/tts", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: w, force }) });
       if (r.ok) { const d = await r.json(); if (d.audio) { if (!_pa) _pa = new Audio(); _pa.src = "data:audio/mp3;base64," + d.audio; _pa.play().catch(() => { if (typeof speakZh === "function") speakZh(w); }); return; } }
     } catch (e) {}
     if (typeof speakZh === "function") speakZh(w);
   }
-  return { render, home, start, q, answer, next, say };
+  return { render, home, start, q, answer, next, say, list, fav };
 })();
 if (typeof window !== "undefined") window.POLY = POLY;
