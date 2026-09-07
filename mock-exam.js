@@ -129,8 +129,8 @@ const MockExam = (() => {
       const opts = shuf([it.mw, ...shuf(others).slice(0, 3)]);
       qs.push({ sec: "measure", stem: "一（　　）" + it.n, noun: it.n, opts, ans: opts.indexOf(it.mw) });
     });
-    // ⑨ 閱讀
-    shuf(PASSAGES[level] || PASSAGES.l1).slice(0, 3).forEach(p => {
+    // ⑨ 閱讀（L6 は専用長文が未整備なので L5 の上級長文で代替）
+    shuf(PASSAGES[level] || PASSAGES.l5 || PASSAGES.l1).slice(0, 3).forEach(p => {
       qs.push({ sec: "read", stem: p.q, passage: p.text, opts: p.opts, ans: p.ans, why: p.why });
     });
     return qs;

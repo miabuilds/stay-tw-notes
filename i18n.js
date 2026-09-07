@@ -96,7 +96,7 @@ ja: {
   zyPyTitle:"注音と拼音、どっち？", zyPyBody:"<b>拼音（ピンイン）</b>はローマ字で<b>とっつきやすく</b>、入力も簡単。まず声に出したい人向け。<br><b>注音（ㄅㄆㄇ）</b>は台湾の主流。字母の思い込みが無いぶん<b>微妙な発音や声調を正確に</b>つかめ、台湾の教材・辞書・キーボードも読めます。<br>おすすめ：<b>まず拼音で口を慣らし、注音で精度を上げる</b>。両方を対応づけて学ぶのが最短です。", zyPyToggle:"注音と拼音の違い", zyCredit:"注音の発音音声：2017 © 教育部「國語注音符號手冊-開放部件」",
   zyTypeHint:"符号の音を聞いて、ローマ字（拼音）を入力しよう。", zyTypePh:"例：b, a, zh…", zyListenHint:"音を聞いて、合う符号を選ぼう。", zyResGreat:"すばらしい！", zyResGood:"いい調子！", zyResTry:"もう一度！",
   // レベル名
-  lv_l1:"入門", lv_l2:"基礎", lv_l3:"中級", lv_l4:"上級", lv_l5:"最上級",
+  lv_l1:"入門", lv_l2:"基礎", lv_l3:"中級", lv_l4:"上級", lv_l5:"最上級", lv_l6:"精通級",
   // カードヒント・操作
   cardHintFront:"カードをタップ＝発音＋答え", cardHintBack:"覚え具合を3段階で評価すると復習に登録されます",
   kbdHint:"Space:めくる ／ ←→:前後 ／ 1・2・3:評価", fcTapReveal:"タップで発音を表示", hidePronToggle:"発音を隠す",
@@ -277,7 +277,7 @@ en: {
   zyWriteHint:"Trace over the guide to practice writing. Use your finger or mouse.", zwGuideOn:"Hide guide", zwGuideOff:"Show guide", zwClear:"Clear",
   zyPyTitle:"Zhuyin or Pinyin?", zyPyBody:"<b>Pinyin</b> uses the Latin alphabet — <b>easy to start</b> and simple to type. Best if you just want to speak fast.<br><b>Zhuyin (ㄅㄆㄇ)</b> is the Taiwan standard. With no alphabet habits to mislead you, it captures <b>subtle sounds and tones more precisely</b>, and lets you read Taiwan's textbooks, dictionaries and keyboards.<br>Tip: <b>start speaking with Pinyin, then sharpen your accuracy with Zhuyin</b>. Learning both side by side is the fastest path.", zyPyToggle:"Zhuyin vs. Pinyin", zyCredit:"Zhuyin audio: 2017 © Ministry of Education, Taiwan «Zhuyin Handbook – Open Components»,",
   zyTypeHint:"Listen to the symbol and type its pinyin.", zyTypePh:"e.g. b, a, zh…", zyListenHint:"Listen and pick the matching symbol.", zyResGreat:"Excellent!", zyResGood:"Nice work!", zyResTry:"Keep going!",
-  lv_l1:"Beginner", lv_l2:"Basic", lv_l3:"Intermediate", lv_l4:"Advanced", lv_l5:"Fluent",
+  lv_l1:"Beginner", lv_l2:"Basic", lv_l3:"Intermediate", lv_l4:"Advanced", lv_l5:"Fluent", lv_l6:"Mastery",
   cardHintFront:"Tap the card = audio + answer", cardHintBack:"Rate how well you knew it — it goes into your review queue",
   kbdHint:"Space: flip / ←→: prev·next / 1·2·3: rate", fcTapReveal:"Tap to show pronunciation", hidePronToggle:"Hide pronunciation",
   obFlow:"① Learn with flashcards → ② Check with quizzes → ③ Lock in with review → ④ Test yourself with mock exams",
@@ -413,7 +413,7 @@ ko: {
   zyWriteHint:"안내선을 따라 쓰기 연습. 손가락이나 마우스로 따라 써 보세요.", zwGuideOn:"안내선 숨기기", zwGuideOff:"안내선 표시", zwClear:"지우기",
   zyPyTitle:"주음과 병음, 무엇을?", zyPyBody:"<b>병음(핀인)</b>은 로마자라 <b>시작하기 쉽고</b> 입력도 간단해요. 우선 말부터 하고 싶은 분께.<br><b>주음(ㄅㄆㄇ)</b>은 대만의 표준. 알파벳 선입견이 없어 <b>미묘한 발음과 성조를 더 정확히</b> 잡을 수 있고, 대만의 교재·사전·키보드도 읽을 수 있어요.<br>추천: <b>병음으로 입을 트고, 주음으로 정확도를 높이기</b>. 둘을 대응시켜 배우는 게 가장 빠릅니다.", zyPyToggle:"주음 vs 병음", zyCredit:"주음 발음 음성: 2017 © 대만 교육부 「국어 주음부호 안내서-개방 부품」,",
   zyTypeHint:"기호의 소리를 듣고 병음을 입력하세요.", zyTypePh:"예: b, a, zh…", zyListenHint:"소리를 듣고 맞는 기호를 고르세요.", zyResGreat:"훌륭해요!", zyResGood:"좋아요!", zyResTry:"다시 도전!",
-  lv_l1:"입문", lv_l2:"기초", lv_l3:"중급", lv_l4:"고급", lv_l5:"최상급",
+  lv_l1:"입문", lv_l2:"기초", lv_l3:"중급", lv_l4:"고급", lv_l5:"최상급", lv_l6:"정통급",
   cardHintFront:"카드를 탭 = 발음 + 정답", cardHintBack:"기억 정도를 3단계로 평가하면 복습에 등록됩니다",
   kbdHint:"Space: 뒤집기 / ←→: 이동 / 1·2·3: 평가", fcTapReveal:"탭하면 발음 표시", hidePronToggle:"발음 숨기기",
   obFlow:"① 단어 카드로 외우기 → ② 퀴즈로 확인 → ③ 복습으로 정착 → ④ 모의고사로 실력 점검",
