@@ -1222,7 +1222,7 @@ function loadExZy(cb){
   if (EX_ZY) { if (cb) cb(); return; }
   if (EX_ZY_LOADING) return;
   EX_ZY_LOADING = true;
-  fetch("data/ex-zhuyin.json?v=2").then(r => r.ok ? r.json() : null).then(m => { EX_ZY = m || {}; EX_ZY_LOADING = false; if (cb) cb(); }).catch(() => { EX_ZY_LOADING = false; });
+  fetch("data/ex-zhuyin.json?v=3").then(r => r.ok ? r.json() : null).then(m => { EX_ZY = m || {}; EX_ZY_LOADING = false; if (cb) cb(); }).catch(() => { EX_ZY_LOADING = false; });
 }
 function exRuby(z, py){
   const zy = (EX_ZY && EX_ZY[z]) ? EX_ZY[z] : "";

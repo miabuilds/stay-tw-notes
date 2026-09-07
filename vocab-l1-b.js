@@ -19,7 +19,7 @@ const VOCAB_L1_B = [
 {w:"灰色",py:"huīsè",zy:"ㄏㄨㄟ ㄙㄜˋ",c:"名",m:{j:"グレー・灰色",e:"gray",k:"회색"},ex:{z:"我買了一件灰色的衣服。",py:"Wǒ mǎi le yí jiàn huīsè de yīfú.",j:"グレーの服を1着買いました。",e:"I bought a gray piece of clothing.",k:"회색 옷을 한 벌 샀어요."}},
 {w:"橘色",py:"júsè",zy:"ㄐㄩˊ ㄙㄜˋ",c:"名",m:{j:"オレンジ色",e:"orange (color)",k:"주황색"},ex:{z:"這個橘色的水果是什麼？",py:"Zhège júsè de shuǐguǒ shì shénme?",j:"このオレンジ色の果物は何ですか。",e:"What is this orange fruit?",k:"이 주황색 과일은 뭐예요?"}},
 // ── 動詞 ──
-{w:"睡覺",py:"shuìjiào",zy:"ㄕㄨㄟˋ ㄐㄧㄠˋ",c:"動",m:{j:"寝る・眠る",e:"to sleep",k:"자다"},ex:{z:"我每天晚上十一點睡覺。",py:"Wǒ měitiān wǎnshàng shíyī diǎn shuìjiào.",j:"毎晩11時に寝ます。",e:"I go to bed at eleven every night.",k:"저는 매일 밤 11시에 자요."}},
+{w:"睡覺",py:"shuìjiào",zy:"ㄕㄨㄟˋ ㄐㄧㄠˋ",c:"動",m:{j:"寝る・眠る",e:"to sleep",k:"자다"},ex:{z:"我每天晚上十一點睡覺。",py:"Wǒ měitiān wǎnshang shíyī diǎn shuìjiào.",j:"毎晩11時に寝ます。",e:"I go to bed at eleven every night.",k:"저는 매일 밤 11시에 자요."}},
 {w:"起床",py:"qǐchuáng",zy:"ㄑㄧˇ ㄔㄨㄤˊ",c:"動",m:{j:"起きる",e:"to get up",k:"일어나다"},ex:{z:"我早上六點半起床。",py:"Wǒ zǎoshang liù diǎn bàn qǐchuáng.",j:"朝6時半に起きます。",e:"I get up at six thirty in the morning.",k:"저는 아침 6시 반에 일어나요."}},
 {w:"給",py:"gěi",zy:"ㄍㄟˇ",c:"動",m:{j:"あげる・くれる・渡す",e:"to give",k:"주다"},ex:{z:"這個給你。",py:"Zhège gěi nǐ.",j:"これあげるね。",e:"This is for you.",k:"이거 너 줄게."}},
 {w:"站",py:"zhàn",zy:"ㄓㄢˋ",c:"動",m:{j:"立つ",e:"to stand",k:"서다"},ex:{z:"請不要站在門口。",py:"Qǐng búyào zhàn zài ménkǒu.",j:"入り口に立たないでください。",e:"Please don't stand in the doorway.",k:"출입구에 서 있지 마세요."}},
@@ -59,7 +59,7 @@ const VOCAB_L1_B = [
 {w:"番茄",py:"fānqié",zy:"ㄈㄢ ㄑㄧㄝˊ",c:"名",m:{j:"トマト",e:"tomato",k:"토마토"},ex:{z:"我喜歡吃番茄。",py:"Wǒ xǐhuān chī fānqié.",j:"トマトを食べるのが好きです。",e:"I like eating tomatoes.",k:"저는 토마토를 즐겨 먹어요."}},
 {w:"冰淇淋",py:"bīngqílín",zy:"ㄅㄧㄥ ㄑㄧˊ ㄌㄧㄣˊ",c:"名",m:{j:"アイスクリーム",e:"ice cream",k:"아이스크림"},ex:{z:"夏天我最愛吃冰淇淋。",py:"Xiàtiān wǒ zuì ài chī bīngqílín.",j:"夏はアイスクリームが一番好きです。",e:"I love ice cream most in summer.",k:"여름엔 아이스크림이 제일 좋아요."}},
 {w:"甜點",py:"tiándiǎn",zy:"ㄊㄧㄢˊ ㄉㄧㄢˇ",c:"名",m:{j:"デザート・スイーツ",e:"dessert; sweets",k:"디저트, 후식"},ex:{z:"吃完飯還想吃甜點。",py:"Chī wán fàn hái xiǎng chī tiándiǎn.",j:"食後にデザートも食べたいです。",e:"I still want dessert after the meal.",k:"밥 먹고 나서도 디저트가 먹고 싶어요."}},
-{w:"鹹酥雞",py:"xiánsūjī",zy:"ㄒㄧㄢˊ ㄙㄨ ㄐㄧ",c:"名",m:{j:"塩から揚げ（台湾の屋台料理）",e:"Taiwanese salty crispy chicken",k:"대만식 닭튀김 (옌수지)"},ex:{z:"晚上我想吃鹹酥雞。",py:"Wǎnshàng wǒ xiǎng chī xiánsūjī.",j:"夜に塩から揚げが食べたいです。",e:"I want salty crispy chicken tonight.",k:"저녁에 옌수지가 먹고 싶어요."}},
+{w:"鹹酥雞",py:"xiánsūjī",zy:"ㄒㄧㄢˊ ㄙㄨ ㄐㄧ",c:"名",m:{j:"塩から揚げ（台湾の屋台料理）",e:"Taiwanese salty crispy chicken",k:"대만식 닭튀김 (옌수지)"},ex:{z:"晚上我想吃鹹酥雞。",py:"Wǎnshang wǒ xiǎng chī xiánsūjī.",j:"夜に塩から揚げが食べたいです。",e:"I want salty crispy chicken tonight.",k:"저녁에 옌수지가 먹고 싶어요."}},
 // ── 場所 ──
 {w:"房間",py:"fángjiān",zy:"ㄈㄤˊ ㄐㄧㄢ",c:"名",m:{j:"部屋",e:"room",k:"방"},ex:{z:"我的房間很小。",py:"Wǒ de fángjiān hěn xiǎo.",j:"私の部屋は小さいです。",e:"My room is small.",k:"제 방은 작아요."}},
 {w:"市場",py:"shìchǎng",zy:"ㄕˋ ㄔㄤˇ",c:"名",m:{j:"市場",e:"market",k:"시장"},ex:{z:"媽媽早上去市場買菜。",py:"Māma zǎoshang qù shìchǎng mǎi cài.",j:"母は朝、市場へ買い物に行きます。",e:"Mom goes to the market to buy groceries in the morning.",k:"엄마는 아침에 시장에 장 보러 가요."}},
@@ -81,7 +81,7 @@ const VOCAB_L1_B = [
 // ── 日用品 ──
 {w:"手機",py:"shǒujī",zy:"ㄕㄡˇ ㄐㄧ",c:"名",m:{j:"携帯電話・スマホ",e:"mobile phone",k:"휴대폰"},ex:{z:"我的手機沒電了。",py:"Wǒ de shǒujī méi diàn le.",j:"スマホの電池が切れました。",e:"My phone is out of battery.",k:"휴대폰 배터리가 다 됐어요."}},
 {w:"電腦",py:"diànnǎo",zy:"ㄉㄧㄢˋ ㄋㄠˇ",c:"名",m:{j:"パソコン・コンピューター",e:"computer",k:"컴퓨터"},ex:{z:"我用電腦工作。",py:"Wǒ yòng diànnǎo gōngzuò.",j:"パソコンで仕事をします。",e:"I work on a computer.",k:"저는 컴퓨터로 일해요."}},
-{w:"電視",py:"diànshì",zy:"ㄉㄧㄢˋ ㄕˋ",c:"名",m:{j:"テレビ",e:"television; TV",k:"텔레비전"},ex:{z:"晚上我喜歡看電視。",py:"Wǎnshàng wǒ xǐhuān kàn diànshì.",j:"夜はテレビを見るのが好きです。",e:"I like watching TV in the evening.",k:"저녁에 텔레비전 보는 걸 좋아해요."}},
+{w:"電視",py:"diànshì",zy:"ㄉㄧㄢˋ ㄕˋ",c:"名",m:{j:"テレビ",e:"television; TV",k:"텔레비전"},ex:{z:"晚上我喜歡看電視。",py:"Wǎnshang wǒ xǐhuān kàn diànshì.",j:"夜はテレビを見るのが好きです。",e:"I like watching TV in the evening.",k:"저녁에 텔레비전 보는 걸 좋아해요."}},
 {w:"衣服",py:"yīfú",zy:"ㄧ ㄈㄨˊ",c:"名",m:{j:"服・衣類",e:"clothes",k:"옷"},ex:{z:"這件衣服很漂亮。",py:"Zhè jiàn yīfú hěn piàoliàng.",j:"この服はとてもきれいです。",e:"These clothes are very pretty.",k:"이 옷은 아주 예뻐요."}},
 {w:"鞋子",py:"xiézi",zy:"ㄒㄧㄝˊ ˙ㄗ",c:"名",m:{j:"靴",e:"shoes",k:"신발"},ex:{z:"進門前要脫鞋子。",py:"Jìn mén qián yào tuō xiézi.",j:"家に入る前に靴を脱ぎます。",e:"Take off your shoes before entering.",k:"들어가기 전에 신발을 벗어요."}},
 ];
