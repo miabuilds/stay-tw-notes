@@ -174,7 +174,7 @@ const MockExam = (() => {
       ${q.passage ? `<div class="ex-passage" onclick="speakZh(this.textContent)">${q.passage}</div>` : ""}
       ${(q.sec === "listen" || q.sec === "listenW")
         ? `<div class="ex-listen">
-             <button class="ex-play" onclick="speakZh(this.dataset.z)" data-z="${q.audio}">🔊</button>
+             <button class="ex-play" onclick="speakZh(this.dataset.z)" data-z="${q.audio}"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>
              <div style="font-size:13px;color:var(--tx3);margin-top:8px">${twT("exListenHint")}</div>
            </div>`
         : `${SEC_PROMPT()[q.sec] ? `<div class="ex-prompt">${SEC_PROMPT()[q.sec]}</div>` : ""}
@@ -191,7 +191,7 @@ const MockExam = (() => {
     let h = `<div>${twT("qzCorrectIs")}<b>${"ABCD"[q.ans]}. ${correct}</b></div>`;
     if (q.word) { const w = q.word;
       h += `<div style="margin-top:6px"><b style="font-family:var(--serif);font-size:18px;cursor:pointer" onclick="speakZh('${w.w}')">${w.w}</b>（${w.zy}｜${w.py}）— ${w.m[mk] || w.m.e || w.m.j}</div>`;
-      if ((q.sec === "listen" || q.sec === "listenW" || q.sec === "cloze") && w.ex) h += `<div style="font-size:13px;color:var(--tx2);margin-top:4px;cursor:pointer" onclick="speakZh('${w.ex.z}')">🔊 ${w.ex.z}<br>${w.ex[mk] || w.ex.e || w.ex.j || ""}</div>`;
+      if ((q.sec === "listen" || q.sec === "listenW" || q.sec === "cloze") && w.ex) h += `<div style="font-size:13px;color:var(--tx2);margin-top:4px;cursor:pointer" onclick="speakZh('${w.ex.z}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg> ${w.ex.z}<br>${w.ex[mk] || w.ex.e || w.ex.j || ""}</div>`;
     } else if (q.sec === "measure") {
       h += `<div style="margin-top:6px;font-family:var(--serif);font-size:20px" onclick="speakZh('一${correct}${q.noun}')">一<b style="color:var(--ac)">${correct}</b>${q.noun}</div>`;
     }
@@ -261,7 +261,7 @@ const MockExam = (() => {
           <button class="btn primary" onclick="Paywall.gate('exam',()=>MockExam.start('${lvl}'))">${twT("quizRetry")}</button>
           <button class="btn" onclick="MockExam.quit()">OK</button>
         </div>
-        ${(typeof WrongBook!=="undefined" && WrongBook.forLevel(lvl).length) ? `<div><button class="wb-link" onclick="openWrongBook()">📕 ${twT("wbReview")} (${WrongBook.forLevel(lvl).length})</button></div>` : ""}
+        ${(typeof WrongBook!=="undefined" && WrongBook.forLevel(lvl).length) ? `<div><button class="wb-link" onclick="openWrongBook()">${twT("wbReview")} (${WrongBook.forLevel(lvl).length})</button></div>` : ""}
       </div>`;
     if (typeof updateSrsBadges === "function") updateSrsBadges();
     if (typeof renderExamHome === "function") return; // quit() で戻る

@@ -118,12 +118,12 @@ const POLY = (() => {
   const pfHas = c => pfGet().includes(c);
   function pfToggle(c) { const a = pfGet(), i = a.indexOf(c); if (i >= 0) a.splice(i, 1); else a.push(c); try { localStorage.setItem(PF_KEY, JSON.stringify(a)); } catch (e) {} return i < 0; }
   const favBtn = c => `<button class="poly-fav-btn" onclick="event.stopPropagation();POLY.fav('${c}')" aria-label="収藏" style="background:none;border:none;cursor:pointer;font-size:20px;padding:2px 6px;color:${pfHas(c) ? "var(--ac)" : "var(--tx3)"}">${pfHas(c) ? "★" : "♡"}</button>`;
-  // 破音字1字の詳細（読音ごとに zy/py/意味/例詞🔊）＋収藏ボタン。
+  // 破音字1字の詳細（読音ごとに zy/py/意味/例詞<svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg>）＋収藏ボタン。
   function polyDetail(p) {
     const mk = twMKey();
     const rows = p.r.map(r => `<div class="poly-r">
       <div class="poly-r-h"><b>${r.zy}</b> <span style="color:var(--tx3)">${r.py}</span> — ${r.m[mk] || r.m.e || r.m.j}</div>
-      <div class="poly-r-ex">${r.ex.map(w => `<button class="poly-ex" onclick="POLY.say('${w}','${p.c}','${r.py}')">${w} 🔊</button>`).join("")}</div></div>`).join("");
+      <div class="poly-r-ex">${r.ex.map(w => `<button class="poly-ex" onclick="POLY.say('${w}','${p.c}','${r.py}')">${w} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>`).join("")}</div></div>`).join("");
     return `<div class="poly-card"><div class="poly-card-h"><b style="font-size:26px">${p.c}</b>${favBtn(p.c)}</div>${rows}</div>`;
   }
   // 一覧 / 収藏だけ。fav=true で収藏のみ。
@@ -152,10 +152,10 @@ const POLY = (() => {
       <p class="poly-sub">${twT("polySub")}</p>
       <button class="btn primary" onclick="POLY.start()">${twT("polyStart")}</button>
       <div class="poly-home-links">
-        <button class="btn" onclick="POLY.list(false)">📋 ${twT("polyAll")} (${POLYPHONE.length})</button>
+        <button class="btn" onclick="POLY.list(false)">${twT("polyAll")} (${POLYPHONE.length})</button>
         <button class="btn" onclick="POLY.list(true)">★ ${twT("polySaved")} (${pfGet().length})</button>
       </div>
-      ${(typeof WrongBook!=="undefined" && WrongBook.forLevel("poly").length) ? `<div><button class="wb-link" onclick="openWrongBook('poly')">📕 ${twT("wbReview")} (${WrongBook.forLevel("poly").length})</button></div>` : ""}
+      ${(typeof WrongBook!=="undefined" && WrongBook.forLevel("poly").length) ? `<div><button class="wb-link" onclick="openWrongBook('poly')">${twT("wbReview")} (${WrongBook.forLevel("poly").length})</button></div>` : ""}
     </div>`;
   }
   function render() { home(); }
@@ -176,7 +176,7 @@ const POLY = (() => {
     const wordHtml = it.word.split("").map(ch => ch === p.c ? `<b class="poly-hi">${ch}</b>` : ch).join("");
     box().innerHTML = `<div class="aq-wrap">
       <div style="font-size:13px;color:var(--tx3)">${qi+1} / ${deck.length}　✓ ${score}</div>
-      <div class="poly-word" onclick="POLY.say('${it.word}','${p.c}','${p.r[it.ri].py}')">${wordHtml} <button class="tts-btn" style="width:30px;height:30px;font-size:13px" onclick="event.stopPropagation();POLY.say('${it.word}','${p.c}','${p.r[it.ri].py}')">🔊</button></div>
+      <div class="poly-word" onclick="POLY.say('${it.word}','${p.c}','${p.r[it.ri].py}')">${wordHtml} <button class="tts-btn" style="width:30px;height:30px;font-size:13px" onclick="event.stopPropagation();POLY.say('${it.word}','${p.c}','${p.r[it.ri].py}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
       <div class="ex-prompt">${twT("polyAsk").replace("%c", p.c)}</div>
       <div class="qz-opts zy" id="polyOpts">${it.opts.map(oi => `<button class="qz-opt" data-i="${oi}" data-ok="${oi===it.ri}" onclick="POLY.answer(${oi})">${p.r[oi].zy}</button>`).join("")}</div>
       <div id="polyFb"></div></div>`;
@@ -189,10 +189,10 @@ const POLY = (() => {
       document.querySelectorAll("#polyOpts .qz-opt")[it.opts.indexOf(oi)].classList.add("ng");
       if (typeof WrongBook !== "undefined") WrongBook.add({ type: "poly", lv: "poly", word: it.word, q: it.word, correct: p.c + "＝" + p.r[it.ri].zy + "（" + p.r[it.ri].py + "）", detail: (p.r[it.ri].m[mk] || p.r[it.ri].m.j) });
     }
-    // 詳解:列出這個字的所有讀音 + 例詞 + 🔊
+    // 詳解:列出這個字的所有讀音 + 例詞 + <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg>
     const rows = p.r.map((r, i) => `<div class="poly-r ${i===it.ri?'cur':''}">
       <div class="poly-r-h"><b>${r.zy}</b> <span style="color:var(--tx3)">${r.py}</span> — ${r.m[mk] || r.m.j}</div>
-      <div class="poly-r-ex">${r.ex.map(w => `<button class="poly-ex" onclick="POLY.say('${w}','${p.c}','${r.py}')">${w} 🔊</button>`).join("")}</div></div>`).join("");
+      <div class="poly-r-ex">${r.ex.map(w => `<button class="poly-ex" onclick="POLY.say('${w}','${p.c}','${r.py}')">${w} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>`).join("")}</div></div>`).join("");
     document.getElementById("polyFb").innerHTML = `<div class="qz-fb ${ok?'ok':'ng'}">
       <div style="font-weight:700;font-size:15px">${ok ? "⭕ "+twT("qzRight") : "❌ "+twT("qzWrong")}</div>
       <div style="margin:8px 0 4px">${twT("polyIn").replace("%w", it.word)}<b style="font-size:20px">${p.c}</b> ＝ <b style="font-size:20px;color:var(--ac)">${p.r[it.ri].zy}</b>（${p.r[it.ri].py}）${favBtn(p.c)}</div>
@@ -208,7 +208,7 @@ const POLY = (() => {
       <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
         <button class="btn primary" onclick="POLY.start()">${twT("quizRetry")}</button>
         <button class="btn" onclick="POLY.render()">${twT("startOver")||"OK"}</button></div>
-      ${nWrong?`<div><button class="wb-link" onclick="openWrongBook('poly')">📕 ${twT("wbReview")} (${nWrong})</button></div>`:""}</div>`;
+      ${nWrong?`<div><button class="wb-link" onclick="openWrongBook('poly')">${twT("wbReview")} (${nWrong})</button></div>`:""}</div>`;
   }
   // 破音字要唸對:走 /api/tts,並把「該字的檢証済み読音」用 force 強制(SSML phoneme)。失敗退回瀏覽器音。
   // py(注音資料の diacritic 拼音,例"děi")→ Google phoneme 用の番号調("dei3")。
