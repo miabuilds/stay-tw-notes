@@ -463,8 +463,17 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       }
       if (url.pathname === "/api/admin/feedback") {
         const r = await env.DB.prepare(
-          `SELECT id, ts, type, message, email, lang FROM feedback ORDER BY id DESC LIMIT 200`).all();
+          `SELECT id, ts, type, message, email, lang, replied_at FROM feedback ORDER BY id DESC LIMIT 200`).all();
         return json(r.results, 200, h);
+      }
+      // 回信済みマーク（管理者が Gmail で返信したあと押す）
+      if (url.pathname === "/api/admin/feedback-reply" && req.method === "POST") {
+        let fb; try { fb = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
+        const fid = parseInt(fb.id, 10);
+        if (!fid) return json({ error: "no id" }, 400, h);
+        const val = fb.undo ? null : new Date().toISOString().slice(0, 19).replace("T", " ");
+        await env.DB.prepare(`UPDATE feedback SET replied_at=?1 WHERE id=?2`).bind(val, fid).run();
+        return json({ ok: true, replied_at: val }, 200, h);
       }
       if (url.pathname === "/api/admin/traffic") {
         const [total, today, daily, countries, paths, refs, bySource] = await Promise.all([
