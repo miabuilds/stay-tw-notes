@@ -58,7 +58,7 @@ const MockExam = (() => {
       {text:"「快時尚」以低廉的價格與快速更迭的款式，席捲了全球的服飾市場。消費者只需花費不多，便能追上最新的潮流。然而，這股風潮的背後，卻隱藏著驚人的環境代價：大量成衣在僅穿數次後便遭丟棄，紡織過程更耗費可觀的水資源並排放污染。有識者因此呼籲，消費者縱使無法完全擺脫流行，至少應在購買之前多想一步：這件衣服是否真有需要？能否穿得長久？畢竟，最環保的消費，往往就是「少買一件」。",q:"這段文字主要想傳達的觀點是什麼？",opts:["快時尚讓人人都能負擔流行，值得推廣","消費者應理性節制購買，減少浪費","政府應立法全面禁止快時尚產業","價格昂貴的衣服必然比便宜的更環保"],ans:1,why:"文末點題「最環保的消費，往往就是少買一件」，呼籲節制購買。"},
     ],
   };
-  const TIME_LIMIT = { l1: 14, l2: 15, l3: 17, l4: 19, l5: 20 }; // 分（題數增加→時間延長）
+  const TIME_LIMIT = { l1: 14, l2: 15, l3: 17, l4: 19, l5: 20, l6: 22 }; // 分（題數増加→時間延長。l6 精通級）
   // 量詞：台灣標準用法の精選リスト（曖昧なものは除外＝正確性を担保）
   const MEASURE = [
     {n:"書",mw:"本"},{n:"雜誌",mw:"本"},{n:"筆",mw:"支"},{n:"紙",mw:"張"},{n:"照片",mw:"張"},{n:"票",mw:"張"},
@@ -140,7 +140,7 @@ const MockExam = (() => {
     lvl = level || (typeof currentLevel !== "undefined" ? currentLevel : "l1");
     questions = buildQuestions(lvl);
     cur = 0; score = 0; wrongs = []; active = true;
-    deadline = Date.now() + TIME_LIMIT[lvl] * 60 * 1000;
+    deadline = Date.now() + (TIME_LIMIT[lvl] || 20) * 60 * 1000;   // 未知レベルでも NaN にしない
     clearInterval(timerId);
     timerId = setInterval(tick, 1000);
     render();
