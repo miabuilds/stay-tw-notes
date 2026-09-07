@@ -30,13 +30,25 @@ th{background:rgba(0,0,0,.03);font-size:12px;color:var(--tx2)}
 .muted{color:var(--tx3);font-size:12px}
 a{color:#2F5D7A}
 .sandbox{opacity:.55}
+.fb-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.fb-fbtn{border:1px solid var(--bd);background:var(--bg2);color:var(--tx2);border-radius:999px;padding:5px 13px;font-size:13px;cursor:pointer}
+.fb-fbtn.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.fb-card{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin-bottom:10px}
+.fb-card.replied{opacity:.6}
+.fb-top{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.fb-meta{font-size:11.5px;color:var(--tx3)}
+.fb-msg{font-size:14.5px;white-space:pre-wrap;line-height:1.6;margin-bottom:10px;word-break:break-word}
+.fb-bot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.fb-btn{background:var(--ac);color:#fff;border:none;border-radius:8px;padding:8px 15px;font-size:13px;font-weight:600;cursor:pointer}
+.fb-btn.done{background:transparent;color:var(--ok);border:1px solid var(--line)}
+@media(max-width:640px){.wrap{padding:22px 13px 90px}.traf-grid{grid-template-columns:1fr!important}h1{font-size:21px}}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 <div class="wrap">
   <div id="login" class="login">
-    <div style="font-size:44px">🐻</div>
+    
     <h1>StayTW 後台</h1>
     <p class="muted">用 Google 帳號登入（僅限管理員）</p>
     <div id="gbtn" style="display:flex;justify-content:center;margin:18px 0"></div>
@@ -46,6 +58,16 @@ a{color:#2F5D7A}
   <div id="dash" style="display:none">
     <h1>StayTW 後台 <span class="muted" style="font-weight:400">iOS 收益（RevenueCat）＋使用者回饋</span></h1>
     <div class="cards" id="cards"></div>
+    <h2>使用者回饋 <span class="muted" id="fbUnreplied"></span></h2>
+    <div class="fb-filter">
+      <button class="fb-fbtn on" data-fbf="all" onclick="fbFilter('all')">全部</button>
+      <button class="fb-fbtn" data-fbf="todo" onclick="fbFilter('todo')">待回信</button>
+      <button class="fb-fbtn" data-fbf="bug" onclick="fbFilter('bug')">bug</button>
+      <button class="fb-fbtn" data-fbf="content" onclick="fbFilter('content')">content</button>
+      <button class="fb-fbtn" data-fbf="feature" onclick="fbFilter('feature')">feature</button>
+    </div>
+    <div id="fbList"></div>
+
     <h2>近 30 天收益（美金計）</h2>
     <div class="tbl"><table id="daily"><thead><tr><th>日期</th><th>筆數</th><th>USD</th></tr></thead><tbody></tbody></table></div>
     <h2>各商品累計</h2>
@@ -61,16 +83,15 @@ a{color:#2F5D7A}
     <h3 style="font-size:14px;margin:16px 0 6px">近 30 天每日</h3>
     <div class="tbl"><table id="trDaily"><thead><tr><th>日期</th><th>PV</th></tr></thead><tbody></tbody></table></div>
 
-    <h2>使用者回饋</h2>
-    <div class="tbl"><table id="fb"><thead><tr><th>時間(UTC)</th><th>類型</th><th>內容</th><th>email</th></tr></thead><tbody></tbody></table></div>
+
 
     <h2>メール購読リスト <span class="muted" id="subsCount"></span></h2>
     <div class="tbl"><table id="subs"><thead><tr><th>時間(UTC)</th><th>email</th><th>言語</th><th>來源</th></tr></thead><tbody></tbody></table></div>
-    <button class="btn" style="margin-top:10px" onclick="copyEmails('subs')">📋 全メールをコピー</button>
+    <button class="btn" style="margin-top:10px" onclick="copyEmails('subs')">全メールをコピー</button>
 
     <h2>登録ユーザー（Google 登入） <span class="muted" id="usersCount"></span></h2>
     <div class="tbl"><table id="users"><thead><tr><th>最終ログイン(UTC)</th><th>email</th><th>プロバイダ</th></tr></thead><tbody></tbody></table></div>
-    <button class="btn" style="margin-top:10px" onclick="copyEmails('users')">📋 全メールをコピー</button>
+    <button class="btn" style="margin-top:10px" onclick="copyEmails('users')">全メールをコピー</button>
     <p class="muted" style="margin-top:20px">來源：RevenueCat webhook → Cloudflare D1。更完整的圖表看 <a href="https://app.revenuecat.com/projects/5b67fb57/overview" target="_blank">RevenueCat 儀表板</a>。金額為 RC 換算美金；日圓實收以 App Store Connect 為準。</p>
     <button class="btn" style="margin-top:14px" onclick="localStorage.removeItem('stw_admin_tok');location.reload()">登出</button>
   </div>
@@ -78,6 +99,61 @@ a{color:#2F5D7A}
 <script>
 // 同源代理（pages.dev/api/* → Service Binding → Worker）。某些網路連不到 workers.dev、但 pages.dev 通。
 const API="";
+const SENDER="abc83327@gmail.com";   // 返信の差出人（このアカウントで Gmail にログインしておく）
+let FB_DATA=[], FB_FILTER="all";
+// 返信テンプレ（言語別。使用者の回饋 lang に合わせて自動選択、なければ日本語）。
+const FB_TMPL={
+  ja:{ bug:{s:"[StayTW] ご報告の不具合について（修正しました）",b:"{NAME}様\n\nご報告ありがとうございます。ご不便をおかけし申し訳ございませんでした。\nお知らせいただいた不具合:\n「{ISSUE}」\nは修正し、公開済みです。アプリを再起動（または再読み込み）すると反映されます。\n\n引き続きよろしくお願いいたします。\nStayTW"},
+       content:{s:"[StayTW] ご指摘の内容について（修正しました）",b:"{NAME}様\n\nご報告ありがとうございます。\n「{ISSUE}」\nについて確認し、修正して公開しました。再読み込みで反映されます。\n\n今後ともよろしくお願いいたします。\nStayTW"},
+       feature:{s:"[StayTW] ご要望ありがとうございます",b:"{NAME}様\n\nご要望ありがとうございます。\n「{ISSUE}」\n———\n\nStayTW"},
+       other:{s:"[StayTW] メッセージありがとうございます",b:"{NAME}様\n\nメッセージありがとうございます。\n\n———\n\nStayTW"} },
+  ko:{ bug:{s:"[StayTW] 신고해 주신 오류(수정 완료)",b:"안녕하세요,\n\n신고 감사합니다. 불편을 드려 죄송합니다.\n알려주신 오류:\n「{ISSUE}」\n는 수정되어 반영되었습니다. 앱을 재시작(또는 새로고침)하면 적용됩니다.\n\n감사합니다.\nStayTW"},
+       content:{s:"[StayTW] 지적해 주신 내용(수정 완료)",b:"안녕하세요,\n\n신고 감사합니다.\n「{ISSUE}」\n확인 후 수정하여 반영했습니다. 새로고침하면 적용됩니다.\n\n감사합니다.\nStayTW"},
+       feature:{s:"[StayTW] 제안 감사합니다",b:"안녕하세요,\n\n제안 감사합니다.\n「{ISSUE}」\n———\n\nStayTW"},
+       other:{s:"[StayTW] 메시지 감사합니다",b:"안녕하세요,\n\n메시지 감사합니다.\n\n———\n\nStayTW"} },
+  en:{ bug:{s:"[StayTW] The bug you reported (fixed)",b:"Hi,\n\nThanks for the report, and sorry for the trouble.\nThe issue:\n\"{ISSUE}\"\nis now fixed and live. Restart (or reload) the app to get it.\n\nBest,\nStayTW"},
+       content:{s:"[StayTW] The content issue you reported (fixed)",b:"Hi,\n\nThanks for the report.\n\"{ISSUE}\"\nhas been checked and fixed. Reload to see it.\n\nBest,\nStayTW"},
+       feature:{s:"[StayTW] Thanks for the suggestion",b:"Hi,\n\nThanks for the suggestion:\n\"{ISSUE}\"\n———\n\nBest,\nStayTW"},
+       other:{s:"[StayTW] Thanks for your message",b:"Hi,\n\nThanks for reaching out.\n\n———\n\nBest,\nStayTW"} },
+  zh:{ bug:{s:"[StayTW] 您回報的問題（已修正）",b:"您好，\n\n感謝回報，造成不便很抱歉。\n您回報的問題：\n「{ISSUE}」\n已修正並上線，重開（或重新整理）App 就會生效。\n\nStayTW"},
+       content:{s:"[StayTW] 您回報的內容（已修正）",b:"您好，\n\n感謝回報。\n「{ISSUE}」\n已確認並修正上線，重新整理即可看到。\n\nStayTW"},
+       feature:{s:"[StayTW] 感謝您的建議",b:"您好，\n\n感謝您的建議：\n「{ISSUE}」\n———\n\nStayTW"},
+       other:{s:"[StayTW] 感謝您的訊息",b:"您好，\n\n感謝您的訊息。\n\n———\n\nStayTW"} } };
+function fbLang(l){ l=(l||"").toLowerCase(); if(l.indexOf("ko")===0)return"ko"; if(l.indexOf("en")===0)return"en"; if(l.indexOf("zh")===0||l==="tw")return"zh"; return"ja"; }
+function fbReply(id){
+  const f=FB_DATA.find(x=>x.id===id); if(!f||!f.email)return;
+  const L=fbLang(f.lang), t=(FB_TMPL[L]||FB_TMPL.ja)[f.type]||FB_TMPL[L].other;
+  const issue=(f.message||"").slice(0,140).replace(/\n/g," ");
+  const su=t.s, body=t.b.replace(/\{ISSUE\}/g,issue).replace(/\{NAME\}/g,"");
+  const url=`https://mail.google.com/mail/?authuser=${encodeURIComponent(SENDER)}&view=cm&fs=1&to=${encodeURIComponent(f.email)}&su=${encodeURIComponent(su)}&body=${encodeURIComponent(body)}`;
+  window.open(url,"_blank");
+  fbMark(id,false);   // 開いたら「返信済み」に
+}
+async function fbMark(id,undo){
+  try{ await fetch(API+"/api/admin/feedback-reply",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+localStorage.getItem("stw_admin_tok")},body:JSON.stringify({id,undo})});
+    const f=FB_DATA.find(x=>x.id===id); if(f)f.replied_at=undo?null:new Date().toISOString().slice(0,19).replace("T"," "); renderFb();
+  }catch(e){ alert("標記失敗:"+e.message); }
+}
+function fbFilter(k){ FB_FILTER=k; document.querySelectorAll(".fb-fbtn").forEach(b=>b.classList.toggle("on",b.dataset.fbf===k)); renderFb(); }
+function renderFb(){
+  let list=FB_DATA;
+  if(FB_FILTER==="todo") list=list.filter(f=>!f.replied_at && f.email);
+  else if(FB_FILTER!=="all") list=list.filter(f=>f.type===FB_FILTER);
+  const todo=FB_DATA.filter(f=>!f.replied_at && f.email).length;
+  document.getElementById("fbUnreplied").textContent=todo?`（待回信 ${todo}）`:"";
+  document.getElementById("fbList").innerHTML = list.length ? list.map(f=>{
+    const noMail=!f.email||f.email.indexOf("@")<0;
+    const btn = f.replied_at
+      ? `<button class="fb-btn done" onclick="fbMark(${f.id},true)">✓ 已回信 <span class="muted">（點取消）</span></button>`
+      : (noMail ? `<span class="muted" style="font-size:12px">未留 email</span>`
+                : `<button class="fb-btn" onclick="fbReply(${f.id})">回信（開 Gmail）</button>`);
+    return `<div class="fb-card ${f.replied_at?'replied':''}">
+      <div class="fb-top"><span class="tag ${esc(f.type)}">${esc(f.type)}</span><span class="fb-meta">${esc(f.ts)}　${esc(f.lang||'')}</span></div>
+      <div class="fb-msg">${esc(f.message)}</div>
+      <div class="fb-bot">${noMail?'<span class="muted">—</span>':`<a href="mailto:${esc(f.email)}">${esc(f.email)}</a>`}${btn}</div>
+    </div>`;
+  }).join("") : `<p class="muted" style="padding:16px">沒有符合的回饋</p>`;
+}
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function copyEmails(tblId){
   const emails=[...document.querySelectorAll("#"+tblId+" tbody tr td:nth-child(2)")].map(td=>td.textContent.trim()).filter(x=>x&&x.indexOf("@")>=0);
@@ -118,7 +194,7 @@ async function load(){
     document.querySelector("#daily tbody").innerHTML=(sum.last30||[]).map(r=>`<tr><td>${esc(r.d)}</td><td>${r.n}</td><td>$${r.usd??0}</td></tr>`).join("")||"<tr><td colspan=3 class=muted>還沒有正式交易</td></tr>";
     document.querySelector("#byproduct tbody").innerHTML=(sum.byProduct||[]).map(r=>`<tr><td>${esc(r.product_id)}</td><td>${r.n}</td><td>$${r.usd??0}</td></tr>`).join("")||"<tr><td colspan=3 class=muted>還沒有正式交易</td></tr>";
     document.querySelector("#events tbody").innerHTML=(events||[]).map(r=>`<tr class="${r.environment!=='PRODUCTION'?'sandbox':''}"><td>${esc(r.ts)}</td><td>${esc(r.event_type)}</td><td>${esc(r.product_id)}</td><td>${r.price_in_purchased_currency??r.price??""}</td><td>${esc(r.currency)}</td><td>${esc(r.country)}</td></tr>`).join("")||"<tr><td colspan=6 class=muted>還沒有事件（webhook 接上後會出現）</td></tr>";
-    document.querySelector("#fb tbody").innerHTML=(fb||[]).map(r=>`<tr><td>${esc(r.ts)}</td><td><span class="tag ${esc(r.type)}">${esc(r.type)}</span></td><td style="max-width:420px;white-space:pre-wrap">${esc(r.message)}</td><td>${esc(r.email)}</td></tr>`).join("")||"<tr><td colspan=4 class=muted>還沒有回饋</td></tr>";
+    FB_DATA = fb || []; renderFb();
     const src=Object.fromEntries((traf.bySource||[]).map(r=>[r.source,r.n]));
     document.getElementById("trafCards").innerHTML=`
       <div class="card"><b>${traf.today??0}</b><span>今日 PV</span></div>
