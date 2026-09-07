@@ -731,6 +731,7 @@ body.more-open .ar-bar{display:none}
     <button class="lv-btn" data-lv="l3">Level 3<small data-lvname="l3">中級</small></button>
     <button class="lv-btn" data-lv="l4">Level 4<small data-lvname="l4">上級</small></button>
     <button class="lv-btn" data-lv="l5">Level 5<small data-lvname="l5">最上級</small></button>
+    <button class="lv-btn" data-lv="l6">Level 6<small data-lvname="l6">精通級</small></button>
     <label class="voice-sel"><span data-i18n="voiceLabel">音声</span> <select id="voiceSel" onchange="TTS.setVoice(this.value)"></select></label>
   </div>
 
@@ -971,6 +972,7 @@ body.more-open .ar-bar{display:none}
 <script src="vocab-l3-c.js?v=57"></script>
 <script src="vocab-l4-c.js?v=57"></script>
 <script src="vocab-l5-c.js?v=57"></script>
+<script src="vocab-l6.js?v=1"></script>
 <script src="grammar-l1.js?v=52"></script>
 <script src="grammar-l2.js?v=52"></script>
 <script src="grammar-l3.js?v=52"></script>
@@ -1028,6 +1030,7 @@ const VOCAB_BY_LEVEL   = {
   l3: _cat(VOCAB_L3, typeof VOCAB_L3_B!=="undefined"&&VOCAB_L3_B, typeof VOCAB_L3_C!=="undefined"&&VOCAB_L3_C),
   l4: _cat(VOCAB_L4, typeof VOCAB_L4_B!=="undefined"&&VOCAB_L4_B, typeof VOCAB_L4_C!=="undefined"&&VOCAB_L4_C),
   l5: _cat(VOCAB_L5, typeof VOCAB_L5_B!=="undefined"&&VOCAB_L5_B, typeof VOCAB_L5_C!=="undefined"&&VOCAB_L5_C),
+  l6: _cat(typeof VOCAB_L6!=="undefined"&&VOCAB_L6, typeof VOCAB_L6_B!=="undefined"&&VOCAB_L6_B, typeof VOCAB_L6_C!=="undefined"&&VOCAB_L6_C),
 };
 const GRAMMAR_BY_LEVEL = { l1: GRAMMAR_L1, l2: GRAMMAR_L2, l3: GRAMMAR_L3, l4: GRAMMAR_L4, l5: GRAMMAR_L5 };
 function getVocabData(lv){ return VOCAB_BY_LEVEL[lv] || []; }
@@ -1036,7 +1039,7 @@ function getGrammarData(lv){ return GRAMMAR_BY_LEVEL[lv] || []; }
 // タップ辞書（twWord / .tapc）と「復習に追加」が参照。低レベル優先＝より基本的な語の級を採用。
 const STW_DICT = (() => {
   const map = Object.create(null);
-  for (const lv of ["l1","l2","l3","l4","l5"]) {
+  for (const lv of ["l1","l2","l3","l4","l5","l6"]) {
     for (const v of (VOCAB_BY_LEVEL[lv] || [])) {
       if (v && v.w && !map[v.w]) map[v.w] = Object.assign({}, v, { _lv: lv });
     }
@@ -1232,7 +1235,7 @@ function loadExZy(cb){
   if (EX_ZY) { if (cb) cb(); return; }
   if (EX_ZY_LOADING) return;
   EX_ZY_LOADING = true;
-  fetch("data/ex-zhuyin.json?v=3").then(r => r.ok ? r.json() : null).then(m => { EX_ZY = m || {}; EX_ZY_LOADING = false; if (cb) cb(); }).catch(() => { EX_ZY_LOADING = false; });
+  fetch("data/ex-zhuyin.json?v=4").then(r => r.ok ? r.json() : null).then(m => { EX_ZY = m || {}; EX_ZY_LOADING = false; if (cb) cb(); }).catch(() => { EX_ZY_LOADING = false; });
 }
 function exRuby(z, py){
   const zy = (EX_ZY && EX_ZY[z]) ? EX_ZY[z] : "";
@@ -1939,12 +1942,12 @@ function renderProfile(){
   const srs = parse("stw_srs", {}), exam = parse("stw_exam_history", []);
   const keys = Object.keys(srs);
   const total = keys.length, mastered = keys.filter(k => srs[k].interval >= 21).length, learning = total - mastered;
-  const per = { l1:{t:0,m:0}, l2:{t:0,m:0}, l3:{t:0,m:0}, l4:{t:0,m:0}, l5:{t:0,m:0} };
+  const per = { l1:{t:0,m:0}, l2:{t:0,m:0}, l3:{t:0,m:0}, l4:{t:0,m:0}, l5:{t:0,m:0}, l6:{t:0,m:0} };
   keys.forEach(k => { const lv = k.split(":")[0]; if (per[lv]) { per[lv].t++; if (srs[k].interval >= 21) per[lv].m++; } });
   const best = exam.length ? Math.max(...exam.map(h => Math.round(h.score / h.total * 100))) : 0;
   const li = !!(window.STW_WEB && STW_WEB.isLoggedIn && STW_WEB.isLoggedIn());
   const u = li && STW_WEB.getUser ? STW_WEB.getUser() : null;
-  const lvName = { l1:twT("lv_l1"), l2:twT("lv_l2"), l3:twT("lv_l3"), l4:twT("lv_l4"), l5:twT("lv_l5") };
+  const lvName = { l1:twT("lv_l1"), l2:twT("lv_l2"), l3:twT("lv_l3"), l4:twT("lv_l4"), l5:twT("lv_l5"), l6:twT("lv_l6") };
   let acc;
   if (li && u) {
     const label = (u.name || u.email || "?").trim().slice(0, 1).toUpperCase();
@@ -1980,7 +1983,7 @@ function renderProfile(){
       <div class="srs-stat"><b>${best ? best + "%" : "—"}</b><span>${twT("pfExamBest")}</span></div>
     </div>
     <h3 class="pf-h">${twT("pfByLevel")}</h3>
-    <div class="pf-levels">${["l1","l2","l3","l4","l5"].map(lv =>
+    <div class="pf-levels">${["l1","l2","l3","l4","l5","l6"].map(lv =>
       `<div class="pf-lv"><span class="pf-lvn">${lvName[lv]}</span><div class="pf-bar"><i style="width:${per[lv].t ? Math.min(100, per[lv].m / per[lv].t * 100) : 0}%"></i></div><span class="pf-lvc">${per[lv].m} / ${per[lv].t}</span></div>`).join("")}</div>
     ${exam.length ? `<h3 class="pf-h">${twT("exHistory")}</h3><div class="ex-hist">${exam.slice(-8).reverse().map(h =>
       `<div class="ex-hist-item"><span>${new Date(h.ts).toLocaleDateString()}</span><b>${h.score} / ${h.total}</b><span>${Math.round(h.score / h.total * 100)}%</span></div>`).join("")}</div>` : ""}`;
@@ -2041,7 +2044,7 @@ function renderExamHome(){
   const hist = MockExam.history().filter(h => h.level === currentLevel).slice(-8).reverse();
   document.getElementById("examBox").innerHTML = `
     <p style="font-size:14.5px;color:var(--tx2);line-height:1.9">${twT("exIntro")}</p>
-    <p style="font-size:13px;color:var(--tx3);margin:8px 0 18px">${currentLevel.toUpperCase()}・⏱ ${{l1:10,l2:10,l3:12,l4:15,l5:15}[currentLevel]} ${twT("exMin")}　<a href="tocfl.html" style="color:var(--ac)">TOCFL Guide →</a></p>
+    <p style="font-size:13px;color:var(--tx3);margin:8px 0 18px">${currentLevel.toUpperCase()}・⏱ ${{l1:10,l2:10,l3:12,l4:15,l5:15,l6:15}[currentLevel]} ${twT("exMin")}　<a href="tocfl.html" style="color:var(--ac)">TOCFL Guide →</a></p>
     ${Paywall.quotaBadge("exam")}
     <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--tx2);margin:6px 0 2px;cursor:pointer">
       <input type="checkbox" id="exPronChk" ${MockExam.examPronOn() ? "checked" : ""} onchange="MockExam.setExamPron(this.checked)" style="width:16px;height:16px;accent-color:var(--ac)">${twT("exInclPron")}</label>
@@ -2302,7 +2305,7 @@ const PA = (() => {
   }
 
   function render(){
-    const lvName = { l1:twT("lv_l1"), l2:twT("lv_l2"), l3:twT("lv_l3"), l4:twT("lv_l4"), l5:twT("lv_l5") }[currentLevel] || "";
+    const lvName = { l1:twT("lv_l1"), l2:twT("lv_l2"), l3:twT("lv_l3"), l4:twT("lv_l4"), l5:twT("lv_l5"), l6:twT("lv_l6") }[currentLevel] || "";
     const s = stages();
     const next = s.find(x => !x.done) || s[s.length-1];
     const daily = (typeof getDaily === "function") ? getDaily() : { n:0, goal:20, pct:0, done:false };
@@ -2498,7 +2501,7 @@ function twCloseWord(){ if(window.TTS&&TTS.stop)TTS.stop(); const bg=document.ge
 
 /* ===== 分級閲読（読解）：台湾のリアルな短文＋逐句音声＋生詞＋理解チェック ===== */
 const RD = (() => {
-  const DATA = ["l1","l2","l3","l4","l5"].reduce((o,l)=>{ o[l] = twReading(l); return o; }, {});
+  const DATA = ["l1","l2","l3","l4","l5","l6"].reduce((o,l)=>{ o[l] = twReading(l); return o; }, {});
   let showPy = false, showTr = false, cur = null;
   let rdFont = Math.min(34, Math.max(17, +(localStorage.getItem("stw_rd_font") || 21)));
   const box = () => document.getElementById("rdBox");
