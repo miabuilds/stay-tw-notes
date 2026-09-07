@@ -101,8 +101,8 @@ const MockExam = (() => {
       const opts = shuf([w, ...wm(w)]);
       qs.push({ sec: "vocabR", stem: (w.m[mk] || w.m.e || w.m.j), stemPlain: true, word: w, opts: opts.map(o => o.w), ans: opts.indexOf(w) });
     });
-    // ⑤ 発音：単語 → 正しい注音（NEW）
-    shuf(withZy).slice(0, 4).forEach(w => {
+    // ⑤ 発音：単語 → 正しい注音（NEW・ユーザー設定でオフにできる）
+    if (examPronOn()) shuf(withZy).slice(0, 4).forEach(w => {
       const wrong = shuf(withZy.filter(v => v.zy !== w.zy)).slice(0, 3);
       const opts = shuf([w, ...wrong]);
       qs.push({ sec: "pron", stem: w.w, word: w, opts: opts.map(o => o.zy), ans: opts.indexOf(w) });
@@ -277,6 +277,9 @@ const MockExam = (() => {
     try { return JSON.parse(localStorage.getItem("stw_exam_history") || "[]"); } catch (e) { return []; }
   }
 
-  return { start, answer, next, quit, finish, history,
+  // 注音発音セクションの ON/OFF（既定 ON。ユーザーが「注音が苦手／不要」なら試験から外せる）
+  function examPronOn() { try { return localStorage.getItem("stw_ex_pron") !== "0"; } catch (e) { return true; } }
+  function setExamPron(on) { try { localStorage.setItem("stw_ex_pron", on ? "1" : "0"); } catch (e) {} }
+  return { start, answer, next, quit, finish, history, examPronOn, setExamPron,
            _import(h) { localStorage.setItem("stw_exam_history", JSON.stringify(h)); } };
 })();

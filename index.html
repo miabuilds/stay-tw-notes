@@ -130,6 +130,12 @@ button{font-family:inherit}
 .fc-word{font-family:var(--serif);font-size:clamp(44px,9vw,64px);font-weight:700;line-height:1.2}
 .fc-zy{font-size:15px;color:var(--ac);margin-top:10px;letter-spacing:.12em}
 .fc-py{font-size:17px;color:var(--tx2);margin-top:2px}
+#fcReading{position:relative;cursor:default}
+.fc-reveal{display:none}
+#fcReading.hide{cursor:pointer}
+#fcReading.hide .fc-zy,#fcReading.hide .fc-py{filter:blur(8px);opacity:.55;user-select:none}
+#fcReading.hide .fc-reveal{display:block;position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);font-size:12px;color:var(--tx3);letter-spacing:normal;pointer-events:none}
+.js-hidepron.on{background:var(--ac);color:#fff;border-color:var(--ac)}
 .fc-pos{display:inline-block;font-size:11px;font-weight:700;color:var(--ac);border:1px solid var(--ac);border-radius:6px;padding:0 7px;margin-top:14px;letter-spacing:.05em}
 .fc-mean{font-size:23px;font-weight:700;margin-bottom:12px}
 .fc-ex{font-size:15px;color:var(--tx);line-height:1.85;border-top:1px solid var(--line);margin-top:2px;cursor:pointer;border-radius:0 0 8px 8px;padding:12px 8px 4px}
@@ -760,8 +766,11 @@ body.more-open .ar-bar{display:none}
       <div class="fc-inner">
         <div class="fc-face fc-front">
           <div class="fc-word" id="fcWord"></div>
-          <div class="fc-zy" id="fcZy"></div>
-          <div class="fc-py" id="fcPy"></div>
+          <div id="fcReading" onclick="event.stopPropagation();this.classList.remove('hide')">
+            <div class="fc-zy" id="fcZy"></div>
+            <div class="fc-py" id="fcPy"></div>
+            <div class="fc-reveal" data-i18n="fcTapReveal">タップで発音を表示</div>
+          </div>
           <div class="fc-pos" id="fcPos"></div>
         </div>
         <div class="fc-face fc-back">
@@ -783,6 +792,7 @@ body.more-open .ar-bar{display:none}
       <button class="btn" id="fcFav" onclick="event.stopPropagation();toggleFavCard()" aria-pressed="false" data-i18n-aria="favToggle" aria-label="収藏" style="min-width:44px;font-size:18px;line-height:1">♡</button>
       <button class="btn js-spd" onclick="event.stopPropagation();cycleTtsSpeed()" data-i18n-aria="speedToggle" aria-label="再生速度" title="再生速度" style="min-width:48px">1x</button>
       <button class="btn js-ruby" onclick="event.stopPropagation();cycleRuby()" title="拼音／注音" aria-label="拼音／注音" style="min-width:44px">拼</button>
+      <button class="btn js-hidepron" onclick="event.stopPropagation();toggleHidePron()" data-i18n-aria="hidePronToggle" aria-label="発音を隠す" title="発音を隠す" style="min-width:44px">🙈</button>
     </div>
     <div class="fc-prog" id="fcProg"></div>
     <div class="kbd-hint" data-i18n="kbdHint">⌨️ Space:めくる ／ ←→:前後 ／ 1・2・3:評価</div>
@@ -944,7 +954,7 @@ body.more-open .ar-bar{display:none}
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=72"></script>
+<script src="i18n.js?v=73"></script>
 <script src="tts.js?v=61"></script>
 <script src="vocab-l1.js?v=52"></script>
 <script src="vocab-l2.js?v=52"></script>
@@ -995,7 +1005,7 @@ body.more-open .ar-bar{display:none}
 <script src="paywall.js?v=58"></script>
 <script src="websync.js?v=61"></script>
 <script src="srs.js?v=56"></script>
-<script src="mock-exam.js?v=55"></script>
+<script src="mock-exam.js?v=56"></script>
 <script src="polyphone.js?v=2"></script>
 <script>
 /* ===== テーマ ===== */
@@ -1258,12 +1268,22 @@ function cycleRuby(){
   const rerender = () => { try { renderCard(); } catch(e){} try { renderList(); } catch(e){} };
   if (RUBY !== "py") loadExZy(rerender); else rerender();
 }
+// 発音（注音/拼音）を隠す学習モード。ユーザー要望：字を先に見て自分でテスト、答えを盗み見してる感覚を避ける。
+let HIDE_PRON = (function(){ try { return localStorage.getItem("stw_fc_hidepron") === "1"; } catch(e){ return false; } })();
+function refreshHidePron(){ document.querySelectorAll(".js-hidepron").forEach(b => b.classList.toggle("on", HIDE_PRON)); }
+function toggleHidePron(){
+  HIDE_PRON = !HIDE_PRON;
+  try { localStorage.setItem("stw_fc_hidepron", HIDE_PRON ? "1" : "0"); } catch(e){}
+  refreshHidePron();
+  const fr = document.getElementById("fcReading"); if (fr) fr.classList.toggle("hide", HIDE_PRON);
+}
 function renderCard(){
   const w = deck[fcIdx], mk = twMKey();
   document.getElementById("fc").classList.remove("flip");
   document.getElementById("fcWord").textContent = w.w;
   document.getElementById("fcZy").textContent = w.zy;
   document.getElementById("fcPy").textContent = w.py;
+  const _fr = document.getElementById("fcReading"); if (_fr) _fr.classList.toggle("hide", HIDE_PRON);   // 新カードは再び隠す
   document.getElementById("fcPos").textContent = w.c;
   document.getElementById("fcMean").textContent = w.m[mk] || w.m.e || w.m.j;
   document.getElementById("fcEx").innerHTML =
@@ -2023,7 +2043,9 @@ function renderExamHome(){
     <p style="font-size:14.5px;color:var(--tx2);line-height:1.9">${twT("exIntro")}</p>
     <p style="font-size:13px;color:var(--tx3);margin:8px 0 18px">${currentLevel.toUpperCase()}・⏱ ${{l1:10,l2:10,l3:12,l4:15,l5:15}[currentLevel]} ${twT("exMin")}　<a href="tocfl.html" style="color:var(--ac)">TOCFL Guide →</a></p>
     ${Paywall.quotaBadge("exam")}
-    <div style="margin-top:10px"><button class="btn primary" onclick="Paywall.gate('exam',()=>MockExam.start(currentLevel))">▶ ${twT("exStart")}</button></div>
+    <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--tx2);margin:6px 0 2px;cursor:pointer">
+      <input type="checkbox" id="exPronChk" ${MockExam.examPronOn() ? "checked" : ""} onchange="MockExam.setExamPron(this.checked)" style="width:16px;height:16px;accent-color:var(--ac)">${twT("exInclPron")}</label>
+    <div style="margin-top:8px"><button class="btn primary" onclick="Paywall.gate('exam',()=>MockExam.start(currentLevel))">▶ ${twT("exStart")}</button></div>
     ${hist.length ? `<div class="ex-hist">
       <div style="font-size:12px;color:var(--tx3);letter-spacing:.1em;margin-bottom:6px">${twT("exHistory")}</div>
       ${hist.map(h=>`<div class="ex-hist-item"><span>${new Date(h.ts).toLocaleDateString()}</span><b>${h.score} / ${h.total}</b><span>${Math.round(h.score/h.total*100)}%</span></div>`).join("")}
