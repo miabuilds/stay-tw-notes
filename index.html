@@ -700,7 +700,7 @@ body.more-open .ar-bar{display:none}
   localStorage.setItem("stw-lang", pick||"en");   // ja/en/ko/vi/id 以外は英語を既定に
 }}catch(e){} })();
 // vi/id なら内容訳マップを同期ロード(init の正規化より前に間に合わせる)。他言語では読み込まない＝軽い。
-(function(){ try{ var l=localStorage.getItem("stw-lang"); if(l==="vi"||l==="id"){ document.write('<script src="content-'+l+'.js?v=2"><\/script>'); } }catch(e){} })();
+(function(){ try{ var l=localStorage.getItem("stw-lang"); if(l==="vi"||l==="id"){ document.write('<script src="content-'+l+'.js?v=3"><\/script>'); } }catch(e){} })();
 /* Google ログインボタンの言語をアプリ言語に合わせて読み込む（hl はスクリプト読込時に決まるため） */
 (function(){ var hl=({ja:"ja",en:"en",ko:"ko",vi:"vi",id:"id"})[localStorage.getItem("stw-lang")]||"ja";
   var s=document.createElement("script"); s.src="https://accounts.google.com/gsi/client?hl="+hl; s.async=true; s.defer=true; document.head.appendChild(s); })();
