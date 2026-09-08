@@ -50,6 +50,8 @@
   --sh: 0 1px 3px rgba(0,0,0,.03); --sh2: 0 2px 8px rgba(0,0,0,.04);
   --r: 10px; --hh: 56px; --ease: cubic-bezier(.25,.1,.25,1);
   --serif: "Hiragino Mincho ProN", "Noto Serif JP", "Yu Mincho", "游明朝", "Songti TC", serif;
+  /* 注音専用：黒体系は声調記号(ˊˇˋ˙)が明朝より太く鮮明。ゴシックで小サイズでも潰れにくい */
+  --zhuyin: "PingFang TC", "Heiti TC", "Microsoft JhengHei", "Noto Sans TC", "Hiragino Sans", sans-serif;
 }
 [data-theme="dark"] {
   --bg: #121113; --bg2: #1B1A1C; --bg3: #1F1E20; --hd: #121113;
@@ -129,7 +131,7 @@ button{font-family:inherit}
 .fc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--bg2);border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center}
 .fc-back{transform:rotateY(180deg)}
 .fc-word{font-family:var(--serif);font-size:clamp(44px,9vw,64px);font-weight:700;line-height:1.2}
-.fc-zy{font-size:15px;color:var(--ac);margin-top:10px;letter-spacing:.12em}
+.fc-zy{font-family:var(--zhuyin);font-size:20px;font-weight:600;color:var(--ac);margin-top:10px;letter-spacing:.1em}
 .fc-py{font-size:17px;color:var(--tx2);margin-top:2px}
 #fcReading{cursor:default;min-height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .fc-reveal{display:none}
@@ -143,7 +145,7 @@ button{font-family:inherit}
 @media(hover:hover){.fc-ex:hover{background:var(--ac-soft)}}
 .fc-ex .ex-z{display:block;margin-bottom:7px}
 .fc-ex .ex-r{display:block}
-.exr-zy{display:block;color:var(--ac);letter-spacing:.06em;font-size:13.5px;line-height:1.5}
+.exr-zy{display:block;font-family:var(--zhuyin);font-weight:600;color:var(--ac);letter-spacing:.05em;font-size:15.5px;line-height:1.55}
 .exr-py{display:block;color:var(--tx3);font-size:12.5px;line-height:1.4;margin-top:1px}
 .fc-ex .tr{font-size:13.5px;color:var(--tx2);display:block;margin-top:7px}
 .fc-grade{display:flex;gap:8px;margin-top:14px;width:100%}
@@ -174,7 +176,7 @@ button{font-family:inherit}
 @media(hover:hover){.vcard:hover{border-color:var(--ac)}}
 .vcard-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .vcard-w{font-family:var(--serif);font-size:26px;font-weight:700}
-.vcard-zy{font-size:12px;color:var(--ac);letter-spacing:.08em}
+.vcard-zy{font-family:var(--zhuyin);font-size:13.5px;font-weight:600;color:var(--ac);letter-spacing:.06em}
 .vcard-py{font-size:14px;color:var(--tx2)}
 .vcard-pos{font-size:10.5px;font-weight:700;color:var(--ac);border:1px solid var(--ac);border-radius:5px;padding:0 5px;margin-left:auto}
 .vcard-m{font-size:15px;font-weight:600;margin-top:4px}
@@ -248,16 +250,16 @@ button{font-family:inherit}
 .zy-cell{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:11px 4px;text-align:center;cursor:pointer;transition:transform .1s var(--ease),border-color .1s;-webkit-tap-highlight-color:transparent}
 .zy-cell:active{transform:scale(.93)}
 .zy-cell.play{border-color:var(--ac);background:var(--ac-soft)}
-.zy-cell .zy-z{font-family:var(--serif);font-size:29px;font-weight:700;line-height:1.1}
-.zy-cell .zy-py{font-size:11.5px;color:var(--tx2);margin-top:3px}
+.zy-cell .zy-z{font-family:var(--zhuyin);font-size:30px;font-weight:700;line-height:1.15;letter-spacing:.03em}
+.zy-cell .zy-py{font-size:12.5px;color:var(--tx2);margin-top:3px}
 .zy-hint{text-align:center;font-size:13px;color:var(--tx3);margin-bottom:16px}
 .zy-test{max-width:460px;margin:0 auto;text-align:center}
-.zy-prompt{font-family:var(--serif);font-size:76px;font-weight:700;line-height:1;margin:8px 0}
+.zy-prompt{font-family:var(--zhuyin);font-size:76px;font-weight:700;line-height:1.05;margin:8px 0;letter-spacing:.03em}
 .zy-play-btn{background:var(--bg3);color:var(--tx);border:1px solid var(--bd);border-radius:999px;padding:11px 24px;font-size:15px;font-weight:700;cursor:pointer;margin:6px 0 18px;font-family:inherit}
 .zy-input{width:100%;max-width:260px;border:2px solid var(--bd);background:var(--bg2);color:var(--tx);border-radius:12px;padding:12px 16px;font-size:20px;text-align:center;font-weight:700;font-family:inherit}
 .zy-input:focus{outline:none;border-color:var(--ac)}
 .zy-opts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:4px}
-.zy-opt{border:1px solid var(--bd);background:var(--bg2);color:var(--tx);border-radius:12px;padding:16px;font-family:var(--serif);font-size:34px;font-weight:700;cursor:pointer}
+.zy-opt{border:1px solid var(--bd);background:var(--bg2);color:var(--tx);border-radius:12px;padding:16px;font-family:var(--zhuyin);font-size:34px;font-weight:700;cursor:pointer;letter-spacing:.03em}
 .zy-opt.ok{background:var(--ok);border-color:var(--ok);color:#fff}
 .zy-opt.ng{background:var(--ac);border-color:var(--ac);color:#fff;opacity:.85}
 .zy-fb{font-size:15px;font-weight:700;margin:14px 0 4px;min-height:22px}
@@ -500,10 +502,10 @@ button{font-family:inherit}
 @media(hover:hover){.ar-w:hover{background:var(--ac-soft);border-color:var(--ac)}}
 /* 逐字ルビ：1 文字ごとに読み（拼音/注音）を真上に。文字・読み・ハイライトが縦にそろう */
 .rc{display:inline-flex;flex-direction:column;align-items:center;justify-content:flex-end;vertical-align:bottom;border-radius:5px;padding:0 1px;transition:background .1s,color .1s;-webkit-tap-highlight-color:transparent}
-.rc .rcr{font-size:.5em;line-height:1.15;color:var(--tx3);font-weight:500;letter-spacing:.02em;white-space:nowrap;margin-bottom:.05em}
-.rc .rcr.rcr2{display:flex;flex-direction:column;align-items:center;line-height:1.08;margin-bottom:.06em}
-.rc .rcr-z{white-space:nowrap}
-.rc .rcr-p{white-space:nowrap;opacity:.8;font-size:.92em}
+.rc .rcr{font-size:.6em;line-height:1.2;color:var(--tx2);font-weight:600;letter-spacing:.02em;white-space:nowrap;margin-bottom:.08em}
+.rc .rcr.rcr2{display:flex;flex-direction:column;align-items:center;line-height:1.12;margin-bottom:.08em}
+.rc .rcr-z{white-space:nowrap;font-family:var(--zhuyin);letter-spacing:.04em}
+.rc .rcr-p{white-space:nowrap;opacity:.72;font-size:.86em}
 .rd-story.rmboth,.ar-body.rmboth{line-height:2.75}
 .rc .rct{line-height:1.18;display:block}
 .rc.rc-h{margin:0 .5px}
@@ -1411,7 +1413,7 @@ function twRubyHtml(ruby, ci){
   if (!ruby || TW_RUBY_MODE === "off") return "";
   const p = (ruby.p && ruby.p[ci]) || "", z = (ruby.z && ruby.z[ci]) || "";
   if (TW_RUBY_MODE === "py") return p;
-  if (TW_RUBY_MODE === "zy") return z;
+  if (TW_RUBY_MODE === "zy") return z ? `<span class="rcr-z">${z}</span>` : "";
   if (!p && !z) return "";   // both
   return `<span class="rcr-z">${z}</span><span class="rcr-p">${p}</span>`;
 }
