@@ -17,7 +17,7 @@ const TTS = (() => {
   let SPD = 1; try { SPD = Math.max(0.5, Math.min(2, parseFloat(localStorage.getItem("stw_tts_rate")) || 1)); } catch (e) {}
   const audioEl = typeof Audio !== "undefined" ? new Audio() : null;
   if (typeof fetch !== "undefined") {
-    fetch("audio/manifest.json")
+    fetch("audio/manifest.json?v=" + Date.now())
       .then(r => (r.ok ? r.json() : null))
       .then(m => { MANIFEST = m; })
       .catch(() => {});
