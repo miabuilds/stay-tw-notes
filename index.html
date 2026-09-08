@@ -691,6 +691,31 @@ body.more-open .ar-bar{display:none}
 .bn-item .bi{height:24px;display:flex;align-items:center;justify-content:center;font-size:20px}
 .bn-item .bi svg{width:23px;height:23px}
 .sheet-item .bi svg{width:24px;height:24px}
+/* ===== 設定シート ===== */
+.set-open .sheet-bg{opacity:1;pointer-events:auto}
+.set-open #setSheet{transform:none}
+#setSheet{max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.set-head{display:flex;align-items:center;justify-content:space-between;margin:2px 2px 14px}
+.set-head h3{font-family:var(--serif);font-size:19px;font-weight:700;margin:0}
+.set-close{background:var(--bg3);border:1px solid var(--bd);border-radius:999px;width:32px;height:32px;color:var(--tx2);cursor:pointer;font-size:17px;line-height:1;font-family:inherit;display:flex;align-items:center;justify-content:center}
+.set-sec{margin-bottom:20px}
+.set-sec>label{display:block;font-size:11.5px;letter-spacing:.08em;color:var(--tx2);font-weight:700;text-transform:uppercase;margin-bottom:9px}
+.set-seg{display:flex;gap:8px}
+.set-seg button{flex:1;background:var(--bg2);border:1px solid var(--bd);border-radius:11px;padding:11px 6px;font-size:13.5px;font-weight:600;color:var(--tx);cursor:pointer;font-family:inherit;transition:border-color .12s,background .12s;-webkit-tap-highlight-color:transparent}
+.set-seg button.on{border-color:var(--ac);background:var(--ac-soft);color:var(--ac)}
+.set-seg button .fss{font-weight:700}
+.set-acc{display:flex;gap:12px;flex-wrap:wrap}
+.set-acc button{width:38px;height:38px;border-radius:999px;border:2px solid var(--bd);cursor:pointer;position:relative;padding:0;-webkit-tap-highlight-color:transparent}
+.set-acc button.on{border-color:var(--tx)}
+.set-acc button.on::after{content:"";position:absolute;inset:0;margin:auto;width:13px;height:13px;border-radius:999px;background:#fff;box-shadow:0 0 0 2px rgba(0,0,0,.15)}
+.set-acc button[data-set-accent="default"]{background:var(--bg3);color:var(--tx2);font-size:11px;font-weight:700;width:auto;padding:0 14px;border-radius:999px}
+.set-acc button[data-set-accent="default"].on::after{display:none}
+.set-langs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.set-langs button{background:var(--bg2);border:1px solid var(--bd);border-radius:11px;padding:11px 12px;font-size:13.5px;font-weight:600;color:var(--tx);cursor:pointer;font-family:inherit;text-align:left;-webkit-tap-highlight-color:transparent}
+.set-langs button.on{border-color:var(--ac);background:var(--ac-soft);color:var(--ac)}
+.set-fb{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:13px 14px;font-size:14px;font-weight:600;color:var(--tx);text-decoration:none}
+.set-fb .ic{color:var(--ac)}
+@media(hover:hover){.set-seg button:hover,.set-langs button:hover{border-color:var(--ac)}.set-close:hover{color:var(--ac)}}
 /* インライン線アイコン（発音ボタン等、絵文字の代わり） */
 .ic{width:1.05em;height:1.05em;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.15em;display:inline-block;flex:none}
 
@@ -744,9 +769,8 @@ body.more-open .ar-bar{display:none}
     <div class="hd-links">
       <a href="home.html" class="hide-sp" data-i18n="navHome">ホーム</a>
       <span id="authBtn" style="display:none"></span>
-      <a href="contact.html" class="theme-btn" data-i18n-aria="navContact" aria-label="ご意見・不具合報告" title="ご意見・不具合報告"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4.5 5.5h15a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H10l-4 3.2V16.5H4.5a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1z"/></svg></a>
-      <button class="lang-btn" id="langBtn" onclick="twCycleLang()">日</button>
-      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" data-i18n-aria="themeToggle" aria-label="ダークモード切替"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg></button>
+      <button class="lang-btn" id="langBtn" onclick="twOpenSettings()" title="設定">日</button>
+      <button class="theme-btn" id="setBtn" onclick="twOpenSettings()" data-i18n-aria="settings" aria-label="設定" title="設定"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
     </div>
   </div>
 </header>
@@ -964,8 +988,56 @@ body.more-open .ar-bar{display:none}
     <button class="sheet-item" data-panel="exam"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><rect x="8" y="2" width="8" height="4" rx="1"/><line x1="8" y1="12" x2="14" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg></span><span data-i18n="toolExam">模試</span></button>
     <button class="sheet-item" data-panel="speak"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></span><span data-i18n="toolSpeak">スピーキング</span></button>
     <button class="sheet-item" data-panel="write"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg></span><span data-i18n="toolWrite">ライティング</span></button>
+    <button class="sheet-item" onclick="toggleMore(false);twOpenSettings()"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span data-i18n="setTitle">設定</span></button>
     <a class="sheet-item" href="contact.html"><span class="bi">📮</span><span data-i18n="navContact" style="display:block">ご意見</span></a>
   </div>
+</div>
+
+<!-- 設定シート -->
+<div class="sheet-bg" onclick="twCloseSettings()"></div>
+<div class="sheet" id="setSheet">
+  <div class="set-head">
+    <h3 data-i18n="setTitle">設定</h3>
+    <button class="set-close" onclick="twCloseSettings()" aria-label="閉じる">✕</button>
+  </div>
+  <div class="set-sec">
+    <label data-i18n="setFontSize">文字サイズ</label>
+    <div class="set-seg" id="setFs">
+      <button data-set-fs="normal" onclick="twSetFs('normal')"><span class="fss" style="font-size:14px">Aa</span><br><span data-i18n="setFsNormal">標準</span></button>
+      <button data-set-fs="large" onclick="twSetFs('large')"><span class="fss" style="font-size:17px">Aa</span><br><span data-i18n="setFsLarge">大</span></button>
+      <button data-set-fs="xlarge" onclick="twSetFs('xlarge')"><span class="fss" style="font-size:20px">Aa</span><br><span data-i18n="setFsXlarge">特大</span></button>
+    </div>
+  </div>
+  <div class="set-sec">
+    <label data-i18n="setTheme">テーマ</label>
+    <div class="set-seg" id="setTheme">
+      <button data-set-theme="light" onclick="twSetTheme('light')" data-i18n="setThemeLight">ライト</button>
+      <button data-set-theme="dark" onclick="twSetTheme('dark')" data-i18n="setThemeDark">ダーク</button>
+      <button data-set-theme="auto" onclick="twSetTheme('auto')" data-i18n="setThemeAuto">自動</button>
+    </div>
+  </div>
+  <div class="set-sec">
+    <label data-i18n="setAccent">テーマカラー</label>
+    <div class="set-acc" id="setAccent">
+      <button data-set-accent="default" onclick="twSetAccent('default')" data-i18n="setAccentDefault">標準</button>
+      <button data-set-accent="coral" onclick="twSetAccent('coral')" style="background:#E8734A" aria-label="coral"></button>
+      <button data-set-accent="rose" onclick="twSetAccent('rose')" style="background:#D14D6B" aria-label="rose"></button>
+      <button data-set-accent="violet" onclick="twSetAccent('violet')" style="background:#7C5CD6" aria-label="violet"></button>
+      <button data-set-accent="teal" onclick="twSetAccent('teal')" style="background:#1F9E8E" aria-label="teal"></button>
+      <button data-set-accent="blue" onclick="twSetAccent('blue')" style="background:#3B74C4" aria-label="blue"></button>
+    </div>
+  </div>
+  <div class="set-sec">
+    <label data-i18n="setLanguage">言語</label>
+    <div class="set-langs" id="setLang">
+      <button data-set-lang="ja" onclick="twSetLangDirect('ja')">日本語</button>
+      <button data-set-lang="en" onclick="twSetLangDirect('en')">English</button>
+      <button data-set-lang="ko" onclick="twSetLangDirect('ko')">한국어</button>
+      <button data-set-lang="vi" onclick="twSetLangDirect('vi')">Tiếng Việt</button>
+      <button data-set-lang="id" onclick="twSetLangDirect('id')">Bahasa</button>
+    </div>
+  </div>
+  <a class="set-fb" href="contact.html"><svg class="ic" viewBox="0 0 24 24"><path d="M4.5 5.5h15a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H10l-4 3.2V16.5H4.5a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1z"/></svg><span data-i18n="setFeedback">ご意見・不具合報告</span></a>
 </div>
 
 <footer class="ft">
@@ -985,7 +1057,7 @@ body.more-open .ar-bar{display:none}
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=75"></script>
+<script src="i18n.js?v=76"></script>
 <script src="tts.js?v=61"></script>
 <script src="vocab-l1.js?v=52"></script>
 <script src="vocab-l2.js?v=52"></script>
@@ -1044,16 +1116,62 @@ body.more-open .ar-bar{display:none}
 <script src="polyphone.js?v=3"></script>
 <script>
 /* ===== テーマ ===== */
-function toggleTheme(){
-  const d = document.documentElement.dataset.theme === "dark";
-  document.documentElement.dataset.theme = d ? "" : "dark";
-  localStorage.setItem("stw-theme", d ? "light" : "dark");
+/* ===== 表示設定：テーマ・文字サイズ・アクセント・言語（統一設定シート）===== */
+const STW_ACCENTS = {
+  default: null,
+  coral:  { ac:"#E8734A", soft:"rgba(232,115,74,.12)" },
+  rose:   { ac:"#D14D6B", soft:"rgba(209,77,107,.12)" },
+  violet: { ac:"#7C5CD6", soft:"rgba(124,92,214,.12)" },
+  teal:   { ac:"#1F9E8E", soft:"rgba(31,158,142,.12)" },
+  blue:   { ac:"#3B74C4", soft:"rgba(59,116,196,.12)" }
+};
+const STW_FS = { normal:1, large:1.12, xlarge:1.24 };
+function twGetTheme(){ const v = localStorage.getItem("stw-theme"); return (v==="light"||v==="dark"||v==="auto") ? v : "auto"; }
+function twApplyTheme(){
+  const m = twGetTheme();
+  const dark = m === "dark" || (m === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.dataset.theme = dark ? "dark" : "";
 }
-(function(){
-  const saved = localStorage.getItem("stw-theme");
-  if (saved === "dark" || (!saved && matchMedia("(prefers-color-scheme: dark)").matches))
-    document.documentElement.dataset.theme = "dark";
-})();
+function twSetTheme(m){ localStorage.setItem("stw-theme", m); twApplyTheme(); twRenderSettings(); }
+function toggleTheme(){ twSetTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"); } // 旧ボタン互換
+try{ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ()=>{ if(twGetTheme()==="auto") twApplyTheme(); }); }catch(e){}
+
+function twGetFs(){ const v = localStorage.getItem("stw-fs"); return STW_FS[v] ? v : "normal"; }
+function twApplyFs(){ const el = document.querySelector("main.wrap"); if(!el) return; const z = STW_FS[twGetFs()]; el.style.zoom = (z===1) ? "" : z; }
+function twSetFs(v){ localStorage.setItem("stw-fs", v); twApplyFs(); twRenderSettings(); }
+
+function twGetAccent(){ const v = localStorage.getItem("stw-accent"); return (v in STW_ACCENTS) ? v : "default"; }
+function twApplyAccent(){
+  const a = STW_ACCENTS[twGetAccent()], s = document.documentElement.style;
+  if(!a){ s.removeProperty("--ac"); s.removeProperty("--ac-soft"); }
+  else { s.setProperty("--ac", a.ac); s.setProperty("--ac-soft", a.soft); }
+}
+function twSetAccent(k){ localStorage.setItem("stw-accent", k); twApplyAccent(); twRenderSettings(); }
+
+function twSetLangDirect(lang){
+  const cur = twGetLang();
+  if(lang === cur){ twCloseSettings(); return; }
+  const needsOverlay = l => l==="vi" || l==="id";
+  localStorage.setItem("stw-lang", lang);
+  if(needsOverlay(lang) || needsOverlay(cur)){ location.reload(); return; }  // vi/id は content overlay 再読込が必要
+  document.documentElement.lang = lang;
+  const lb = document.getElementById("langBtn"); if(lb) lb.textContent = {ja:"日",en:"EN",ko:"한",vi:"VI",id:"ID"}[lang];
+  if(typeof twApplyI18n==="function") twApplyI18n();
+  if(typeof onLangChange==="function") onLangChange();
+  twRenderSettings();
+}
+
+function twOpenSettings(){ twRenderSettings(); document.body.classList.add("set-open"); }
+function twCloseSettings(){ document.body.classList.remove("set-open"); }
+function twRenderSettings(){
+  const th = twGetTheme(), fs = twGetFs(), ac = twGetAccent(), lg = twGetLang();
+  document.querySelectorAll("#setSheet [data-set-theme]").forEach(b=>b.classList.toggle("on", b.dataset.setTheme===th));
+  document.querySelectorAll("#setSheet [data-set-fs]").forEach(b=>b.classList.toggle("on", b.dataset.setFs===fs));
+  document.querySelectorAll("#setSheet [data-set-accent]").forEach(b=>b.classList.toggle("on", b.dataset.setAccent===ac));
+  document.querySelectorAll("#setSheet [data-set-lang]").forEach(b=>b.classList.toggle("on", b.dataset.setLang===lg));
+}
+twApplyTheme(); twApplyAccent();
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", twApplyFs); else twApplyFs();
 
 /* ===== レベルデータ ===== */
 const _cat = (...xs) => xs.filter(x => Array.isArray(x)).flat();
