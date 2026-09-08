@@ -329,6 +329,31 @@ button{font-family:inherit}
 .wr-ta:focus{outline:none;border-color:var(--ac)}
 .wr-meta{display:flex;align-items:center;gap:12px;font-size:12.5px;color:var(--tx3);margin:8px 2px 18px}
 .wr-model{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:14px}
+.wr-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.wr-note{font-size:13px;color:var(--tx2);padding:10px 2px}
+.wr-score-card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:14px}
+.wr-score-top{display:flex;gap:16px;align-items:center}
+.wr-score-num{font-family:var(--serif);font-size:40px;font-weight:700;color:var(--ac);line-height:1;flex-shrink:0}
+.wr-score-num small{font-size:15px;color:var(--tx3);font-weight:400}
+.wr-good{font-size:13.5px;color:var(--ok);line-height:1.6}
+.wr-improve{font-size:13.5px;color:var(--tx2);line-height:1.6;margin-top:2px}
+.wr-corr{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+.wr-corr>b{font-size:12px;color:var(--tx3);letter-spacing:.06em;display:block;margin-bottom:8px}
+.wr-corr-item{font-size:14.5px;line-height:1.7;margin-bottom:8px}
+.wr-x{color:var(--ac);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--ac) 55%,transparent)}
+.wr-arrow{color:var(--tx3)}
+.wr-o{color:var(--ok);font-weight:700;cursor:pointer}
+.wr-corr-item small{display:block;color:var(--tx3);font-size:12px;margin-top:1px}
+.wr-tip{font-size:13px;color:var(--tx2);margin-top:12px;line-height:1.6}
+.wr-tip b{color:var(--ac)}
+.wr-enc{font-size:13.5px;color:var(--tx);margin-top:8px;line-height:1.6}
+.wr-hist{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin-bottom:10px;cursor:pointer}
+@media(hover:hover){.wr-hist:hover{border-color:var(--ac)}}
+.wr-hist-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.wr-hist-top b{font-size:14.5px}
+.wr-hist-score{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ac)}
+.wr-hist-draft{font-size:13px;color:var(--tx2);margin-top:4px;line-height:1.5}
+.wr-hist-date{font-size:11px;color:var(--tx3);margin-top:4px}
 .wr-model .zh{font-family:var(--serif);font-size:16.5px;line-height:2;cursor:pointer;border-radius:8px}
 @media(hover:hover){.wr-model .zh:hover{background:var(--ac-soft)}}
 .wr-model .tr{font-size:13.5px;color:var(--tx2);line-height:1.9;border-top:1px dashed var(--line);margin-top:12px;padding-top:12px}
@@ -960,7 +985,7 @@ body.more-open .ar-bar{display:none}
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=74"></script>
+<script src="i18n.js?v=75"></script>
 <script src="tts.js?v=61"></script>
 <script src="vocab-l1.js?v=52"></script>
 <script src="vocab-l2.js?v=52"></script>
@@ -1796,8 +1821,10 @@ const WR = (() => {
   function renderList(){
     cur = null;
     const d = drafts(), ck = lang();
+    const nHist = scores().length;
     document.getElementById("wrBox").innerHTML = `
-      <p style="font-size:14.5px;color:var(--tx2);line-height:1.9;margin-bottom:16px">${twT("wrIntro")}</p>
+      <p style="font-size:14.5px;color:var(--tx2);line-height:1.9;margin-bottom:12px">${twT("wrIntro")}</p>
+      ${nHist ? `<div style="text-align:center;margin-bottom:14px"><button class="wb-link" onclick="WR.history()">${twT("wrHistory")}（${nHist}）</button></div>` : ""}
       ${WRITING.map(t => `
         <div class="wr-topic" onclick="WR.open('${t.id}')">
           <span class="lv">${t.lv.toUpperCase()}</span>
@@ -1819,9 +1846,13 @@ const WR = (() => {
       <div class="wr-meta">
         <span id="wrCount">${(d[cur.id] || "").length} ${twT("wrChars")}</span>
         <span>${twT("wrMin")}: ${cur.minLen}+</span>
-        <span id="wrSaved" style="margin-left:auto;opacity:0;transition:opacity .3s">💾 ${twT("wrSaved")}</span>
+        <span id="wrSaved" style="margin-left:auto;opacity:0;transition:opacity .3s">${twT("wrSaved")}</span>
       </div>
-      <button class="btn primary" id="wrModelBtn" onclick="WR.toggleModel()">${twT("wrShowModel")}</button>
+      <div class="wr-btns">
+        <button class="btn primary" id="wrScoreBtn" onclick="WR.score()">${twT("wrAiScore")}</button>
+        <button class="btn" id="wrModelBtn" onclick="WR.toggleModel()">${twT("wrShowModel")}</button>
+      </div>
+      <div id="wrResult"></div>
       <div id="wrModel" style="display:none">
         <div class="wr-model">
           <div style="font-size:12px;color:var(--ac);letter-spacing:.08em;font-weight:700;margin-bottom:8px">${twT("wrModelLabel")}</div>
@@ -1871,7 +1902,55 @@ const WR = (() => {
     if (show) speakZh(cur.model);
   }
 
-  return { render: renderList, list: renderList, open, onInput, hint, toggleModel };
+  // ── AI 採点（/api/write-score）＋履歴 ──
+  const scores = () => { try { return JSON.parse(localStorage.getItem("stw_wr_scores") || "[]"); } catch(e){ return []; } };
+  function saveScore(rec){ try { const a = scores(); a.unshift(rec); localStorage.setItem("stw_wr_scores", JSON.stringify(a.slice(0, 60))); } catch(e){} }
+  async function score(){
+    const ta = document.getElementById("wrTa"); if (!ta) return;
+    const draft = ta.value.trim();
+    const res = document.getElementById("wrResult"); const btn = document.getElementById("wrScoreBtn");
+    if (draft.length < 10){ res.innerHTML = `<p class="wr-note">${twT("wrTooShort")}</p>`; return; }
+    btn.disabled = true; btn.textContent = twT("wrScoring");
+    res.innerHTML = `<p class="wr-note">${twT("wrScoring")}</p>`;
+    const ck = { j:"ja", e:"en", k:"ko" }[lang()] || "ja";
+    try {
+      const r = await fetch("/api/write-score", { method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ lang: ck, topic: cur.title[lang()] || cur.title.j, task: cur.task[lang()] || cur.task.j, draft: draft.slice(0,2000) }) });
+      if (r.status === 429){ res.innerHTML = `<p class="wr-note">${twT("wrQuota")}</p>`; return; }
+      if (!r.ok) throw new Error("fail");
+      const d = await r.json();
+      saveScore({ id: cur.id, title: cur.title[lang()] || cur.title.j, draft: draft.slice(0,2000), score: d.score, fb: d, ts: Date.now() });
+      res.innerHTML = renderScore(d);
+    } catch(e){ res.innerHTML = `<p class="wr-note">${twT("wrScoreErr")}</p>`; }
+    finally { btn.disabled = false; btn.textContent = twT("wrAiScore"); }
+  }
+  function renderScore(d){
+    const corr = (d.corrections || []).length ? `<div class="wr-corr"><b>${twT("wrCorr")}</b>${d.corrections.map(c=>
+      `<div class="wr-corr-item"><span class="wr-x">${esc(c.orig||"")}</span> <span class="wr-arrow">→</span> <span class="wr-o" onclick="speakZh('${(c.fixed||'').replace(/'/g,"\\'")}')">${esc(c.fixed||"")}</span><small>${esc(c.why||"")}</small></div>`).join("")}</div>` : "";
+    return `<div class="wr-score-card">
+      <div class="wr-score-top"><div class="wr-score-num">${d.score!=null?d.score:"—"}<small>/100</small></div>
+        <div class="wr-score-txt">${d.good?`<p class="wr-good">✔ ${esc(d.good)}</p>`:""}${d.improve?`<p class="wr-improve">${esc(d.improve)}</p>`:""}</div></div>
+      ${corr}
+      ${d.tip?`<p class="wr-tip"><b>${twT("wrTip")}</b> ${esc(d.tip)}</p>`:""}
+      ${d.encourage?`<p class="wr-enc">${esc(d.encourage)}</p>`:""}</div>`;
+  }
+  function history(){
+    const a = scores(), ck = lang();
+    document.getElementById("wrBox").innerHTML = `<button class="btn" style="margin-bottom:14px" onclick="WR.list()">${twT("wrBack")}</button>
+      <h3 style="font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:12px">${twT("wrHistory")}</h3>
+      ${a.length ? a.map(r=>`<div class="wr-hist" onclick="WR.openHist(${r.ts})">
+        <div class="wr-hist-top"><b>${esc(r.title||"")}</b><span class="wr-hist-score">${r.score!=null?r.score:"—"}</span></div>
+        <div class="wr-hist-draft">${esc((r.draft||"").slice(0,60))}${(r.draft||"").length>60?"…":""}</div>
+        <div class="wr-hist-date">${new Date(r.ts).toLocaleString()}</div></div>`).join("") : `<p class="wr-note">${twT("wrNoHistory")}</p>`}`;
+  }
+  function openHist(ts){
+    const r = scores().find(x=>x.ts===ts); if(!r) return;
+    document.getElementById("wrBox").innerHTML = `<button class="btn" style="margin-bottom:14px" onclick="WR.history()">${twT("wrBack")}</button>
+      <h3 style="font-family:var(--serif);font-size:19px;font-weight:700">${esc(r.title||"")}</h3>
+      <div class="wr-model" style="margin:10px 0"><div class="zh" onclick="speakZh(this.textContent)" style="white-space:pre-wrap">${esc(r.draft||"")}</div></div>
+      ${renderScore(r.fb||{score:r.score})}`;
+  }
+  return { render: renderList, list: renderList, open, onInput, hint, toggleModel, score, history, openHist };
 })();
 
 /* ===== 復習 SRS ホーム ===== */
