@@ -1035,7 +1035,7 @@ body.more-open .ar-bar{display:none}
 <script src="articles-18.js?v=56"></script>
 <script src="articles-19.js?v=1"></script>
 <script src="writing-data.js?v=52"></script>
-<script src="paywall.js?v=58"></script>
+<script src="paywall.js?v=99"></script>
 <script src="websync.js?v=61"></script>
 <script src="srs.js?v=56"></script>
 <script src="mock-exam.js?v=58"></script>
@@ -1852,6 +1852,7 @@ const WR = (() => {
         <button class="btn primary" id="wrScoreBtn" onclick="WR.score()">${twT("wrAiScore")}</button>
         <button class="btn" id="wrModelBtn" onclick="WR.toggleModel()">${twT("wrShowModel")}</button>
       </div>
+      ${(window.Paywall && Paywall.quotaBadge) ? Paywall.quotaBadge("aiscore") : ""}
       <div id="wrResult"></div>
       <div id="wrModel" style="display:none">
         <div class="wr-model">
@@ -1905,11 +1906,17 @@ const WR = (() => {
   // ── AI 採点（/api/write-score）＋履歴 ──
   const scores = () => { try { return JSON.parse(localStorage.getItem("stw_wr_scores") || "[]"); } catch(e){ return []; } };
   function saveScore(rec){ try { const a = scores(); a.unshift(rec); localStorage.setItem("stw_wr_scores", JSON.stringify(a.slice(0, 60))); } catch(e){} }
-  async function score(){
+  function score(){
+    const ta = document.getElementById("wrTa"); if (!ta) return;
+    if (ta.value.trim().length < 10){ document.getElementById("wrResult").innerHTML = `<p class="wr-note">${twT("wrTooShort")}</p>`; return; }
+    // 未購読は 1日1回まで（Paywall.gate が枠消費／購読者は無制限）。
+    if (window.Paywall && Paywall.gate) { if (!Paywall.gate("aiscore", doScore)) return; }
+    else doScore();
+  }
+  async function doScore(){
     const ta = document.getElementById("wrTa"); if (!ta) return;
     const draft = ta.value.trim();
     const res = document.getElementById("wrResult"); const btn = document.getElementById("wrScoreBtn");
-    if (draft.length < 10){ res.innerHTML = `<p class="wr-note">${twT("wrTooShort")}</p>`; return; }
     btn.disabled = true; btn.textContent = twT("wrScoring");
     res.innerHTML = `<p class="wr-note">${twT("wrScoring")}</p>`;
     const ck = { j:"ja", e:"en", k:"ko" }[lang()] || "ja";

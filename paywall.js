@@ -10,7 +10,7 @@
 const Paywall = (() => {
   const QUOTA_KEY = "stw_quota";
   // 1日の無料枠（プレミアムで無制限）
-  const LIMITS = { quiz: 3, srs: 1, exam: 1, speak: 5, writing: 1 };
+  const LIMITS = { quiz: 3, srs: 1, exam: 1, speak: 5, writing: 1, aiscore: 1 };
   const PRICES = { monthly: "¥980", yearly: "¥5,800", lifetime: "¥12,800" };
 
   function today() { return new Date().toISOString().split("T")[0]; }
@@ -79,7 +79,7 @@ const Paywall = (() => {
   function show(feature) {
     const bg = document.getElementById("pwBg");
     if (!bg) return;
-    const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite") }[feature] || "";
+    const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore") }[feature] || "";
     const desc = feature === "article" ? twT("pwContentHit") : twT("pwLimitHit").replace("{f}", featName);
     document.getElementById("pwBox").innerHTML = `
       <button class="qclose" style="float:right" onclick="Paywall.close()">✕</button>
