@@ -212,6 +212,52 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       return json(out, 200, h);
     }
 
+    // ライティング採点:お題+作文 → {score, good, improve, corrections[], tip, encourage}
+    if (url.pathname === "/api/write-score" && req.method === "POST") {
+      const ip = req.headers.get("CF-Connecting-IP") || "unknown";
+      const day = new Date().toISOString().slice(0, 10);
+      const qkey = ip + ":ws:" + day, DAILY = 30;
+      const row = await env.DB.prepare("SELECT count FROM chat_quota WHERE key=?1").bind(qkey).first();
+      if (row && row.count >= DAILY) return json({ error: "quota" }, 429, h);
+      await env.DB.prepare("INSERT INTO chat_quota (key,count,day) VALUES (?1,1,?2) ON CONFLICT(key) DO UPDATE SET count=count+1, day=?2").bind(qkey, day).run();
+      let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
+      if (!env.ANTHROPIC_API_KEY) return json({ error: "ai_not_configured" }, 501, h);
+      const lang = ["ja", "en", "ko"].includes(b.lang) ? b.lang : "ja";
+      const langName = { ja: "Japanese", en: "English", ko: "Korean" }[lang];
+      const topic = String(b.topic || "").slice(0, 200);
+      const task = String(b.task || "").slice(0, 400);
+      const draft = String(b.draft || "").trim().slice(0, 2000);
+      if (draft.length < 5) return json({ error: "too short" }, 400, h);
+      const sys = `You are a warm but rigorous Taiwan Mandarin writing tutor grading a learner's short composition.
+Topic: ${topic}
+Task: ${task}
+Grade the learner's writing (below) as **Taiwan Mandarin** (Traditional characters, Taiwan usage & phrasing). Judge grammar, word choice, naturalness for Taiwan, coherence, and whether it fulfils the task. Be encouraging but honest and specific.
+Respond with a SINGLE valid JSON object only (no markdown), keys:
+  "score": integer 0-100 (reward effort and communication; a coherent on-topic piece with minor errors is ~75-88),
+  "good": one short sentence in ${langName} naming a genuine strength (you may quote their Traditional Chinese),
+  "corrections": array (max 4) of the most useful fixes, each {"orig":"their exact Chinese phrase","fixed":"the natural Taiwan-Mandarin version in Traditional characters","why":"one very short ${langName} reason"}. Only include real errors or clearly unnatural phrasing; [] if the writing is already clean.
+  "improve": one short ${langName} sentence on the single biggest thing to work on next,
+  "tip": one short practical ${langName} writing tip,
+  "encourage": one short warm ${langName} sentence.`;
+      let rc;
+      try {
+        rc = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: { "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01", "content-type": "application/json" },
+          body: JSON.stringify({ model: "claude-haiku-4-5-20251001", max_tokens: 800, system: sys, messages: [{ role: "user", content: draft }] }),
+        });
+      } catch (e) { return json({ error: "ai_error" }, 502, h); }
+      if (!rc.ok) { const t = await rc.text().catch(() => ""); return json({ error: "ai_error", detail: t.slice(0, 160) }, 502, h); }
+      const data = await rc.json();
+      const text = (data.content && data.content[0] && data.content[0].text) || "";
+      let out;
+      try { const a = text.indexOf("{"), z = text.lastIndexOf("}"); out = JSON.parse(text.slice(a, z + 1)); }
+      catch (e) { out = { score: null, good: "", corrections: [], improve: text, tip: "", encourage: "" }; }
+      out.score = (out.score == null ? null : Math.max(0, Math.min(100, Number(out.score) || 0)));
+      if (!Array.isArray(out.corrections)) out.corrections = [];
+      return json(out, 200, h);
+    }
+
     if (url.pathname === "/api/tts" && req.method === "POST") {
       // 自然人聲。優先 Azure（文章朗讀同款 zh-TW-HsiaoChenNeural），次 Google，皆無 → 501，前端退回瀏覽器音。
       const hasAzure = !!env.AZURE_SPEECH_KEY, hasGoogle = !!env.GOOGLE_TTS_KEY;
