@@ -1086,12 +1086,12 @@ body.more-open .ar-bar{display:none}
 <script src="grammar-l6.js?v=1"></script>
 <script src="phrases-l1.js?v=52"></script>
 <script src="zhuyin.js?v=52"></script>
-<script src="reading-l1.js?v=52"></script>
-<script src="reading-l2.js?v=52"></script>
-<script src="reading-l3.js?v=52"></script>
-<script src="reading-l4.js?v=52"></script>
-<script src="reading-l5.js?v=52"></script>
-<script src="reading-l6.js?v=1"></script>
+<script src="reading-l1.js?v=53"></script>
+<script src="reading-l2.js?v=53"></script>
+<script src="reading-l3.js?v=53"></script>
+<script src="reading-l4.js?v=53"></script>
+<script src="reading-l5.js?v=53"></script>
+<script src="reading-l6.js?v=53"></script>
 <script src="articles-1.js?v=52"></script>
 <script src="articles-2.js?v=52"></script>
 <script src="articles-3.js?v=52"></script>
@@ -1111,6 +1111,7 @@ body.more-open .ar-bar{display:none}
 <script src="articles-17.js?v=52"></script>
 <script src="articles-18.js?v=56"></script>
 <script src="articles-19.js?v=1"></script>
+<script src="articles-20.js?v=1"></script>
 <script src="writing-data.js?v=52"></script>
 <script src="paywall.js?v=99"></script>
 <script src="websync.js?v=61"></script>
@@ -1406,7 +1407,7 @@ function loadRubyMap(cb){
   if (RUBYMAP) { if (cb) cb(); return; }
   if (RUBYMAP_LOADING) return;
   RUBYMAP_LOADING = true;
-  fetch("data/reading-ruby.json?v=7").then(r => r.ok ? r.json() : null).then(m => { RUBYMAP = m || {}; RUBYMAP_LOADING = false; if (cb) cb(); }).catch(() => { RUBYMAP_LOADING = false; });
+  fetch("data/reading-ruby.json?v=8").then(r => r.ok ? r.json() : null).then(m => { RUBYMAP = m || {}; RUBYMAP_LOADING = false; if (cb) cb(); }).catch(() => { RUBYMAP_LOADING = false; });
 }
 // その文字（通し番号 ci）のルビ HTML を返す。both は注音（上）＋拼音（下）の 2 行。
 function twRubyHtml(ruby, ci){
@@ -2883,6 +2884,7 @@ function twArticles(){
     (typeof ARTICLES_17 !== "undefined" ? ARTICLES_17 : []),
     (typeof ARTICLES_18 !== "undefined" ? ARTICLES_18 : []),
     (typeof ARTICLES_19 !== "undefined" ? ARTICLES_19 : []),
+    (typeof ARTICLES_20 !== "undefined" ? ARTICLES_20 : []),
   ].flat();
 }
 const AR = (() => {
