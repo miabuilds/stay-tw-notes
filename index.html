@@ -1384,19 +1384,25 @@ function toggleFavCard(){ const w=deck[fcIdx].w; const now=toggleFav(currentLeve
 function updateFavBtn(){ const b=document.getElementById("fcFav"); if(!b||!deck[fcIdx]) return; const on=isFav(currentLevel,deck[fcIdx].w); b.textContent=on?"★":"♡"; b.classList.toggle("primary",on); b.setAttribute("aria-pressed",on); }
 
 /* ===== 例文の注音表示（拼音⇄注音の切替。ユーザー要望：拼音を知らない人向け）===== */
-let EX_ZY = null, EX_ZY_LOADING = false;
+let EX_ZY = null, EX_ZY_LOADING = false, EX_PY = null;
 let RUBY = (function(){ try { return localStorage.getItem("stw_ruby") || "both"; } catch(e){ return "both"; } })();
 function loadExZy(cb){
   if (EX_ZY) { if (cb) cb(); return; }
   if (EX_ZY_LOADING) return;
   EX_ZY_LOADING = true;
-  fetch("data/ex-zhuyin.json?v=5").then(r => r.ok ? r.json() : null).then(m => { EX_ZY = m || {}; EX_ZY_LOADING = false; if (cb) cb(); }).catch(() => { EX_ZY_LOADING = false; });
+  // 注音＋(台灣読音に修正した)拼音オーバーレイを並行ロード。EX_PY にあれば ex.py より優先。
+  Promise.all([
+    fetch("data/ex-zhuyin.json?v=6").then(r => r.ok ? r.json() : null),
+    fetch("data/ex-pinyin.json?v=1").then(r => r.ok ? r.json() : null).catch(() => null)
+  ]).then(([zy, py]) => { EX_ZY = zy || {}; EX_PY = py || {}; EX_ZY_LOADING = false; if (cb) cb(); })
+    .catch(() => { EX_ZY_LOADING = false; });
 }
 function exRuby(z, py){
   const zy = (EX_ZY && EX_ZY[z]) ? EX_ZY[z] : "";
-  if (RUBY === "zy") return `<span class="exr-zy">${zy || py}</span>`;
-  if (RUBY === "py") return `<span class="exr-py">${py}</span>`;
-  return (zy ? `<span class="exr-zy">${zy}</span>` : "") + `<span class="exr-py">${py}</span>`;   // both
+  const p = (EX_PY && EX_PY[z]) ? EX_PY[z] : py;   // 台湾読音に修正済みの拼音を優先
+  if (RUBY === "zy") return `<span class="exr-zy">${zy || p}</span>`;
+  if (RUBY === "py") return `<span class="exr-py">${p}</span>`;
+  return (zy ? `<span class="exr-zy">${zy}</span>` : "") + `<span class="exr-py">${p}</span>`;   // both
 }
 // ── 逐字ルビ（読解・記事の本文で「1 文字ずつ真上に読み」を出す） ──
 // data/reading-ruby.json = { "<原文>": {p:[逐字拼音], z:[逐字注音]} }（pypinyin で文脈込み・破音字も正しい）
