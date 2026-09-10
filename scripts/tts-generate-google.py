@@ -96,6 +96,13 @@ def _pick(z,py):
     for s in ok:                       # 各字の基底が妥当な切り方を優先
         if _all_valid(z,s):return s
     return ok[0]
+try:
+    import importlib as _il, os as _os, sys as _sys
+    _sys.path.insert(0, _os.path.dirname(__file__))
+    _twr=_il.import_module("tw-readings"); _tw_fix=_twr.apply_fix
+except Exception:
+    def _tw_fix(parts): return parts
+
 def phonemes(z,py):
     syl=_pick(z,py)
     if syl is None:return None
@@ -133,6 +140,7 @@ def main():
     for z,py in data.items():
         parts=phonemes(z,py)
         if parts is None:bad.append(z);continue
+        parts=_tw_fix(parts)   # 台灣讀音強制修正(tw-readings.TW_FIX)
         todo.append((z,parts))
     print(f"対象 {len(todo)} / 整列失敗 {len(bad)}",flush=True)
     if bad[:10]:print("  失敗例:",bad[:10])
