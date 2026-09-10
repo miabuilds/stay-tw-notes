@@ -54,7 +54,7 @@ ex:{j:"「過 guò」は経験「〜したことがある」。否定は「沒�
 eg:[{z:"你去<em>過</em>九份嗎？",py:"Nǐ qù guò Jiǔfèn ma?",j:"九份へ行ったことがありますか。",e:"Have you been to Jiufen?",k:"지우펀에 가 본 적 있어요?"},{z:"我沒吃<em>過</em>臭豆腐。",py:"Wǒ méi chī guò chòudòufu.",j:"臭豆腐は食べたことがありません。",e:"I've never eaten stinky tofu.",k:"취두부는 먹어 본 적이 없어요."}]},
 {id:"l1-18",cat:"前置詞",t:"跟／和",g:{j:"〜と",e:"with / and",k:"~와/과"},p:{j:"A ＋ 跟／和 ＋ B",e:"A + 跟/和 + B",k:"A + 跟/和 + B"},
 ex:{j:"「跟 gēn」「和 hàn」は「〜と」。台湾では「和」を hàn と読むのが特徴（中国では hé）。会話では「跟」のほうがよく使う。",e:"跟 / 和 = \"with; and\". In Taiwan 和 is read hàn (not hé). 跟 is more common in speech.",k:"\"跟/和\" = ~와/과. 대만에서는 \"和\"를 hàn으로 읽는다. 회화에서는 \"跟\"이 더 흔하다."},
-eg:[{z:"我<em>跟</em>朋友去逛夜市。",py:"Wǒ gēn péngyǒu qù guàng yèshì.",j:"友達と夜市をぶらぶらしに行きます。",e:"I stroll the night market with friends.",k:"친구와 야시장 구경을 갑니다."},{z:"我要珍珠<em>和</em>椰果。",py:"Wǒ yào zhēnzhū hàn yēguǒ.",j:"タピオカとナタデココをお願いします。",e:"I'd like pearls and nata de coco.",k:"타피오카와 코코넛 젤리 주세요."}]},
+eg:[{z:"我<em>跟</em>朋友去逛夜市。",py:"Wǒ gēn péngyǒu qù guàng yèshì.",j:"友達と夜市をぶらぶらしに行きます。",e:"I stroll the night market with friends.",k:"친구와 야시장 구경을 갑니다."},{z:"我要珍珠<em>和</em>椰果。",py:"Wǒ yào zhēnzhū hàn yéguǒ.",j:"タピオカとナタデココをお願いします。",e:"I'd like pearls and nata de coco.",k:"타피오카와 코코넛 젤리 주세요."}]},
 {id:"l1-19",cat:"依頼",t:"請",g:{j:"どうぞ・〜してください",e:"please (do)",k:"~해 주세요"},p:{j:"請 ＋ 動詞",e:"請 + verb",k:"請 + 동사"},
 ex:{j:"「請 qǐng」を文頭に置くと丁寧な依頼「〜してください」。「請坐（どうぞ座って）」「請給我〜（〜をください）」は初日から使える。",e:"請 + verb = polite request. 請給我〜 = \"Please give me...\".",k:"\"請\"+동사 = 정중한 부탁. \"請給我~\" = ~을 주세요."},
 eg:[{z:"<em>請</em>給我菜單。",py:"Qǐng gěi wǒ càidān.",j:"メニューをください。",e:"Please give me the menu.",k:"메뉴판 좀 주세요."},{z:"<em>請</em>再說一次。",py:"Qǐng zài shuō yí cì.",j:"もう一度言ってください。",e:"Please say it again.",k:"다시 한번 말해 주세요."}]},
