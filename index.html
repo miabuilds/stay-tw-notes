@@ -4,15 +4,11 @@
 <meta charset="UTF-8">
 <meta name="google-site-verification" content="9wjeCDTfS5zg3ooXHMMPhWE6gCM1qQJ7eGY6q6rPSkY">
 <script>
-/* ルート(/)に来たブラウザ訪問者はランディング(/home)へ誘導。
-   ネイティブアプリ（WEB_URL が "/"）とアプリ起動リンク（?app=1）は除外し、
-   無限ループと「アプリ内でランディングが開く」事故を防ぐ。二重の判定で誤爆防止。 */
+/* ルート(/)の出し分けは functions/_middleware.js がサーバ側で行う（初回訪問者→ランディング、
+   ?app=1 / cookie stw_app=1 / ネイティブアプリ→このツール）。ここでは「ツールに入った」印の cookie を
+   置くだけ。以前の location.replace("/home") は ?utm/?lang を落としていたので廃止。 */
 (function(){try{
-  var native = window.STAYTW_NATIVE || window.ReactNativeWebView;
-  var p = location.pathname, q = location.search || "";
-  if (!native && (p === "/" || p === "/index.html") && q.indexOf("app=") === -1) {
-    location.replace("/home");
-  }
+  document.cookie = "stw_app=1; max-age=31536000; path=/; SameSite=Lax" + (location.protocol==="https:"?"; Secure":"");
 }catch(e){}})();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -1060,7 +1056,7 @@ body.more-open .ar-bar{display:none}
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=76"></script>
+<script src="i18n.js?v=77"></script>
 <script src="tts.js?v=61"></script>
 <script src="vocab-l1.js?v=52"></script>
 <script src="vocab-l2.js?v=52"></script>
