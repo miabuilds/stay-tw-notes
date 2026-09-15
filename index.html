@@ -1056,7 +1056,8 @@ body.more-open .ar-bar{display:none}
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=79"></script>
+<script src="i18n.js?v=80"></script>
+<script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=61"></script>
 <script src="vocab-l1.js?v=52"></script>
 <script src="vocab-l2.js?v=52"></script>
@@ -1751,6 +1752,7 @@ function qzShowFeedback(w, ok){
 }
 function qzAdvance(){ qzIdx++; qzNext(); }
 function qzDone(){
+  try{ window.STAYTW_studyDone && window.STAYTW_studyDone(); }catch(e){}
   const nWrong = WrongBook.forLevel(currentLevel).length;
   document.getElementById("qzBox").innerHTML = `
     <p style="margin:26px 0 8px;color:var(--tx2)">${twT("quizDone")}</p>
@@ -1846,6 +1848,7 @@ const SPK = (() => {
   }
 
   async function showResult(heard){
+    try{ window.STAYTW_studyDone && window.STAYTW_studyDone(); }catch(e){}
     await loadPyMap();   // 音マップの読込完了を待ってから採点（初回タップのレースで文字比較に落ちるのを防ぐ）
     const it = items[idx];
     const { chars, score } = diff(it.z, heard);
@@ -3103,6 +3106,7 @@ const AR = (() => {
   }
   function aqNext(){ if (!aq) return; aq.i++; aqRender(); }
   function aqDone(){
+  try{ window.STAYTW_studyDone && window.STAYTW_studyDone(); }catch(e){}
     const nWrong = (typeof WrongBook !== "undefined") ? WrongBook.forLevel(currentLevel).length : 0;
     box().innerHTML = `<div class="aq-wrap"><p style="color:var(--tx2);margin:26px 0 8px">${twT("quizDone")}</p>
       <div class="qz-big">${aq.score} / ${aq.qs.length}</div>

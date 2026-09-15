@@ -232,6 +232,7 @@ const MockExam = (() => {
     clearInterval(timerId);
     if (!active) return;
     active = false;
+  try{ window.STAYTW_studyDone && window.STAYTW_studyDone(); }catch(e){}
     const total = questions.length;
     const pct = Math.round(score / total * 100);
     // 学習履歴に保存（クラウド同期の対象）

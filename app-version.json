@@ -1,0 +1,6 @@
+{
+  "_note": "商店『目前真的可下載』的最新版號。App 內 native-ui.js 用它跟執行中的版本(STAYTW_NATIVE.appVersion)比,舊了才在底部提醒更新。force = 低於此版一律擋畫面強制更新(重大修正才設)。每次正式版確認上架後才改;切勿填未過審的版號。Android 尚未上架,先填同值。",
+  "latest": { "ios": "1.0.5", "android": "1.0.5" },
+  "min": "1.0.0",
+  "force": ""
+}

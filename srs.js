@@ -172,6 +172,7 @@ const SRS = (() => {
   }
 
   function showDone() {
+    try{ window.STAYTW_studyDone && window.STAYTW_studyDone(); }catch(e){}
     const st = getStats(lvl);
     document.getElementById("quizBox").innerHTML = `
       <div class="qhd"><span>${twT("srsDone")}</span><button class="qclose" onclick="SRS.close()">✕</button></div>
