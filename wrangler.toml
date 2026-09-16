@@ -6,3 +6,8 @@ compatibility_date = "2026-07-01"
 [[services]]
 binding = "API"
 service = "staytw-api"
+
+# R2：音檔(audio/tts/*.mp3)。functions/audio/tts/[[file]].js が AUDIO から配信、無ければ静的へフォールバック。
+[[r2_buckets]]
+binding = "AUDIO"
+bucket_name = "staytw-audio"
