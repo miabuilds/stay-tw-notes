@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>台湾生活会話 — 病院・手続き・家・買い物・仕事、その場で使える対話集｜StayTW</title>
-<meta name="description" content="台湾で暮らす外国人のための生活会話。診所の受付、居留証の延長、銀行口座、房東への修理依頼、垃圾車、コンビニ、ドリンクスタンド、請假、颱風の停班停課まで30場面。「相手が言うこと」と「自分が言うこと」を対話で。拼音・注音・音声つき、日英韓越印対応。">
+<meta name="description" content="台湾で暮らす外国人のための生活会話。診所の受付、居留証の延長、銀行口座、房東への修理依頼、垃圾車、コンビニ、ドリンクスタンド、請假、颱風の停班停課まで31場面。「相手が言うこと」と「自分が言うこと」を対話で。拼音・注音・音声つき、日英韓越印対応。">
 <link rel="canonical" href="https://staytw.pages.dev/life">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="台湾華語スタディ StayTW">
 <meta property="og:url" content="https://staytw.pages.dev/life">
-<meta property="og:title" content="台湾生活会話 — その場で使える30場面の対話集">
+<meta property="og:title" content="台湾生活会話 — その場で使える31場面の対話集">
 <meta property="og:description" content="診所・移民署・銀行・房東・垃圾車・コンビニ・夜市・職場・颱風。相手の言葉と自分の返しをセットで。音声つき、5言語。">
 <meta property="og:image" content="https://staytw.pages.dev/images/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="台湾生活会話 — その場で使える30場面の対話集">
+<meta name="twitter:title" content="台湾生活会話 — その場で使える31場面の対話集">
 <meta name="twitter:description" content="診所・移民署・銀行・房東・垃圾車・コンビニ・夜市・職場・颱風。音声つき、5言語。">
 <meta name="twitter:image" content="https://staytw.pages.dev/images/og.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -99,9 +99,11 @@ button{font-family:inherit}
 .tip{margin-top:12px;background:var(--bg3);border-radius:12px;padding:10px 12px;font-size:13px;color:var(--tx2);line-height:1.6}
 .tip b{color:var(--ac);margin-right:6px}
 /* learn mode */
-body.learn .z{background:var(--tx);color:transparent;border-radius:6px;text-shadow:none;transition:.15s}
-body.learn .line.show .z{background:transparent;color:inherit}
-body.learn .line.y .z::after{content:"";}
+body.learn .z,body.learn .rd{background:var(--tx);color:transparent;border-radius:6px;transition:.15s}
+body.learn .rd *{color:transparent}
+body.learn .line.show .z,body.learn .line.show .rd{background:transparent;color:inherit}
+body.learn .line.show .rd *{color:inherit}
+body.learn .line.show .rd .zy{color:var(--ac2)}
 body.hidezy .zy{display:none}
 .empty{text-align:center;color:var(--tx3);padding:40px 0}
 .cta-box{margin-top:36px;background:var(--bg3);border-radius:18px;padding:24px 20px;text-align:center}
@@ -114,13 +116,14 @@ body.hidezy .zy{display:none}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:200}
 .toast.on{opacity:1}
 mark{background:rgba(184,54,42,.18);color:inherit;border-radius:3px}
+@media (max-width:480px){.hd h1 .brand-txt{display:none}.hd-links a{display:none}.ib{max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
 </style>
 </head>
 <body>
 
 <header class="hd">
   <div class="hd-inner">
-    <h1><a href="/"><img src="images/bear.svg" alt="">台湾華語スタディ <span style="color:var(--ac)">StayTW</span></a></h1>
+    <h1><a href="/"><img src="images/bear.svg" alt=""><span class="brand-txt">台湾華語スタディ</span> <span style="color:var(--ac)">StayTW</span></a></h1>
     <div class="hd-links">
       <a href="/?app=1" data-i18n="nav_tools">学習ツール</a>
       <button class="ib" id="langBtn" onclick="cycleLang()" aria-label="Language">日本語</button>
@@ -131,7 +134,7 @@ mark{background:rgba(184,54,42,.18);color:inherit;border-radius:3px}
 
 <main class="wrap">
   <h2 class="page-title" data-i18n-html="title">台湾生活会話。<em>その場で、開いて、見せる。</em></h2>
-  <p class="lead" data-i18n="lead">病院・手続き・家・買い物・仕事。相手が言うことと自分の返しをセットにした30場面。タップで発音、検索は母語でもOK。</p>
+  <p class="lead" data-i18n="lead">病院・手続き・家・買い物・仕事。相手が言うことと自分の返しをセットにした31場面。タップで発音、検索は母語でもOK。</p>
 
   <div class="sticky">
     <div class="search">
@@ -169,16 +172,16 @@ mark{background:rgba(184,54,42,.18);color:inherit;border-radius:3px}
 <script src="tts.js?v=61"></script>
 <script src="i18n.js?v=84"></script>
 <script src="paywall.js?v=101"></script>
-<script src="life.js?v=1"></script>
+<script src="life.js?v=2"></script>
 <script src="life-tr.js?v=1"></script>
 <script>
 // ── UI 文字列（5言語、このページ専用）──
 const T = {
-  ja:{slowLimit:"ゆっくり再生は無料版1日3回まで。Premium で無制限（タップで料金へ）",nav_tools:"学習ツール",nav_kanji:"漢字ギャップ",title:"台湾生活会話。<em>その場で、開いて、見せる。</em>",lead:"病院・手続き・家・買い物・仕事。相手が言うことと自分の返しをセットにした30場面。タップで発音、検索は母語でもOK。",search:"例：健保卡、トイレ、hospital…",all:"すべて",fav:"お気に入り",learn:"学習モード",them:"相手",you:"自分",play:"対話を再生",slow:"ゆっくり",copy:"コピー",copied:"コピーしました",tip:"ポイント",count:"{n} 場面",empty:"見つかりませんでした。別の言葉で試してみてください。",learnHint:"中国語を隠しました。タップで表示。",ctaTitle:"聞き取れるようになりたい人へ",ctaDesc:"単語1,200語・文法・読解・跟読練習。台湾人が作った台湾華語の学習ツール、ブラウザで無料・登録不要。",ctaBtn:"無料で始める",disc:"会話は台湾人の作者が確認した日常的な言い方です。制度や金額は例で、実際の手続きは各機関で確認してください。"},
-  en:{slowLimit:"Slow playback: 3 per day on the free plan. Unlimited with Premium (tap for pricing)",nav_tools:"Study tools",nav_kanji:"Kanji gap",title:"Taiwan life phrases. <em>Open it, show it, say it.</em>",lead:"Clinic, paperwork, housing, shopping, work: 30 real situations, with what they say and what you answer. Tap to hear it. Search in your own language.",search:"e.g. NHI card, toilet, landlord…",all:"All",fav:"Saved",learn:"Practice mode",them:"THEM",you:"YOU",play:"Play dialogue",slow:"Slow",copy:"Copy",copied:"Copied",tip:"Tip",count:"{n} scenes",empty:"Nothing found. Try another word.",learnHint:"Chinese hidden. Tap a line to reveal.",ctaTitle:"Want to actually understand them?",ctaDesc:"1,200+ words, grammar, reading and shadowing practice. Made by a Taiwanese for learners of Taiwan Mandarin. Free in your browser, no sign-up.",ctaBtn:"Start free",disc:"Dialogues reflect everyday usage confirmed by the Taiwanese author. Fees and procedures are examples; check with the actual office."},
-  ko:{slowLimit:"느리게 재생은 무료 플랜 하루 3회. Premium은 무제한 (탭하여 요금 보기)",nav_tools:"학습 도구",nav_kanji:"한자 갭",title:"대만 생활 회화. <em>바로 열어서, 보여주고, 말하기.</em>",lead:"병원·수속·집·쇼핑·직장. 상대가 하는 말과 내 대답을 세트로 묶은 30가지 상황. 탭하면 발음, 검색은 한국어로도 OK.",search:"예: 건강보험카드, 화장실, 집주인…",all:"전체",fav:"저장",learn:"연습 모드",them:"상대",you:"나",play:"대화 재생",slow:"느리게",copy:"복사",copied:"복사했습니다",tip:"포인트",count:"{n} 상황",empty:"결과가 없어요. 다른 단어로 검색해 보세요.",learnHint:"중국어를 숨겼어요. 탭하면 표시됩니다.",ctaTitle:"알아듣고 싶은 분에게",ctaDesc:"단어 1,200개·문법·독해·따라 말하기. 대만인이 만든 대만 중국어 학습 도구, 브라우저에서 무료·가입 불필요.",ctaBtn:"무료로 시작",disc:"회화는 대만인 저자가 확인한 일상 표현입니다. 제도와 금액은 예시이며 실제 절차는 각 기관에서 확인하세요."},
-  vi:{slowLimit:"Phát chậm: bản miễn phí 3 lần/ngày. Premium không giới hạn (chạm để xem giá)",nav_tools:"Công cụ học",nav_kanji:"Hán tự khác nghĩa",title:"Tiếng Trung đời sống ở Đài Loan. <em>Mở ra, chỉ cho họ xem, nói theo.</em>",lead:"Phòng khám, giấy tờ, nhà ở, mua sắm, công việc: 30 tình huống thật, gồm câu người ta nói và câu mình trả lời. Chạm để nghe. Tìm bằng tiếng Việt cũng được.",search:"VD: thẻ bảo hiểm, nhà vệ sinh, chủ nhà…",all:"Tất cả",fav:"Đã lưu",learn:"Chế độ luyện",them:"HỌ",you:"MÌNH",play:"Nghe cả đoạn",slow:"Chậm",copy:"Sao chép",copied:"Đã sao chép",tip:"Mẹo",count:"{n} tình huống",empty:"Không tìm thấy. Thử từ khác nhé.",learnHint:"Đã ẩn tiếng Trung. Chạm vào câu để hiện.",ctaTitle:"Muốn nghe hiểu người Đài Loan nói?",ctaDesc:"Hơn 1.200 từ, ngữ pháp, bài đọc, luyện nói theo. Người Đài Loan làm cho người học tiếng Trung Đài Loan. Miễn phí trên trình duyệt, không cần đăng ký.",ctaBtn:"Bắt đầu miễn phí",disc:"Các đoạn hội thoại là cách nói hằng ngày do tác giả người Đài Loan xác nhận. Phí và thủ tục chỉ là ví dụ, hãy kiểm tra với cơ quan thực tế."},
-  id:{slowLimit:"Putar lambat: paket gratis 3x/hari. Premium tanpa batas (ketuk untuk harga)",nav_tools:"Alat belajar",nav_kanji:"Beda makna kanji",title:"Percakapan hidup di Taiwan. <em>Buka, tunjukkan, ucapkan.</em>",lead:"Klinik, dokumen, tempat tinggal, belanja, kerja: 30 situasi nyata, lengkap dengan apa yang mereka katakan dan jawabanmu. Ketuk untuk dengar. Cari pakai bahasa Indonesia juga bisa.",search:"mis. kartu asuransi, toilet, pemilik rumah…",all:"Semua",fav:"Tersimpan",learn:"Mode latihan",them:"MEREKA",you:"KAMU",play:"Putar dialog",slow:"Lambat",copy:"Salin",copied:"Tersalin",tip:"Tips",count:"{n} situasi",empty:"Tidak ditemukan. Coba kata lain.",learnHint:"Bahasa Mandarin disembunyikan. Ketuk baris untuk melihat.",ctaTitle:"Mau bisa mengerti ucapan mereka?",ctaDesc:"1.200+ kata, tata bahasa, bacaan, latihan menirukan. Dibuat orang Taiwan untuk pembelajar Mandarin Taiwan. Gratis di browser, tanpa daftar.",ctaBtn:"Mulai gratis",disc:"Dialog adalah ungkapan sehari-hari yang dikonfirmasi penulis orang Taiwan. Biaya dan prosedur hanya contoh; cek ke instansi terkait."},
+  ja:{slowLimit:"ゆっくり再生は無料版1日3回まで。Premium で無制限（タップで料金へ）",nav_tools:"学習ツール",nav_kanji:"漢字ギャップ",title:"台湾生活会話。<em>その場で、開いて、見せる。</em>",lead:"病院・手続き・家・買い物・仕事。相手が言うことと自分の返しをセットにした31場面。タップで発音、検索は母語でもOK。",search:"例：健保卡、トイレ、hospital…",all:"すべて",fav:"お気に入り",learn:"学習モード",them:"相手",you:"自分",play:"対話を再生",slow:"ゆっくり",copy:"コピー",copied:"コピーしました",tip:"ポイント",count:"{n} 場面",empty:"見つかりませんでした。別の言葉で試してみてください。",learnHint:"中国語を隠しました。タップで表示。",ctaTitle:"聞き取れるようになりたい人へ",ctaDesc:"単語1,200語・文法・読解・跟読練習。台湾人が作った台湾華語の学習ツール、ブラウザで無料・登録不要。",ctaBtn:"無料で始める",disc:"会話は台湾人の作者が確認した日常的な言い方です。制度や金額は例で、実際の手続きは各機関で確認してください。"},
+  en:{slowLimit:"Slow playback: 3 per day on the free plan. Unlimited with Premium (tap for pricing)",nav_tools:"Study tools",nav_kanji:"Kanji gap",title:"Taiwan life phrases. <em>Open it, show it, say it.</em>",lead:"Clinic, paperwork, housing, shopping, work: 31 real situations, with what they say and what you answer. Tap to hear it. Search in your own language.",search:"e.g. NHI card, toilet, landlord…",all:"All",fav:"Saved",learn:"Practice mode",them:"THEM",you:"YOU",play:"Play dialogue",slow:"Slow",copy:"Copy",copied:"Copied",tip:"Tip",count:"{n} scenes",empty:"Nothing found. Try another word.",learnHint:"Chinese hidden. Tap a line to reveal.",ctaTitle:"Want to actually understand them?",ctaDesc:"1,200+ words, grammar, reading and shadowing practice. Made by a Taiwanese for learners of Taiwan Mandarin. Free in your browser, no sign-up.",ctaBtn:"Start free",disc:"Dialogues reflect everyday usage confirmed by the Taiwanese author. Fees and procedures are examples; check with the actual office."},
+  ko:{slowLimit:"느리게 재생은 무료 플랜 하루 3회. Premium은 무제한 (탭하여 요금 보기)",nav_tools:"학습 도구",nav_kanji:"한자 갭",title:"대만 생활 회화. <em>바로 열어서, 보여주고, 말하기.</em>",lead:"병원·수속·집·쇼핑·직장. 상대가 하는 말과 내 대답을 세트로 묶은 31가지 상황. 탭하면 발음, 검색은 한국어로도 OK.",search:"예: 건강보험카드, 화장실, 집주인…",all:"전체",fav:"저장",learn:"연습 모드",them:"상대",you:"나",play:"대화 재생",slow:"느리게",copy:"복사",copied:"복사했습니다",tip:"포인트",count:"{n} 상황",empty:"결과가 없어요. 다른 단어로 검색해 보세요.",learnHint:"중국어를 숨겼어요. 탭하면 표시됩니다.",ctaTitle:"알아듣고 싶은 분에게",ctaDesc:"단어 1,200개·문법·독해·따라 말하기. 대만인이 만든 대만 중국어 학습 도구, 브라우저에서 무료·가입 불필요.",ctaBtn:"무료로 시작",disc:"회화는 대만인 저자가 확인한 일상 표현입니다. 제도와 금액은 예시이며 실제 절차는 각 기관에서 확인하세요."},
+  vi:{slowLimit:"Phát chậm: bản miễn phí 3 lần/ngày. Premium không giới hạn (chạm để xem giá)",nav_tools:"Công cụ học",nav_kanji:"Hán tự khác nghĩa",title:"Tiếng Trung đời sống ở Đài Loan. <em>Mở ra, chỉ cho họ xem, nói theo.</em>",lead:"Phòng khám, giấy tờ, nhà ở, mua sắm, công việc: 31 tình huống thật, gồm câu người ta nói và câu mình trả lời. Chạm để nghe. Tìm bằng tiếng Việt cũng được.",search:"VD: thẻ bảo hiểm, nhà vệ sinh, chủ nhà…",all:"Tất cả",fav:"Đã lưu",learn:"Chế độ luyện",them:"HỌ",you:"MÌNH",play:"Nghe cả đoạn",slow:"Chậm",copy:"Sao chép",copied:"Đã sao chép",tip:"Mẹo",count:"{n} tình huống",empty:"Không tìm thấy. Thử từ khác nhé.",learnHint:"Đã ẩn tiếng Trung. Chạm vào câu để hiện.",ctaTitle:"Muốn nghe hiểu người Đài Loan nói?",ctaDesc:"Hơn 1.200 từ, ngữ pháp, bài đọc, luyện nói theo. Người Đài Loan làm cho người học tiếng Trung Đài Loan. Miễn phí trên trình duyệt, không cần đăng ký.",ctaBtn:"Bắt đầu miễn phí",disc:"Các đoạn hội thoại là cách nói hằng ngày do tác giả người Đài Loan xác nhận. Phí và thủ tục chỉ là ví dụ, hãy kiểm tra với cơ quan thực tế."},
+  id:{slowLimit:"Putar lambat: paket gratis 3x/hari. Premium tanpa batas (ketuk untuk harga)",nav_tools:"Alat belajar",nav_kanji:"Beda makna kanji",title:"Percakapan hidup di Taiwan. <em>Buka, tunjukkan, ucapkan.</em>",lead:"Klinik, dokumen, tempat tinggal, belanja, kerja: 31 situasi nyata, lengkap dengan apa yang mereka katakan dan jawabanmu. Ketuk untuk dengar. Cari pakai bahasa Indonesia juga bisa.",search:"mis. kartu asuransi, toilet, pemilik rumah…",all:"Semua",fav:"Tersimpan",learn:"Mode latihan",them:"MEREKA",you:"KAMU",play:"Putar dialog",slow:"Lambat",copy:"Salin",copied:"Tersalin",tip:"Tips",count:"{n} situasi",empty:"Tidak ditemukan. Coba kata lain.",learnHint:"Bahasa Mandarin disembunyikan. Ketuk baris untuk melihat.",ctaTitle:"Mau bisa mengerti ucapan mereka?",ctaDesc:"1.200+ kata, tata bahasa, bacaan, latihan menirukan. Dibuat orang Taiwan untuk pembelajar Mandarin Taiwan. Gratis di browser, tanpa daftar.",ctaBtn:"Mulai gratis",disc:"Dialog adalah ungkapan sehari-hari yang dikonfirmasi penulis orang Taiwan. Biaya dan prosedur hanya contoh; cek ke instansi terkait."},
 };
 const LANGS = ["ja","en","ko","vi","id"], LABEL = {ja:"日本語",en:"English",ko:"한국어",vi:"Tiếng Việt",id:"Indonesia"};
 function lang(){ const l = localStorage.getItem("stw-lang") || "ja"; return T[l] ? l : "en"; }
