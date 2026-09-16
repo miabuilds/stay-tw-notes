@@ -35,6 +35,7 @@ export async function onRequest(context) {
     if (fb.status !== 200 || !(fb.headers.get("content-type") || "").startsWith("audio/")) return new Response("not found", { status: 404, headers: { "Cache-Control": "no-store" } });
     res = new Response(fb.body, fb);
     res.headers.set("x-audio-source", "assets");
+    res.headers.set("x-audio-r2-bound", env.AUDIO ? "1" : "0");   // 診断用：R2 バインドが来ているか
     res.headers.set("Cache-Control", "public, max-age=31536000, immutable");
   }
   context.waitUntil(cache.put(cacheKey, res.clone()));

@@ -9,7 +9,7 @@ DIR="${STW_AUDIO_DIR:-$(cd "$(dirname "$0")/.." && pwd)/audio/tts}"
 CC="public, max-age=31536000, immutable"
 
 put_one() {  # $1 = path
-  npx wrangler r2 object put "$BUCKET/$(basename "$1")" --file "$1" --content-type audio/mpeg --cache-control "$CC" >/dev/null 2>&1 || echo "FAIL $1"
+  npx wrangler r2 object put --remote "$BUCKET/$(basename "$1")" --file "$1" --content-type audio/mpeg --cache-control "$CC" >/dev/null 2>&1 || echo "FAIL $1"
 }
 export -f put_one; export BUCKET CC
 
