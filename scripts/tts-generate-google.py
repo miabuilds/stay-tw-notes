@@ -144,7 +144,7 @@ def main():
         todo.append((z,parts))
     print(f"対象 {len(todo)} / 整列失敗 {len(bad)}",flush=True)
     if bad[:10]:print("  失敗例:",bad[:10])
-    res={};fails=[];done=[0];skip=[0];lock=threading.Lock()
+    res={};fails=[];done=[0];skip=[0];gen=[];lock=threading.Lock()
     def work(z,parts):
         fn=hashlib.md5(z.encode()).hexdigest()[:12]+"gp.mp3";path=os.path.join(OUT,fn)
         if not FORCE and os.path.exists(path) and os.path.getsize(path)>500:
@@ -155,7 +155,7 @@ def main():
                 r=json.load(urllib.request.urlopen(urllib.request.Request("https://texttospeech.googleapis.com/v1/text:synthesize?key="+KEY,data=body,headers={"Content-Type":"application/json"}),timeout=40))
                 if r.get("audioContent"):
                     open(path,"wb").write(base64.b64decode(r["audioContent"]))
-                    with lock:res[z]=fn;done[0]+=1;return
+                    with lock:res[z]=fn;done[0]+=1;gen.append(fn);return
             except Exception as e:
                 time.sleep(1.5*(att+1))
                 if att==3:
@@ -165,6 +165,13 @@ def main():
     for z,fn in res.items():manifest[z]=fn
     json.dump(manifest,open(MANI,"w"),ensure_ascii=False,indent=0)
     print(f"=== 生成{done[0]} 略過{skip[0]} 失敗{len(fails)} manifest{len(manifest)} ===",flush=True)
+    # 新規生成分を R2(staytw-audio) へ同步（scripts/audio-sync-r2.sh）。失敗しても生成結果には影響なし。
+    newf=[os.path.join(OUT,fn) for fn in gen if os.path.exists(os.path.join(OUT,fn))]
+    if newf:
+        try:
+            r=subprocess.run([os.path.join(ROOT,"scripts","audio-sync-r2.sh"),*newf],capture_output=True,text=True,timeout=1800)
+            print("R2 同步", "OK" if r.returncode==0 else "失敗(音檔仍在本機)", (r.stderr.strip()[-200:] if r.returncode else ""),flush=True)
+        except Exception as e: print("R2 同步略過:",e,flush=True)
     if fails[:20]:print("FAIL:",fails[:20])
 
 if __name__=="__main__":main()

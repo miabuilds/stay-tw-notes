@@ -48,6 +48,14 @@ def synth(text, parts):
             time.sleep(2 * (att + 1))
     return None, "network"
 
+def sync_r2(files):
+    """新しく作った mp3 を R2(staytw-audio) へ。失敗しても生成結果には影響させない。"""
+    try:
+        r = subprocess.run([os.path.join(ROOT, "scripts", "audio-sync-r2.sh"), *files], capture_output=True, text=True, timeout=600)
+        print(("R2 同步 OK: " if r.returncode == 0 else "R2 同步失敗(音檔仍在本機): ") + (r.stdout.strip().splitlines() or [""])[-1][:120] + (r.stderr.strip()[-200:] if r.returncode else ""), flush=True)
+    except Exception as e:
+        print("R2 同步略過:", e, flush=True)
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     data = json.loads(subprocess.check_output(["node", "-e", NODE], cwd=ROOT))
@@ -77,6 +85,8 @@ def main():
         time.sleep(0.4)
     json.dump(manifest, open(MANI, "w"), ensure_ascii=False, indent=0)
     print(f"=== 生成 {done} / 略過 {skip} / 失敗 {len(fails)} / manifest {len(manifest)} ===", flush=True)
+    new_files = [path for (z, parts, fn, path) in todo if os.path.exists(path) and manifest.get(z) == fn]
+    if new_files: sync_r2(new_files)
     for f in fails[:20]: print("  FAIL:", f)
 
 if __name__ == "__main__": main()
