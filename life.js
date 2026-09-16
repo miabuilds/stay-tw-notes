@@ -334,3 +334,4 @@ scenes: [
 ]},
 ]};
 if (typeof window !== "undefined") window.LIFE = LIFE;
+if (typeof module !== "undefined") module.exports = { LIFE };

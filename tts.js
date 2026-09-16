@@ -27,7 +27,8 @@ const TTS = (() => {
     const f = MANIFEST[text];
     if (!f) return false;
     if ("speechSynthesis" in window && speechSynthesis.speaking) speechSynthesis.cancel();
-    audioEl.playbackRate = SPD;
+    // rate 引数(生活会話の「ゆっくり」等)があればそれを優先、無ければ全体設定 SPD
+    audioEl.playbackRate = (typeof rate === "number" && rate > 0) ? rate : SPD;
     // 再生完了で次へ進めるよう ended を通知（読み上げの自動送り用）
     audioEl.onended = () => { if (onprog) onprog(1); if (onend) onend(); };
     // mp3 が読めない（弱い回線など）→ Web Speech にフォールバック（無音防止）
@@ -106,10 +107,10 @@ const TTS = (() => {
   function speak(text, rate, onend, onprog) {
     if (!text) { if (onend) onend(); return; }
     if (playMp3(text, rate, onend, onprog)) return;      // 高音質 mp3 があればそちらを再生（ended で送り）
-    synthSpeak(text, onend, onprog);
+    synthSpeak(text, onend, onprog, rate);
   }
   // Web Speech（mp3 が無い/読めない時のフォールバック）
-  function synthSpeak(text, onend, onprog) {
+  function synthSpeak(text, onend, onprog, rate) {
     if (!("speechSynthesis" in window)) { if (onend) onend(); return; }
     text = sanitize(text);
     if (!text) { if (onend) onend(); return; }
@@ -118,7 +119,7 @@ const TTS = (() => {
     u.lang = "zh-TW";
     const v = best();
     if (v) { u.voice = v; u.lang = v.lang; }
-    u.rate = SPD;
+    u.rate = (typeof rate === "number" && rate > 0) ? rate : SPD;
     u.pitch = 1.05;
     // 逐字ハイライト：boundary で読み上げ位置（文字インデックス）を通知（対応ブラウザのみ）
     if (onprog) u.onboundary = e => { if (e.charIndex != null) onprog(Math.min(1, e.charIndex / (text.length || 1))); };
