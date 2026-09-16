@@ -312,6 +312,16 @@ scenes: [
  {w:"y", z:"我要加值五百。", py:"wǒ yào jiā zhí wǔ bǎi", m:{ja:"500元チャージします。", en:"I'd like to top up 500."}},
  {w:"t", z:"好，卡片放這裡。", py:"hǎo, kǎ piàn fàng zhè lǐ", m:{ja:"はい、カードをここに置いてください。", en:"OK, place your card here."}},
 ]},
+{id:"toilet", cat:"go", icon:"🚻", name:{ja:"トイレを借りる・探す", en:"Finding or borrowing a toilet", ko:"화장실 찾기·빌리기", vi:"Tìm hoặc mượn nhà vệ sinh", id:"Mencari atau meminjam toilet"},
+ tip:{ja:"台湾のコンビニ・MRT駅・百貨店はほぼトイレを貸してくれる。「洗手間」が丁寧、「廁所」が普通。紙は流していい所と「請丟垃圾桶」の所があるので表示を見る。", en:"Convenience stores, MRT stations and department stores almost always let you use the toilet. 洗手間 is polite, 廁所 is everyday. Check the sign: some places want paper in the bin (請丟垃圾桶).", ko:"편의점·MRT역·백화점은 거의 화장실을 빌려줘요. 洗手間이 정중한 말, 廁所가 일상 표현. 휴지를 변기에 버려도 되는 곳과 쓰레기통에 버려야 하는 곳(請丟垃圾桶)이 있으니 표시를 확인하세요.", vi:"Cửa hàng tiện lợi, ga MRT, trung tâm thương mại hầu như đều cho dùng nhà vệ sinh. 洗手間 là cách nói lịch sự, 廁所 là cách nói thường. Xem bảng: có nơi phải bỏ giấy vào thùng rác (請丟垃圾桶).", id:"Minimarket, stasiun MRT, dan mal hampir selalu mengizinkan pakai toilet. 洗手間 lebih sopan, 廁所 lebih sehari-hari. Lihat tandanya: ada tempat yang minta tisu dibuang ke tempat sampah (請丟垃圾桶)."},
+ lines:[
+ {w:"y", z:"不好意思，請問洗手間在哪裡？", py:"bù hǎo yì si, qǐng wèn xǐ shǒu jiān zài nǎ lǐ", m:{ja:"すみません、トイレはどこですか？", en:"Excuse me, where's the restroom?", ko:"실례합니다, 화장실이 어디예요?", vi:"Xin lỗi, cho hỏi nhà vệ sinh ở đâu?", id:"Maaf, toiletnya di mana ya?"}},
+ {w:"t", z:"直走到底，左手邊。", py:"zhí zǒu dào dǐ, zuǒ shǒu biān", m:{ja:"まっすぐ突き当たりまで行って、左側です。", en:"Straight to the end, on the left.", ko:"끝까지 직진해서 왼쪽이에요.", vi:"Đi thẳng đến cuối, bên tay trái.", id:"Lurus sampai ujung, sebelah kiri."}},
+ {w:"y", z:"可以借一下廁所嗎？", py:"kě yǐ jiè yí xià cè suǒ ma", m:{ja:"トイレを借りてもいいですか？", en:"Could I use your toilet?", ko:"화장실 좀 써도 될까요?", vi:"Cho mình mượn nhà vệ sinh một chút được không?", id:"Boleh pinjam toiletnya sebentar?"}},
+ {w:"t", z:"可以，鑰匙在櫃檯拿。", py:"kě yǐ, yào shi zài guì tái ná", m:{ja:"いいですよ。鍵はカウンターで受け取ってください。", en:"Sure, get the key at the counter.", ko:"네, 열쇠는 카운터에서 받아 가세요.", vi:"Được, chìa khóa lấy ở quầy.", id:"Boleh, kuncinya ambil di kasir."}},
+ {w:"y", z:"沒有衛生紙了。", py:"méi yǒu wèi shēng zhǐ le", m:{ja:"トイレットペーパーがありません。", en:"There's no toilet paper.", ko:"휴지가 없어요.", vi:"Hết giấy vệ sinh rồi.", id:"Tisunya habis."}},
+ {w:"t", z:"衛生紙請丟垃圾桶，不要丟馬桶。", py:"wèi shēng zhǐ qǐng diū lā jī tǒng, bú yào diū mǎ tǒng", m:{ja:"紙はゴミ箱に捨ててください。便器に流さないで。", en:"Please put paper in the bin, not the toilet.", ko:"휴지는 쓰레기통에 버려 주세요. 변기에 넣지 마세요.", vi:"Giấy vui lòng bỏ vào thùng rác, đừng bỏ vào bồn cầu.", id:"Tisunya buang ke tempat sampah ya, jangan ke kloset."}},
+]},
 {id:"typhoon", cat:"go", icon:"🌀", name:{ja:"台風・停班停課", en:"Typhoons & work/school closures"},
  tip:{ja:"「停班停課」＝仕事も学校も休み。前日の夜に各県市が発表する。台風の日は外に出ないこと。", en:"停班停課 means work and school are cancelled. Each city announces it the night before. Stay indoors on typhoon days."},
  lines:[
