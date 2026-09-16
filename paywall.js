@@ -10,7 +10,9 @@
 const Paywall = (() => {
   const QUOTA_KEY = "stw_quota";
   // 1日の無料枠（プレミアムで無制限）
-  const LIMITS = { quiz: 3, srs: 1, exam: 1, speak: 5, writing: 1, aiscore: 1 };
+  // 2026-09-16: speak 5→2（跟讀是 App 限定＋日本人最需要的功能，當 Premium 招牌）；SRS 免費一次最多 SRS_FREE_CARDS 張
+  const LIMITS = { quiz: 3, srs: 1, exam: 1, speak: 2, writing: 1, aiscore: 1 };
+  const SRS_FREE_CARDS = 10;
   const PRICES = { monthly: "¥980", yearly: "¥5,800", lifetime: "¥12,800" };
 
   function today() { return new Date().toISOString().split("T")[0]; }
@@ -76,9 +78,16 @@ const Paywall = (() => {
 
   const isNative = () => typeof window !== "undefined" && !!window.ReactNativeWebView;
 
+  // 付費牆被看到幾次 = 轉換漏斗的分母。記到 hits(path=/__paywall/<feature>) 與 GA4 事件，後台「熱門路徑」就看得到。
+  function track(feature) {
+    try { fetch("/api/hit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ path: "/__paywall/" + feature, ref: location.pathname, app: !!(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp) }) }); } catch (e) {}
+    try { if (typeof gtag === "function") gtag("event", "paywall_shown", { feature }); } catch (e) {}
+  }
+
   function show(feature) {
     const bg = document.getElementById("pwBg");
     if (!bg) return;
+    track(feature);
     const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore") }[feature] || "";
     const desc = feature === "article" ? twT("pwContentHit") : twT("pwLimitHit").replace("{f}", featName);
     document.getElementById("pwBox").innerHTML = `
@@ -121,7 +130,7 @@ const Paywall = (() => {
   // ネイティブ側から window.stwSetEntitled(true/false) を注入して呼ぶ
   if (typeof window !== "undefined") window.stwSetEntitled = setEntitled;
 
-  return { gate, isPremium, setEntitled, quotaBadge, left, show, close, openNative, openStore, LIMITS };
+  return { gate, isPremium, setEntitled, quotaBadge, left, show, close, openNative, openStore, LIMITS, SRS_FREE_CARDS };
 })();
 // ★重要：Paywall は const 宣言なので window に自動では乗らない。renderProfile / twUpgrade が
 //   window.Paywall で判定・呼び出しており、undefined だと「アップグレード無反応」になる（TTS/STW_WEB と同じ罠）。

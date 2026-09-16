@@ -108,7 +108,7 @@ const SRS = (() => {
   }
 
   // ===== 復習セッション（モーダル） =====
-  let queue = [], cur = 0, lvl = "l1";
+  let queue = [], cur = 0, lvl = "l1", capped = false;
 
   function start(level) {
     lvl = level || (typeof currentLevel !== "undefined" ? currentLevel : "l1");
@@ -123,6 +123,12 @@ const SRS = (() => {
     });
     nw.forEach(v => queue.push({ ...v, level: lvl, isNew: true }));
     if (!queue.length) { alert(twT("srsNoReview")); return; }
+    // 無料版は1セッション SRS_FREE_CARDS 枚まで（due 優先の順は維持）。Premium は無制限。
+    capped = false;
+    try {
+      const cap = (typeof Paywall !== "undefined" && Paywall.SRS_FREE_CARDS) || 10;
+      if (typeof Paywall !== "undefined" && !Paywall.isPremium() && queue.length > cap) { queue = queue.slice(0, cap); capped = true; }
+    } catch (e) {}
     cur = 0;
     renderCard();
     document.getElementById("quizBg").classList.add("show");
@@ -179,6 +185,7 @@ const SRS = (() => {
       <div style="text-align:center;padding:26px 10px">
         <div style="font-size:44px">🎉</div>
         <p style="margin:12px 0;color:var(--tx2)">${twT("srsToday")}: ${queue.length}</p>
+        ${capped ? `<p style="margin:0 0 12px;font-size:13px;color:var(--ac);cursor:pointer" onclick="Paywall.show('srs')">${twT("srsFreeCap").replace("{n}", String((typeof Paywall !== "undefined" && Paywall.SRS_FREE_CARDS) || 10))}</p>` : ""}
         <p style="font-size:13px;color:var(--tx3)">${twT("srsLearned")} ${st.total}・${twT("srsMastered")} ${st.mastered}</p>
         <button class="btn primary" style="margin-top:16px" onclick="SRS.close()">OK</button>
       </div>`;
