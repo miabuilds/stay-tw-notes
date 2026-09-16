@@ -3195,7 +3195,7 @@ function twNormalizeContent(){
   if ("speechSynthesis" in window) speechSynthesis.onvoiceschanged = () => { TTS.refresh(); fillVoiceSel(); };
 })();
 </script>
-<script>try{fetch("/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname,ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
+<script>try{fetch("/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname+(function(){try{var u=new URLSearchParams(location.search).get("utm_source");return u?"?utm_source="+u.replace(/[^\w-]/g,"").slice(0,40):""}catch(e){return ""}})(),ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
 <script>
 /* 発音チェック（録音）はブラウザの音声認識だと不安定なため、Web ではスピーキング機能を非表示。App（原生音声認識）でのみ表示。 */
 (function(){ try{ if(!(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp)){

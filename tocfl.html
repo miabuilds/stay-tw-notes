@@ -349,6 +349,6 @@ function toggleTheme(){
     document.documentElement.dataset.theme = "dark";
 })();
 </script>
-<script>try{fetch("/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname,ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
+<script>try{fetch("/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname+(function(){try{var u=new URLSearchParams(location.search).get("utm_source");return u?"?utm_source="+u.replace(/[^\w-]/g,"").slice(0,40):""}catch(e){return ""}})(),ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
 </body>
 </html>
