@@ -87,7 +87,10 @@ export async function onRequest(context) {
   const ct = res.headers.get("content-type") || "";
   if (!ct.includes("text/html")) return res;
 
-  const lang = pickLang(url, request);
+  // title/og の差し替えはトップ(ランディング / ツール)だけ。compare/*, kanji-gap, life などの
+  // 独立ページは自前の SEO タイトルを持っているので触らない（2026-09-16 まで全ページ上書きしていたバグを修正）。
+  const isTopPage = isRoot || url.pathname === "/home" || url.pathname === "/home.html";
+  const lang = isTopPage ? pickLang(url, request) : null;
   let out = res;
   if (lang) {
     const m = META[lang];

@@ -12,7 +12,10 @@
 }catch(e){}})();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<style>html,body{touch-action:manipulation}</style>
+<style>html,body{touch-action:manipulation}.ph-life{display:flex;align-items:center;gap:10px;margin:6px 0 14px;padding:12px 14px;border:1px solid var(--ac);border-radius:14px;background:var(--ac-soft);color:var(--tx);text-decoration:none;font-weight:600;font-size:14px}
+.ph-life-ic{font-size:20px}
+.ph-life-arr{margin-left:auto;color:var(--ac)}
+</style>
 <script>document.addEventListener("gesturestart",function(e){e.preventDefault();},{passive:false});</script>
 <title>台湾華語スタディ StayTW Study — 学習ツール｜単語・文法・フレーズ・クイズ・復習・模試</title>
 <meta name="description" content="台湾華語（繁体字中国語）の無料学習ツール。TOCFL Level 1〜5 の単語カード・文法・場面別フレーズ・クイズ・SRS復習・模擬試験。注音＋拼音つき、日本語・英語・韓国語対応。">
@@ -1056,7 +1059,7 @@ body.more-open .ar-bar{display:none}
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=81"></script>
+<script src="i18n.js?v=83"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=61"></script>
 <script src="vocab-l1.js?v=52"></script>
@@ -1110,7 +1113,7 @@ body.more-open .ar-bar{display:none}
 <script src="articles-19.js?v=1"></script>
 <script src="articles-20.js?v=1"></script>
 <script src="writing-data.js?v=52"></script>
-<script src="paywall.js?v=100"></script>
+<script src="paywall.js?v=101"></script>
 <script src="websync.js?v=61"></script>
 <script src="srs.js?v=57"></script>
 <script src="mock-exam.js?v=58"></script>
@@ -1614,7 +1617,9 @@ function renderPhrases(){
     ["all", twT("phAll")], ["travel", "🧳 " + twT("phTravel")], ["life", "🏠 " + twT("phLife")]
   ].map(([f,label])=>`<button class="pos-btn ${phFilter===f?"on":""}" onclick="setPhFilter('${f}')">${label}</button>`).join("");
   const secs = PHRASES_L1.filter(s => phFilter === "all" || s.t === phFilter || s.t === "both");
-  document.getElementById("phList").innerHTML = secs.map(sec=>`
+  // 生活会話（対話集 /life）への入口。フレーズは単文、/life は「相手の言葉＋自分の返し」の対話。
+  const lifeLink = `<a class="ph-life" href="life?lang=${lang}&utm_source=tool_phrases"><span class="ph-life-ic">💬</span><span>${twT("phLifeLink")}</span><span class="ph-life-arr">→</span></a>`;
+  document.getElementById("phList").innerHTML = lifeLink + secs.map(sec=>`
     <div class="ph-cat">${sec.cat[ck]}</div>
     ${sec.items.map(it=>`
       <div class="ph-item" onclick="speakZh(this.dataset.z)" data-z="${it.z}">
