@@ -31,7 +31,8 @@ export async function onRequest(context) {
   }
   if (!res) {
     const fb = await env.ASSETS.fetch(request);
-    if (fb.status !== 200) return fb;
+    // 無い mp3 は Pages の SPA フォールバック(index.html 200)になるので、audio 以外は 404 にする
+    if (fb.status !== 200 || !(fb.headers.get("content-type") || "").startsWith("audio/")) return new Response("not found", { status: 404, headers: { "Cache-Control": "no-store" } });
     res = new Response(fb.body, fb);
     res.headers.set("x-audio-source", "assets");
     res.headers.set("Cache-Control", "public, max-age=31536000, immutable");
