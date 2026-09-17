@@ -16,7 +16,7 @@ import threading
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KEY=os.environ.get("GOOGLE_TTS_KEY")   # main() で必須チェック（import 時は不要 → tts-audit.py が phonemes() を再利用可）
 FORCE="--force" in sys.argv
-OUT=os.path.join(ROOT,"audio","tts"); MANI=os.path.join(ROOT,"audio","manifest.json")
+OUT=os.environ.get("STW_AUDIO_DIR") or os.path.join(os.path.dirname(ROOT),"stay-tw-audio","tts"); MANI=os.path.join(ROOT,"audio","manifest.json")   # 音檔は repo 外(R2 配信)
 
 # 拼音 base(声調なし) → 注音符号なしの音節分割用に py2zy.js の音節表を流用。
 js=open(os.path.join(ROOT,"py2zy.js"),encoding="utf-8").read()

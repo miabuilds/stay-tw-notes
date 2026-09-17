@@ -7,7 +7,8 @@
 import json, os, sys, re, base64, hashlib, time, subprocess, urllib.request, importlib.util
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "audio", "tts"); MANI = os.path.join(ROOT, "audio", "manifest.json")
+# 音檔は repo 外（git/Pages に含めない。配信は R2、scripts/audio-sync-r2.sh で同期）
+OUT = os.environ.get("STW_AUDIO_DIR") or os.path.join(os.path.dirname(ROOT), "stay-tw-audio", "tts"); MANI = os.path.join(ROOT, "audio", "manifest.json")
 API = os.environ.get("STW_TTS_API", "https://staytw.pages.dev/api/tts")
 FORCE = "--force" in sys.argv
 

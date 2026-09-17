@@ -5,7 +5,7 @@
 # 音檔目錄預設 audio/tts；搬出 repo 後用 STW_AUDIO_DIR 指過去。
 set -euo pipefail
 BUCKET="${STW_R2_BUCKET:-staytw-audio}"
-DIR="${STW_AUDIO_DIR:-$(cd "$(dirname "$0")/.." && pwd)/audio/tts}"
+DIR="${STW_AUDIO_DIR:-$(cd "$(dirname "$0")/../.." && pwd)/stay-tw-audio/tts}"
 CC="public, max-age=31536000, immutable"
 
 put_one() {  # $1 = path
