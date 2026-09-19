@@ -1114,15 +1114,15 @@ body.more-open .ar-bar{display:none}
 <script src="vocab-l5.js?v=52"></script>
 <script src="vocab-l1-b.js?v=53"></script>
 <script src="vocab-l2-b.js?v=53"></script>
-<script src="vocab-l3-b.js?v=53"></script>
+<script src="vocab-l3-b.js?v=54"></script>
 <script src="vocab-l4-b.js?v=54"></script>
-<script src="vocab-l5-b.js?v=55"></script>
+<script src="vocab-l5-b.js?v=56"></script>
 <script src="vocab-l1-c.js?v=57"></script>
 <script src="vocab-l2-c.js?v=58"></script>
 <script src="vocab-l3-c.js?v=57"></script>
 <script src="vocab-l4-c.js?v=59"></script>
-<script src="vocab-l5-c.js?v=59"></script>
-<script src="vocab-l6.js?v=2"></script>
+<script src="vocab-l5-c.js?v=60"></script>
+<script src="vocab-l6.js?v=3"></script>
 <script src="grammar-l1.js?v=53"></script>
 <script src="grammar-l2.js?v=52"></script>
 <script src="grammar-l3.js?v=52"></script>
@@ -1440,7 +1440,7 @@ function loadExZy(cb){
   EX_ZY_LOADING = true;
   // 注音＋(台灣読音に修正した)拼音オーバーレイを並行ロード。EX_PY にあれば ex.py より優先。
   Promise.all([
-    fetch("data/ex-zhuyin.json?v=7").then(r => r.ok ? r.json() : null),
+    fetch("data/ex-zhuyin.json?v=8").then(r => r.ok ? r.json() : null),
     fetch("data/ex-pinyin.json?v=1").then(r => r.ok ? r.json() : null).catch(() => null)
   ]).then(([zy, py]) => { EX_ZY = zy || {}; EX_PY = py || {}; EX_ZY_LOADING = false; if (cb) cb(); })
     .catch(() => { EX_ZY_LOADING = false; });

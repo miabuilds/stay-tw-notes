@@ -123,6 +123,43 @@ for(const f of files){const t=fs.readFileSync(f,"utf8");const m=t.match(/const\s
   const a=new Function("module","window",t+";return "+m[1]+";")({},{});
   for(const v of a){if(v&&v.w&&v.py)o[v.w]=v.py; if(v&&v.ex&&v.ex.z&&v.ex.py)o[v.ex.z]=v.ex.py;}}
 console.log(JSON.stringify(o));'''
+# ★「一」「不」対策（2026-09-19）
+# Google の中国語音声は 一/不 の変調を自前で処理し、<phoneme> で指定した声調を無視する。
+# （舉一反三 を yi1/yi3/yi4 で合成しても出力が 1 バイトも変わらなかったので確認済み）
+# こちらは人が検証した拼音を鳴らしたいので、読みが同じで単一音の別字に差し替えて合成する。
+# 差し替えるのは SSML に送る文字だけ。画面に出る本文・注音・拼音は一切変わらない。
+# 代用字は萌典で「読みが1つだけ」を確認したもの：醫=ㄧ / 移=ㄧˊ / 億=ㄧˋ / 步=ㄅㄨˋ
+SANDHI_SUB = {("一","yi1"):"醫", ("一","yi2"):"移", ("一","yi4"):"億", ("不","bu4"):"步"}
+def _engine_tone(ch, nxt):
+    """エンジンが機械的に当てる声調（次の音節の本調で決まる）"""
+    if ch=="一": return "yi1" if nxt is None else ("yi2" if nxt==4 else ("yi4" if nxt in (1,2,3) else "yi1"))
+    if ch=="不": return "bu2" if nxt==4 else "bu4"
+    return None
+def _next_tone(parts, i):
+    for c2,p2 in parts[i+1:]:
+        if p2:
+            t=int(p2[-1])
+            if t==5:
+                try:
+                    from pypinyin import pinyin as _p, Style as _S
+                    r=_p(c2,style=_S.TONE3)[0][0]
+                    t=int(r[-1]) if r and r[-1].isdigit() else 5
+                except Exception: t=5
+            return None if t==5 else t
+        if c2.strip()=="": continue
+        return None          # 句読点＝ポーズ→語末あつかい
+    return None
+def sandhi_fix(parts):
+    """一/不 でエンジンが上書きしそうな所だけ、同音の別字に差し替える。"""
+    out=[]
+    for i,(c,ph) in enumerate(parts):
+        if ph and c in ("一","不"):
+            eng=_engine_tone(c,_next_tone(parts,i))
+            sub=SANDHI_SUB.get((c,ph))
+            if eng and eng!=ph and sub: out.append((sub,ph)); continue
+        out.append((c,ph))
+    return out
+
 def gesc(s):return s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
 def ssml(parts):
     out=""
@@ -141,6 +178,7 @@ def main():
         parts=phonemes(z,py)
         if parts is None:bad.append(z);continue
         parts=_tw_fix(parts)   # 台灣讀音強制修正(tw-readings.TW_FIX)
+        parts=sandhi_fix(parts)   # 一/不 はエンジンの変調に負けるので同音字に差し替え
         todo.append((z,parts))
     print(f"対象 {len(todo)} / 整列失敗 {len(bad)}",flush=True)
     if bad[:10]:print("  失敗例:",bad[:10])
