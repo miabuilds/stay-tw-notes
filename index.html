@@ -1111,7 +1111,7 @@ body.more-open .ar-bar{display:none}
 <script src="vocab-l2.js?v=53"></script>
 <script src="vocab-l3.js?v=52"></script>
 <script src="vocab-l4.js?v=53"></script>
-<script src="vocab-l5.js?v=52"></script>
+<script src="vocab-l5.js?v=53"></script>
 <script src="vocab-l1-b.js?v=53"></script>
 <script src="vocab-l2-b.js?v=53"></script>
 <script src="vocab-l3-b.js?v=54"></script>
@@ -1440,7 +1440,7 @@ function loadExZy(cb){
   EX_ZY_LOADING = true;
   // 注音＋(台灣読音に修正した)拼音オーバーレイを並行ロード。EX_PY にあれば ex.py より優先。
   Promise.all([
-    fetch("data/ex-zhuyin.json?v=8").then(r => r.ok ? r.json() : null),
+    fetch("data/ex-zhuyin.json?v=9").then(r => r.ok ? r.json() : null),
     fetch("data/ex-pinyin.json?v=1").then(r => r.ok ? r.json() : null).catch(() => null)
   ]).then(([zy, py]) => { EX_ZY = zy || {}; EX_PY = py || {}; EX_ZY_LOADING = false; if (cb) cb(); })
     .catch(() => { EX_ZY_LOADING = false; });

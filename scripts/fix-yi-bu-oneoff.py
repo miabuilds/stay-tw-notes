@@ -20,9 +20,8 @@ spec = importlib.util.spec_from_file_location("g", os.path.join(ROOT, "scripts",
 g = importlib.util.module_from_spec(spec); spec.loader.exec_module(g)
 
 SKIP = {
-    "一絲不苟", "他做事一絲不苟，連小數點都不放過。",
-    "一蹴可幾", "語言能力的養成並非一蹴可幾，需要長期累積。",
-    "理論與實務相輔相成，缺一不可。",
+    # 2026-09-19 教育部で確認済み：舉一反三・缺一不可 は變調なし（＝ㄧ のまま）→ 音声を直す対象。
+    #                          一絲不苟=（變）ㄧˋ / 一蹴可幾=（變）ㄧˊ → データ側を直したので差し替え不要になった。
     "地上都是頭髮，快掃一掃。",          # V一V の軽い「一」。代用字が無いので触らない
 }
 
