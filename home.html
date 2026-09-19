@@ -461,6 +461,7 @@ document.addEventListener("DOMContentLoaded", function(){
       <a class="guide-card" href="compare/tocfl-guide-ja">TOCFL 入門ガイド</a>
       <a class="guide-card" href="kanji-gap" id="guideKanji">同じ漢字なのに意味が違う40語</a>
       <a class="guide-card" href="life" id="guideLife">台湾生活会話 31場面（病院・手続き・家・買い物・仕事）</a>
+      <a class="guide-card" href="readings" id="guideRead">台湾ではこう読む33字（教育部の辞典で確認）</a>
     </div>
   </div>
 </section>
@@ -470,11 +471,13 @@ document.addEventListener("DOMContentLoaded", function(){
          ko:{t:"학습 가이드",g:["주음(보포모포) 읽는 법","번체자 vs 간체자","대만 vs 중국 중국어","的·得·地 구분","대만 일상 단어","TOCFL 입문 가이드"]}};
   var slugs=["zhuyin-guide","traditional-vs-simplified","taiwan-vs-china-mandarin","de-particles","taiwan-daily-words","tocfl-guide"];
   var KJ={en:"Same kanji, different meaning: 40 words",ko:"같은 한자, 다른 뜻: 40단어"};
+  var RD={en:"33 characters Taiwan reads differently",ko:"대만에서 다르게 읽는 33자",vi:"33 chữ Đài Loan đọc khác",id:"33 huruf yang dibaca beda di Taiwan"};
   var LF={en:"Taiwan life phrases: 31 real situations",ko:"대만 생활 회화: 31가지 상황",vi:"Tiếng Trung đời sống ở Đài Loan: 31 tình huống",id:"Percakapan hidup di Taiwan: 31 situasi"};
   if(l==="ja")return; var d=T[l]||T.en; var gl=(l==="ko")?"ko":"en"; var gt=document.getElementById("guidesTitle"); if(gt)gt.textContent=d.t;
   document.querySelectorAll("#guideGrid .guide-card").forEach(function(a,i){ if(!slugs[i])return; a.href="compare/"+slugs[i]+"-"+gl; a.textContent=d.g[i]; });
   var kj=document.getElementById("guideKanji"); if(kj){ kj.textContent=KJ[l]||KJ.en; kj.href="kanji-gap?lang=en"; }
   var lf=document.getElementById("guideLife"); var l0=localStorage.getItem("stw-lang")||"ja"; if(lf&&l0!=="ja"){ lf.textContent=LF[l0]||LF.en; lf.href="life?lang="+(LF[l0]?l0:"en"); }
+  var rd=document.getElementById("guideRead"); if(rd&&l0!=="ja"){ rd.textContent=RD[l0]||RD.en; rd.href="readings?lang="+(RD[l0]?l0:"en"); }
 })();</script>
 
 <!-- Footer -->
@@ -494,7 +497,7 @@ document.addEventListener("DOMContentLoaded", function(){
   </div>
 </footer>
 
-<script src="i18n.js?v=85"></script>
+<script src="i18n.js?v=86"></script>
 <script>
 function toggleTheme(){
   const d = document.documentElement.dataset.theme === "dark";
