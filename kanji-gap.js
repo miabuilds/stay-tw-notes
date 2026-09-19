@@ -34,7 +34,7 @@ const KANJI_GAP = [
 {tw:"約束",py:"yuē shù",m:{ja:{jp:"約束",tw:"縛る、制限する"},en:{jp:"a promise",tw:"to restrain, to bind"}},ex:{z:"父母不該約束太多。",py:"Fùmǔ bù gāi yuēshù tài duō.",ja:"親はあまり縛りすぎないほうがいい。",en:"Parents shouldn't restrict too much."}},
 {tw:"用心",py:"yòng xīn",m:{ja:{jp:"用心する、警戒",tw:"心を込める、一生懸命"},en:{jp:"caution",tw:"to put one's heart into"}},ex:{z:"她做菜很用心。",py:"Tā zuòcài hěn yòngxīn.",ja:"彼女は料理に心を込めている。",en:"She cooks with great care."}},
 {tw:"節目",py:"jié mù",m:{ja:{jp:"節目、区切り",tw:"番組"},en:{jp:"a turning point",tw:"a TV program"}},ex:{z:"這個節目很好笑。",py:"Zhège jiémù hěn hǎoxiào.",ja:"この番組、すごく面白い。",en:"This show is really funny."}},
-{tw:"主人",py:"zhǔ rén",m:{ja:{jp:"夫、ご主人",tw:"持ち主、ホスト"},en:{jp:"husband",tw:"owner, host"}},ex:{z:"這隻狗的主人是誰？",py:"Zhè zhī gǒu de zhǔrén shì shuí?",ja:"この犬の飼い主は誰？",en:"Who is this dog's owner?"}},
+{tw:"主人",py:"zhǔ rén",m:{ja:{jp:"夫、ご主人",tw:"持ち主、ホスト"},en:{jp:"husband",tw:"owner, host"}},ex:{z:"這隻狗的主人是誰？",py:"Zhè zhī gǒu de zhǔrén shì shéi?",ja:"この犬の飼い主は誰？",en:"Who is this dog's owner?"}},
 {tw:"看病",py:"kàn bìng",m:{ja:{jp:"看病する（世話）",tw:"診察を受ける、病院に行く"},en:{jp:"to nurse someone",tw:"to see a doctor"}},ex:{z:"我下午要去看病。",py:"Wǒ xiàwǔ yào qù kànbìng.",ja:"午後、病院に行きます。",en:"I'm going to see a doctor this afternoon."}},
 {tw:"麻雀",py:"má què",m:{ja:{jp:"麻雀（マージャン）",tw:"すずめ"},en:{jp:"mahjong",tw:"sparrow"}},ex:{z:"樹上有兩隻麻雀。",py:"Shù shàng yǒu liǎng zhī máquè.",ja:"木の上にすずめが2羽いる。",en:"There are two sparrows in the tree."}},
 {tw:"是非",py:"shì fēi",m:{ja:{jp:"ぜひ",tw:"善悪／もめごと、噂"},en:{jp:"by all means",tw:"right and wrong / gossip, trouble"}},ex:{z:"少說是非。",py:"Shǎo shuō shìfēi.",ja:"人の噂話はやめよう。",en:"Don't gossip."}},

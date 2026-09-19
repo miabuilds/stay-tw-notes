@@ -165,7 +165,10 @@ const TTS = (() => {
 
   function setRate(r){ SPD = Math.max(0.5, Math.min(2, +r || 1)); try { localStorage.setItem("stw_tts_rate", SPD); } catch (e) {} if (audioEl) { try { audioEl.playbackRate = SPD; } catch (e) {} } }
   function getRate(){ return SPD; }
-  return { speak, speakKey, stop, options, setVoice, currentURI, refresh, setRate, getRate };
+  // 事前生成 mp3 があるか（「用聽的背」は mp3 のみ再生する方針なので、無い語を除外するのに使う）
+  function has(text) { return !!(MANIFEST && text && MANIFEST[text]); }
+  function ready() { return !!MANIFEST; }
+  return { speak, speakKey, stop, options, setVoice, currentURI, refresh, setRate, getRate, has, ready };
 })();
 // 既存コードとの互換用グローバル
 // ★重要：TTS は const 宣言なので window に自動では乗らない。全画面の一時停止は

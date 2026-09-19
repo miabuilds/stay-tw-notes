@@ -88,7 +88,7 @@ const Paywall = (() => {
     const bg = document.getElementById("pwBg");
     if (!bg) return;
     track(feature);
-    const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore"), slow: twT("toolSlow") }[feature] || "";
+    const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore"), slow: twT("toolSlow"), listen: twT("lsTitle") }[feature] || "";
     const desc = feature === "article" ? twT("pwContentHit") : twT("pwLimitHit").replace("{f}", featName);
     document.getElementById("pwBox").innerHTML = `
       <button class="qclose" style="float:right" onclick="Paywall.close()">✕</button>

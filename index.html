@@ -611,6 +611,46 @@ body.more-open .ar-bar{display:none}
 .pa-frac{flex:none;font-size:12px;color:var(--tx3);align-self:center;font-variant-numeric:tabular-nums}
 .pa-step.next{background:var(--ac-soft);border-radius:12px;border-bottom-color:transparent}
 @media(hover:hover){.pa-step:hover .pa-t{color:var(--ac)}}
+/* ===== 学習ハブ（面板トップ）===== */
+.hb{display:flex;flex-direction:column;gap:18px}
+.hb-hero{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 9%,var(--bg2)),var(--bg2));border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+.hb-hero img{width:54px;height:62px;flex:none}
+.hb-hi{flex:1;min-width:0}
+.hb-greet{font-family:var(--serif);font-size:21px;font-weight:700;line-height:1.2;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.hb-fire{font-size:11.5px;font-weight:700;color:var(--ac);background:var(--ac-soft);border-radius:999px;padding:3px 9px;letter-spacing:.02em}
+.hb-motto{font-size:12.5px;color:var(--tx2);margin-top:4px;line-height:1.55}
+.hb-goal{margin-top:9px}
+.hb-goal-top{display:flex;justify-content:space-between;font-size:11.5px;color:var(--tx3);margin-bottom:4px;font-variant-numeric:tabular-nums}
+.hb-goal-bar{height:7px;border-radius:999px;background:var(--bg3);overflow:hidden}
+.hb-goal-bar i{display:block;height:100%;border-radius:999px;background:var(--ac);transition:width .6s var(--ease)}
+.hb-goal.ok .hb-goal-bar i{background:var(--ok)}
+.hb-plan{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:17px 18px}
+.hb-plan-h{font-size:11.5px;font-weight:700;color:var(--tx3);letter-spacing:.06em;margin-bottom:7px}
+.hb-plan-n{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:13px}
+.hb-plan-n div{font-size:12px;color:var(--tx3)}
+.hb-plan-n b{display:block;font-family:var(--serif);font-size:25px;color:var(--tx);line-height:1.1}
+.hb-plan-n .due b{color:var(--ac)}
+.hb-go{display:block;width:100%;border:0;border-radius:13px;background:var(--ac);color:#fff;padding:14px;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.hb-go:active{transform:translateY(1px)}
+.hb-go.rest{background:var(--bg3);color:var(--tx2);border:1px solid var(--line)}
+.hb-resume{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:12px 15px;cursor:pointer;font-family:inherit;color:var(--tx)}
+.hb-resume .p{flex:none;width:28px;height:28px;border-radius:50%;background:var(--ac-soft);color:var(--ac);display:flex;align-items:center;justify-content:center;font-size:12px}
+.hb-resume b{font-size:14px;font-weight:700}
+.hb-resume span{font-size:12px;color:var(--tx3);display:block;margin-top:1px}
+.hb-wod{display:flex;align-items:center;gap:13px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:15px 17px}
+.hb-wod-m{flex:1;min-width:0}
+.hb-wod-l{font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.06em}
+.hb-wod-w{font-family:var(--serif);font-size:27px;font-weight:700;margin-top:3px;line-height:1.2}
+.hb-wod-r{font-family:var(--zhuyin);font-size:13px;color:var(--ac2);margin-top:3px}
+.hb-wod-s{font-size:12.5px;color:var(--tx2);margin-top:3px;line-height:1.5}
+.hb-wod-b{flex:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--ac);cursor:pointer;font-size:17px;font-family:inherit}
+.hb-sec{font-size:11.5px;font-weight:700;color:var(--tx3);letter-spacing:.06em;margin-bottom:-8px}
+.hb-quick{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.hb-quick button,.hb-quick a{display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:14px 6px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:var(--tx);text-decoration:none;text-align:center;line-height:1.3}
+.hb-quick .qi{font-size:20px;line-height:1}
+.hb-quick button:active,.hb-quick a:active{transform:scale(.97)}
+.hb-quick .hot{border-color:var(--ac);background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 10%,var(--bg2)),var(--bg2))}
+@media(max-width:360px){.hb-quick{grid-template-columns:repeat(2,1fr)}}
 /* 復習モーダル */
 .quiz-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
 .quiz-bg.show{display:flex}
@@ -1059,24 +1099,24 @@ body.more-open .ar-bar{display:none}
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=84"></script>
+<script src="i18n.js?v=85"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=62"></script>
 <script src="vocab-l1.js?v=52"></script>
-<script src="vocab-l2.js?v=52"></script>
+<script src="vocab-l2.js?v=53"></script>
 <script src="vocab-l3.js?v=52"></script>
-<script src="vocab-l4.js?v=52"></script>
+<script src="vocab-l4.js?v=53"></script>
 <script src="vocab-l5.js?v=52"></script>
 <script src="vocab-l1-b.js?v=53"></script>
 <script src="vocab-l2-b.js?v=53"></script>
 <script src="vocab-l3-b.js?v=53"></script>
 <script src="vocab-l4-b.js?v=54"></script>
-<script src="vocab-l5-b.js?v=54"></script>
+<script src="vocab-l5-b.js?v=55"></script>
 <script src="vocab-l1-c.js?v=57"></script>
 <script src="vocab-l2-c.js?v=58"></script>
 <script src="vocab-l3-c.js?v=57"></script>
-<script src="vocab-l4-c.js?v=58"></script>
-<script src="vocab-l5-c.js?v=58"></script>
+<script src="vocab-l4-c.js?v=59"></script>
+<script src="vocab-l5-c.js?v=59"></script>
 <script src="vocab-l6.js?v=2"></script>
 <script src="grammar-l1.js?v=53"></script>
 <script src="grammar-l2.js?v=52"></script>
@@ -1113,7 +1153,8 @@ body.more-open .ar-bar{display:none}
 <script src="articles-19.js?v=1"></script>
 <script src="articles-20.js?v=1"></script>
 <script src="writing-data.js?v=52"></script>
-<script src="paywall.js?v=101"></script>
+<script src="paywall.js?v=102"></script>
+<script src="listen.js?v=2"></script>
 <script src="websync.js?v=61"></script>
 <script src="srs.js?v=57"></script>
 <script src="mock-exam.js?v=58"></script>
@@ -1296,6 +1337,8 @@ document.querySelectorAll(".lv-btn").forEach(b => b.onclick = () => setLevel(b.d
 /* ===== タブ（上部タブ＋モバイル下部ナビの両方から呼ぶ） ===== */
 function switchPanel(p){
   if (window.TTS && TTS.stop) TTS.stop();   // タブ/ページ切替で再生中の音声を止める
+  // ハブの「前回の続き」用。トップ(path)自身は記録しない
+  try { if (p !== "path") localStorage.setItem("stw_last_panel", p); } catch (e) {}
   document.querySelectorAll(".tool-btn").forEach(x=>x.classList.toggle("on", x.dataset.panel===p));
   document.querySelectorAll(".panel").forEach(x=>x.classList.remove("on"));
   document.getElementById("panel-"+p).classList.add("on");
@@ -1392,7 +1435,7 @@ function loadExZy(cb){
   EX_ZY_LOADING = true;
   // 注音＋(台灣読音に修正した)拼音オーバーレイを並行ロード。EX_PY にあれば ex.py より優先。
   Promise.all([
-    fetch("data/ex-zhuyin.json?v=6").then(r => r.ok ? r.json() : null),
+    fetch("data/ex-zhuyin.json?v=7").then(r => r.ok ? r.json() : null),
     fetch("data/ex-pinyin.json?v=1").then(r => r.ok ? r.json() : null).catch(() => null)
   ]).then(([zy, py]) => { EX_ZY = zy || {}; EX_PY = py || {}; EX_ZY_LOADING = false; if (cb) cb(); })
     .catch(() => { EX_ZY_LOADING = false; });
@@ -2540,13 +2583,105 @@ const PA = (() => {
     ];
   }
 
+  // ── ハブ用の小物 ──
+  function greet(){
+    const h = new Date().getHours();
+    return twT(h < 5 ? "hbGreetNight" : h < 11 ? "hbGreetMorning" : h < 18 ? "hbGreetDay" : "hbGreetEve");
+  }
+  // 今日の分：新出（まだ SRS に入っていない語）と復習（期限切れ）の数、ざっくり所要分
+  function plan(){
+    const lv = currentLevel;
+    const st = (typeof SRS !== "undefined" && SRS.getStats) ? SRS.getStats(lv) : { total:0, due:0 };
+    const all = (typeof getVocabData === "function" ? getVocabData(lv).length : 0) || 0;
+    const fresh = Math.max(0, all - st.total);
+    const nw = Math.min(10, fresh);
+    const due = st.due;
+    const min = Math.max(1, Math.round(nw * 0.5 + due * 0.25));
+    return { nw, due, min, fresh };
+  }
+  // 今日一字：日付で決まるので日替わり。音声がある語だけ選ぶ（タップして発音できるように）
+  function wordOfDay(){
+    try {
+      const v = (typeof getVocabData === "function") ? (getVocabData(currentLevel) || []) : [];
+      if (!v.length) return null;
+      const pool = v.filter(x => x && x.w && (!window.TTS || !TTS.ready || !TTS.ready() || TTS.has(x.w)));
+      const src = pool.length ? pool : v;
+      const d = new Date();
+      const seed = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+      return src[seed % src.length];
+    } catch (e) { return null; }
+  }
+  function esc(x){ return String(x == null ? "" : x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
   function render(){
     const lvName = { l1:twT("lv_l1"), l2:twT("lv_l2"), l3:twT("lv_l3"), l4:twT("lv_l4"), l5:twT("lv_l5"), l6:twT("lv_l6") }[currentLevel] || "";
     const s = stages();
     const next = s.find(x => !x.done) || s[s.length-1];
     const daily = (typeof getDaily === "function") ? getDaily() : { n:0, goal:20, pct:0, done:false };
     const streak = (typeof getStreak === "function") ? getStreak() : { cur:0 };
-    const rows = s.map((x,i) => {
+    const pl = plan();
+    const wod = wordOfDay();
+    const mk = (typeof twMKey === "function") ? twMKey() : "j";
+
+    const motto = daily.done ? twT("hbMottoDone")
+      : daily.n > 0 ? twT("hbMottoGo").replace("{n}", daily.goal - daily.n)
+      : streak.cur > 0 ? twT("hbMottoKeep").replace("{n}", streak.cur)
+      : twT("hbMottoStart");
+
+    const hero = `<div class="hb-hero">
+      <img src="images/bear.svg" alt="">
+      <div class="hb-hi">
+        <div class="hb-greet">${esc(greet())}${streak.cur > 0 ? `<span class="hb-fire">🔥 ${twT("hbStreak").replace("{n}", streak.cur)}</span>` : ""}</div>
+        <div class="hb-motto">${esc(motto)}</div>
+        <div class="hb-goal${daily.done ? " ok" : ""}">
+          <div class="hb-goal-top"><span>${esc(twT("pfDaily"))}</span><span>${daily.n} / ${daily.goal}</span></div>
+          <div class="hb-goal-bar"><i style="width:${daily.pct}%"></i></div>
+        </div>
+      </div>
+    </div>`;
+
+    const planCard = `<div class="hb-plan">
+      <div class="hb-plan-h">${esc(twT("hbPlanH"))}</div>
+      <div class="hb-plan-n">
+        <div><b>${pl.nw}</b>${esc(twT("hbPlanNew"))}</div>
+        <div class="due"><b>${pl.due}</b>${esc(twT("hbPlanDue"))}</div>
+        <div><b>${pl.min}</b>${esc(twT("hbPlanMin"))}</div>
+      </div>
+      ${pl.due > 0
+        ? `<button class="hb-go" onclick="SRS.start('${currentLevel}')">▶ ${esc(twT("hbPlanGoReview"))}</button>`
+        : pl.nw > 0
+          ? `<button class="hb-go" onclick="switchPanel('fc')">▶ ${esc(twT("hbPlanGoNew"))}</button>`
+          : `<button class="hb-go rest" onclick="switchPanel('quiz')">${esc(twT("hbPlanClear"))}</button>`}
+    </div>`;
+
+    const lastP = (() => { try { return localStorage.getItem("stw_last_panel") || ""; } catch (e) { return ""; } })();
+    const lastName = { fc:twT("toolVocabCard"), list:twT("toolVocabList"), grammar:twT("toolGrammar"), phrases:twT("toolPhrases"),
+      reading:twT("toolReading"), quiz:twT("toolQuiz"), articles:twT("toolArticles"), srs:twT("toolSrs"),
+      exam:twT("toolExam"), speak:twT("toolSpeak"), write:twT("toolWrite"), zhuyin:twT("toolZhuyin") }[lastP];
+    const resume = (lastP && lastName) ? `<button class="hb-resume" onclick="switchPanel('${lastP}')">
+      <span class="p">▶</span><span><b>${esc(twT("hbResume"))}</b><span>${esc(lastName)}</span></span></button>` : "";
+
+    const wodCard = wod ? `<div class="hb-wod">
+      <div class="hb-wod-m">
+        <div class="hb-wod-l">${esc(twT("hbWod"))}</div>
+        <div class="hb-wod-w">${esc(wod.w)}</div>
+        <div class="hb-wod-r">${esc(wod.zy || "")}${wod.py ? " · " + esc(wod.py) : ""}</div>
+        <div class="hb-wod-s">${esc((wod.m && (wod.m[mk] || wod.m.e || wod.m.j)) || "")}</div>
+      </div>
+      <button class="hb-wod-b" onclick="speakZh('${esc(wod.w).replace(/'/g, "\\'")}')" aria-label="play">🔊</button>
+    </div>` : "";
+
+    const quick = `<div class="hb-sec">${esc(twT("hbQuick"))}</div>
+    <div class="hb-quick">
+      <button class="hot" onclick="Listen.open()"><span class="qi">🎧</span>${esc(twT("lsTitle"))}</button>
+      <button onclick="SRS.start('${currentLevel}')"><span class="qi">🔁</span>${esc(twT("toolSrs"))}</button>
+      <button onclick="switchPanel('fc')"><span class="qi">🃏</span>${esc(twT("toolVocabCard"))}</button>
+      <button onclick="switchPanel('quiz')"><span class="qi">✏️</span>${esc(twT("toolQuiz"))}</button>
+      <button onclick="switchPanel('zhuyin')"><span class="qi">ㄅ</span>${esc(twT("toolZhuyin"))}</button>
+      <a href="life?utm_source=hub"><span class="qi">💬</span>${esc(twT("hbLife"))}</a>
+    </div>`;
+
+    const rows = s.map((x) => {
       const status = x.done ? "done" : (x.started ? "doing" : "todo");
       const badge = x.done ? "✓" : x.icon;
       return `<button class="pa-step ${status} ${x.key===next.key?"next":""}" onclick="switchPanel('${x.key}')">
@@ -2559,31 +2694,34 @@ const PA = (() => {
         <div class="pa-frac">${x.frac}</div>
       </button>`;
     }).join("");
+
     const paIsPrem = !!(window.Paywall && Paywall.isPremium && Paywall.isPremium());
-    // 会員には出さない(首頁をすっきり)。非会員のみアップグレード CTA を表示。
-    // 会員がプランを管理したいときは「その他 → プレミアム」から。
     const upBanner = paIsPrem ? "" : `<button class="pa-upgrade" onclick="twUpgrade()">
-        <div class="pa-up-ic"></div>
-        <div class="pa-up-tx"><b>${twT("pfUpgrade").replace("","")}</b><span>${twT("paUpgradeSub")}</span></div>
+        <div class="pa-up-ic">✨</div>
+        <div class="pa-up-tx"><b>${twT("pfUpgrade")}</b><span>${twT("paUpgradeSub")}</span></div>
         <svg viewBox="0 0 24 24" class="pa-up-ch"><path d="M9 6l6 6-6 6"/></svg>
       </button>`;
-    document.getElementById("paBody").innerHTML = `
+
+    document.getElementById("paBody").innerHTML = `<div class="hb">
+      ${hero}
+      ${planCard}
+      ${resume}
+      ${wodCard}
+      ${quick}
+      <div>
+        <div class="pa-found-h">${twT("paFoundH")}</div>
+        <button class="pa-found" onclick="switchPanel('zhuyin')">
+          <div class="pa-found-ic">ㄅ</div>
+          <div class="pa-found-tx"><div class="pa-found-t">${twT("paFoundT")}</div><div class="pa-found-d">${twT("paFoundD")}</div></div>
+          <svg viewBox="0 0 24 24" class="pa-found-ch"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div>
+        <div class="pa-found-h">${twT("paLevelH").replace("{lv}", lvName)}</div>
+        <div class="pa-steps">${rows}</div>
+      </div>
       ${upBanner}
-      <div class="pa-head">
-        <div><div class="pa-lv">TOCFL ${lvName}</div><p class="pa-lead">${twT("paLead")}</p></div>
-      </div>
-      <div class="pa-mini">
-        <div class="pa-mini-i"><b>${streak.cur}</b><span>${twT("pfStreak")}</span></div>
-        <div class="pa-mini-i ${daily.done?"ok":""}"><b>${daily.n}/${daily.goal}</b><span>${twT("pfDaily")}</span></div>
-      </div>
-      <div class="pa-found-h">${twT("paFoundH")}</div>
-      <button class="pa-found" onclick="switchPanel('zhuyin')">
-        <div class="pa-found-ic">ㄅ</div>
-        <div class="pa-found-tx"><div class="pa-found-t">${twT("paFoundT")}</div><div class="pa-found-d">${twT("paFoundD")}</div></div>
-        <svg viewBox="0 0 24 24" class="pa-found-ch"><path d="M9 6l6 6-6 6"/></svg>
-      </button>
-      <div class="pa-found-h">${twT("paLevelH").replace("{lv}", lvName)}</div>
-      <div class="pa-steps">${rows}</div>`;
+    </div>`;
   }
   return { render };
 })();
