@@ -11,7 +11,7 @@ const Paywall = (() => {
   const QUOTA_KEY = "stw_quota";
   // 1日の無料枠（プレミアムで無制限）
   // 2026-09-16: speak 5→2（跟讀是 App 限定＋日本人最需要的功能，當 Premium 招牌）；SRS 免費一次最多 SRS_FREE_CARDS 張
-  const LIMITS = { quiz: 3, srs: 1, exam: 1, speak: 2, writing: 1, aiscore: 1, slow: 3 };   // slow = 生活会話のゆっくり再生
+  const LIMITS = { quiz: 3, srs: 1, exam: 1, speak: 2, writing: 1, aiscore: 1 };
   const SRS_FREE_CARDS = 10;
   const PRICES = { monthly: "¥980", yearly: "¥5,800", lifetime: "¥12,800" };
 
@@ -88,7 +88,7 @@ const Paywall = (() => {
     const bg = document.getElementById("pwBg");
     if (!bg) return;
     track(feature);
-    const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore"), slow: twT("toolSlow"), listen: twT("lsTitle") }[feature] || "";
+    const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore"), listen: twT("lsTitle") }[feature] || "";
     const desc = feature === "article" ? twT("pwContentHit") : twT("pwLimitHit").replace("{f}", featName);
     document.getElementById("pwBox").innerHTML = `
       <button class="qclose" style="float:right" onclick="Paywall.close()">✕</button>

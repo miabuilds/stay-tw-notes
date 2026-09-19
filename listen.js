@@ -17,6 +17,12 @@
   function save() { try { localStorage.setItem(KEY, JSON.stringify(opts)); } catch (e) {} }
   function premium() { try { return !!(root.Paywall && Paywall.isPremium && Paywall.isPremium()); } catch (e) { return false; } }
   function has(t) { try { return !!(root.TTS && TTS.has && TTS.has(t)); } catch (e) { return false; } }
+  // 再生速度（サイト共通・localStorage stw_tts_rate）
+  const SPEEDS = [1, 0.75, 0.5, 1.25];
+  function speed() { try { return (root.TTS && TTS.getRate) ? TTS.getRate() : (parseFloat(localStorage.getItem("stw_tts_rate")) || 1); } catch (e) { return 1; } }
+  function cycleSpeed() { const i = SPEEDS.indexOf(speed()); const r = SPEEDS[(i + 1) % SPEEDS.length];
+    try { if (root.TTS && TTS.setRate) TTS.setRate(r); else localStorage.setItem("stw_tts_rate", r); } catch (e) {}
+    const b = document.getElementById("lsSpd"); if (b) b.textContent = speed() + "x"; }
   function srsData() { try { return (root.SRS && SRS.getData) ? SRS.getData() : (JSON.parse(localStorage.getItem("stw_srs")) || {}); } catch (e) { return {}; } }
   function vocab(lv) { try { return (typeof getVocabData === "function") ? (getVocabData(lv) || []) : []; } catch (e) { return []; } }
   function curLevel() { try { return (typeof currentLevel !== "undefined") ? currentLevel : "l1"; } catch (e) { return "l1"; } }
@@ -154,6 +160,7 @@
         + '<button onclick="Listen.next()" aria-label="next">⏭</button>'
       + "</div>"
       + '<div class="ls-mini">'
+        + '<button id="lsSpd" onclick="Listen.cycleSpeed()">' + speed() + 'x</button>'
         + '<button onclick="Listen.toggleMeaning()">' + esc(T("lsToggleMeaning")) + "</button>"
         + '<button onclick="Listen.back()">' + esc(T("lsSettings")) + "</button>"
       + "</div>"
@@ -204,8 +211,9 @@
     const my = ++tok;
     const done = () => { if (playing && my === tok) { clearGuard(); advancePhase(); } };
     clearGuard();
-    guard = setTimeout(done, Math.min(20, 2.5 + String(text).length * 0.45) * 1000);
-    try { TTS.stop(); TTS.speak(text, 1, done); msState("playing"); }
+    // 遅い速度ほど長くかかるので、見張り時間も速度で割る
+    guard = setTimeout(done, Math.min(40, (2.5 + String(text).length * 0.45) / Math.max(0.4, speed())) * 1000);
+    try { TTS.stop(); TTS.speak(text, null, done); msState("playing"); }   // 速度は全体設定にまかせる
     catch (e) { clearGuard(); schedule(0.4, advancePhase); }
   }
   function play() {
@@ -268,5 +276,5 @@
   function releaseWake() { try { if (wake) { wake.release(); wake = null; } } catch (e) {} }
   document.addEventListener("visibilitychange", () => { if (!document.hidden && playing) requestWake(); });
 
-  root.Listen = { open, close, start, back, next, prev, toggle, opt, opt2, toggleMeaning, upgrade, isPlaying: () => playing, count: () => build().length };
+  root.Listen = { open, close, start, back, next, prev, toggle, opt, opt2, toggleMeaning, upgrade, cycleSpeed, isPlaying: () => playing, count: () => build().length };
 })(window);

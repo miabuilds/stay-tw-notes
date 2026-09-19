@@ -27,8 +27,13 @@ const TTS = (() => {
     const f = MANIFEST[text];
     if (!f) return false;
     if ("speechSynthesis" in window && speechSynthesis.speaking) speechSynthesis.cancel();
-    // rate 引数(生活会話の「ゆっくり」等)があればそれを優先、無ければ全体設定 SPD
-    audioEl.playbackRate = (typeof rate === "number" && rate > 0) ? rate : SPD;
+    // rate 引数があればそれを優先、無ければ全体設定 SPD。
+    // ⚠️ src を入れ替えると load アルゴリズムが playbackRate を defaultPlaybackRate に戻すので、
+    //    先に defaultPlaybackRate を立て、src 設定の後にもう一度 playbackRate を入れ直す。
+    //    （これを忘れていたため、再生速度の設定が mp3 にずっと効いていなかった）
+    const _r = (typeof rate === "number" && rate > 0) ? rate : SPD;
+    try { audioEl.defaultPlaybackRate = _r; } catch (e) {}
+    audioEl.playbackRate = _r;
     // 再生完了で次へ進めるよう ended を通知（読み上げの自動送り用）
     audioEl.onended = () => { if (onprog) onprog(1); if (onend) onend(); };
     // mp3 が読めない（弱い回線など）→ Web Speech にフォールバック（無音防止）
@@ -40,6 +45,7 @@ const TTS = (() => {
       audioEl.src = TTS_BASE + "audio/tts/" + f;
       audioEl.dataset.f = f;
     }
+    try { audioEl.playbackRate = _r; } catch (e) {}   // src 差し替え後に入れ直す（上のコメント参照）
     const myToken = ++playToken;
     const p = audioEl.play();
     // 読込に時間がかかり、その間に stop() されたら、再生開始した瞬間に止める（＝一時停止が空振りしない）
@@ -163,7 +169,7 @@ const TTS = (() => {
     if ("speechSynthesis" in window) { try { speechSynthesis.cancel(); speechSynthesis.cancel(); } catch (e) {} }
   }
 
-  function setRate(r){ SPD = Math.max(0.5, Math.min(2, +r || 1)); try { localStorage.setItem("stw_tts_rate", SPD); } catch (e) {} if (audioEl) { try { audioEl.playbackRate = SPD; } catch (e) {} } }
+  function setRate(r){ SPD = Math.max(0.5, Math.min(2, +r || 1)); try { localStorage.setItem("stw_tts_rate", SPD); } catch (e) {} if (audioEl) { try { audioEl.defaultPlaybackRate = SPD; audioEl.playbackRate = SPD; } catch (e) {} } }
   function getRate(){ return SPD; }
   // 事前生成 mp3 があるか（「用聽的背」は mp3 のみ再生する方針なので、無い語を除外するのに使う）
   function has(text) { return !!(MANIFEST && text && MANIFEST[text]); }
