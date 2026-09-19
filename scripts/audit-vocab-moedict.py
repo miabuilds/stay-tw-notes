@@ -35,6 +35,9 @@ for(const f of files){const t=fs.readFileSync(f,"utf8");const m=t.match(/const\s
   for(const v of a){ if(v&&v.w&&v.py)o.push([v.w,v.py,f+":w"]); if(v&&v.ex&&v.ex.z&&v.ex.py)o.push([v.ex.z,v.ex.py,f+":ex"]); }}
 console.log(JSON.stringify(o));'''
 rows=json.loads(subprocess.check_output(["node","-e",NODE],cwd=ROOT))
+# 声調だけ違うが正しいもの（萌典の国語辞典に語として無い＝台湾語からの借用語など）
+# 嬤: 萌典に「阿嬤」の項目は無く、字単独は ㄇㄚ。台湾で実際に言うのは ā-mà なので ma4 のままにする。
+TONE_OK={("嬤","ma4")}
 base_bad=[];tone_chk=[];n=0
 for z,py,src in rows:
     parts=g.phonemes(z,py)
@@ -53,6 +56,7 @@ for z,py,src in rows:
         base=re.sub(r'[ˊˇˋ˙]','',zy)
         if any(re.sub(r'[ˊˇˋ˙]','',x)==base for x in rsn):
             if ph.endswith("5"): continue   # 輕聲は自分で決めたもの
+            if (c,ph) in TONE_OK: continue
             tone_chk.append((c,ph,zy,"/".join(rs),z,src))
         else:
             base_bad.append((c,ph,zy,"/".join(rs),z,src))
