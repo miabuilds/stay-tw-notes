@@ -78,6 +78,31 @@ async function verifySession(token, secret) {
 }
 
 // Google 網頁ログイン用（後台・Web）。iOS は env.GOOGLE_IOS_CLIENT_ID、Web はこの公開 client id。
+const YT_KEY = "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w";   // youtube.com 前端寫死的公開 key(非機密)
+// 字幕軌回應:帶了 fmt=json3 也常回 XML(timedtext format=3),兩種都解。
+function parseCaptionBody(body) {
+  const out = [];
+  const push = (t, d, text) => {
+    text = String(text || "").replace(/\n/g, " ").trim();
+    if (text && !/^[\[（(♪♫「」\]）)\s]*$/.test(text)) out.push({ t, d, z: text });
+  };
+  const unesc = (x) => x.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+  if (body.trim().startsWith("{")) {
+    const j = JSON.parse(body);
+    for (const ev of j.events || []) {
+      if (!ev.segs) continue;
+      push(ev.tStartMs || 0, ev.dDurationMs || 0, ev.segs.map((x) => x.utf8 || "").join(""));
+    }
+  } else {
+    const re = /<p\b([^>]*)>([\s\S]*?)<\/p>/g; let m;
+    while ((m = re.exec(body))) {
+      const a = m[1];
+      push(+((a.match(/\bt="(\d+)"/) || [])[1] || 0), +((a.match(/\bd="(\d+)"/) || [])[1] || 0), unesc(m[2].replace(/<[^>]+>/g, "")));
+    }
+  }
+  return out;
+}
+
 const GOOGLE_WEB_CLIENT_ID = "949214636130-e2dl3h0t1l789fggve3vsd6pu670lnb1.apps.googleusercontent.com";
 const ADMIN_EMAILS = ["abc83327@gmail.com"];
 async function verifyGoogleWeb(token) {
@@ -473,6 +498,57 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
         `INSERT INTO subscribers (email, lang, source) VALUES (?1,?2,?3) ON CONFLICT(email) DO NOTHING`
       ).bind(email, String(b.lang || "").slice(0, 8), String(b.source || "web").slice(0, 24)).run();
       return json({ ok: true }, 200, h);
+    }
+
+    // ---------- YouTube 跟讀:字幕快取 ----------
+    // 影片本身走官方 IFrame 嵌入(不下載不重製);這裡只存「哪一秒講了哪一句」的時間軸。
+    // YouTube 會擋機房 IP,Worker 現場抓多半抓不到 → 主要靠本機(住宅 IP)用 scripts/yt-seed.mjs 種進來。
+    if (url.pathname === "/api/yt-captions" && req.method === "POST") {
+      let b; try { b = await req.json(); } catch { b = {}; }
+      const v = String(b.v || "");
+      if (!/^[A-Za-z0-9_-]{11}$/.test(v)) return json({ error: "bad_video_id" }, 400, h);
+      const row = await env.DB.prepare("SELECT title, author, seconds, track, lines FROM yt_captions WHERE vid=?1").bind(v).first();
+      if (row) {
+        let lines = []; try { lines = JSON.parse(row.lines); } catch (e) {}
+        return json({ v, title: row.title, author: row.author, seconds: row.seconds, track: row.track, lines, cached: true }, 200, h);
+      }
+      // 快取沒有 → 現場試一次。失敗就明講,前端顯示「這支還沒準備好」。
+      try {
+        const pr = await fetch("https://www.youtube.com/youtubei/v1/player?key=" + YT_KEY, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "User-Agent": "com.google.android.youtube/20.10.38 (Linux; U; Android 11) gzip" },
+          body: JSON.stringify({ context: { client: { clientName: "ANDROID", clientVersion: "20.10.38", androidSdkVersion: 30, hl: "zh-TW", gl: "TW" } }, videoId: v }),
+        });
+        if (!pr.ok) return json({ error: "not_ready" }, 404, h);
+        const pj = await pr.json();
+        const tracks = (pj.captions && pj.captions.playerCaptionsTracklistRenderer && pj.captions.playerCaptionsTracklistRenderer.captionTracks) || [];
+        const tr = tracks.find((t) => /^zh/i.test(t.languageCode || ""));
+        if (!tr) return json({ error: "no_captions" }, 404, h);
+        let u = tr.baseUrl + (tr.baseUrl.includes("fmt=") ? "" : "&fmt=json3");
+        const tb = await (await fetch(u, { headers: { "User-Agent": "Mozilla/5.0" } })).text();
+        const lines = parseCaptionBody(tb);
+        if (lines.length < 3) return json({ error: "no_captions" }, 404, h);
+        const d = pj.videoDetails || {};
+        await env.DB.prepare(
+          "INSERT INTO yt_captions (vid,title,author,seconds,track,lines,updated_at) VALUES (?1,?2,?3,?4,?5,?6,?7) ON CONFLICT(vid) DO UPDATE SET lines=?6, updated_at=?7"
+        ).bind(v, String(d.title || "").slice(0, 200), String(d.author || "").slice(0, 120), Number(d.lengthSeconds || 0), tr.languageCode || "zh", JSON.stringify(lines), nowMs()).run();
+        return json({ v, title: d.title || "", author: d.author || "", seconds: Number(d.lengthSeconds || 0), track: tr.languageCode, lines, cached: false }, 200, h);
+      } catch (e) { return json({ error: "not_ready" }, 404, h); }
+    }
+
+    // 本機種字幕用(住宅 IP 抓得到)。要 ADMIN_TOKEN,不開放一般人寫。
+    if (url.pathname === "/api/yt-seed" && req.method === "POST") {
+      const bearer = (req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
+      if (!env.ADMIN_TOKEN || bearer !== env.ADMIN_TOKEN) return json({ error: "unauthorized" }, 401, h);
+      let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
+      const v = String(b.v || "");
+      if (!/^[A-Za-z0-9_-]{11}$/.test(v)) return json({ error: "bad_video_id" }, 400, h);
+      const lines = Array.isArray(b.lines) ? b.lines : [];
+      if (lines.length < 3 || lines.length > 2000) return json({ error: "bad_lines" }, 400, h);
+      await env.DB.prepare(
+        "INSERT INTO yt_captions (vid,title,author,seconds,track,lines,updated_at) VALUES (?1,?2,?3,?4,?5,?6,?7) ON CONFLICT(vid) DO UPDATE SET title=?2, author=?3, seconds=?4, track=?5, lines=?6, updated_at=?7"
+      ).bind(v, String(b.title || "").slice(0, 200), String(b.author || "").slice(0, 120), Number(b.seconds || 0), String(b.track || "zh"), JSON.stringify(lines), nowMs()).run();
+      return json({ ok: true, v, n: lines.length }, 200, h);
     }
 
     // ---------- 後台（Google 管理 session または旧 ADMIN_TOKEN）----------
