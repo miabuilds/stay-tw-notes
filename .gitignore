@@ -8,3 +8,4 @@ firebase-debug.log
 
 # 音檔は R2 配信・repo 外（~/Documents/GitHub/stay-tw-audio/tts）
 audio/tts/
+out/
