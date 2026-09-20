@@ -176,7 +176,7 @@ button{font-family:inherit}
 @media(hover:hover){.vcard:hover{border-color:var(--ac)}}
 .vcard-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .vcard-w{font-family:var(--serif);font-size:26px;font-weight:700}
-.vcard-zy{font-family:var(--zhuyin);font-size:13.5px;font-weight:600;color:var(--ac);letter-spacing:.06em}
+.vcard-zy{font-family:var(--zhuyin);font-size:15px;font-weight:600;color:var(--ac);letter-spacing:.06em}
 .vcard-py{font-size:14px;color:var(--tx2)}
 .vcard-pos{font-size:10.5px;font-weight:700;color:var(--ac);border:1px solid var(--ac);border-radius:5px;padding:0 5px;margin-left:auto}
 .vcard-m{font-size:15px;font-weight:600;margin-top:4px}
@@ -509,7 +509,15 @@ button{font-family:inherit}
    しか無い。韓国のユーザーから「声調が見分けづらい」と報告があったため、この 4 文字だけを
    twZy() で包んで拡大・太字にする。@font-face の unicode-range + size-adjust も試したが、
    local() フォントには size-adjust が効かず(実測で幅が変わらない)不採用。 */
-.zyt{font-size:1.45em;font-weight:700;letter-spacing:0;margin-left:-.06em}   /* 親要素の letter-spacing で符号が離れて見えるぶんを詰める */
+.zyt{font-size:1.45em;font-weight:700;letter-spacing:0;margin-left:-.06em}
+:root{--zt1:#1F6FB2;--zt2:#2E7D5B;--zt3:#C07000;--zt4:#B8362A;--zt5:#8A8A8F}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--zt1:#7FB8E8;--zt2:#79C9A0;--zt3:#E8A857;--zt4:#E8877C;--zt5:#9A9AA0}}
+:root[data-theme="dark"]{--zt1:#7FB8E8;--zt2:#79C9A0;--zt3:#E8A857;--zt4:#E8877C;--zt5:#9A9AA0}
+html[data-tone="on"] .zy-t1{color:var(--zt1)}
+html[data-tone="on"] .zy-t2{color:var(--zt2)}
+html[data-tone="on"] .zy-t3{color:var(--zt3)}
+html[data-tone="on"] .zy-t4{color:var(--zt4)}
+html[data-tone="on"] .zy-t5{color:var(--zt5)}   /* 親要素の letter-spacing で符号が離れて見えるぶんを詰める */
 .rc .rcr-p{white-space:nowrap;opacity:.72;font-size:.86em}
 .rd-story.rmboth,.ar-body.rmboth{line-height:2.75}
 .rc .rct{line-height:1.18;display:block}
@@ -823,6 +831,7 @@ body.more-open .ar-bar{display:none}
 .set-sec{margin-bottom:20px}
 .set-sec>label{display:block;font-size:11.5px;letter-spacing:.08em;color:var(--tx2);font-weight:700;text-transform:uppercase;margin-bottom:9px}
 .set-seg{display:flex;gap:8px}
+.set-note{font-size:11.5px;color:var(--tx3);line-height:1.6;margin:8px 0 0}
 #setFs button{padding-left:2px;padding-right:2px;font-size:12.5px}   /* 字級是 4 段,窄螢幕才擠不下 */
 .set-seg button{flex:1;background:var(--bg2);border:1px solid var(--bd);border-radius:11px;padding:11px 6px;font-size:13.5px;font-weight:600;color:var(--tx);cursor:pointer;font-family:inherit;transition:border-color .12s,background .12s;-webkit-tap-highlight-color:transparent}
 .set-seg button.on{border-color:var(--ac);background:var(--ac-soft);color:var(--ac)}
@@ -1136,6 +1145,14 @@ body.more-open .ar-bar{display:none}
     </div>
   </div>
   <div class="set-sec">
+    <label data-i18n="setTone">声調の色分け</label>
+    <div class="set-seg" id="setTone">
+      <button data-set-tone="on" onclick="twSetTone('on')" data-i18n="setToneOn">つける</button>
+      <button data-set-tone="off" onclick="twSetTone('off')" data-i18n="setToneOff">つけない</button>
+    </div>
+    <p class="set-note" data-i18n="setToneNote">2声=緑、3声=オレンジ、4声=赤、軽声=グレー。色が見分けづらい場合も、符号は大きく太く出ます。</p>
+  </div>
+  <div class="set-sec">
     <label data-i18n="setTheme">テーマ</label>
     <div class="set-seg" id="setTheme">
       <button data-set-theme="light" onclick="twSetTheme('light')" data-i18n="setThemeLight">ライト</button>
@@ -1186,7 +1203,7 @@ body.more-open .ar-bar{display:none}
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=90"></script>
+<script src="i18n.js?v=91"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=63"></script>
 <script src="vocab-l1.js?v=52"></script>
@@ -1273,6 +1290,12 @@ function twGetFs(){ const v = localStorage.getItem("stw-fs"); return STW_FS[v] ?
 function twApplyFs(){ const el = document.querySelector("main.wrap"); if(!el) return; const z = STW_FS[twGetFs()]; el.style.zoom = (z===1) ? "" : z; }
 function twSetFs(v){ localStorage.setItem("stw-fs", v); twApplyFs(); twRenderSettings(); }
 
+// 声調の色分け。CSS 側は html[data-tone="on"] のときだけ着色するので、
+// 属性を差し替えるだけで再描画なしに切り替わる。既定は ON。
+function twGetTone(){ try { return localStorage.getItem("stw-tone") === "off" ? "off" : "on"; } catch(e){ return "on"; } }
+function twApplyTone(){ document.documentElement.dataset.tone = twGetTone(); }
+function twSetTone(v){ try { localStorage.setItem("stw-tone", v); } catch(e){} twApplyTone(); twRenderSettings(); }
+
 function twGetAccent(){ const v = localStorage.getItem("stw-accent"); return (v in STW_ACCENTS) ? v : "default"; }
 function twApplyAccent(){
   const a = STW_ACCENTS[twGetAccent()], s = document.documentElement.style;
@@ -1302,8 +1325,9 @@ function twRenderSettings(){
   document.querySelectorAll("#setSheet [data-set-fs]").forEach(b=>b.classList.toggle("on", b.dataset.setFs===fs));
   document.querySelectorAll("#setSheet [data-set-accent]").forEach(b=>b.classList.toggle("on", b.dataset.setAccent===ac));
   document.querySelectorAll("#setSheet [data-set-lang]").forEach(b=>b.classList.toggle("on", b.dataset.setLang===lg));
+  document.querySelectorAll("#setSheet [data-set-tone]").forEach(b=>b.classList.toggle("on", b.dataset.setTone===twGetTone()));
 }
-twApplyTheme(); twApplyAccent();
+twApplyTheme(); twApplyAccent(); twApplyTone();
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", twApplyFs); else twApplyFs();
 
 /* ===== レベルデータ ===== */
@@ -1560,11 +1584,24 @@ function loadRubyMap(cb){
   fetch("data/reading-ruby.json?v=8").then(r => r.ok ? r.json() : null).then(m => { RUBYMAP = m || {}; RUBYMAP_LOADING = false; if (cb) cb(); }).catch(() => { RUBYMAP_LOADING = false; });
 }
 // その文字（通し番号 ci）のルビ HTML を返す。both は注音（上）＋拼音（下）の 2 行。
-// 注音の声調記号だけを <b class="zyt"> で包んで大きく見せる。入力は生テキスト、出力は HTML。
+// 注音の整形。入力は生テキスト、出力は HTML。
+//  ・声調記号(ˊ ˇ ˋ ˙)は Unicode 上「修飾文字」で本体の半分しか無い → <b class="zyt"> で拡大
+//  ・音節ごとに声調クラス(.zy-t1〜5)を付ける → 設定で色分けを ON にすると効く
+//    色は補助で、拡大＋太字という形の手がかりは常に残す(色覚に依存させない)。
 const TW_TONE_RE = /[\u02CA\u02CB\u02C7\u02D9]/g;
+const TW_TONE_OF = { "\u02CA": 2, "\u02C7": 3, "\u02CB": 4, "\u02D9": 5 };   // 無印 = 1声
 function twZy(str){
-  const e = String(str == null ? "" : str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-  return e.replace(TW_TONE_RE, m => '<b class="zyt">' + m + '</b>');
+  const raw = String(str == null ? "" : str);
+  if (!raw) return "";
+  return raw.split(/(\s+)/).map(tok => {
+    if (!tok) return "";
+    if (/^\s+$/.test(tok)) return tok;
+    let tone = 1;
+    for (const ch of tok) { if (TW_TONE_OF[ch]) { tone = TW_TONE_OF[ch]; break; } }
+    const e = tok.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+                 .replace(TW_TONE_RE, m => '<b class="zyt">' + m + '</b>');
+    return '<span class="zy-t' + tone + '">' + e + '</span>';
+  }).join("");
 }
 if (typeof window !== "undefined") window.twZy = twZy;
 
