@@ -3582,11 +3582,25 @@ function twNormalizeContent(){
 <script>try{fetch("/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname+(function(){try{var u=new URLSearchParams(location.search).get("utm_source");return u?"?utm_source="+u.replace(/[^\w-]/g,"").slice(0,40):""}catch(e){return ""}})(),ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
 <script>
 /* 発音チェック（録音）はブラウザの音声認識だと不安定なため、Web ではスピーキング機能を非表示。App（原生音声認識）でのみ表示。 */
-(function(){ try{ if(!(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp)){
-  document.querySelectorAll('[data-panel="speak"]').forEach(function(el){ el.style.display='none'; });
-  // 直リンク等で speak パネルに来た場合は単語へ退避
-  if(typeof switchPanel==='function'){ var _sp=switchPanel; window.switchPanel=function(p){ return _sp(p==='speak'?'fc':p); }; }
-}}catch(e){} })();
+(function(){ try{
+  var native = !!(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp);
+  var hide = [];
+  if(!native){
+    hide.push('speak');   /* 録音判定はブラウザの音声認識だと不安定 → App だけ */
+  } else {
+    /* 2026-09-21 App だけ一時的に隠す:iOS の WKWebView が動画を強制全画面にするため
+       YouTube シャドーイングの練習カードが見えない。原生側の allowsInlineMediaPlayback を
+       入れたビルドが出たら、この 'ytshadow' を外す。Web は playsinline が効くのでそのまま公開。 */
+    hide.push('ytshadow');
+  }
+  hide.forEach(function(p){
+    document.querySelectorAll('[data-panel="'+p+'"]').forEach(function(el){ el.style.display='none'; });
+  });
+  if(hide.length && typeof switchPanel==='function'){
+    var _sp=switchPanel;
+    window.switchPanel=function(p){ return _sp(hide.indexOf(p)>=0 ? 'fc' : p); };   /* 直リンクで来たら単語へ退避 */
+  }
+}catch(e){} })();
 </script>
 <script src="inapp-hint.js?v=1"></script>
 </body>
