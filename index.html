@@ -277,6 +277,14 @@ button{font-family:inherit}
 .zw-guide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:min(230px,58vw);line-height:1;color:var(--tx);opacity:.13;pointer-events:none;user-select:none}
 .zw-guide.hide{display:none}
 .zw-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+/* 筆順番号。韓国のユーザー要望「2画以上は 1,2 と小さく順番を出してほしい」。
+   位置は教育部『國語注音符號手冊』の分画画像から機械的に求めた各画の重心(zhuyin.js の sp)。
+   ガイド文字を消すと番号も消える(なぞり終わったあとの答え合わせを邪魔しない)。 */
+.zw-order{position:absolute;inset:0;pointer-events:none}
+.zw-order i{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;
+  background:var(--ac);color:#fff;font-style:normal;font-size:14px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;opacity:.9;font-family:var(--sans)}
+.zw-strokes{text-align:center;font-size:12.5px;color:var(--tx3);margin-top:10px}
 .zw-ctrls{display:flex;gap:8px;justify-content:center;margin-top:16px}
 .zw-nav{display:flex;align-items:center;justify-content:space-between;margin-top:18px;max-width:320px;margin-left:auto;margin-right:auto}
 .zw-nav button{background:none;border:none;color:var(--tx2);font-size:14px;cursor:pointer;font-family:inherit;padding:8px}
@@ -1203,7 +1211,7 @@ body.more-open .ar-bar{display:none}
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=91"></script>
+<script src="i18n.js?v=92"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=63"></script>
 <script src="vocab-l1.js?v=52"></script>
@@ -1229,7 +1237,7 @@ body.more-open .ar-bar{display:none}
 <script src="grammar-l5.js?v=52"></script>
 <script src="grammar-l6.js?v=1"></script>
 <script src="phrases-l1.js?v=52"></script>
-<script src="zhuyin.js?v=52"></script>
+<script src="zhuyin.js?v=2"></script>
 <script src="reading-l1.js?v=53"></script>
 <script src="reading-l2.js?v=53"></script>
 <script src="reading-l3.js?v=53"></script>
@@ -2550,8 +2558,11 @@ const ZY = (() => {
       </div>
       <div class="zw-pad">
         <div class="zw-guide ${wGuide?"":"hide"}" id="zwGuide">${z.z}</div>
+        ${wGuide && z.sp && z.sp.length > 1 ? `<div class="zw-order" id="zwOrder">${z.sp.map((p, i) =>
+          `<i data-x="${p[0]}" data-y="${p[1]}">${i + 1}</i>`).join("")}</div>` : ""}
         <canvas class="zw-canvas" id="zwCanvas" width="600" height="600"></canvas>
       </div>
+      ${z.s ? `<div class="zw-strokes">${twT("zwStrokes").replace("{n}", z.s)}</div>` : ""}
       <div class="zw-ctrls">
         <button class="zy-tab" onclick="ZY.wGuide()" id="zwGuideBtn">${wGuide?twT("zwGuideOn"):twT("zwGuideOff")}</button>
         <button class="zy-tab" onclick="ZY.wClear()">${twT("zwClear")}</button>
@@ -2563,6 +2574,36 @@ const ZY = (() => {
       </div>
     </div>`;
     initCanvas();
+    placeOrder();
+  }
+
+  // 筆順番号の位置あわせ。sp は教育部の分画画像(128px 枠)基準なので、
+  // 実際に描かれるフォント字形のインク範囲を毎回測って、その中に写す。
+  // こうしないとフォントや端末が変わるたびにズレる(固定の倍率では合わなかった)。
+  function placeOrder(){
+    const pad = document.querySelector(".zw-pad"), guide = document.getElementById("zwGuide"), box = document.getElementById("zwOrder");
+    if (!pad || !guide || !box) return;
+    const cs = getComputedStyle(guide);
+    const size = parseFloat(cs.fontSize) || 200;
+    const S = Math.ceil(size * 1.7);
+    const c = document.createElement("canvas"); c.width = c.height = S;
+    const g = c.getContext("2d");
+    g.font = size + "px " + cs.fontFamily;
+    g.textAlign = "center"; g.textBaseline = "middle"; g.fillStyle = "#000";
+    g.fillText((guide.textContent || "").trim(), S / 2, S / 2);
+    const d = g.getImageData(0, 0, S, S).data;
+    let x0 = S, y0 = S, x1 = -1, y1 = -1;
+    for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+      if (d[(y * S + x) * 4 + 3] > 40) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    }
+    if (x1 < 0) return;
+    const pw = pad.clientWidth || 320, ph = pad.clientHeight || pw;   // zoom の影響を受けない値
+    box.querySelectorAll("i").forEach(el => {
+      const ix = x0 + (+el.dataset.x) * (x1 - x0);
+      const iy = y0 + (+el.dataset.y) * (y1 - y0);
+      el.style.left = (50 + (ix - S / 2) / pw * 100).toFixed(2) + "%";
+      el.style.top  = (50 + (iy - S / 2) / ph * 100).toFixed(2) + "%";
+    });
   }
   let ctx = null, drawing = false;
   // 2026-09-20 バグ修正（韓国のユーザー報告）:文字サイズを上げていると iPhone で
