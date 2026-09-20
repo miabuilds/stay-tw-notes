@@ -126,9 +126,9 @@ button{font-family:inherit}
 /* == Flashcard == */
 .fc-hint{text-align:center;font-size:13px;color:var(--tx3);margin-bottom:14px}
 .fc{max-width:500px;margin:0 auto;perspective:1200px;cursor:pointer}
-.fc-inner{position:relative;width:100%;min-height:360px;transform-style:preserve-3d;transition:transform .5s var(--ease)}
+.fc-inner{position:relative;display:grid;width:100%;min-height:360px;transform-style:preserve-3d;transition:transform .5s var(--ease)}
 .fc.flip .fc-inner{transform:rotateY(180deg)}
-.fc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--bg2);border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center}
+.fc-face{grid-area:1/1;position:relative;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--bg2);border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center}
 .fc-back{transform:rotateY(180deg)}
 .fc-word{font-family:var(--serif);font-size:clamp(44px,9vw,64px);font-weight:700;line-height:1.2}
 .fc-zy{font-family:var(--zhuyin);font-size:20px;font-weight:600;color:var(--ac);margin-top:10px;letter-spacing:.1em}
@@ -509,7 +509,7 @@ button{font-family:inherit}
    しか無い。韓国のユーザーから「声調が見分けづらい」と報告があったため、この 4 文字だけを
    twZy() で包んで拡大・太字にする。@font-face の unicode-range + size-adjust も試したが、
    local() フォントには size-adjust が効かず(実測で幅が変わらない)不採用。 */
-.zyt{font-size:1.45em;font-weight:700;letter-spacing:0;margin-left:-.06em}
+.zyt{font-size:1.45em;font-weight:700;letter-spacing:0;margin-left:-.06em;line-height:1}
 :root{--zt1:#1F6FB2;--zt2:#2E7D5B;--zt3:#C07000;--zt4:#B8362A;--zt5:#8A8A8F}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--zt1:#7FB8E8;--zt2:#79C9A0;--zt3:#E8A857;--zt4:#E8877C;--zt5:#9A9AA0}}
 :root[data-theme="dark"]{--zt1:#7FB8E8;--zt2:#79C9A0;--zt3:#E8A857;--zt4:#E8877C;--zt5:#9A9AA0}
