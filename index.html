@@ -817,6 +817,7 @@ body.more-open .ar-bar{display:none}
 .set-sec{margin-bottom:20px}
 .set-sec>label{display:block;font-size:11.5px;letter-spacing:.08em;color:var(--tx2);font-weight:700;text-transform:uppercase;margin-bottom:9px}
 .set-seg{display:flex;gap:8px}
+#setFs button{padding-left:2px;padding-right:2px;font-size:12.5px}   /* 字級是 4 段,窄螢幕才擠不下 */
 .set-seg button{flex:1;background:var(--bg2);border:1px solid var(--bd);border-radius:11px;padding:11px 6px;font-size:13.5px;font-weight:600;color:var(--tx);cursor:pointer;font-family:inherit;transition:border-color .12s,background .12s;-webkit-tap-highlight-color:transparent}
 .set-seg button.on{border-color:var(--ac);background:var(--ac-soft);color:var(--ac)}
 .set-seg button .fss{font-weight:700}
@@ -1125,6 +1126,7 @@ body.more-open .ar-bar{display:none}
       <button data-set-fs="normal" onclick="twSetFs('normal')"><span class="fss" style="font-size:14px">Aa</span><br><span data-i18n="setFsNormal">標準</span></button>
       <button data-set-fs="large" onclick="twSetFs('large')"><span class="fss" style="font-size:17px">Aa</span><br><span data-i18n="setFsLarge">大</span></button>
       <button data-set-fs="xlarge" onclick="twSetFs('xlarge')"><span class="fss" style="font-size:20px">Aa</span><br><span data-i18n="setFsXlarge">特大</span></button>
+      <button data-set-fs="xxlarge" onclick="twSetFs('xxlarge')"><span class="fss" style="font-size:23px">Aa</span><br><span data-i18n="setFsXxlarge">最大</span></button>
     </div>
   </div>
   <div class="set-sec">
@@ -1178,7 +1180,7 @@ body.more-open .ar-bar{display:none}
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=89"></script>
+<script src="i18n.js?v=90"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=63"></script>
 <script src="vocab-l1.js?v=52"></script>
@@ -1250,7 +1252,7 @@ const STW_ACCENTS = {
   teal:   { ac:"#1F9E8E", soft:"rgba(31,158,142,.12)" },
   blue:   { ac:"#3B74C4", soft:"rgba(59,116,196,.12)" }
 };
-const STW_FS = { normal:1, large:1.12, xlarge:1.24 };
+const STW_FS = { normal:1, large:1.12, xlarge:1.24, xxlarge:1.4 };   // 2026-09 老眼のユーザー要望で 4段目を追加
 function twGetTheme(){ const v = localStorage.getItem("stw-theme"); return (v==="light"||v==="dark"||v==="auto") ? v : "auto"; }
 function twApplyTheme(){
   const m = twGetTheme();
@@ -2512,26 +2514,42 @@ const ZY = (() => {
     initCanvas();
   }
   let ctx = null, drawing = false;
+  // 2026-09-20 バグ修正（韓国のユーザー報告）:文字サイズを上げていると iPhone で
+  // 「指の位置とズレた所に線が出る」。原因は文字サイズ拡大が main.wrap への CSS `zoom` で、
+  // zoom と getBoundingClientRect() の関係が WebKit と Chrome で食い違うため。
+  // → rect を使う計算をやめ、要素ローカルで zoom の影響を受けない offsetX/offsetY と
+  //   clientWidth/Height だけで描く。ついでに Pointer Events に一本化（mouse/touch の二重登録も解消）。
   function initCanvas(){
     const c = document.getElementById("zwCanvas"); if (!c) return;
     ctx = c.getContext("2d");
     const cs = getComputedStyle(document.documentElement);
-    ctx.lineWidth = 22; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    const w = c.clientWidth || 320, h = c.clientHeight || 320;   // レイアウト px(zoom 非依存)
+    c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);                      // 以後は CSS px で描ける
+    ctx.lineWidth = Math.max(10, Math.round(w * 0.07)); ctx.lineCap = "round"; ctx.lineJoin = "round";
     ctx.strokeStyle = (cs.getPropertyValue("--ac") || "#B8362A").trim();
-    const pos = e => {
-      const r = c.getBoundingClientRect();
-      const t = e.touches ? e.touches[0] : e;
-      return { x: (t.clientX - r.left) / r.width * c.width, y: (t.clientY - r.top) / r.height * c.height };
+    // offsetX/offsetY と getBoundingClientRect は「同じ空間」で返るが、それが zoom 込みかどうかは
+    // ブラウザ/バージョンで違う(Chrome は zoom 込み、clientWidth だけ zoom 無し)。
+    // そこで実測比 rect.width / clientWidth を毎回取って割り戻す。zoom 無しなら 1 になるだけ。
+    const zf = () => { const r = c.getBoundingClientRect(); return (c.clientWidth > 0 && r.width > 0) ? r.width / c.clientWidth : 1; };
+    const pos = e => { const k = zf(); return { x: e.offsetX / k, y: e.offsetY / k }; };
+    const start = e => {
+      if (e.button !== undefined && e.button !== 0) return;
+      e.preventDefault(); drawing = true;
+      try { c.setPointerCapture(e.pointerId); } catch (err) {}   // 枠外に出ても描き続ける
+      const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x + 0.01, p.y); ctx.stroke();                 // 点タップでも痕が残るように
     };
-    const start = e => { e.preventDefault(); drawing = true; const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
     const move = e => { if (!drawing) return; e.preventDefault(); const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); };
     const end = () => { drawing = false; };
-    c.addEventListener("mousedown", start); c.addEventListener("mousemove", move);
-    window.addEventListener("mouseup", end);
-    c.addEventListener("touchstart", start, {passive:false}); c.addEventListener("touchmove", move, {passive:false});
-    c.addEventListener("touchend", end);
+    c.addEventListener("pointerdown", start);
+    c.addEventListener("pointermove", move);
+    c.addEventListener("pointerup", end);
+    c.addEventListener("pointercancel", end);
+    c.addEventListener("pointerleave", end);
   }
-  function wClear(){ const c = document.getElementById("zwCanvas"); if (c && ctx) ctx.clearRect(0,0,c.width,c.height); }
+  function wClear(){ const c = document.getElementById("zwCanvas"); if (!c || !ctx) return; ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,c.width,c.height); ctx.restore(); }
   function wGuideToggle(){ wGuide = !wGuide; renderWrite(); }
   function wMove(d){ wi = (wi + d + ZHUYIN.length) % ZHUYIN.length; renderWrite(); }
   function renderTable(){
