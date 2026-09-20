@@ -561,6 +561,70 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       return json({ ok: true, v, n: lines.length }, 200, h);
     }
 
+    // ---------- 紹介プログラム（現金ではなく無料日数を配る）----------
+    // 現金の分潤にすると海外送金・源泉徴収・契約書が要る。最小構成は「双方に無料日数」。
+    // ＊ Apple 3.1.1(v): アプリ内で「コードを入れると無料日数」と言うのは NG(StayJP で一度リジェクト)。
+    //   なので UI は Web だけに出し、App では丸ごと隠す。ここは API なので両方から呼べてよい。
+    const REF_DAYS = 14;              // 紹介された人／した人、それぞれに付く日数
+    const REF_CAP_DAYS = 180;         // 紹介した人の累計上限(ざる防止)
+
+    async function grantDays(uid, days) {
+      const now = nowMs(), add = days * 86400000;
+      const row = await env.DB.prepare("SELECT expires_at FROM entitlements WHERE uid=?1").bind(uid).first();
+      const base = row && row.expires_at && row.expires_at > now ? row.expires_at : now;
+      const until = base + add;
+      await env.DB.prepare(
+        `INSERT INTO entitlements (uid, plan, status, expires_at) VALUES (?1,'referral','active',?2)
+         ON CONFLICT(uid) DO UPDATE SET expires_at=?2, status='active'`
+      ).bind(uid, until).run();
+      return until;
+    }
+    async function refCodeOf(uid) {
+      const hit = await env.DB.prepare("SELECT code FROM referrals WHERE uid=?1").bind(uid).first();
+      if (hit) return hit.code;
+      // uid から決め打ちで作る。紛らわしい文字(0/O/1/I)は外す。
+      const buf = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode("stw:" + uid)));
+      const AB = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+      for (let attempt = 0; attempt < 8; attempt++) {
+        let code = "";
+        for (let i = 0; i < 6; i++) code += AB[buf[i + attempt] % AB.length];
+        try { await env.DB.prepare("INSERT INTO referrals (code, uid, created_at) VALUES (?1,?2,?3)").bind(code, uid, nowMs()).run(); return code; }
+        catch (e) { /* 衝突したら次のバイトで作り直す */ }
+      }
+      return null;
+    }
+
+    if (url.pathname === "/api/me") {
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      if (!uid) return json({ error: "unauthorized" }, 401, h);
+      const code = await refCodeOf(uid);
+      const ent = await env.DB.prepare("SELECT plan, status, expires_at FROM entitlements WHERE uid=?1").bind(uid).first();
+      const cnt = await env.DB.prepare("SELECT COUNT(*) n FROM referral_claims WHERE referrer_uid=?1").bind(uid).first();
+      const until = ent && ent.status === "active" ? (ent.expires_at || 0) : 0;
+      return json({ uid, refCode: code, referrals: (cnt && cnt.n) || 0,
+                    premiumUntil: until, entitled: until > nowMs(), refDays: REF_DAYS }, 200, h);
+    }
+
+    if (url.pathname === "/api/referral/claim" && req.method === "POST") {
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      if (!uid) return json({ error: "unauthorized" }, 401, h);
+      let b; try { b = await req.json(); } catch { b = {}; }
+      const code = String(b.code || "").trim().toUpperCase().slice(0, 12);
+      if (!/^[A-Z0-9]{4,12}$/.test(code)) return json({ error: "bad_code" }, 400, h);
+      const owner = await env.DB.prepare("SELECT uid FROM referrals WHERE code=?1").bind(code).first();
+      if (!owner) return json({ error: "unknown_code" }, 404, h);
+      if (owner.uid === uid) return json({ error: "self" }, 400, h);
+      const used = await env.DB.prepare("SELECT referred_uid FROM referral_claims WHERE referred_uid=?1").bind(uid).first();
+      if (used) return json({ error: "already_claimed" }, 409, h);
+      // 紹介した側は上限まで。超えても紹介された側の特典は出す(誘い文句が嘘にならないように)
+      const got = await env.DB.prepare("SELECT COUNT(*) n FROM referral_claims WHERE referrer_uid=?1").bind(owner.uid).first();
+      await env.DB.prepare("INSERT INTO referral_claims (referred_uid, code, referrer_uid, at) VALUES (?1,?2,?3,?4)")
+        .bind(uid, code, owner.uid, nowMs()).run();
+      const mine = await grantDays(uid, REF_DAYS);
+      if (((got && got.n) || 0) * REF_DAYS < REF_CAP_DAYS) await grantDays(owner.uid, REF_DAYS);
+      return json({ ok: true, days: REF_DAYS, premiumUntil: mine }, 200, h);
+    }
+
     // ---------- 後台（Google 管理 session または旧 ADMIN_TOKEN）----------
     if (url.pathname.startsWith("/api/admin/")) {
       const auth = req.headers.get("Authorization") || "";

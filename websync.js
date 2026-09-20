@@ -181,8 +181,45 @@ const STW_WEB = (() => {
   }
 
   // ── 同期 ──
+  // サーバー側の権利(紹介でもらった無料日数など)を取り、Paywall に反映する。
+  // 課金そのものは App の RevenueCat が正。ここは「Web でも紹介特典が効く」ための経路。
+  let me = null;
+  async function fetchMe(){
+    if (!session) { me = null; return null; }
+    try {
+      const r = await fetch(STW_API + "/api/me", { headers: { Authorization: "Bearer " + session } });
+      if (!r.ok) return null;
+      me = await r.json();
+      if (me && me.entitled && window.Paywall && Paywall.setEntitled) Paywall.setEntitled(true);
+      return me;
+    } catch (e) { return null; }
+  }
+  // ?ref=CODE で来た人は、ログインするまで覚えておいて、ログイン後に引き換える
+  function stashRef(){
+    try {
+      const c = new URLSearchParams(location.search).get("ref");
+      if (c && /^[A-Za-z0-9]{4,12}$/.test(c)) localStorage.setItem("stw_ref", c.toUpperCase());
+    } catch (e) {}
+  }
+  async function claimRef(){
+    let code = null;
+    try { code = localStorage.getItem("stw_ref"); } catch (e) {}
+    if (!code || !session) return null;
+    try {
+      const r = await fetch(STW_API + "/api/referral/claim", {
+        method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + session },
+        body: JSON.stringify({ code }),
+      });
+      const j = await r.json().catch(() => ({}));
+      try { localStorage.removeItem("stw_ref"); } catch (e) {}   // 成否にかかわらず一度きり
+      if (r.ok && j.ok) { await fetchMe(); return j; }
+    } catch (e) {}
+    return null;
+  }
+
   async function pullMerge(){
     if (!session) return;
+    fetchMe().then(() => claimRef());
     try {
       const r = await fetch(STW_API + "/api/progress", { headers: { Authorization: "Bearer " + session } });
       if (!r.ok) return;   // 同期失敗はスキップ（ログイン状態は保持。手動ログアウトのみ）
@@ -264,7 +301,8 @@ const STW_WEB = (() => {
   if (session) pullMerge();
   initGoogle();
 
-  return { login, logout, closeModal, initGoogle, copyUrl, isInApp, loginApple, deleteAccount, isLoggedIn: () => !!session, getUser: () => user, sync: pullMerge };
+  stashRef();
+  return { login, logout, closeModal, initGoogle, copyUrl, isInApp, loginApple, deleteAccount, isLoggedIn: () => !!session, getUser: () => user, sync: pullMerge, me: () => me, fetchMe, claimRef };
 })();
 // ★重要：STW_WEB は const 宣言なので window に自動では乗らない。renderProfile 等が
 //   `window.STW_WEB && STW_WEB.isLoggedIn()` でログイン判定しており、window.STW_WEB が

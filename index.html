@@ -287,6 +287,13 @@ button{font-family:inherit}
   background:var(--ac);color:#fff;font-style:normal;font-size:14px;font-weight:700;
   display:flex;align-items:center;justify-content:center;opacity:.9;font-family:var(--sans)}
 .zw-strokes{text-align:center;font-size:12.5px;color:var(--tx3);margin-top:10px}
+.pf-ref{border:1px solid var(--line);border-radius:14px;padding:15px 16px;margin-top:14px;background:var(--bg2)}
+.pf-ref-h{font-size:13px;font-weight:700;margin-bottom:5px}
+.pf-ref-d{font-size:12.5px;color:var(--tx2);line-height:1.65;margin:0 0 11px}
+.pf-ref-code{display:flex;gap:8px;align-items:center}
+.pf-ref-code span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px;color:var(--tx);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+.pf-ref-code .btn{flex:0 0 auto;padding:9px 14px;font-size:13px}
+.pf-ref-stat{font-size:11.5px;color:var(--tx3);margin-top:9px}
 .zw-ctrls{display:flex;gap:8px;justify-content:center;margin-top:16px}
 .zw-nav{display:flex;align-items:center;justify-content:space-between;margin-top:18px;max-width:320px;margin-left:auto;margin-right:auto}
 .zw-nav button{background:none;border:none;color:var(--tx2);font-size:14px;cursor:pointer;font-family:inherit;padding:8px}
@@ -1213,7 +1220,7 @@ body.more-open .ar-bar{display:none}
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=93"></script>
+<script src="i18n.js?v=94"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=63"></script>
 <script src="vocab-l1.js?v=52"></script>
@@ -1270,7 +1277,7 @@ body.more-open .ar-bar{display:none}
 <script src="paywall.js?v=104"></script>
 <script src="ytshadow.js?v=3"></script>
 <script src="listen.js?v=3"></script>
-<script src="websync.js?v=61"></script>
+<script src="websync.js?v=62"></script>
 <script src="srs.js?v=57"></script>
 <script src="mock-exam.js?v=58"></script>
 <script src="polyphone.js?v=3"></script>
@@ -2373,6 +2380,42 @@ function twMonthShort(){ const l = (typeof twGetLang==="function"?twGetLang():"j
 function recordStudy(){ recordStudyDay(); bumpDaily(); }
 
 /* ===== マイページ ===== */
+// 紹介プログラム。現金ではなく双方に無料日数 → 海外送金も源泉徴収も要らない。
+// ＊App 内では出さない:Apple 3.1.1(v) は「コードで無料日数」をアプリ内で案内するのを認めない
+//   (StayJP が同じ表記で一度リジェクトされている)。Web だけで完結させる。
+function renderRefBlock(){
+  const box = document.getElementById("pfRef");
+  if (!box) return;
+  if (window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp) { box.innerHTML = ""; return; }
+  if (!(window.STW_WEB && STW_WEB.isLoggedIn && STW_WEB.isLoggedIn())) { box.innerHTML = ""; return; }
+  const draw = (me) => {
+    if (!me || !me.refCode) { box.innerHTML = ""; return; }
+    const link = location.origin + "/?ref=" + me.refCode;
+    const until = me.premiumUntil ? new Date(me.premiumUntil) : null;
+    const left = until && until > new Date() ? Math.ceil((until - Date.now()) / 86400000) : 0;
+    box.innerHTML = `<div class="pf-ref">
+      <div class="pf-ref-h">${esc(twT("refTitle"))}</div>
+      <p class="pf-ref-d">${esc(twT("refDesc").replace("{n}", me.refDays || 14))}</p>
+      <div class="pf-ref-code"><span id="pfRefLink">${esc(link)}</span>
+        <button class="btn" onclick="twCopyRef()">${esc(twT("refCopy"))}</button></div>
+      <div class="pf-ref-stat">${esc(twT("refCount").replace("{n}", me.referrals || 0))}${left ? " ・ " + esc(twT("refLeft").replace("{n}", left)) : ""}</div>
+    </div>`;
+  };
+  const cached = STW_WEB.me && STW_WEB.me();
+  if (cached) draw(cached);
+  if (STW_WEB.fetchMe) STW_WEB.fetchMe().then(draw).catch(() => {});
+}
+function twCopyRef(){
+  const el = document.getElementById("pfRefLink");
+  if (!el) return;
+  const t = el.textContent || "";
+  const done = () => { try { showToast(twT("refCopied")); } catch (e) {} };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, done);
+  else { const ta = document.createElement("textarea"); ta.value = t; document.body.appendChild(ta); ta.select();
+         try { document.execCommand("copy"); } catch (e) {} ta.remove(); done(); }
+}
+if (typeof window !== "undefined") window.twCopyRef = twCopyRef;
+
 function renderProfile(){
   const parse = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } };
   const srs = parse("stw_srs", {}), exam = parse("stw_exam_history", []);
@@ -2391,6 +2434,7 @@ function renderProfile(){
       <div style="flex:1;min-width:0;overflow:hidden"><b style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.name || u.email || ""}</b><span style="display:block;font-size:12.5px;color:var(--tx3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.email || ""}</span></div>
       <button class="pf-logout" onclick="STW_WEB.logout();renderProfile()">${twT("acLogout")}</button></div>
       <p class="pf-sync">✓ ${twT("pfSynced")}</p>
+      <div id="pfRef"></div>
       ${(u.email === "abc83327@gmail.com") ? `<a href="/admin.html" target="_blank" style="display:block;text-align:center;margin:8px auto 0;font-size:13px;color:var(--tx3)">管理後台 →</a>` : ""}
       <div style="text-align:center;margin-top:2px"><button class="pf-del" onclick="twDeleteAccount()">${twT("acDelete")}</button></div>`;
   } else {
@@ -2424,6 +2468,7 @@ function renderProfile(){
       `<div class="pf-lv"><span class="pf-lvn">${lvName[lv]}</span><div class="pf-bar"><i style="width:${per[lv].t ? Math.min(100, per[lv].m / per[lv].t * 100) : 0}%"></i></div><span class="pf-lvc">${per[lv].m} / ${per[lv].t}</span></div>`).join("")}</div>
     ${exam.length ? `<h3 class="pf-h">${twT("exHistory")}</h3><div class="ex-hist">${exam.slice(-8).reverse().map(h =>
       `<div class="ex-hist-item"><span>${new Date(h.ts).toLocaleDateString()}</span><b>${h.score} / ${h.total}</b><span>${Math.round(h.score / h.total * 100)}%</span></div>`).join("")}</div>` : ""}`;
+  try { renderRefBlock(); } catch (e) {}
 }
 // ログイン状態が変わったら呼ぶ（websync が renderAuth 内から呼ぶ）。プロフィール面の
 // 「ログイン/ログアウト」表示を最新化する。これが無いと sign in 後もカードが「Sign in」のままだった。
