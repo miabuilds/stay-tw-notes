@@ -12,7 +12,8 @@
 }catch(e){}})();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<style>html,body{touch-action:manipulation}.ph-life{display:flex;align-items:center;gap:10px;margin:6px 0 14px;padding:12px 14px;border:1px solid var(--ac);border-radius:14px;background:var(--ac-soft);color:var(--tx);text-decoration:none;font-weight:600;font-size:14px}
+<style>
+html,body{touch-action:manipulation}.ph-life{display:flex;align-items:center;gap:10px;margin:6px 0 14px;padding:12px 14px;border:1px solid var(--ac);border-radius:14px;background:var(--ac-soft);color:var(--tx);text-decoration:none;font-weight:600;font-size:14px}
 .ph-life-ic{font-size:20px}
 .ph-life-arr{margin-left:auto;color:var(--ac)}
 </style>
@@ -504,6 +505,11 @@ button{font-family:inherit}
 .rc .rcr{font-size:.6em;line-height:1.2;color:var(--tx2);font-weight:600;letter-spacing:.02em;white-space:nowrap;margin-bottom:.08em}
 .rc .rcr.rcr2{display:flex;flex-direction:column;align-items:center;line-height:1.12;margin-bottom:.08em}
 .rc .rcr-z{white-space:nowrap;font-family:var(--zhuyin);letter-spacing:.04em}
+/* 注音の声調(ˊ ˇ ˋ ˙)は Unicode 上「修飾文字」で、どのフォントでも本体の半分ほどの大きさ
+   しか無い。韓国のユーザーから「声調が見分けづらい」と報告があったため、この 4 文字だけを
+   twZy() で包んで拡大・太字にする。@font-face の unicode-range + size-adjust も試したが、
+   local() フォントには size-adjust が効かず(実測で幅が変わらない)不採用。 */
+.zyt{font-size:1.45em;font-weight:700;letter-spacing:0;margin-left:-.06em}   /* 親要素の letter-spacing で符号が離れて見えるぶんを詰める */
 .rc .rcr-p{white-space:nowrap;opacity:.72;font-size:.86em}
 .rd-story.rmboth,.ar-body.rmboth{line-height:2.75}
 .rc .rct{line-height:1.18;display:block}
@@ -1538,9 +1544,9 @@ function loadExZy(cb){
 function exRuby(z, py){
   const zy = (EX_ZY && EX_ZY[z]) ? EX_ZY[z] : "";
   const p = (EX_PY && EX_PY[z]) ? EX_PY[z] : py;   // 台湾読音に修正済みの拼音を優先
-  if (RUBY === "zy") return `<span class="exr-zy">${zy || p}</span>`;
+  if (RUBY === "zy") return `<span class="exr-zy">${twZy(zy || p)}</span>`;
   if (RUBY === "py") return `<span class="exr-py">${p}</span>`;
-  return (zy ? `<span class="exr-zy">${zy}</span>` : "") + `<span class="exr-py">${p}</span>`;   // both
+  return (zy ? `<span class="exr-zy">${twZy(zy)}</span>` : "") + `<span class="exr-py">${p}</span>`;   // both
 }
 // ── 逐字ルビ（読解・記事の本文で「1 文字ずつ真上に読み」を出す） ──
 // data/reading-ruby.json = { "<原文>": {p:[逐字拼音], z:[逐字注音]} }（pypinyin で文脈込み・破音字も正しい）
@@ -1554,13 +1560,21 @@ function loadRubyMap(cb){
   fetch("data/reading-ruby.json?v=8").then(r => r.ok ? r.json() : null).then(m => { RUBYMAP = m || {}; RUBYMAP_LOADING = false; if (cb) cb(); }).catch(() => { RUBYMAP_LOADING = false; });
 }
 // その文字（通し番号 ci）のルビ HTML を返す。both は注音（上）＋拼音（下）の 2 行。
+// 注音の声調記号だけを <b class="zyt"> で包んで大きく見せる。入力は生テキスト、出力は HTML。
+const TW_TONE_RE = /[\u02CA\u02CB\u02C7\u02D9]/g;
+function twZy(str){
+  const e = String(str == null ? "" : str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  return e.replace(TW_TONE_RE, m => '<b class="zyt">' + m + '</b>');
+}
+if (typeof window !== "undefined") window.twZy = twZy;
+
 function twRubyHtml(ruby, ci){
   if (!ruby || TW_RUBY_MODE === "off") return "";
   const p = (ruby.p && ruby.p[ci]) || "", z = (ruby.z && ruby.z[ci]) || "";
   if (TW_RUBY_MODE === "py") return p;
-  if (TW_RUBY_MODE === "zy") return z ? `<span class="rcr-z">${z}</span>` : "";
+  if (TW_RUBY_MODE === "zy") return z ? `<span class="rcr-z">${twZy(z)}</span>` : "";
   if (!p && !z) return "";   // both
-  return `<span class="rcr-z">${z}</span><span class="rcr-p">${p}</span>`;
+  return `<span class="rcr-z">${twZy(z)}</span><span class="rcr-p">${p}</span>`;
 }
 function refreshRubyLabels(){ document.querySelectorAll(".js-ruby").forEach(b => { b.textContent = RUBY === "both" ? "ㄅ拼" : RUBY === "zy" ? "ㄅ" : "拼"; b.classList.toggle("on", RUBY !== "py"); }); }
 function cycleRuby(){
@@ -1589,7 +1603,7 @@ function renderCard(){
   const w = deck[fcIdx], mk = twMKey();
   document.getElementById("fc").classList.remove("flip");
   document.getElementById("fcWord").textContent = w.w;
-  document.getElementById("fcZy").textContent = w.zy;
+  document.getElementById("fcZy").innerHTML = twZy(w.zy);   // 声調を大きく見せるため HTML で入れる
   document.getElementById("fcPy").textContent = w.py;
   document.getElementById("fcZy").hidden = (RUBY === "py");   // ㄅ/拼/ㄅ拼 の切替をカード表面にも反映
   document.getElementById("fcPy").hidden = (RUBY === "zy");
@@ -1711,7 +1725,7 @@ function renderList(){
     <div class="vcard" data-i="${i}">
       <div class="vcard-top">
         <span class="vcard-w">${v.w}</span>
-        <span><span class="vcard-zy">${v.zy}</span><br><span class="vcard-py">${v.py}</span></span>
+        <span><span class="vcard-zy">${twZy(v.zy)}</span><br><span class="vcard-py">${v.py}</span></span>
         <button class="vcard-fav" data-fav="${i}" aria-label="収藏" style="background:none;border:none;cursor:pointer;font-size:19px;padding:2px 6px;color:${isFav(currentLevel,v.w)?"var(--ac)":"var(--tx3)"}">${isFav(currentLevel,v.w)?"★":"♡"}</button>
         <span class="vcard-pos">${v.c}</span>
       </div>
@@ -1837,7 +1851,7 @@ function qzNext(){
   document.getElementById("qzBox").innerHTML = `
     <div style="font-size:13px;color:var(--tx3)">${qzIdx+1} / ${qzOrder.length}　${twT("quizScore")}: ${qzScore}</div>
     <div class="qz-word" onclick="speakZh('${w.w}')">${w.w}</div>
-    <div class="qz-py">${w.zy}　${w.py}　<button class="tts-btn" style="width:30px;height:30px;font-size:13px" onclick="speakZh('${w.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
+    <div class="qz-py">${twZy(w.zy)}　${w.py}　<button class="tts-btn" style="width:30px;height:30px;font-size:13px" onclick="speakZh('${w.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
     <div class="qz-opts">${opts.map(o=>
       `<button class="qz-opt" data-ok="${o.w===w.w}" onclick="qzAnswer(this)">${o.m[mk] || o.m.e || o.m.j}</button>`).join("")}
     </div>`;
@@ -1865,7 +1879,7 @@ function qzTypeAnswer(){
   document.getElementById("qzTypeResult").innerHTML =
     `<div class="qz-fb ${ok?'ok':'ng'}">
       <div style="font-size:15px;font-weight:700">${ok ? "⭕ "+twT("qzRight") : "❌ "+twT("qzWrong")}</div>
-      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${w.zy}｜${w.py}）</div>
+      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${twZy(w.zy)}｜${w.py}）</div>
       <div style="font-size:14px;color:var(--tx2);margin-top:2px">${w.m[mk] || w.m.e || w.m.j}</div>${ex}
       <div style="margin-top:16px"><button class="btn primary" onclick="qzAdvance()">${twT("quizNext")} ›</button></div>
     </div>`;
@@ -1890,7 +1904,7 @@ function qzShowFeedback(w, ok){
   document.getElementById("qzBox").insertAdjacentHTML("beforeend",
     `<div class="qz-fb ${ok?'ok':'ng'}">
       <div style="font-weight:700;font-size:15px">${ok?"⭕ "+twT("qzRight"):"❌ "+twT("qzWrong")}</div>
-      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${w.zy}｜${w.py}）</div>
+      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${twZy(w.zy)}｜${w.py}）</div>
       <div style="font-size:14px;color:var(--tx2);margin-top:2px">${w.m[mk] || w.m.e || w.m.j}</div>${ex}
       <div style="margin-top:16px"><button class="btn primary" onclick="qzAdvance()">${twT("quizNext")} ›</button></div>
     </div>`);
@@ -2558,7 +2572,7 @@ const ZY = (() => {
     for (const g of ["initial","medial","final"]){
       const items = ZHUYIN.filter(z => z.g === g);
       html += `<div class="zy-group"><h4>${twT(GKEY[g])}</h4><div class="zy-grid">` +
-        items.map(z => `<button class="zy-cell" onclick="ZY.play(this,'${z.z}','${z.rep}')"><div class="zy-z">${z.z}</div><div class="zy-py">${z.py}</div></button>`).join("") +
+        items.map(z => `<button class="zy-cell" onclick="ZY.play(this,'${z.z}','${z.rep}')"><div class="zy-z">${twZy(z.z)}</div><div class="zy-py">${z.py}</div></button>`).join("") +
         `</div></div>`;
     }
     html += `<p class="zy-credit">${twT("zyCredit")} <a href="https://creativecommons.org/licenses/by/4.0/deed.zh_TW" target="_blank" rel="noopener">CC BY 4.0</a></p>`;
@@ -2587,7 +2601,7 @@ const ZY = (() => {
     const z = cur();
     body().innerHTML = `<div class="zy-test">
       <p class="zy-hint">${twT("zyTypeHint")}</p>
-      <div class="zy-prompt">${z.z}</div>
+      <div class="zy-prompt">${twZy(z.z)}</div>
       <button class="zy-play-btn" onclick="ZY.play(null,'${z.z}','${z.rep}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg> ${twT("btnPlay")}</button>
       <div><input class="zy-input" id="zyIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${twT("zyTypePh")}"></div>
       <div class="zy-fb" id="zyFb"></div>
@@ -2617,7 +2631,7 @@ const ZY = (() => {
     body().innerHTML = `<div class="zy-test">
       <p class="zy-hint">${twT("zyListenHint")}</p>
       <button class="zy-play-btn" onclick="ZY.play(null,'${z.z}','${z.rep}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg> ${twT("btnPlay")}</button>
-      <div class="zy-opts">${opts.map(o => `<button class="zy-opt" data-z="${o.z}" onclick="ZY.pick(this,'${o.z}','${z.z}')">${o.z}</button>`).join("")}</div>
+      <div class="zy-opts">${opts.map(o => `<button class="zy-opt" data-z="${o.z}" onclick="ZY.pick(this,'${o.z}','${z.z}')">${twZy(o.z)}</button>`).join("")}</div>
       <div class="zy-fb" id="zyFb"></div>
       ${progress()}</div>`;
     play(null, z.z, z.rep);
@@ -2779,7 +2793,7 @@ const PA = (() => {
       <div class="hb-wod-m">
         <div class="hb-wod-l">${esc(twT("hbWod"))}</div>
         <div class="hb-wod-w">${esc(wod.w)}</div>
-        <div class="hb-wod-r">${esc(wod.zy || "")}${wod.py ? " · " + esc(wod.py) : ""}</div>
+        <div class="hb-wod-r">${twZy(wod.zy || "")}${wod.py ? " · " + esc(wod.py) : ""}</div>
         <div class="hb-wod-s">${esc((wod.m && (wod.m[mk] || wod.m.e || wod.m.j)) || "")}</div>
       </div>
       <button class="hb-wod-b" onclick="speakZh('${esc(wod.w).replace(/'/g, "\\'")}')" aria-label="play">🔊</button>
@@ -2979,7 +2993,7 @@ function twShowWordCard(v, opts){
   const srsBtn = `<button class="ws-srs${inSrs?" added":""}" id="wsSrsBtn"${inSrs?" disabled":` onclick="twAddWordSrs('${v.w}','${lv}')"`}>${twT(inSrs?"dictAdded":"dictAddSrs")}</button>`;
   document.getElementById("wsBox").innerHTML = `
     <div class="ws-top"><div class="ws-w">${v.w}</div><button class="ws-play" onclick="speakZh('${v.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
-    <div class="ws-p">${zy}　${py}</div>
+    <div class="ws-p">${twZy(zy)}　${py}</div>
     ${meanHtml}${exHtml}${srsBtn}`;
   document.getElementById("wsBg").classList.add("show");
   document.getElementById("wsBox").classList.add("show");
@@ -3367,7 +3381,7 @@ const AR = (() => {
     else { document.querySelectorAll("#aqOpts .qz-opt")[i].classList.add("ng"); if (typeof WrongBook !== "undefined") WrongBook.add({ type:"article", word:w.w, q:(w.m[mk] || w.m.e || w.m.j), correct:w.w, detail:w.zy+"｜"+w.py }); }
     document.getElementById("aqFb").innerHTML = `<div class="qz-fb ${ok?"ok":"ng"}">
       <div style="font-weight:700;font-size:15px">${ok ? "⭕ "+twT("qzRight") : "❌ "+twT("qzWrong")}</div>
-      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${w.zy}｜${w.py}）</div>
+      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${twZy(w.zy)}｜${w.py}）</div>
       <div style="font-size:14px;color:var(--tx2);margin-top:2px">${w.m[mk] || w.m.e || w.m.j}</div>
       <div style="margin-top:16px"><button class="btn primary" onclick="AR.aqNext()">${twT("quizNext")} ›</button></div></div>`;
   }
