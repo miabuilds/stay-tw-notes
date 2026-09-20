@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>アカウント削除 — 台湾華語スタディ StayTW</title><link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="robots" content="index,follow">
+<script src="analytics.js?v=52"></script>
+<style>body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;max-width:720px;margin:0 auto;padding:48px 24px;line-height:1.9;color:#1C1C1E;background:#FAF8F3}h1{font-size:24px;margin-bottom:8px}h2{font-size:17px;margin:30px 0 8px}p,li{font-size:14.5px;color:#444}a{color:#2F5D7A}
+ol{padding-left:22px}ol li{margin-bottom:6px}
+.app{font-size:13px;color:#888;margin:0 0 24px}
+.box{background:#fff;border:1px solid #e6e0d2;border-radius:12px;padding:18px 20px;margin:14px 0}
+.kept{background:#fdf6ee;border-color:#e8d9c0}
+table{border-collapse:collapse;width:100%;margin-top:6px}td{font-size:14px;padding:7px 0;border-top:1px solid #eee;vertical-align:top}td:first-child{width:42%;padding-right:12px;color:#222}
+#langToggle{font:inherit;font-size:13px;color:#2F5D7A;background:transparent;border:1px solid #d8d2c4;border-radius:8px;padding:4px 12px;cursor:pointer}#langToggle:hover{background:#f0ebe0}</style></head><body>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+<button onclick="stwBack()" aria-label="Back" style="font:inherit;font-size:14px;color:#2F5D7A;background:transparent;border:1px solid #d8d2c4;border-radius:8px;padding:5px 13px;cursor:pointer;display:inline-flex;align-items:center;gap:5px"><span style="font-size:16px;line-height:1">←</span> <span id="backTxt">Back</span></button>
+<button id="langToggle" data-i18n="langBtn" onclick="cycleLang()" aria-label="Language">日本語</button></div>
+
+<h1 data-i18n="h1">アカウントの削除</h1>
+<p class="app" data-i18n="app">台湾華語スタディ StayTW</p>
+
+<h2 data-i18n="h2_app">アプリから削除する</h2>
+<div class="box">
+<ol>
+<li data-i18n="s1">アプリを開いてログインする</li>
+<li data-i18n="s2">下のバーの「その他」をタップ</li>
+<li data-i18n="s3">「マイページ」を開き、いちばん下の「アカウントを削除」をタップ</li>
+<li data-i18n="s4">確認ダイアログで「削除」をタップ</li>
+</ol>
+<p data-i18n="sNote" style="margin:10px 0 0;font-size:13px;color:#666">削除はその場で実行され、取り消せません。</p>
+</div>
+
+<h2 data-i18n="h2_mail">メールで依頼する</h2>
+<p data-i18n-html="mail">アプリを削除済みで操作できない場合は、<a href="mailto:stayjpplan@gmail.com?subject=StayTW%20account%20deletion">stayjpplan@gmail.com</a> までご連絡ください。ログインに使ったメールアドレス（Google または Apple）からお送りいただければ、7 日以内に削除して結果をご返信します。</p>
+
+<h2 data-i18n="h2_what">削除されるもの・残るもの</h2>
+<table>
+<tr><td data-i18n="d1">アカウント情報（メールアドレス、ログイン ID）</td><td data-i18n="dDel">すぐに削除</td></tr>
+<tr><td data-i18n="d2">学習記録（復習の進捗、模試の成績、単語帳）</td><td data-i18n="dDel2">すぐに削除</td></tr>
+<tr><td data-i18n="d3">お知らせメールの登録</td><td data-i18n="dDel3">すぐに削除</td></tr>
+<tr><td data-i18n="d4">お問い合わせの内容</td><td data-i18n="dAnon">メールアドレスのみ削除（本文は個人と結びつかない形で改善のために保持）</td></tr>
+<tr><td data-i18n="d5">購入・課金の記録</td><td data-i18n="dKeep">会計帳簿として法定期間（台湾の法令により 5 年）保持。アカウント削除の時点でメールアドレスとの紐づけは失われます</td></tr>
+</table>
+<div class="box kept">
+<p data-i18n="note1" style="margin:0">端末内に保存された学習データは、アプリを削除するか、ブラウザのサイトデータを消去すると同時に消えます。</p>
+<p data-i18n="note2" style="margin:8px 0 0">サブスクリプションの解約は Google Play ストア（または App Store）から別途お手続きください。アカウントを削除しても自動的には解約されません。</p>
+</div>
+
+<p style="margin-top:36px;font-size:13px;color:#888" data-i18n-html="footer">最終更新：2026年9月<br><a href="privacy.html">プライバシーポリシー</a> ・ <a href="terms.html">利用規約</a></p>
+
+<script>
+const T={
+ja:{langBtn:"日本語"},
+zh:{
+ langBtn:"繁體中文",
+ h1:"刪除帳號",
+ app:"台灣華語 StayTW",
+ h2_app:"從 App 內刪除",
+ s1:"開啟 App 並登入",
+ s2:"點下方列的「更多」",
+ s3:"進入「我的頁面」，捲到最下面點「刪除帳號」",
+ s4:"在確認視窗點「刪除」",
+ sNote:"刪除會立即執行，無法復原。",
+ h2_mail:"用電子郵件申請",
+ mail:'如果已經把 App 刪掉、無法自行操作，請來信 <a href="mailto:stayjpplan@gmail.com?subject=StayTW%20account%20deletion">stayjpplan@gmail.com</a>。請用當初登入的信箱（Google 或 Apple）寄出，我們會在 7 天內刪除並回信確認。',
+ h2_what:"會刪除什麼、會保留什麼",
+ d1:"帳號資料（電子郵件、登入 ID）", dDel:"立即刪除",
+ d2:"學習紀錄（複習進度、模擬考成績、單字本）", dDel2:"立即刪除",
+ d3:"電子報訂閱", dDel3:"立即刪除",
+ d4:"意見回饋內容", dAnon:"僅刪除電子郵件；內容以無法連結到個人的形式保留供改善產品",
+ d5:"購買與交易紀錄", dKeep:"依法定帳簿憑證保存義務保留（台灣法令為 5 年）。帳號刪除後即無法再與電子郵件對應",
+ note1:"存在裝置上的學習資料，會在您刪除 App 或清除瀏覽器網站資料時一併消失。",
+ note2:"訂閱的取消請另外到 Google Play 商店（或 App Store）辦理；刪除帳號不會自動取消訂閱。",
+ footer:'最後更新：2026 年 9 月<br><a href="privacy.html">隱私權政策</a> ・ <a href="terms.html">使用條款</a>'
+},
+en:{
+ langBtn:"English",
+ h1:"Delete your account",
+ app:"StayTW — Taiwanese Mandarin",
+ h2_app:"Delete from inside the app",
+ s1:"Open the app and sign in",
+ s2:"Tap “More” in the bottom bar",
+ s3:"Open “My Page” and tap “Delete account” at the bottom",
+ s4:"Tap “Delete” in the confirmation dialog",
+ sNote:"Deletion happens immediately and cannot be undone.",
+ h2_mail:"Request by email",
+ mail:'If you have already removed the app and cannot do this yourself, email <a href="mailto:stayjpplan@gmail.com?subject=StayTW%20account%20deletion">stayjpplan@gmail.com</a>. Write from the address you signed in with (Google or Apple) and we will delete it within 7 days and reply to confirm.',
+ h2_what:"What is deleted and what is kept",
+ d1:"Account details (email address, sign-in ID)", dDel:"Deleted immediately",
+ d2:"Study records (review progress, mock exam scores, word list)", dDel2:"Deleted immediately",
+ d3:"Newsletter subscription", dDel3:"Deleted immediately",
+ d4:"Support messages you sent", dAnon:"Email address removed; the message text is kept in a form not linked to you, for product improvement",
+ d5:"Purchase and transaction records", dKeep:"Kept for the statutory accounting retention period (5 years under Taiwanese law). Once the account is deleted these records can no longer be linked to your email address",
+ note1:"Study data stored on your device disappears when you uninstall the app or clear the site data in your browser.",
+ note2:"Cancel your subscription separately in the Google Play Store (or App Store). Deleting your account does not cancel it automatically.",
+ footer:'Last updated: September 2026<br><a href="privacy.html">Privacy policy</a> · <a href="terms.html">Terms</a>'
+},
+ko:{
+ langBtn:"한국어",
+ h1:"계정 삭제",
+ app:"StayTW 대만 중국어",
+ h2_app:"앱에서 삭제하기",
+ s1:"앱을 열고 로그인합니다",
+ s2:"하단 바의 «더보기»를 누릅니다",
+ s3:"«마이페이지»에서 맨 아래 «계정 삭제»를 누릅니다",
+ s4:"확인 창에서 «삭제»를 누릅니다",
+ sNote:"삭제는 즉시 실행되며 되돌릴 수 없습니다.",
+ h2_mail:"메일로 요청하기",
+ mail:'이미 앱을 지워서 직접 할 수 없다면 <a href="mailto:stayjpplan@gmail.com?subject=StayTW%20account%20deletion">stayjpplan@gmail.com</a> 으로 보내 주세요. 로그인에 쓰신 주소(Google 또는 Apple)로 보내 주시면 7일 이내에 삭제하고 회신드립니다.',
+ h2_what:"삭제되는 것과 남는 것",
+ d1:"계정 정보(이메일 주소, 로그인 ID)", dDel:"즉시 삭제",
+ d2:"학습 기록(복습 진도, 모의고사 점수, 단어장)", dDel2:"즉시 삭제",
+ d3:"뉴스레터 구독", dDel3:"즉시 삭제",
+ d4:"보내신 문의 내용", dAnon:"이메일 주소만 삭제하고, 본문은 개인과 연결되지 않는 형태로 제품 개선을 위해 보관",
+ d5:"구매·결제 기록", dKeep:"회계 장부로서 법정 기간(대만 법령상 5년) 보관합니다. 계정 삭제 시점부터 이메일 주소와 연결되지 않습니다",
+ note1:"기기에 저장된 학습 데이터는 앱을 삭제하거나 브라우저의 사이트 데이터를 지우면 함께 사라집니다.",
+ note2:"구독 해지는 Google Play 스토어(또는 App Store)에서 따로 진행해 주세요. 계정을 삭제해도 자동으로 해지되지 않습니다.",
+ footer:'최종 수정: 2026년 9월<br><a href="privacy.html">개인정보처리방침</a> · <a href="terms.html">이용약관</a>'
+},
+vi:{
+ langBtn:"Tiếng Việt",
+ h1:"Xoá tài khoản",
+ app:"StayTW — Tiếng Trung Đài Loan",
+ h2_app:"Xoá ngay trong ứng dụng",
+ s1:"Mở ứng dụng và đăng nhập",
+ s2:"Chạm «Thêm» ở thanh dưới",
+ s3:"Mở «Trang của tôi» và chạm «Xoá tài khoản» ở dưới cùng",
+ s4:"Chạm «Xoá» trong hộp thoại xác nhận",
+ sNote:"Việc xoá diễn ra ngay lập tức và không thể hoàn tác.",
+ h2_mail:"Yêu cầu qua email",
+ mail:'Nếu bạn đã gỡ ứng dụng và không tự làm được, hãy gửi email tới <a href="mailto:stayjpplan@gmail.com?subject=StayTW%20account%20deletion">stayjpplan@gmail.com</a>. Gửi từ địa chỉ bạn đã dùng để đăng nhập (Google hoặc Apple), chúng tôi sẽ xoá trong vòng 7 ngày và trả lời xác nhận.',
+ h2_what:"Những gì bị xoá và những gì được giữ",
+ d1:"Thông tin tài khoản (email, ID đăng nhập)", dDel:"Xoá ngay",
+ d2:"Dữ liệu học tập (tiến độ ôn tập, điểm thi thử, sổ từ)", dDel2:"Xoá ngay",
+ d3:"Đăng ký nhận bản tin", dDel3:"Xoá ngay",
+ d4:"Nội dung bạn đã gửi phản hồi", dAnon:"Chỉ xoá địa chỉ email; nội dung được giữ ở dạng không liên kết với bạn để cải thiện sản phẩm",
+ d5:"Hồ sơ mua hàng và giao dịch", dKeep:"Giữ theo thời hạn lưu trữ sổ sách kế toán bắt buộc (5 năm theo luật Đài Loan). Sau khi xoá tài khoản, hồ sơ này không còn liên kết được với email của bạn",
+ note1:"Dữ liệu học lưu trên máy sẽ mất khi bạn gỡ ứng dụng hoặc xoá dữ liệu trang web trong trình duyệt.",
+ note2:"Hãy huỷ gói đăng ký riêng trong Google Play Store (hoặc App Store). Xoá tài khoản không tự động huỷ gói.",
+ footer:'Cập nhật lần cuối: tháng 9/2026<br><a href="privacy.html">Chính sách bảo mật</a> · <a href="terms.html">Điều khoản</a>'
+},
+id:{
+ langBtn:"Bahasa Indonesia",
+ h1:"Hapus akun",
+ app:"StayTW — Mandarin Taiwan",
+ h2_app:"Hapus dari dalam aplikasi",
+ s1:"Buka aplikasi dan masuk",
+ s2:"Ketuk «Lainnya» di bilah bawah",
+ s3:"Buka «Halaman saya» lalu ketuk «Hapus akun» di paling bawah",
+ s4:"Ketuk «Hapus» pada dialog konfirmasi",
+ sNote:"Penghapusan langsung berlaku dan tidak bisa dibatalkan.",
+ h2_mail:"Ajukan lewat email",
+ mail:'Kalau aplikasinya sudah dihapus dan kamu tidak bisa melakukannya sendiri, kirim email ke <a href="mailto:stayjpplan@gmail.com?subject=StayTW%20account%20deletion">stayjpplan@gmail.com</a>. Kirim dari alamat yang kamu pakai untuk masuk (Google atau Apple); kami akan menghapusnya dalam 7 hari dan membalas sebagai konfirmasi.',
+ h2_what:"Yang dihapus dan yang disimpan",
+ d1:"Data akun (alamat email, ID masuk)", dDel:"Langsung dihapus",
+ d2:"Catatan belajar (progres ulangan, nilai simulasi ujian, buku kata)", dDel2:"Langsung dihapus",
+ d3:"Langganan buletin", dDel3:"Langsung dihapus",
+ d4:"Isi masukan yang kamu kirim", dAnon:"Hanya alamat email yang dihapus; isinya disimpan dalam bentuk yang tidak terkait denganmu untuk perbaikan produk",
+ d5:"Catatan pembelian dan transaksi", dKeep:"Disimpan sesuai kewajiban penyimpanan pembukuan (5 tahun menurut hukum Taiwan). Setelah akun dihapus, catatan ini tidak lagi bisa dikaitkan dengan emailmu",
+ note1:"Data belajar yang tersimpan di perangkat akan hilang saat kamu menghapus aplikasi atau membersihkan data situs di browser.",
+ note2:"Batalkan langgananmu secara terpisah di Google Play Store (atau App Store). Menghapus akun tidak otomatis membatalkannya.",
+ footer:'Terakhir diperbarui: September 2026<br><a href="privacy.html">Kebijakan privasi</a> · <a href="terms.html">Ketentuan</a>'
+}};
+const ORDER=["ja","zh","en","ko","vi","id"];
+function pickLang(){
+  try{
+    const q=new URLSearchParams(location.search).get("lang");
+    if(q&&T[q])return q;
+    const s=localStorage.getItem("stw-lang");
+    if(s&&T[s])return s;
+    const n=(navigator.language||"ja").toLowerCase();
+    if(n.startsWith("zh"))return "zh";
+    for(const l of ORDER) if(n.startsWith(l)) return l;
+  }catch(e){}
+  return "ja";
+}
+function applyLang(){
+  const lang=pickLang();
+  document.documentElement.lang=lang==="zh"?"zh-Hant":lang;
+  const dict=T[lang]||T.ja;
+  const b=document.getElementById("backTxt");
+  if(b)b.textContent=({zh:"返回",ja:"戻る",en:"Back",ko:"뒤로",vi:"Quay lại",id:"Kembali"})[lang]||"Back";
+  document.querySelectorAll("[data-i18n]").forEach(function(el){
+    const k=el.getAttribute("data-i18n");
+    const v=(dict[k]!==undefined)?dict[k]:undefined;   // ja はページ本文が既定値なので上書きしない
+    if(v!==undefined)el.textContent=v;
+  });
+  document.querySelectorAll("[data-i18n-html]").forEach(function(el){
+    const k=el.getAttribute("data-i18n-html");
+    const v=(dict[k]!==undefined)?dict[k]:undefined;
+    if(v!==undefined)el.innerHTML=v;
+  });
+}
+function cycleLang(){
+  const cur=pickLang();
+  const next=ORDER[(ORDER.indexOf(cur)+1)%ORDER.length];
+  try{localStorage.setItem("stw-lang",next);}catch(e){}
+  applyLang();
+}
+function stwBack(){ if(history.length>1){ history.back(); } else { location.href="index.html"; } }
+applyLang();
+</script>
+</body></html>

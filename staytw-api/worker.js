@@ -432,8 +432,18 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     if (url.pathname === "/api/delete-account" && req.method === "POST") {
       const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
       if (!uid) return json({ error: "unauthorized" }, 401, h);
+      // Play の「帳戶和關聯資料刪除」に合わせ、この uid に紐づくものは一通り消す。
+      // 取引記録(rc_events)だけは会計帳簿として残す必要があるが、auth_users を消した時点で
+      // app_user_id からメールアドレスを辿れなくなる＝仮名化される。delete-account.html にそう明記。
+      const who = await env.DB.prepare("SELECT email FROM auth_users WHERE uid=?1").bind(uid).first();
+      const email = (who && who.email) ? String(who.email) : "";
       await env.DB.prepare("DELETE FROM progress WHERE uid=?1").bind(uid).run();
       await env.DB.prepare("DELETE FROM auth_users WHERE uid=?1").bind(uid).run();
+      if (email) {
+        await env.DB.prepare("DELETE FROM subscribers WHERE email=?1").bind(email).run();
+        // 問い合わせ本文は製品改善のため残すが、宛先(個人の識別子)は落とす
+        await env.DB.prepare("UPDATE feedback SET email='' WHERE email=?1").bind(email).run();
+      }
       return json({ ok: true }, 200, h);
     }
 
