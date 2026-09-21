@@ -192,6 +192,51 @@ Rules:
       return json(out, 200, h);
     }
 
+    // 「我的單字本」で辞書に無い語を引く。注音はあくまで補助:
+    // クライアント側で 1 文字ずつサイト辞書(教育部で検証済み)から組み直せる場合はそちらを優先し、
+    // AI のままの読みには画面で印を付ける。推測の読みを検証済みと同じ顔で出さない。
+    if (url.pathname === "/api/word-lookup" && req.method === "POST") {
+      const ip = req.headers.get("CF-Connecting-IP") || "unknown";
+      const day = new Date().toISOString().slice(0, 10);
+      const qkey = "wl:" + ip + ":" + day, DAILY = 30;
+      const row = await env.DB.prepare("SELECT count FROM chat_quota WHERE key=?1").bind(qkey).first();
+      if (row && row.count >= DAILY) return json({ error: "quota" }, 429, h);
+      await env.DB.prepare("INSERT INTO chat_quota (key,count,day) VALUES (?1,1,?2) ON CONFLICT(key) DO UPDATE SET count=count+1, day=?2").bind(qkey, day).run();
+
+      let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
+      if (!env.ANTHROPIC_API_KEY) return json({ error: "ai_not_configured" }, 501, h);
+      const word = String(b.word || "").trim().slice(0, 20);
+      if (!word) return json({ error: "empty" }, 400, h);
+
+      const sys = `You look up a Taiwan Mandarin word for a learner's personal word list.
+Readings MUST follow Taiwan's 教育部《重編國語辭典修訂本》 (Taiwan readings, NOT mainland). Traditional characters only.
+Reply with a SINGLE valid JSON object, no markdown fences, keys:
+ "w": the word in traditional characters,
+ "zy": 注音 with one space between syllables (e.g. "ㄗㄠˇ ㄕㄤˋ"), neutral tone written as ˙ㄅㄚ,
+ "py": pinyin with tone marks, space between syllables,
+ "c": part of speech in Chinese, one short word (名/動/形/副/代/量/助),
+ "ja","en","ko","vi","id": the meaning in each language, short,
+ "ex": { "z": one natural Taiwan sentence using the word, "py": its pinyin, "ja","en","ko","vi","id": translations }.
+If the input is not a real Chinese word, set "w" to "" and leave the rest empty.`;
+
+      let rc;
+      try {
+        rc = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: { "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01", "content-type": "application/json" },
+          body: JSON.stringify({ model: "claude-haiku-4-5-20251001", max_tokens: 700, system: sys, messages: [{ role: "user", content: word }] }),
+        });
+      } catch (e) { return json({ error: "ai_error" }, 502, h); }
+      if (!rc.ok) return json({ error: "ai_error" }, 502, h);
+      const data = await rc.json();
+      const text = (data.content && data.content[0] && data.content[0].text) || "";
+      let out;
+      try { const a = text.indexOf("{"), z = text.lastIndexOf("}"); out = JSON.parse(text.slice(a, z + 1)); }
+      catch (e) { return json({ error: "parse" }, 502, h); }
+      if (!out || !out.w) return json({ error: "notfound" }, 404, h);
+      return json(out, 200, h);
+    }
+
     if (url.pathname === "/api/speak-review" && req.method === "POST") {
       // 對話結束點評:評學習者的台灣華語表現，回 {score,good,improve,tip,encourage}
       const ip = req.headers.get("CF-Connecting-IP") || "unknown";

@@ -11,7 +11,7 @@ const STW_WEB_CLIENT_ID = "949214636130-e2dl3h0t1l789fggve3vsd6pu670lnb1.apps.go
 // ※ Worker 側も secret APPLE_WEB_SERVICE_ID を同じ値にすること（aud 検証用）。
 const STW_APPLE_SERVICE_ID = "com.staytw.web";
 const STW_APPLE_REDIRECT = "https://staytw.pages.dev/";
-const SYNC_KEYS = ["stw_srs", "stw_exam_history", "stw_writing", "stw_wr_opened", "stw-level", "stw_streak", "stw_read", "stw_goal", "stw_art_read"];
+const SYNC_KEYS = ["stw_srs", "stw_exam_history", "stw_writing", "stw_wr_opened", "stw-level", "stw_streak", "stw_read", "stw_goal", "stw_art_read", "stw_myvocab", "stw_custom_cards", "stw_checkin"];
 
 const STW_WEB = (() => {
   let session = localStorage.getItem("stw_session") || null;
@@ -273,6 +273,24 @@ const STW_WEB = (() => {
       const c = parse(cloud[k], []), l = parse(localStorage.getItem(k), []);
       localStorage.setItem(k, JSON.stringify(Array.from(new Set([...l, ...c]))));
     });
+    // 我的單字本：語ごとに union。墓碑(del)も upd が新しければ勝つ＝別端末で消した語は戻さない
+    if (cloud.stw_myvocab) {
+      const c = parse(cloud.stw_myvocab, []), l = parse(localStorage.getItem("stw_myvocab"), []);
+      const by = {};
+      [...l, ...c].forEach(x => { if (x && x.w && (!by[x.w] || (x.upd || 0) > (by[x.w].upd || 0))) by[x.w] = x; });
+      localStorage.setItem("stw_myvocab", JSON.stringify(Object.values(by)));
+    }
+    // 自訂卡片：キーごとに union（クラウドで穴埋め）
+    if (cloud.stw_custom_cards) {
+      const c = parse(cloud.stw_custom_cards, {}), l = parse(localStorage.getItem("stw_custom_cards"), {});
+      for (const k in c) if (!l[k]) l[k] = c[k];
+      localStorage.setItem("stw_custom_cards", JSON.stringify(l));
+    }
+    // 打卡日：和集合
+    if (cloud.stw_checkin) {
+      const c = parse(cloud.stw_checkin, []), l = parse(localStorage.getItem("stw_checkin"), []);
+      localStorage.setItem("stw_checkin", JSON.stringify(Array.from(new Set([...l, ...c])).sort()));
+    }
     if (cloud["stw-level"] && !localStorage.getItem("stw-level")) localStorage.setItem("stw-level", cloud["stw-level"]);
     if (cloud.stw_goal && !localStorage.getItem("stw_goal")) localStorage.setItem("stw_goal", cloud.stw_goal);
   }

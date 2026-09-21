@@ -119,6 +119,7 @@ const Paywall = (() => {
     track(feature);
     const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore"), listen: twT("lsTitle"), fav: twT("pwFavName") }[feature] || "";
     const desc = feature === "article" ? twT("pwContentHit")
+      : feature === "myvocab" ? twT("pwMyVocabHit").replace("{n}", String((typeof MyVocab !== "undefined" && MyVocab.FREE_MAX) || 10))
       : feature === "fav" ? twT("pwFavHit").replace("{n}", String(FAV_FREE_MAX))
       : twT("pwLimitHit").replace("{f}", featName);
     document.getElementById("pwBox").innerHTML = `
@@ -143,7 +144,7 @@ const Paywall = (() => {
       </div>
       <p class="pw-trial">🎁 ${twT("pwTrial").replace("{n}", String(TRIAL_DAYS))}</p>
       ${isNative() ? `<button class="btn primary" style="width:100%;padding:13px" onclick="Paywall.openNative()">${twT("pwCtaNative")}</button>` : webCta()}
-      ${feature === "fav" || feature === "article" ? "" : `<p style="text-align:center;font-size:12px;color:var(--tx3);margin-top:10px">${twT("pwTomorrow")}</p>`}`;
+      ${feature === "fav" || feature === "article" || feature === "myvocab" ? "" : `<p style="text-align:center;font-size:12px;color:var(--tx3);margin-top:10px">${twT("pwTomorrow")}</p>`}`;
     bg.classList.add("show");
   }
 
