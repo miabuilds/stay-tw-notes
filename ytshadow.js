@@ -15,7 +15,6 @@ const YTS = (() => {
     { v: "ulkM3tRfA1Q", cat: "beg", t: "台灣人的口頭禪", tag: "2 分 · 中原大學華語中心" },
     { v: "gD5kuw2EPF4", cat: "beg", t: "常用語系列 EP.2", tag: "2 分 · 中原大學華語中心" },
     { v: "VRBnr6V1gAg", cat: "beg", t: "台灣熱門網路用語", tag: "3 分 · 中原大學華語中心" },
-    { v: "0wZe_nqaiN4", cat: "beg", t: "要這樣撩妹才對？", tag: "3 分 · 中原大學華語中心" },
     { v: "5gknWTmFe0A", cat: "beg", t: "台灣華語 vs 中國普通話", tag: "10 分 · Grace Mandarin" },
     { v: "bA336OmpX38", cat: "beg", t: "搭台北捷運：買票進站・悠遊卡", tag: "7 分 · 樂樂TV" },
     // 生活:台湾で実際にやること・食べるもの
@@ -50,6 +49,7 @@ const YTS = (() => {
   const $ = (id) => document.getElementById(id);
   const speed = () => SPEEDS[spdIdx];
   const ICON_PLAY = '<svg class="yts-i" viewBox="0 0 24 24"><polygon points="7 4.5 19 12 7 19.5" fill="currentColor" stroke="none"/></svg>';
+  const ICON_PAUSE = '<svg class="yts-i" viewBox="0 0 24 24"><rect x="7" y="4.5" width="3.6" height="15" fill="currentColor" stroke="none"/><rect x="13.4" y="4.5" width="3.6" height="15" fill="currentColor" stroke="none"/></svg>';
   const ICON_LOOP = '<svg class="yts-i" viewBox="0 0 24 24"><path d="M4 9.5A4.5 4.5 0 0 1 8.5 5H18"/><polyline points="15 2.5 18.5 5 15 7.5"/><path d="M20 14.5A4.5 4.5 0 0 1 15.5 19H6"/><polyline points="9 21.5 5.5 19 9 16.5"/></svg>';
 
   function parseVid(s) {
@@ -143,6 +143,7 @@ const YTS = (() => {
           // 跟播模式字幕不動、逐句模式會一路播下去。這裡接手。
           onStateChange: (e) => {
             const st = e && e.data;
+            syncPlayBtn(st);
             if (st === 1) {
               if (mode === "follow") followWatch();
               else if (lines[cur]) {
@@ -190,7 +191,7 @@ const YTS = (() => {
       <div class="yts-count">${cur + 1} / ${lines.length}${done.has(cur) ? " ✓" : ""}</div>
       <div class="yts-ctrl">
         <button class="yts-c" onclick="YTS.go(-1)" aria-label="${esc(T("ytsPrev"))}">‹</button>
-        <button class="yts-c wide" onclick="YTS.play()">${ICON_PLAY}${esc(T("ytsPlayLine"))}</button>
+        <button class="yts-c wide" id="ytsPlayBtn" onclick="YTS.play()">${ICON_PLAY}${esc(T("ytsPlayLine"))}</button>
         <button class="yts-c" onclick="YTS.cycleSpeed()">${speed()}x</button>
         <button class="yts-c${loopOn ? " on" : ""}" onclick="YTS.toggleLoop()" aria-label="${esc(T("ytsLoop"))}">${ICON_LOOP}</button>
         <button class="yts-c" onclick="YTS.go(1)" aria-label="${esc(T("ytsNext"))}">›</button>
@@ -202,6 +203,7 @@ const YTS = (() => {
     sent.innerHTML = twRenderZh(l.z, vocab, null);
     twBindWords(sent, vocab);
     if (mode === "dict") { const i = $("ytsIn"); if (i) { i.value = ""; i.onkeydown = (e) => { if (e.key === "Enter") check(); }; } }
+    syncPlayBtn();
   }
 
   // ── 播放控制 ──
@@ -219,6 +221,14 @@ const YTS = (() => {
     return { s: s0, e: e0 };
   }
   function clearWatch() { clearInterval(watchT); watchT = 0; }
+  // 再生ボタンの見た目は「プレイヤーの実際の状態」だけを見る。
+  // 自前のボタンから動かしても、YouTube 側のボタンから動かしても同じ絵になる。
+  function syncPlayBtn(state) {
+    const b = $("ytsPlayBtn"); if (!b) return;
+    if (state === undefined) { try { state = player && player.getPlayerState(); } catch (e) { state = -1; } }
+    const playing = state === 1;
+    b.innerHTML = (playing ? ICON_PAUSE : ICON_PLAY) + esc(T(playing ? "ytsPause" : "ytsPlayLine"));
+  }
   function clearFollow() { clearInterval(followT); followT = 0; }
   function watchSeg(s0, e0, onEnd) {
     clearWatch();
@@ -276,7 +286,10 @@ const YTS = (() => {
       followWatch();
       return;
     }
-    // 逐句:句の途中で止まっているなら続きから、そうでなければ頭から
+    // 逐句:再生中に押されたら止める（アイコンが一時停止なのだから止まらないと嘘になる）
+    let st2 = -1; try { st2 = player.getPlayerState(); } catch (e) {}
+    if (st2 === 1) { clearWatch(); try { player.pauseVideo(); } catch (e) {} return; }
+    // 句の途中で止まっているなら続きから、そうでなければ頭から
     let c = -1; try { c = player.getCurrentTime(); } catch (e) {}
     const r = segRange(cur);
     if (c > r.s && c < r.e - 0.1) {
