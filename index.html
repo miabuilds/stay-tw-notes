@@ -737,6 +737,12 @@ body.more-open .ar-bar{display:none}
 .pa-step.done .pa-bar i{background:var(--ok)}
 .pa-frac{flex:none;font-size:12px;color:var(--tx3);align-self:center;font-variant-numeric:tabular-nums}
 .pa-step.next{background:var(--ac-soft);border-radius:12px;border-bottom-color:transparent}
+.pa-step.locked{opacity:.5}
+.pa-lock{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
+.pa-stars{margin-left:7px;font-size:11.5px;color:var(--ac);letter-spacing:.06em;vertical-align:1px}
+.pa-step.todo .pa-stars{color:var(--tx3)}
+.pa-count{float:right;font-size:11.5px;color:var(--tx3);font-variant-numeric:tabular-nums}
+.pa-cleared{margin-top:12px;text-align:center;font-size:13px;font-weight:700;color:var(--ok,#2e7d5b);background:var(--bg2);border:1px solid var(--ok,#2e7d5b);border-radius:12px;padding:11px}
 @media(hover:hover){.pa-step:hover .pa-t{color:var(--ac)}}
 /* ===== 学習ハブ（面板トップ）===== */
 .hb{display:flex;flex-direction:column;gap:18px}
@@ -1247,7 +1253,7 @@ body.more-open .ar-bar{display:none}
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=95"></script>
+<script src="i18n.js?v=98"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=63"></script>
 <script src="vocab-l1.js?v=52"></script>
@@ -1937,7 +1943,7 @@ function qzNext(){
     <div class="qz-word" onclick="speakZh('${w.w}')">${w.w}</div>
     <div class="qz-py">${twZy(w.zy)}　${w.py}　<button class="tts-btn" style="width:30px;height:30px;font-size:13px" onclick="speakZh('${w.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
     <div class="qz-opts">${opts.map(o=>
-      `<button class="qz-opt" data-ok="${o.w===w.w}" onclick="qzAnswer(this)">${o.m[mk] || o.m.e || o.m.j}</button>`).join("")}
+      `<button class="qz-opt" data-ok="${o.w===w.w}" data-w="${o.w}" onclick="qzAnswer(this)">${o.m[mk] || o.m.e || o.m.j}</button>`).join("")}
     </div>`;
   speakZh(w.w);
 }
@@ -1980,16 +1986,28 @@ function qzAnswer(btn){
   });
   if (ok) qzScore++;
   else { btn.classList.add("ng"); WrongBook.add({type:"quiz", word:w.w, q:(w.m[mk] || w.m.e || w.m.j), correct:w.w, detail:w.zy+"｜"+w.py}); }
-  qzShowFeedback(w, ok);   // 停住:顯示正解+詳解+「下一題」，不自動跳
+  qzShowFeedback(w, ok, ok ? null : btn.dataset.w);   // 停住:顯示正解+詳解+「下一題」，不自動跳
 }
-function qzShowFeedback(w, ok){
+// 選んだ誤答の「意味」が、実際どの語のものかを出す。正解だけ見せるより身につく。
+function qzPickLine(pickWord){
+  if (!pickWord) return "";
+  const mk = twMKey();
+  const p = getVocabData(currentLevel).find(v => v.w === pickWord);
+  if (!p) return "";
+  const mean = p.m[mk] || p.m.e || p.m.j || "";
+  return `<div style="font-size:13px;color:var(--tx2);margin-top:8px;padding-top:8px;border-top:1px solid var(--ln)">`
+    + `${twT("qzYourPick")}<b>${mean}</b>${twT("qzPickIs")}`
+    + `<b style="font-family:var(--serif);font-size:17px">${p.w}</b>（${twZy(p.zy)}｜${p.py}）`
+    + `<button class="tts-btn" style="width:26px;height:26px;font-size:12px;vertical-align:middle;margin-left:4px" onclick="speakZh('${p.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>`;
+}
+function qzShowFeedback(w, ok, pickWord){
   const mk = twMKey();
   const ex = (w.ex && w.ex.z) ? `<div style="font-size:13px;color:var(--tx2);margin-top:6px">${w.ex.z}<br>${w.ex[mk] || w.ex.e || w.ex.j||""}</div>` : "";
   document.getElementById("qzBox").insertAdjacentHTML("beforeend",
     `<div class="qz-fb ${ok?'ok':'ng'}">
       <div style="font-weight:700;font-size:15px">${ok?"⭕ "+twT("qzRight"):"❌ "+twT("qzWrong")}</div>
       <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${twZy(w.zy)}｜${w.py}）</div>
-      <div style="font-size:14px;color:var(--tx2);margin-top:2px">${w.m[mk] || w.m.e || w.m.j}</div>${ex}
+      <div style="font-size:14px;color:var(--tx2);margin-top:2px">${w.m[mk] || w.m.e || w.m.j}</div>${ex}${qzPickLine(pickWord)}
       <div style="margin-top:16px"><button class="btn primary" onclick="qzAdvance()">${twT("quizNext")} ›</button></div>
     </div>`);
   const fb=document.querySelector("#qzBox .qz-fb"); if(fb) fb.scrollIntoView({block:"nearest",behavior:"smooth"});
@@ -2862,6 +2880,7 @@ function twReading(level){
 /* ===== 学習パス（TOCFL 主線）：現有ツールを一本の道に。今のレベルの進み具合と「次にやること」 ===== */
 const PA = (() => {
   const parse = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
+  const LOCK_SVG = '<svg viewBox="0 0 24 24" class="pa-lock"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8.4 10.5V7.6a3.6 3.6 0 0 1 7.2 0v2.9"/></svg>';
 
   function stages(){
     const lv = currentLevel;
@@ -2888,6 +2907,20 @@ const PA = (() => {
         done: best>=60, started: exam.length>0, frac: best?`${best}%`:"—" },
     ];
   }
+
+  // 闖關:前の関を「触った(started)」だけで次が開く。完了を条件にすると詰まって不快なので緩め。
+  // 星は達成度 3 段階。関門そのものは既存の進捗から出すので、新しい保存データは増やさない。
+  function withGates(list) {
+    let openNext = true;
+    return list.map((x, i) => {
+      // すでに触った/終えた関は絶対に閉じない(★★★なのに鍵、という矛盾が出る)
+      const locked = !openNext && !(x.started || x.done);
+      if (!(x.started || x.done)) openNext = false;   // この関に未着手なら以降は閉じる
+      const stars = x.done ? 3 : x.pct >= 70 ? 2 : x.pct >= 40 ? 1 : 0;
+      return Object.assign({}, x, { locked: i === 0 ? false : locked, stars });
+    });
+  }
+  function clearedAll(list) { return list.length > 0 && list.every((x) => x.done); }
 
   // ── ハブ用の小物 ──
   function greet(){
@@ -2987,19 +3020,24 @@ const PA = (() => {
       <a href="life?utm_source=hub"><span class="qi">💬</span>${esc(twT("hbLife"))}</a>
     </div>`;
 
-    const rows = s.map((x) => {
+    const gated = withGates(s);
+    const cleared = gated.filter((x) => x.done).length;
+    const rows = gated.map((x) => {
       const status = x.done ? "done" : (x.started ? "doing" : "todo");
-      const badge = x.done ? "✓" : x.icon;
-      return `<button class="pa-step ${status} ${x.key===next.key?"next":""}" onclick="switchPanel('${x.key}')">
+      const badge = x.locked ? LOCK_SVG : (x.done ? "✓" : x.icon);
+      const stars = x.stars ? `<span class="pa-stars">${"★".repeat(x.stars)}${"☆".repeat(3 - x.stars)}</span>` : "";
+      const click = x.locked ? `PA.locked('${x.key}')` : `switchPanel('${x.key}')`;
+      return `<button class="pa-step ${status}${x.locked ? " locked" : ""} ${x.key===next.key && !x.locked?"next":""}" onclick="${click}">
         <div class="pa-num">${badge}</div>
         <div class="pa-main">
-          <div class="pa-t">${twT("paStep_"+x.key)}${x.key===next.key?` <span class="pa-next-tag">${twT("paNext")}</span>`:""}</div>
+          <div class="pa-t">${twT("paStep_"+x.key)}${stars}${x.key===next.key && !x.locked?` <span class="pa-next-tag">${twT("paNext")}</span>`:""}</div>
           <div class="pa-d">${twT("paDesc_"+x.key)}</div>
           <div class="pa-bar"><i style="width:${x.pct}%"></i></div>
         </div>
         <div class="pa-frac">${x.frac}</div>
       </button>`;
-    }).join("");
+    }).join("")
+    + (clearedAll(gated) ? `<div class="pa-cleared">${twT("paCleared").replace("{lv}", lvName)}</div>` : "");
 
     const paIsPrem = !!(window.Paywall && Paywall.isPremium && Paywall.isPremium());
     const favCap = (window.Paywall && Paywall.FAV_FREE_MAX) || 20;
@@ -3034,12 +3072,17 @@ const PA = (() => {
         </button>
       </div>
       <div>
-        <div class="pa-found-h">${twT("paLevelH").replace("{lv}", lvName)}</div>
+        <div class="pa-found-h">${twT("paLevelH").replace("{lv}", lvName)}<span class="pa-count">${cleared} / ${gated.length}</span></div>
         <div class="pa-steps">${rows}</div>
       </div>
     </div>`;
   }
-  return { render };
+  // 鍵つきの関を押したとき。閉じ込めない:案内を出しつつ開けるようにしておく。
+  function locked(key) {
+    try { showToast(twT("paLockedMsg")); } catch (e) {}
+    setTimeout(() => { try { switchPanel(key); } catch (e) {} }, 900);
+  }
+  return { render, locked };
 })();
 
 /* ===== 共用：本文中の生詞をタップ可能にする＋逐字ハイライト（読解・記事で共用） ===== */
