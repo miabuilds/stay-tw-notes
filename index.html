@@ -287,6 +287,31 @@ button{font-family:inherit}
   background:var(--ac);color:#fff;font-style:normal;font-size:14px;font-weight:700;
   display:flex;align-items:center;justify-content:center;opacity:.9;font-family:var(--sans)}
 .zw-strokes{text-align:center;font-size:12.5px;color:var(--tx3);margin-top:10px}
+.ess{max-width:680px;margin:0 auto}
+.ess-lead{font-size:13.5px;color:var(--tx2);line-height:1.65;margin:0 0 13px}
+.ess-tabs{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:13px;-webkit-overflow-scrolling:touch}
+.ess-tab{flex:0 0 auto;background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font:inherit;font-size:12.5px;color:var(--tx2);cursor:pointer}
+.ess-tab.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.ess-note{background:var(--ac-soft,#fdf2f0);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:12.5px;line-height:1.7;color:var(--tx);margin-bottom:14px}
+.ess-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.ess-card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:14px 10px 12px;cursor:pointer;font:inherit;text-align:center;color:var(--tx)}
+.ess-card:active{transform:scale(.97)}
+.ess-w{font-family:var(--serif);font-size:24px;font-weight:700;line-height:1.25}
+.ess-zy{font-family:var(--zhuyin);font-size:14px;font-weight:600;color:var(--ac);margin-top:5px;letter-spacing:.04em}
+.ess-py{font-size:12px;color:var(--tx3);margin-top:2px}
+.ess-m{font-size:12.5px;color:var(--tx2);margin-top:7px;line-height:1.45}
+.ess-actions{display:flex;gap:9px;justify-content:center;margin-top:18px}
+.ess-quiz{text-align:center;padding:10px 0}
+.ess-q-prog{font-size:12px;color:var(--tx3);font-variant-numeric:tabular-nums}
+.ess-q-hint{font-size:12.5px;color:var(--tx3);margin:10px 0 4px}
+.ess-q-mean{font-size:21px;font-weight:700;margin:14px 0 20px;line-height:1.5}
+.ess-q-opts{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;max-width:420px;margin:0 auto}
+.ess-opt{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:16px 8px;font-family:var(--serif);font-size:21px;font-weight:700;color:var(--tx);cursor:pointer}
+.ess-opt.ok{border-color:#2e7d5b;color:#2e7d5b}
+.ess-opt.ng{border-color:var(--ac);color:var(--ac)}
+.ess-q-fb{min-height:26px;margin-top:13px;font-size:14px;color:var(--tx2)}
+.ess-q-fb span{color:var(--tx3);font-size:12.5px}
+.ess-done{font-family:var(--serif);font-size:44px;color:var(--ac);margin:26px 0 6px}
 .pf-ref{border:1px solid var(--line);border-radius:14px;padding:15px 16px;margin-top:14px;background:var(--bg2)}
 .pf-ref-h{font-size:13px;font-weight:700;margin-bottom:5px}
 .pf-ref-d{font-size:12.5px;color:var(--tx2);line-height:1.65;margin:0 0 11px}
@@ -1048,6 +1073,7 @@ body.more-open .ar-bar{display:none}
   <!-- ライティング -->
   <section class="panel" id="panel-write"><div class="wr" id="wrBox"></div></section>
 
+  <section class="panel" id="panel-essentials"><div class="ess" id="essBody"></div></section>
   <section class="panel" id="panel-ytshadow"><div class="yts" id="ytsBody"></div></section>
 
   <!-- 復習 SRS -->
@@ -1131,6 +1157,7 @@ body.more-open .ar-bar{display:none}
     <button class="sheet-item sheet-premium" data-panel="__premium"><span class="bi"></span><span data-i18n="navPremium">プレミアム</span></button>
     <button class="sheet-item" data-panel="list"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="8.5" y1="6" x2="21" y2="6"/><line x1="8.5" y1="12" x2="21" y2="12"/><line x1="8.5" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor" stroke="none"/><circle cx="4" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="4" cy="18" r="1" fill="currentColor" stroke="none"/></svg></span><span data-i18n="toolVocabList">単語リスト</span></button>
     <button class="sheet-item" data-panel="zhuyin"><span class="bi">ㄅ</span><span data-i18n="toolZhuyin">注音</span></button>
+    <button class="sheet-item" data-panel="essentials"><span class="bi">123</span><span data-i18n="toolEssentials">必修の基礎</span></button>
     <button class="sheet-item" data-panel="profile"><span class="bi"></span><span data-i18n="toolProfile">マイページ</span></button>
     <button class="sheet-item" data-panel="grammar"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span><span data-i18n="toolGrammar">文法</span></button>
     <button class="sheet-item" data-panel="phrases"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg></span><span data-i18n="toolPhrases">フレーズ</span></button>
@@ -1220,7 +1247,7 @@ body.more-open .ar-bar{display:none}
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=94"></script>
+<script src="i18n.js?v=95"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=63"></script>
 <script src="vocab-l1.js?v=52"></script>
@@ -1275,6 +1302,8 @@ body.more-open .ar-bar{display:none}
 <script src="articles-20.js?v=1"></script>
 <script src="writing-data.js?v=52"></script>
 <script src="paywall.js?v=104"></script>
+<script src="essentials.js?v=1"></script>
+<script src="essentials-ui.js?v=1"></script>
 <script src="ytshadow.js?v=3"></script>
 <script src="listen.js?v=3"></script>
 <script src="websync.js?v=62"></script>
@@ -1477,6 +1506,7 @@ function switchPanel(p){
   if (p === "exam" && !document.getElementById("exTimer")) renderExamHome();
   if (p === "speak") SPK.render();
   if (p === "ytshadow" && typeof YTS !== "undefined" && !YTS.booted()) YTS.render();
+  if (p === "essentials" && typeof ESS !== "undefined") ESS.render();
   if (p === "write") WR.render();
   if (p === "path") PA.render();
   if (p === "zhuyin") ZY.render();
