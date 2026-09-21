@@ -13,7 +13,8 @@ const Paywall = (() => {
   // 2026-09-16: speak 5→2（跟讀是 App 限定＋日本人最需要的功能，當 Premium 招牌）；SRS 免費一次最多 SRS_FREE_CARDS 張
   const LIMITS = { quiz: 3, srs: 1, exam: 1, speak: 2, writing: 1, aiscore: 1 };
   const SRS_FREE_CARDS = 10;
-  const PRICES = { monthly: "¥980", yearly: "¥5,800", lifetime: "¥12,800" };
+  // 買い切りは年額の 2.2 倍しか取れていなかった（原価は永久に続くのに）。年額の約 3 倍へ。
+  const PRICES = { monthly: "¥980", yearly: "¥5,800", lifetime: "¥17,800" };
   // 単語帳（★）の無料上限。辞書を引く人＝いちばん多い層が自然に Premium に出会う接点。
   const FAV_FREE_MAX = 20;
   // ストアの出し分け。以前は誰に対しても App Store を開いていたので、Android と PC の人には
