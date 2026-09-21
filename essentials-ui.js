@@ -59,22 +59,50 @@ const ESS = (() => {
       <div class="ess-actions"><button class="btn" onclick="ESS.go('${sec}')">${esc(T("essBack"))}</button></div>
     </div>`;
   }
+  // 読み札:正解の語＋注音＋拼音＋意味＋音。詳解で使い回す。
+  function cardLine(it) {
+    return `<b style="font-family:var(--serif);font-size:21px">${esc(it.w)}</b>`
+      + `（${zy(it.zy)}｜${esc(it.py)}）`
+      + `<button class="tts-btn" style="width:26px;height:26px;vertical-align:middle;margin-left:5px" onclick="ESS.sayW('${esc(it.w)}')">`
+      + `<svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>`
+      + `<div style="font-size:14px;color:var(--tx2);margin-top:3px">${esc(mean(it))}</div>`;
+  }
   function pick(el, got, want) {
     if (quiz.locked) return;
     quiz.locked = true;
     const cur = ESSENTIALS.find((s) => s.k === sec);
     const right = cur.items.find((x) => x.w === want);
-    document.querySelectorAll(".ess-opt").forEach((b) => { if (b.dataset.w === want) b.classList.add("ok"); });
-    if (got !== want) el.classList.add("ng");
-    else quiz.ok++;
+    const ok = got === want;
+    document.querySelectorAll(".ess-opt").forEach((b) => {
+      b.disabled = true;
+      if (b.dataset.w === want) b.classList.add("ok");
+    });
+    if (!ok) el.classList.add("ng"); else quiz.ok++;
     if (typeof speakZh === "function") speakZh(want);
+    // 間違えた選択肢が「実際なんの語なのか」まで出す。正解だけ見せても次に活きない。
+    let picked = "";
+    if (!ok) {
+      const p = cur.items.find((x) => x.w === got);
+      if (p) picked = `<div style="font-size:13px;color:var(--tx2);margin-top:9px;padding-top:9px;border-top:1px solid var(--line)">`
+        + `${esc(T("qzYourPick"))}<b>${esc(p.w)}</b>（${zy(p.zy)}｜${esc(p.py)}）`
+        + `<span style="color:var(--tx3)">　${esc(mean(p))}</span></div>`;
+    }
+    const last = quiz.i >= quiz.pool.length - 1;
     const fb = document.getElementById("essFb");
-    if (fb && right) fb.innerHTML = `<b>${esc(right.w)}</b>　${zy(right.zy)}　<span>${esc(right.py)}</span>`;
-    setTimeout(() => {
-      quiz.i++; quiz.locked = false;
-      if (quiz.i >= quiz.pool.length) done(); else drawQuiz();
-    }, 1200);
+    if (fb && right) fb.innerHTML = `<div class="qz-fb ${ok ? "ok" : "ng"}">
+      <div style="font-weight:700;font-size:15px">${ok ? "⭕ " + esc(T("qzRight")) : "❌ " + esc(T("qzWrong"))}</div>
+      <div style="margin-top:8px">${esc(T("qzCorrectIs"))}${cardLine(right)}</div>
+      ${picked}
+      <div style="margin-top:16px"><button class="btn primary" onclick="ESS.next()">${esc(T(last ? "essSeeResult" : "quizNext"))} ›</button></div>
+    </div>`;
+    if (fb) fb.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }
+  // 自動で進めない。自分で押して進む(どこで間違えたか読む時間が要る)。
+  function next() {
+    quiz.i++; quiz.locked = false;
+    if (quiz.i >= quiz.pool.length) done(); else drawQuiz();
+  }
+  function sayW(w) { if (typeof speakZh === "function") speakZh(w); }
   function done() {
     body().innerHTML = `<div class="ess-quiz">
       <div class="ess-done">${quiz.ok} / ${quiz.pool.length}</div>
@@ -83,6 +111,6 @@ const ESS = (() => {
         <button class="btn" onclick="ESS.go('${sec}')">${esc(T("essBack"))}</button></div>
     </div>`;
   }
-  return { render, go, say, startQuiz, pick };
+  return { render, go, say, sayW, startQuiz, pick, next };
 })();
 if (typeof window !== "undefined") window.ESS = ESS;   // const は window に乗らない
