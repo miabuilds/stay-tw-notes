@@ -3823,10 +3823,21 @@ function twNormalizeContent(){
   if(!native){
     hide.push('speak');   /* 録音判定はブラウザの音声認識だと不安定 → App だけ */
   } else {
-    /* 2026-09-21 App だけ一時的に隠す:iOS の WKWebView が動画を強制全画面にするため
-       YouTube シャドーイングの練習カードが見えない。原生側の allowsInlineMediaPlayback を
-       入れたビルドが出たら、この 'ytshadow' を外す。Web は playsinline が効くのでそのまま公開。 */
-    hide.push('ytshadow');
+    /* YouTube シャドーイング:WKWebView が動画を強制全画面にして練習カードが見えなくなる問題は
+       allowsInlineMediaPlayback を入れた 1.0.7 で直る。古いビルドの人にだけ隠す。
+       版番号が取れない = 判定できないので、安全側に倒して隠す。 */
+    var YTS_MIN = '1.0.7';
+    var cur = (window.STAYTW_NATIVE && window.STAYTW_NATIVE.appVersion) || '';
+    var ok = false;
+    if (cur && cur !== '?') {
+      var a1 = String(cur).split('.').map(Number), b1 = YTS_MIN.split('.').map(Number);
+      ok = true;
+      for (var i = 0; i < 3; i++) {
+        var x = a1[i] || 0, y = b1[i] || 0;
+        if (x !== y) { ok = x > y; break; }
+      }
+    }
+    if (!ok) hide.push('ytshadow');
   }
   hide.forEach(function(p){
     document.querySelectorAll('[data-panel="'+p+'"]').forEach(function(el){ el.style.display='none'; });
