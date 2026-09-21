@@ -411,6 +411,10 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     }
 
     if (url.pathname === "/api/hit" && req.method === "POST") {
+      // プレビュー(ytstest.*)からのアクセスは自分の動作確認なので数えない。
+      // 混ざると「PC の割合」みたいな判断がそのまま狂う(実際 1 日ぶん汚した)。
+      const from = req.headers.get("Referer") || req.headers.get("Origin") || "";
+      if (/ytstest\./i.test(from)) return new Response(null, { status: 204, headers: h });
       let b; try { b = await req.json(); } catch { b = {}; }
       const path = String(b.path || "/").slice(0, 200);
       const ref = String(b.ref || "").slice(0, 300);
