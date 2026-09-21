@@ -8,24 +8,36 @@
 const YTS = (() => {
   const API = "/api/yt-captions";
   const SPEEDS = [1, 0.75, 0.5];
+  // 影片は「字幕トラックが本当に有る」ものだけ（台湾の YouTube は焼き込み字幕が多く、
+  // 使えるものは少ない）。追加するときは必ず node scripts/yt-seed.mjs --check <id> で確認してから。
   const SAMPLES = [
+    // 入門:短くてはっきり喋る。字幕付きの教材系
     { v: "ulkM3tRfA1Q", cat: "beg", t: "台灣人的口頭禪", tag: "2 分 · 中原大學華語中心" },
     { v: "gD5kuw2EPF4", cat: "beg", t: "常用語系列 EP.2", tag: "2 分 · 中原大學華語中心" },
     { v: "VRBnr6V1gAg", cat: "beg", t: "台灣熱門網路用語", tag: "3 分 · 中原大學華語中心" },
     { v: "0wZe_nqaiN4", cat: "beg", t: "要這樣撩妹才對？", tag: "3 分 · 中原大學華語中心" },
     { v: "5gknWTmFe0A", cat: "beg", t: "台灣華語 vs 中國普通話", tag: "10 分 · Grace Mandarin" },
-    { v: "Bm_bzziblpE", cat: "life", t: "台中觀光宣傳片", tag: "2 分 · 旁白清楚" },
-    { v: "UECAULQW9CE", cat: "life", t: "游泳池為什麼一定要戴泳帽？", tag: "6 分 · 公視 P#" },
-    { v: "8wJpwr1mAZ0", cat: "life", t: "行動電源召回有用嗎？", tag: "7 分 · 公視 P#" },
-    { v: "oRVV2Ae2HtQ", cat: "life", t: "都市熱島該怎麼種樹？", tag: "6 分 · 公視 P#" },
-    { v: "FC074LPlfwU", cat: "news", t: "跨境網購報關流程", tag: "6 分 · 公視 P#" },
-    { v: "ADtDpbuifkU", cat: "news", t: "公視的錢怎麼來、怎麼花？", tag: "8 分 · 公視 P#" },
+    { v: "bA336OmpX38", cat: "beg", t: "搭台北捷運：買票進站・悠遊卡", tag: "7 分 · 樂樂TV" },
+    // 生活:台湾で実際にやること・食べるもの
+    { v: "tqy1JaNotUA", cat: "life", t: "在手搖飲料店怎麼點餐？", tag: "5 分 · Lu Twins" },
+    { v: "x5Ccp2J1ziM", cat: "life", t: "台灣早餐店是怎麼出現的？", tag: "11 分 · 志祺七七" },
+    { v: "gID1iXQdUmk", cat: "life", t: "全家為什麼贏不了 7-11？", tag: "15 分 · 志祺七七" },
+    { v: "ybQbUN35kR8", cat: "life", t: "珍珠奶茶怎麼走向國際？", tag: "11 分 · 志祺七七" },
+    { v: "LRvRY67VWjU", cat: "life", t: "台灣怎麼變成吃鍋大國？", tag: "16 分 · 志祺七七" },
+    { v: "P3pJn58ULsw", cat: "life", t: "台灣泡麵大戰打了半世紀", tag: "13 分 · 志祺七七" },
+    // 社会:ニュースっぽいが身近な話
+    { v: "s5zW5IHcLi8", cat: "news", t: "行人地獄？台灣交通到底怎麼了", tag: "13 分 · 志祺七七" },
+    { v: "ukXD5mrVQMA", cat: "news", t: "台灣人為什麼這麼愛補習？", tag: "11 分 · 志祺七七" },
+    { v: "DnTa8ZVQKv0", cat: "news", t: "台灣住宿為什麼這麼貴？", tag: "12 分 · 志祺七七" },
+    { v: "FCOxTLcqp8I", cat: "news", t: "全球只剩台灣在用「注音」", tag: "12 分 · 志祺七七" },
+    // 講演:長めだが中身がある
     { v: "j_t0XlFoCjU", cat: "talk", t: "向你的困境借東西", tag: "9 分 · TEDxTaipei" },
     { v: "snZ811wvjjw", cat: "talk", t: "如何不讓人生留下遺憾？", tag: "14 分 · TEDxTaipei" },
     { v: "uiJ4zibW8_M", cat: "talk", t: "重新認識「情緒反應」", tag: "15 分 · TEDxTaipei" },
     { v: "E_rrqYcl6TQ", cat: "talk", t: "扎根大地的文學：吳明益", tag: "19 分 · TEDxTaipei" },
     { v: "6i7RcP39NB0", cat: "talk", t: "留十八分鐘給自己：蔣勳", tag: "25 分 · TEDxTaipei" },
   ];
+
   const CATS = ["all", "beg", "life", "news", "talk"];
 
   let player = null, apiReady = false, vid = "", lines = [], cur = 0, mode = "follow";
