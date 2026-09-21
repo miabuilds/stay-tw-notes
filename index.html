@@ -752,6 +752,9 @@ body.more-open .ar-bar{display:none}
 .hb-hi{flex:1;min-width:0}
 .hb-greet{font-family:var(--serif);font-size:21px;font-weight:700;line-height:1.2;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .hb-fire{font-size:11.5px;font-weight:700;color:var(--ac);background:var(--ac-soft);border-radius:999px;padding:3px 9px;letter-spacing:.02em}
+.hb-fire.zero{color:var(--tx3);background:var(--bg2);border:1px solid var(--line)}
+.hb-fire.risk{color:#8a5a00;background:#fdf1d8;border:1px solid #f0d49a}
+html[data-theme="dark"] .hb-fire.risk{color:#f0c674;background:#3a2f18;border-color:#5c4a22}
 .hb-motto{font-size:12.5px;color:var(--tx2);margin-top:4px;line-height:1.55}
 .hb-goal{margin-top:9px}
 .hb-goal-top{display:flex;justify-content:space-between;font-size:11.5px;color:var(--tx3);margin-bottom:4px;font-variant-numeric:tabular-nums}
@@ -1255,7 +1258,7 @@ body.more-open .ar-bar{display:none}
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=101"></script>
+<script src="i18n.js?v=102"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=63"></script>
 <script src="vocab-l1.js?v=52"></script>
@@ -2371,7 +2374,7 @@ function getStreak(){
   let cur = 0, cursor = new Date();
   if (!set.has(dayStr(cursor))) cursor.setDate(cursor.getDate() - 1);   // 今日未学習でも昨日までの連続は生きている
   while (set.has(dayStr(cursor))) { cur++; cursor.setDate(cursor.getDate() - 1); }
-  return { cur, total: set.size };
+  return { cur, total: set.size, todayDone: set.has(dayStr(new Date())) };
 }
 /* ===== 毎日の目標（学習した項目数） ===== */
 function getGoalTarget(){ const g = parseInt(localStorage.getItem("stw_goal") || "20", 10); return (g > 0 ? g : 20); }
@@ -2427,7 +2430,15 @@ function twMonthShort(){ const l = (typeof twGetLang==="function"?twGetLang():"j
   if (l==="id") return ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
   return ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"]; }
 // 学習1アクション＝ストリーク記録＋今日のカウント。フラッシュカード評価・クイズ回答・読解などから呼ぶ。
-function recordStudy(){ recordStudyDay(); bumpDaily(); }
+function recordStudy(){
+  const before = getStreak();
+  recordStudyDay(); bumpDaily();
+  // 今日はじめての学習なら、その場で連続日数を祝う(ハブに戻らないと見えないのでは意味がない)
+  if (!before.todayDone) {
+    const after = getStreak();
+    try { showToast("🔥 " + twT("hbStreakToast").replace("{n}", after.cur)); } catch (e) {}
+  }
+}
 
 /* ===== マイページ ===== */
 // 紹介プログラム。現金ではなく双方に無料日数 → 海外送金も源泉徴収も要らない。
@@ -2954,6 +2965,14 @@ const PA = (() => {
   }
   function esc(x){ return String(x == null ? "" : x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 
+  // 連続日数のチップ。0 なら誘い、切れそうなら警告、続いていれば普通に表示。
+  function fireChip(st){
+    if (!st || !st.cur) return `<span class="hb-fire zero">🔥 ${esc(twT("hbStreakStart"))}</span>`;
+    const n = twT("hbStreak").replace("{n}", st.cur);
+    return st.todayDone
+      ? `<span class="hb-fire">🔥 ${esc(n)}</span>`
+      : `<span class="hb-fire risk">🔥 ${esc(n)}・${esc(twT("hbStreakRisk"))}</span>`;
+  }
   function render(){
     const lvName = { l1:twT("lv_l1"), l2:twT("lv_l2"), l3:twT("lv_l3"), l4:twT("lv_l4"), l5:twT("lv_l5"), l6:twT("lv_l6") }[currentLevel] || "";
     const s = stages();
@@ -2972,7 +2991,7 @@ const PA = (() => {
     const hero = `<div class="hb-hero">
       <img src="images/bear.svg" alt="">
       <div class="hb-hi">
-        <div class="hb-greet">${esc(greet())}${streak.cur > 0 ? `<span class="hb-fire">🔥 ${twT("hbStreak").replace("{n}", streak.cur)}</span>` : ""}</div>
+        <div class="hb-greet">${esc(greet())}${fireChip(streak)}</div>
         <div class="hb-motto">${esc(motto)}</div>
         <div class="hb-goal${daily.done ? " ok" : ""}">
           <div class="hb-goal-top"><span>${esc(twT("pfDaily"))}</span><span>${daily.n} / ${daily.goal}</span></div>

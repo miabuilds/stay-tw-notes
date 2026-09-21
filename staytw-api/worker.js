@@ -371,8 +371,13 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       const ref = String(b.ref || "").slice(0, 300);
       const country = (req.cf && req.cf.country) || req.headers.get("CF-IPCountry") || "";
       const inApp = /STAYTW_NATIVE|ReactNative/i.test(String(b.ua || "")) || b.app ? "app" : "web";
-      await env.DB.prepare("INSERT INTO hits (path, referrer, country, source) VALUES (?1,?2,?3,?4)")
-        .bind(path, ref, country, inApp).run();
+      // 端末の内訳。web の何割が PC なのかが分からないと「web 決済を入れる価値があるか」を判断できない。
+      const ua = req.headers.get("User-Agent") || "";
+      const device = /android/i.test(ua) ? "android"
+        : /iphone|ipad|ipod/i.test(ua) ? "ios"
+        : /mobile/i.test(ua) ? "mobile-other" : "desktop";
+      await env.DB.prepare("INSERT INTO hits (path, referrer, country, source, device) VALUES (?1,?2,?3,?4,?5)")
+        .bind(path, ref, country, inApp, device).run();
       return new Response(null, { status: 204, headers: h });
     }
 
