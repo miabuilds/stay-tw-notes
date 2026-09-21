@@ -1395,7 +1395,7 @@ html[data-theme="dark"] .hb-fire.risk{color:#f0c674;background:#3a2f18;border-co
 <script src="fortune.js?v=2"></script>
 <script src="myvocab.js?v=2"></script>
 <script src="whatsnew.js?v=2"></script>
-<script src="ytshadow.js?v=3"></script>
+<script src="ytshadow.js?v=4"></script>
 <script src="listen.js?v=3"></script>
 <script src="websync.js?v=62"></script>
 <script src="srs.js?v=57"></script>
@@ -3832,7 +3832,16 @@ function twNormalizeContent(){
      true にした後も、アプリ側は 1.0.7 未満なら隠したまま（古い版では全画面バグが残るため）。 */
   var YTS_LIVE = false;
   var YTS_MIN = '1.0.7';
-  var ytOk = YTS_LIVE;
+  /* 自分で見るための抜け道:?yts=1 で解禁（端末に覚える）／?yts=0 で元に戻す。
+     公開前に本人が動作確認できないと、直したかどうかも分からない。 */
+  var ytPrev = false;
+  try {
+    var q = new URLSearchParams(location.search).get('yts');
+    if (q === '1') localStorage.setItem('stw_yts_preview', '1');
+    if (q === '0') localStorage.removeItem('stw_yts_preview');
+    ytPrev = localStorage.getItem('stw_yts_preview') === '1';
+  } catch (e) {}
+  var ytOk = YTS_LIVE || ytPrev;
   if (ytOk && native) {
     var cur = (window.STAYTW_NATIVE && window.STAYTW_NATIVE.appVersion) || '';
     ytOk = false;

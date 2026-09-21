@@ -30,6 +30,7 @@ const YTS = (() => {
 
   let player = null, apiReady = false, vid = "", lines = [], cur = 0, mode = "follow";
   let loopOn = false, spdIdx = 0, vocab = [], watchT = 0, booted = false, meta = {};
+  let followT = 0;   // 跟播モード:動画の再生位置に合わせてカードを送る
   let cat = "all", rec = null, recording = false, stopTimer = 0;
 
   const T = (k) => (typeof twT === "function" ? twT(k) : k);
@@ -126,6 +127,18 @@ const YTS = (() => {
         videoId: vid, playerVars: { rel: 0, playsinline: 1, modestbranding: 1 },
         events: {
           onReady: () => { card(); },
+          // 使用者直接按影片自己的播放鍵時,我們的監看沒被掛上 →
+          // 跟播模式字幕不動、逐句模式會一路播下去。這裡接手。
+          onStateChange: (e) => {
+            const st = e && e.data;
+            if (st === 1) {
+              if (mode === "follow") followWatch();
+              else if (lines[cur]) {
+                const r = segRange(cur);
+                watchSeg(r.s, r.e, () => { clearWatch(); try { player.pauseVideo(); } catch (e2) {} if (loopOn) setTimeout(playSeg, 350); });
+              }
+            } else if (st === 2) { clearWatch(); clearFollow(); }   // 使用者自己按暫停
+          },
           onError: (e) => {
             const code = e && e.data;
             $("ytsCard").innerHTML = `<div class="yts-empty"><p>${esc(code === 101 || code === 150 ? T("ytsNoEmbed") : T("ytsPlayErr"))}</p>
@@ -139,6 +152,9 @@ const YTS = (() => {
   function setMode(m) {
     mode = m;
     document.querySelectorAll(".yts-mode").forEach((b) => b.classList.toggle("on", b.dataset.m === m));
+    clearWatch(); clearFollow();
+    let st = -1; try { st = player && player.getPlayerState(); } catch (e) {}
+    if (st === 1) { if (m === "follow") followWatch(); else { const r = segRange(cur); watchSeg(r.s, r.e, () => { clearWatch(); try { player.pauseVideo(); } catch (e) {} }); } }
     card();
   }
 
@@ -177,25 +193,88 @@ const YTS = (() => {
   }
 
   // ── 播放控制 ──
-  function play() {
+  // ここは 2 回作り直している。固定 setTimeout で「この長さ経ったら止める」方式は、
+  //   ・seekTo の直後 getCurrentTime はしばらく“前の位置”を返す
+  //   ・バッファリングで実際の再生開始が遅れる
+  // ので「一言しゃべって止まる」になる。StayJP が同じ苦情で直した方式に合わせ、
+  // 再生位置を 100ms ごとに見て「seek がその区間に着地してから」終わりを判定する。
+  function segRange(i) {
+    const l = lines[i];
+    const s0 = Math.max(0, l.t / 1000 - 0.15);              // 頭を切らないよう少し前から
+    let e0 = (l.t + (l.d || 4000)) / 1000 + 0.3;            // 語尾も少し残す
+    const nx = lines[i + 1];
+    if (nx) e0 = Math.min(e0, nx.t / 1000 + 0.25);          // ASR の d は次の句に食い込みがち
+    return { s: s0, e: e0 };
+  }
+  function clearWatch() { clearInterval(watchT); watchT = 0; }
+  function clearFollow() { clearInterval(followT); followT = 0; }
+  function watchSeg(s0, e0, onEnd) {
+    clearWatch();
+    let landed = false, tries = 0;
+    watchT = setInterval(() => {
+      try {
+        const c = player.getCurrentTime();
+        if (!landed) {
+          if (c >= s0 - 0.6 && c < e0 + 0.5) landed = true;
+          else if (++tries > 40) landed = true;             // 4 秒待っても着地しなければ諦めて判定に入る
+          else return;
+        }
+        if (c >= e0 - 0.05 || c < s0 - 1.5) onEnd(c);
+      } catch (e) {}
+    }, 100);
+  }
+  function playSeg() {
     const l = lines[cur]; if (!l || !player || !player.seekTo) return;
-    clearTimeout(watchT);
+    const r = segRange(cur);
+    clearWatch(); clearFollow();
     try {
       player.setPlaybackRate(speed());
-      player.seekTo(l.t / 1000, true);
+      player.seekTo(r.s, true);
       player.playVideo();
     } catch (e) { return; }
-    // 下一句開始 = 這句結束(ASR 的 d 常常蓋過下一句,所以用下一句的 t 截斷)
-    const next = lines[cur + 1];
-    const endMs = next ? next.t : l.t + (l.d || 4000);
-    const waitMs = Math.max(400, (endMs - l.t) / speed());
-    watchT = setTimeout(() => {
+    watchSeg(r.s, r.e, () => {
+      clearWatch();
       try { player.pauseVideo(); } catch (e) {}
-      if (loopOn) setTimeout(play, 350);
-    }, waitMs);
+      if (loopOn) setTimeout(playSeg, 350);
+    });
+  }
+  // 跟播:止めずに流しっぱなしで、カードだけ再生位置に追従させる。
+  // これが無いと「動画の再生ボタンを押しても字幕が動かない」になる。
+  function followWatch() {
+    if (!player) return;
+    clearWatch(); clearFollow();
+    followT = setInterval(() => {
+      try {
+        const ms = player.getCurrentTime() * 1000;
+        let i = cur;
+        // シークバーを動かされたら現在地が離れるので頭から探し直す
+        if (ms < lines[i].t || ms >= lines[i].t + (lines[i].d || 4000) + 4000) i = 0;
+        while (i < lines.length - 1 && lines[i + 1].t <= ms) i++;
+        while (i > 0 && lines[i].t > ms) i--;
+        if (i !== cur) { cur = i; card(); }
+      } catch (e) {}
+    }, 200);
+  }
+  function play() {
+    if (!player || !lines[cur]) return;
+    if (mode === "follow") {
+      let st = -1; try { st = player.getPlayerState(); } catch (e) {}
+      if (st === 1) { try { player.pauseVideo(); } catch (e) {} clearFollow(); return; }
+      try { player.setPlaybackRate(speed()); player.seekTo(lines[cur].t / 1000, true); player.playVideo(); } catch (e) {}
+      followWatch();
+      return;
+    }
+    // 逐句:句の途中で止まっているなら続きから、そうでなければ頭から
+    let c = -1; try { c = player.getCurrentTime(); } catch (e) {}
+    const r = segRange(cur);
+    if (c > r.s && c < r.e - 0.1) {
+      try { player.playVideo(); } catch (e) {}
+      watchSeg(r.s, r.e, () => { clearWatch(); try { player.pauseVideo(); } catch (e) {} if (loopOn) setTimeout(playSeg, 350); });
+    } else playSeg();
   }
   function go(d) {
-    clearTimeout(watchT); try { player && player.pauseVideo && player.pauseVideo(); } catch (e) {}
+    clearWatch(); clearFollow();
+    try { player && player.pauseVideo && player.pauseVideo(); } catch (e) {}
     const n = cur + d;
     if (n < 0 || n >= lines.length) return;
     cur = n; card();
@@ -211,7 +290,7 @@ const YTS = (() => {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     const m = $("ytsMic"), st = $("ytsStatus");
     try { player && player.pauseVideo && player.pauseVideo(); } catch (e) {}
-    clearTimeout(watchT);
+    clearWatch(); clearFollow();
     if (isNative()) {
       let final = "";
       recording = true; m.classList.add("rec"); st.textContent = T("ytsListening");
@@ -277,7 +356,7 @@ const YTS = (() => {
   // ── 首頁:影片牆 ──
   function render() {
     booted = true;
-    clearTimeout(watchT);
+    clearWatch(); clearFollow();
     try { if (player && player.destroy) player.destroy(); } catch (e) {}
     player = null; vid = "";
     const list = SAMPLES.filter((s) => cat === "all" || s.cat === cat);
