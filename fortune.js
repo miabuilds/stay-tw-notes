@@ -98,10 +98,11 @@ const Fortune = (() => {
       const list = typeof getVocabData === "function" ? getVocabData(currentLevel) : [];
       if (list && list.length) word = list[(base >>> 17) % list.length];
     } catch (e) {}
-    return { rank, yi, ji, word };
+    const no = ((base >>> 23) % 60) + 1;   // 六十甲子籤に合わせて 1〜60
+    return { rank, yi, ji, word, no };
   }
 
-  function checkIn() {
+  function save() {
     const t = dayStr(new Date());
     const d = days();
     if (!d.includes(t)) {
@@ -109,8 +110,30 @@ const Fortune = (() => {
       localStorage.setItem(K_DAYS, JSON.stringify(d.slice(-400)));
       try { if (typeof window.onSRSChange === "function") window.onSRSChange(); } catch (e) {}
     }
-    try { PA.render(); } catch (e) {}
-    try { document.querySelector(".fo-card").scrollIntoView({ block: "nearest", behavior: "smooth" }); } catch (e) {}
+  }
+  // 廟で籤を引く手順をそのまま:筒を振る → 竹籤が 1 本飛び出す → 籤詩をひらく。
+  // 結果は日付で決まっているので演出だけ。動きを減らす設定の人には即表示。
+  function checkIn() {
+    save();
+    const reduce = (() => { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } })();
+    const box = document.querySelector(".fo-shake");
+    if (reduce || !box) { try { PA.render(); } catch (e) {} return; }
+    box.classList.add("go");
+    // 1.5 秒黙って待たせると固まったように見える。振っていると言葉でも出す
+    try {
+      const t = document.querySelector(".fo-draw .fo-t"), d = document.querySelector(".fo-draw .fo-d");
+      if (t) t.textContent = T("foShaking", "籤筒を振っています…");
+      if (d) d.textContent = T("foShakingSub", "ちょっと待ってね");
+      const b2 = document.querySelector(".fo-draw"); if (b2) b2.disabled = true;
+    } catch (e) {}
+    try { navigator.vibrate && navigator.vibrate([18, 60, 18, 60, 26]); } catch (e) {}
+    setTimeout(() => {
+      try { PA.render(); } catch (e) {}
+      try {
+        const c = document.querySelector(".fo-slip");
+        if (c) { c.classList.add("in"); c.scrollIntoView({ block: "nearest", behavior: "smooth" }); }
+      } catch (e) {}
+    }, 1500);
   }
 
   function speak() {
@@ -122,20 +145,31 @@ const Fortune = (() => {
   const T = (k, fb) => { try { const v = twT(k); return v && v !== k ? v : fb; } catch (e) { return fb; } };
 
   /** ハブに差し込むカード。未打卡ならボタン、打卡済みなら今日の運勢。 */
+  const NUM = ["〇","一","二","三","四","五","六","七","八","九"];
+  function cnNum(n) {                       // 12 → 十二、35 → 三十五（籤の番号らしく漢数字で）
+    if (n < 10) return NUM[n];
+    if (n < 20) return "十" + (n % 10 ? NUM[n % 10] : "");
+    return NUM[Math.floor(n / 10)] + "十" + (n % 10 ? NUM[n % 10] : "");
+  }
+
   function card() {
     const n = days().length;
     if (!checkedToday()) {
-      return `<button class="fo-card fo-btn" onclick="Fortune.checkIn()">
-        <div class="fo-ic">籤</div>
+      // 籤筒。竹の節を線で、赤い帯に「籤」。画像を足さずに CSS だけで台湾の筒に見せる。
+      return `<button class="fo-card fo-draw" onclick="Fortune.checkIn()">
+        <div class="fo-shake">
+          <div class="fo-sticks"><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="fo-tube"><span class="fo-tube-band">籤</span></div>
+          <div class="fo-out"></div>
+        </div>
         <div class="fo-tx">
           <div class="fo-t">${esc(T("foCheckIn", "今日の運勢を引く"))}</div>
           <div class="fo-d">${esc(T("foCheckInSub", "打卡して、きょうの宜・忌と幸運の一字を見る"))}</div>
         </div>
-        <svg viewBox="0 0 24 24" class="fo-ch"><path d="M9 6l6 6-6 6"/></svg>
       </button>`;
     }
     const f = todayFortune();
-    const zy = (s) => (typeof twZy === "function" ? twZy(s) : esc(s));
+    const zy = (s2) => (typeof twZy === "function" ? twZy(s2) : esc(s2));
     const w = f.word
       ? `<button class="fo-word" onclick="Fortune.speak()">
            <span class="fo-wl">${esc(T("foLucky", "今日の幸運字"))}</span>
@@ -144,10 +178,15 @@ const Fortune = (() => {
            <span class="fo-wm">${esc((f.word.m && (f.word.m[mk()] || f.word.m.e || f.word.m.j)) || "")}</span>
            <svg viewBox="0 0 24 24" class="ic fo-wp"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg>
          </button>` : "";
-    return `<div class="fo-card fo-done">
-      <div class="fo-head">
-        <span class="fo-rank fo-${f.rank.k}">${f.rank.z}</span>
-        <span class="fo-count">${esc(T("foDays", "打卡 {n} 日目").replace("{n}", String(n)))}</span>
+    // 籤詩。縦書きの籤番号＋朱印。廟でもらう紙の並びに寄せる。
+    return `<div class="fo-card fo-slip">
+      <div class="fo-slip-top">
+        <div class="fo-no"><span>第</span><b>${esc(cnNum(f.no))}</b><span>籤</span></div>
+        <div class="fo-rank-wrap">
+          <span class="fo-rank fo-${f.rank.k}">${f.rank.z}</span>
+          <span class="fo-count">${esc(T("foDays", "打卡 {n} 日目").replace("{n}", String(n)))}</span>
+        </div>
+        <div class="fo-seal">平安</div>
       </div>
       <div class="fo-rows">
         <div class="fo-row"><span class="fo-tag yi">宜</span><div class="fo-rt"><b>${esc(f.yi.z)}</b><span class="fo-zy">${zy(f.yi.zy)}</span><span class="fo-m">${esc(tr(f.yi))}</span></div></div>

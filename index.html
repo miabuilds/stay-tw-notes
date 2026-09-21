@@ -885,33 +885,75 @@ html[data-theme="dark"] .hb-fire.risk{color:#f0c674;background:#3a2f18;border-co
 .mv-m{font-size:13.5px;color:var(--tx);margin-top:5px;line-height:1.5}
 .mv-ex{font-size:12.5px;color:var(--tx2);margin-top:5px;line-height:1.55;cursor:pointer}
 .mv-ex span{display:block;color:var(--tx3);font-size:12px}
-/* 每日打卡＋運勢。宜/忌 は自作短文なので注音は出さない(未検証の読みをルビにしない) */
+/* 每日打卡＋今日運勢。廟裡抽籤的樣子:搖籤筒 → 竹籤掉出來 → 攤開籤詩。
+   全部用 CSS 畫,不加圖檔。宜/忌 的注音是逐句對過萌典的固定值(見 fortune.js)。 */
 .fo-card{display:block;width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:16px;background:var(--bg2);padding:14px 15px;text-align:left;font-family:inherit}
-.fo-btn{display:flex;align-items:center;gap:13px;cursor:pointer}
-.fo-btn:active{transform:scale(.995)}
-.fo-ic{flex:0 0 42px;width:42px;height:42px;border-radius:12px;background:var(--ac);color:#fff;font-family:var(--serif);font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+/* ── 未打卡:籤筒 ── */
+.fo-draw{display:flex;align-items:center;gap:16px;cursor:pointer;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 6%,var(--bg2)),var(--bg2));border-color:var(--ac)}
+.fo-draw:active{transform:scale(.995)}
+.fo-shake{position:relative;flex:0 0 58px;width:58px;height:66px}
+/* 竹籤:筒から少し頭が出ている */
+.fo-sticks{position:absolute;left:50%;top:0;transform:translateX(-50%);display:flex;gap:3px;z-index:1}
+.fo-sticks i{display:block;width:3px;height:17px;border-radius:2px 2px 0 0;background:linear-gradient(#e8d9b4,#cdb98c)}
+.fo-sticks i:nth-child(2){height:22px}.fo-sticks i:nth-child(4){height:20px}.fo-sticks i:nth-child(5){height:14px}
+/* 筒本体:竹の節を縦線で表現 */
+.fo-tube{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:40px;height:50px;border-radius:5px 5px 8px 8px;z-index:2;
+  background:repeating-linear-gradient(90deg,#8e5a3b 0 6px,#a06a47 6px 12px);box-shadow:inset 0 -6px 10px rgba(0,0,0,.22),0 2px 4px rgba(0,0,0,.18)}
+.fo-tube-band{position:absolute;left:0;right:0;top:15px;height:19px;background:var(--ac);color:#fff;
+  font-family:var(--serif);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;letter-spacing:.06em}
+/* 飛び出す 1 本 */
+.fo-out{position:absolute;left:50%;top:6px;width:4px;height:26px;border-radius:2px 2px 0 0;
+  background:linear-gradient(#efe2c4,#d4bf93);opacity:0;transform:translateX(-50%)}
+.fo-draw.on .fo-shake,.fo-shake.go{animation:foShake .12s linear 0s 9}
+.fo-shake.go .fo-out{animation:foOut .55s cubic-bezier(.3,1.5,.6,1) 1.08s forwards}
+@keyframes foShake{
+  0%{transform:rotate(0) translateY(0)}25%{transform:rotate(-7deg) translateY(-2px)}
+  50%{transform:rotate(0) translateY(0)}75%{transform:rotate(7deg) translateY(-2px)}100%{transform:rotate(0)}
+}
+@keyframes foOut{0%{opacity:0;transform:translate(-50%,4px)}35%{opacity:1}100%{opacity:1;transform:translate(-50%,-26px) rotate(9deg)}}
 .fo-tx{flex:1;min-width:0}
 .fo-t{font-size:14.5px;font-weight:700;color:var(--tx);line-height:1.35}
-.fo-d{font-size:12px;color:var(--tx3);margin-top:2px;line-height:1.45}
-.fo-ch{width:18px;height:18px;fill:none;stroke:var(--tx3);stroke-width:2;flex-shrink:0}
-.fo-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
-.fo-rank{font-family:var(--serif);font-size:24px;font-weight:700;letter-spacing:.06em}
+.fo-d{font-size:12px;color:var(--tx3);margin-top:3px;line-height:1.45}
+
+/* ── 打卡済み:籤詩 ── */
+.fo-slip{position:relative;background:
+  linear-gradient(#fffdf6,#fbf5e6);
+  border:1px solid #e0cfa8;box-shadow:0 1px 0 #fff inset,0 2px 8px rgba(120,90,40,.08)}
+.fo-slip::before{content:"";position:absolute;inset:5px;border:1px solid rgba(184,54,42,.22);border-radius:11px;pointer-events:none}
+html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);border-color:#4a3f2c}
+.fo-slip.in{animation:foIn .5s cubic-bezier(.2,.9,.3,1)}
+@keyframes foIn{0%{opacity:0;transform:translateY(10px) rotate(-1.5deg)}100%{opacity:1;transform:none}}
+.fo-slip-top{display:flex;align-items:center;gap:12px;padding:4px 2px 12px;border-bottom:1px dashed rgba(184,54,42,.28);margin-bottom:12px}
+.fo-no{display:flex;flex-direction:column;align-items:center;line-height:1.05;color:var(--ac);font-family:var(--serif);flex:0 0 auto}
+.fo-no span{font-size:9.5px;opacity:.8}
+.fo-no b{font-size:19px;font-weight:700;margin:1px 0}
+.fo-rank-wrap{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.fo-rank{font-family:var(--serif);font-size:27px;font-weight:700;letter-spacing:.1em;line-height:1.1}
 .fo-daji{color:var(--ac)}.fo-zhong{color:#B07A2A}.fo-xiao{color:#6E8C4A}.fo-ji{color:#4A7C8C}.fo-mo{color:var(--tx2)}
-.fo-count{font-size:11.5px;color:var(--tx3);white-space:nowrap}
-.fo-rows{display:flex;flex-direction:column;gap:7px}
+.fo-count{font-size:11.5px;color:var(--tx3)}
+/* 朱印っぽい四角。廟の紙にある赤い判子 */
+.fo-seal{flex:0 0 auto;width:38px;height:38px;border:2px solid var(--ac);border-radius:5px;color:var(--ac);
+  font-family:var(--serif);font-size:13px;font-weight:700;line-height:1.05;display:flex;align-items:center;justify-content:center;
+  text-align:center;transform:rotate(-7deg);opacity:.85;letter-spacing:-.02em;padding:2px}
+.fo-rows{display:flex;flex-direction:column;gap:8px}
 .fo-row{display:flex;align-items:flex-start;gap:9px;font-size:14px;line-height:1.45}
 .fo-rt{min-width:0;display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
 .fo-zy{font-size:11.5px;color:var(--tx2);white-space:nowrap}
 .fo-row b{font-family:var(--serif);font-weight:700;color:var(--tx);white-space:nowrap}
-.fo-tag{flex:0 0 22px;width:22px;height:22px;border-radius:6px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;color:#fff}
+.fo-tag{flex:0 0 24px;width:24px;height:24px;border-radius:50%;font-family:var(--serif);font-size:13px;font-weight:700;
+  display:inline-flex;align-items:center;justify-content:center;color:#fff}
 .fo-tag.yi{background:#6E8C4A}.fo-tag.ji{background:#9A5B5B}
 .fo-m{font-size:12px;color:var(--tx3);min-width:0}
-.fo-word{display:flex;align-items:center;gap:9px;flex-wrap:wrap;width:100%;box-sizing:border-box;margin-top:12px;padding:11px 12px;border:0;border-top:1px solid var(--line);background:none;cursor:pointer;font-family:inherit;text-align:left}
+.fo-word{display:flex;align-items:center;gap:9px;flex-wrap:wrap;width:100%;box-sizing:border-box;margin-top:12px;padding:11px 12px 2px;
+  border:0;border-top:1px dashed rgba(184,54,42,.28);background:none;cursor:pointer;font-family:inherit;text-align:left}
 .fo-wl{font-size:11px;color:var(--tx3);width:100%;line-height:1}
 .fo-word b{font-family:var(--serif);font-size:23px;font-weight:700;color:var(--tx)}
 .fo-wz{font-size:12.5px;color:var(--tx2)}
 .fo-wm{font-size:12.5px;color:var(--tx3)}
 .fo-wp{width:17px;height:17px;fill:none;stroke:var(--ac);stroke-width:1.8;margin-left:auto}
+@media(prefers-reduced-motion:reduce){.fo-shake.go,.fo-shake.go .fo-out,.fo-slip.in{animation:none}}
 .pw-per{display:block;font-style:normal;font-size:10.5px;color:var(--ac);font-weight:700;margin-top:3px;line-height:1.3}
 .pw-trial{text-align:center;font-size:13px;font-weight:700;color:var(--ac);background:var(--ac-soft);border-radius:10px;padding:9px 10px;margin:0 0 12px;line-height:1.45}
 .pw-invested{text-align:center;font-size:12.5px;color:var(--tx2);background:var(--bg3);border-radius:10px;padding:9px 12px;margin:12px 0 0;line-height:1.5}
@@ -1335,7 +1377,7 @@ html[data-theme="dark"] .hb-fire.risk{color:#f0c674;background:#3a2f18;border-co
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=108"></script>
+<script src="i18n.js?v=109"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=63"></script>
 <script src="vocab-l1.js?v=52"></script>
@@ -1392,7 +1434,7 @@ html[data-theme="dark"] .hb-fire.risk{color:#f0c674;background:#3a2f18;border-co
 <script src="paywall.js?v=104"></script>
 <script src="essentials.js?v=2"></script>
 <script src="essentials-ui.js?v=2"></script>
-<script src="fortune.js?v=2"></script>
+<script src="fortune.js?v=4"></script>
 <script src="myvocab.js?v=2"></script>
 <script src="whatsnew.js?v=2"></script>
 <script src="ytshadow.js?v=7"></script>
