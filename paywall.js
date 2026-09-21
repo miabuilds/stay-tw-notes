@@ -98,6 +98,21 @@ const Paywall = (() => {
     try { if (typeof gtag === "function") gtag("event", "paywall_shown", { feature }); } catch (e) {}
   }
 
+  // 「機能一覧」だけの paywall は効かない。ネイティブ側（src/components/Paywall.tsx）は
+  // 実価格・月あたり・51%・無料試用まで出しているのに、web はどれも無かったので揃える。
+  const TRIAL_DAYS = 7;                                   // App Store Connect の introductory offer（2026-09-16 設定）と一致
+  const YEARLY_PER_MONTH = "¥483";                        // 5,800 / 12（切り上げ）
+  // その人がすでに積んだもの（語数・連続日数）を出す。止めるのが惜しくなる方が、機能を並べるより強い。
+  function investedLine() {
+    let words = 0, streak = 0;
+    try { words = Object.keys(JSON.parse(localStorage.getItem("stw_srs") || "{}")).length; } catch (e) {}
+    try { streak = (typeof getStreak === "function" ? getStreak().cur : 0) || 0; } catch (e) {}
+    if (words < 5) return "";                             // 始めたばかりの人に出しても白々しい
+    const t = streak > 0 ? twT("pwInvestedBoth").replace("{w}", words).replace("{d}", streak)
+                         : twT("pwInvested").replace("{w}", words);
+    return `<p class="pw-invested">${t}</p>`;
+  }
+
   function show(feature) {
     const bg = document.getElementById("pwBg");
     if (!bg) return;
@@ -113,6 +128,7 @@ const Paywall = (() => {
         <h3 style="font-family:var(--serif);font-size:21px;font-weight:700;margin:10px 0 4px">${twT("pwTitle")}</h3>
         <p style="font-size:13.5px;color:var(--tx2)">${desc}</p>
       </div>
+      ${investedLine()}
       <ul class="pw-benefits">
         <li>✓ ${twT("pwB1")}</li>
         <li>✓ ${twT("pwB2")}</li>
@@ -121,9 +137,11 @@ const Paywall = (() => {
       </ul>
       <div class="pw-plans">
         <div class="pw-plan"><b>${PRICES.monthly}</b><span>${twT("pwMonthly")}</span></div>
-        <div class="pw-plan hot"><span class="pw-tag">${twT("pwBest")}</span><b>${PRICES.yearly}</b><span>${twT("pwYearly")}</span></div>
+        <div class="pw-plan hot"><span class="pw-tag">${twT("pwBest")}</span><b>${PRICES.yearly}</b><span>${twT("pwYearly")}</span>
+          <em class="pw-per">${twT("pwPerMonth").replace("{p}", YEARLY_PER_MONTH)}</em></div>
         <div class="pw-plan"><b>${PRICES.lifetime}</b><span>${twT("pwLifetime")}</span></div>
       </div>
+      <p class="pw-trial">🎁 ${twT("pwTrial").replace("{n}", String(TRIAL_DAYS))}</p>
       ${isNative() ? `<button class="btn primary" style="width:100%;padding:13px" onclick="Paywall.openNative()">${twT("pwCtaNative")}</button>` : webCta()}
       ${feature === "fav" || feature === "article" ? "" : `<p style="text-align:center;font-size:12px;color:var(--tx3);margin-top:10px">${twT("pwTomorrow")}</p>`}`;
     bg.classList.add("show");

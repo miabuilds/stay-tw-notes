@@ -58,6 +58,12 @@ function pickLang(url, req) {
   return null;   // 判定できなければ元の静的 HTML のまま
 }
 
+// サムネも言語ごとに差し替える。2026-09-21 まで文言だけ翻訳して画像は日本語のままだったので、
+// 韓国語アカウントで貼っても日本語のカードが出ていた。画像は images/og-{lang}.png。
+function ogImage(url, lang) {
+  return new URL(`/images/og-${lang}.png`, url.origin).toString();
+}
+
 function hasAppCookie(req) {
   const c = req.headers.get("cookie") || "";
   return /(?:^|;\s*)stw_app=1(?:;|$)/.test(c);
@@ -100,8 +106,10 @@ export async function onRequest(context) {
       .on('meta[property="og:title"]', new AttrSetter("content", m.title))
       .on('meta[property="og:description"]', new AttrSetter("content", m.desc))
       .on('meta[property="og:locale"]', new AttrSetter("content", m.locale))
+      .on('meta[property="og:image"]', new AttrSetter("content", ogImage(url, lang)))
       .on('meta[name="twitter:title"]', new AttrSetter("content", m.title))
       .on('meta[name="twitter:description"]', new AttrSetter("content", m.desc))
+      .on('meta[name="twitter:image"]', new AttrSetter("content", ogImage(url, lang)))
       .on("html", new AttrSetter("lang", lang))
       .transform(res);
   }

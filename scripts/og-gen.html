@@ -1,0 +1,66 @@
+<!doctype html>
+<meta charset="utf-8">
+<!--
+  OG 画像（リンクのサムネ）を言語ごとに作るためのテンプレ。1200x630。
+  PIL で描くと明朝が無くてブランドが崩れるので、サイトと同じ CSS/フォントでブラウザに描かせて撮る。
+    scripts/make-og.sh  →  images/og-{ja,ko,en,vi,id}.png
+  ?lang=ko のように指定。既定は ja。
+-->
+<title>og</title>
+<style>
+  :root{ --bg:#FAF8F3; --bg3:#F2EEE5; --tx:#1C1C1E; --tx2:#6A6A6A; --ac:#B8362A; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{
+    background:linear-gradient(135deg,#FBF6E8 0%,var(--bg) 46%,var(--bg3) 100%);
+    font-family:"Hiragino Sans GB","Apple SD Gothic Neo","Arial Unicode MS",sans-serif;
+    display:flex;align-items:center;gap:48px;padding:0 74px;position:relative;
+  }
+  .bear{width:268px;flex:0 0 268px}
+  .bear img{width:100%;display:block}
+  .tx{flex:1;min-width:0;position:relative;z-index:2}
+  .eyebrow{font-size:25px;font-weight:800;letter-spacing:.24em;color:var(--ac);margin-bottom:22px}
+  h1{
+    font-family:"Songti TC","Songti SC","Hiragino Mincho ProN","Apple SD Gothic Neo",serif;
+    font-size:68px;line-height:1.19;font-weight:700;color:var(--tx);letter-spacing:.01em;
+  }
+  h1.sm{font-size:56px}
+  .brand{
+    font-family:"Songti TC","Songti SC","Apple SD Gothic Neo",serif;
+    font-size:35px;font-weight:700;color:var(--ac);margin-top:14px;letter-spacing:.02em;
+  }
+  p{font-size:25px;line-height:1.62;color:var(--tx2);margin-top:20px;max-width:700px}
+  /* 右下の大きな ㄅ。うっすら敷いてブランドの手触りを出す */
+  .wm{
+    position:absolute;right:-64px;bottom:-16px;font-size:340px;line-height:1;
+    color:var(--ac);opacity:.06;font-family:"Hiragino Sans GB","Arial Unicode MS",sans-serif;z-index:1;
+  }
+</style>
+<div class="bear"><img src="../images/bear.svg" alt=""></div>
+<div class="tx">
+  <div class="eyebrow">STAYTW · STUDY</div>
+  <h1 id="h"></h1>
+  <div class="brand" id="b"></div>
+  <p id="d"></p>
+</div>
+<div class="wm">ㄅ</div>
+<script>
+const T = {
+  ja: { h:"台湾華語を、<br>ゼロから無料で。", b:"台湾華語スタディ　StayTW",
+        d:"繁體字＋注音＋拼音。単語・文法・フレーズ・分級リーディング・深掘り記事・模試まで。ブラウザですぐ、登録不要。" },
+  ko: { h:"대만 화어를,<br>처음부터 무료로.", b:"대만 화어 스터디　StayTW",
+        d:"번체자＋주음＋병음. 단어·문법·회화·독해·심화 기사·모의고사까지. 브라우저에서 바로, 가입 없이." },
+  en: { h:"Taiwanese Mandarin,<br>free from zero.", b:"StayTW Study", sm:1,
+        d:"Traditional characters + Zhuyin + Pinyin. Vocabulary, grammar, phrases, graded reading, articles and mock exams. In your browser, no signup." },
+  vi: { h:"Tiếng Trung Đài Loan,<br>từ số 0, miễn phí.", b:"StayTW Study", sm:1,
+        d:"Chữ phồn thể + Zhuyin + Pinyin. Từ vựng, ngữ pháp, câu giao tiếp, bài đọc theo cấp độ, bài viết chuyên sâu và thi thử. Ngay trên trình duyệt, không cần đăng ký." },
+  id: { h:"Mandarin Taiwan,<br>gratis dari nol.", b:"StayTW Study", sm:1,
+        d:"Aksara tradisional + Zhuyin + Pinyin. Kosakata, tata bahasa, frasa, bacaan bertingkat, artikel mendalam, dan simulasi ujian. Langsung di browser, tanpa daftar." },
+};
+const l = new URLSearchParams(location.search).get("lang") || "ja";
+const v = T[l] || T.ja;
+document.getElementById("h").innerHTML = v.h;
+if (v.sm) document.getElementById("h").classList.add("sm");
+document.getElementById("b").textContent = v.b;
+document.getElementById("d").textContent = v.d;
+</script>
