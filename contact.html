@@ -26,7 +26,9 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--ac)}
 .lang-btn{background:var(--bg3);border:1px solid var(--bd);cursor:pointer;color:var(--tx2);padding:3px 11px;font-size:12px;font-weight:600;border-radius:8px;font-family:inherit}
 .hp{position:absolute;left:-9999px;opacity:0}
 .hint{font-size:12.5px;color:var(--tx3);margin-top:8px;line-height:1.6}
-.hint.warn{color:#8a5a00;background:#fdf1d8;border:1px solid #f0d49a;border-radius:8px;padding:8px 10px}
+.relay-box{background:#fdf1d8;border:1px solid #f0d49a;border-radius:10px;padding:10px 12px;margin-top:10px}
+.relay-t{font-size:12.5px;line-height:1.65;color:#8a5a00}
+.relay-box input{width:100%;box-sizing:border-box;margin-top:8px;padding:9px 10px;border:1px solid #e3cf9f;border-radius:8px;font-size:14px;background:#fff;color:#333}
 .hint.err{color:var(--ac);font-weight:600}
 </style>
 </head>
@@ -52,6 +54,10 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--ac)}
     <label data-i18n="lblEmail">メールアドレス（必須）</label>
     <input id="femail" name="email" type="email" required placeholder="you@example.com">
     <div class="hint" id="emailNote" style="display:none"></div>
+    <div id="relayBox" class="relay-box" style="display:none">
+      <div class="relay-t"></div>
+      <input id="realEmail" type="email" placeholder="you@example.com" autocomplete="email">
+    </div>
     <input class="hp" name="website" tabindex="-1" autocomplete="off">
     <button class="btn" type="submit" data-i18n="btnSend">送信する</button>
     <div class="done" id="done" data-i18n="doneMsg">✅ 送信しました。ありがとうございます！</div>
@@ -62,22 +68,22 @@ const T = {
   zh:{ back:"← 回學習工具", title:"意見・問題回報",
     lead:"發現任何問題都歡迎隨時告訴我們，特別感謝內容錯誤的回報。若需要回覆，請留下 email。",
     lblType:"類型", optBug:"問題（無法運作／顯示異常）", optContent:"內容錯誤（單字・翻譯・語音等）", optFeature:"功能建議", optOther:"其他・心得",
-    lblMsg:"內容 *", phMsg:"例：Level 2「颱風」的例句翻譯怪怪的／模擬考結果畫面…", lblEmail:"Email（必填）", emailLogged:"使用你登入的信箱", emailRelay:"你的 Apple 帳號用的是隱藏信箱，我們回信會被退回。請留一個收得到的 email。", emailNeed:"請填寫 Email",
+    lblMsg:"內容 *", phMsg:"例：Level 2「颱風」的例句翻譯怪怪的／模擬考結果畫面…", lblEmail:"Email（必填）", emailLogged:"使用你登入的信箱", emailRelay:"你用的是 Apple「隱藏信箱」，我們的回覆很可能寄不到。想收到回覆的話，留一個收得到的 email（選填）：", emailNeed:"請填寫 Email",
     hintMsg:"請盡量具體 🙏 寫出「哪個畫面／等級」「做了什麼」「結果怎樣（期待 vs 實際）」，我們能更快修好。", tooShort:"再多描述一點點（至少 10 個字）", btnSend:"送出", sending:"送出中…", doneMsg:"✅ 已送出，謝謝你！", err:"送出失敗 — 請再試一次" },
   ja:{ back:"← 学習ツールへ戻る", title:"ご意見・不具合報告",
     lead:"気づいたことがあれば、なんでも気軽に送ってください。内容の誤り報告は特にありがたいです。返信が必要な場合はメールアドレスを添えてください。",
     lblType:"種類", optBug:"不具合（動かない・表示がおかしい）", optContent:"内容の誤り（単語・訳・音声など）", optFeature:"機能の要望", optOther:"その他・感想",
-    lblMsg:"内容 *", phMsg:"例：Level 2 の「颱風」の例文の日本語訳が不自然です／模試の結果画面で…", lblEmail:"メールアドレス（必須）", emailLogged:"ログイン中のメールを使用します", emailRelay:"Apple の非公開メールには返信が届きません。返事が要る場合は受け取れるアドレスを入れてください。", emailNeed:"メールアドレスを入力してください",
+    lblMsg:"内容 *", phMsg:"例：Level 2 の「颱風」の例文の日本語訳が不自然です／模試の結果画面で…", lblEmail:"メールアドレス（必須）", emailLogged:"ログイン中のメールを使用します", emailRelay:"Apple の「メールを非公開」を使っているため、返信が届かない可能性が高いです。返事が要る方は受け取れるアドレスをどうぞ（任意）：", emailNeed:"メールアドレスを入力してください",
     hintMsg:"できるだけ具体的にお願いします 🙏「どの画面・レベル」「何をしたとき」「どうなった（期待と実際）」があると、すぐ直せます。", tooShort:"もう少し詳しく教えてください（10文字以上）", btnSend:"送信する", sending:"送信中…", doneMsg:"✅ 送信しました。ありがとうございます！", err:"送信できませんでした — もう一度" },
   en:{ back:"← Back to study tools", title:"Feedback & Bug Report",
     lead:"Spotted something? Send it over — anything is welcome. Reports of content errors are especially appreciated. Add your email if you'd like a reply.",
     lblType:"Type", optBug:"Bug (not working / looks off)", optContent:"Content error (word, translation, audio…)", optFeature:"Feature request", optOther:"Other / thoughts",
-    lblMsg:"Message *", phMsg:"e.g. The example sentence for 颱風 in Level 2 reads unnaturally / On the mock-exam results screen…", lblEmail:"Email (required)", emailLogged:"Using your signed-in email", emailRelay:"Apple's private relay address bounces our replies. Please enter an address you can actually receive.", emailNeed:"Please enter your email",
+    lblMsg:"Message *", phMsg:"e.g. The example sentence for 颱風 in Level 2 reads unnaturally / On the mock-exam results screen…", lblEmail:"Email (required)", emailLogged:"Using your signed-in email", emailRelay:"You're using Apple's Hide My Email, so our reply probably won't reach you. If you'd like an answer, add an address you can receive (optional):", emailNeed:"Please enter your email",
     hintMsg:"Please be as specific as you can 🙏 Which screen/level, what you did, and what happened (expected vs actual) helps us fix it fast.", tooShort:"Please add a little more detail (at least 10 characters).", btnSend:"Send", sending:"Sending…", doneMsg:"✅ Sent — thank you!", err:"Couldn't send — try again" },
   ko:{ back:"← 학습 도구로 돌아가기", title:"의견·오류 신고",
     lead:"발견하신 점이 있으면 무엇이든 편하게 보내 주세요. 특히 내용 오류 제보가 큰 도움이 됩니다. 답장이 필요하면 이메일을 남겨 주세요.",
     lblType:"종류", optBug:"오류 (작동 안 함 / 표시 이상)", optContent:"내용 오류 (단어·번역·음성 등)", optFeature:"기능 요청", optOther:"기타 / 감상",
-    lblMsg:"내용 *", phMsg:"예: Level 2 「颱風」 예문의 번역이 어색해요 / 모의고사 결과 화면에서…", lblEmail:"이메일 (필수)", emailLogged:"로그인된 이메일을 사용합니다", emailRelay:"Apple 비공개 이메일로는 답장이 가지 않아요. 답장을 받으실 수 있는 주소를 적어 주세요.", emailNeed:"이메일을 입력해 주세요",
+    lblMsg:"내용 *", phMsg:"예: Level 2 「颱風」 예문의 번역이 어색해요 / 모의고사 결과 화면에서…", lblEmail:"이메일 (필수)", emailLogged:"로그인된 이메일을 사용합니다", emailRelay:"Apple「이메일 가리기」를 쓰고 계셔서 답장이 안 갈 가능성이 높아요. 답장을 받고 싶으시면 받을 수 있는 주소를 적어 주세요 (선택):", emailNeed:"이메일을 입력해 주세요",
     hintMsg:"가능한 한 구체적으로 적어 주세요 🙏 어느 화면·레벨에서, 무엇을 했을 때, 어떻게 됐는지(기대 vs 실제) 알려 주시면 빠르게 고칠 수 있어요.", tooShort:"조금만 더 자세히 적어 주세요 (10자 이상).", btnSend:"보내기", sending:"보내는 중…", doneMsg:"✅ 보냈습니다 — 감사합니다!", err:"보내지 못했습니다 — 다시 시도" }
 };
 function pickLang(){
@@ -109,14 +115,14 @@ function prefillEmail(){
   let email="";
   try{ const u=JSON.parse(localStorage.getItem("stw_user")||"null"); email=(u&&u.email)||""; }catch(e){}
   if(!email) return;
-  if(RELAY_RE.test(email)){
-    fe.value=""; fe.readOnly=false; fe.style.opacity="";
-    fe.placeholder="you@example.com";
-    if(note){ note.textContent=d.emailRelay; note.style.display="block"; note.classList.add("warn"); }
-    return;
-  }
   fe.value=email; fe.readOnly=true; fe.style.opacity=".7";
   if(note){ note.textContent=d.emailLogged; note.style.display="block"; }
+  // Apple の非公開メールは、こちらの送信元を Apple に登録していないと返信が届かない。
+  // 送信を止めるのではなく、返信用アドレスを任意で足してもらう。
+  if(RELAY_RE.test(email)){
+    const box=document.getElementById("relayBox");
+    if(box){ box.style.display="block"; box.querySelector(".relay-t").textContent=d.emailRelay; }
+  }
 }
 prefillEmail();
 document.getElementById("f").addEventListener("submit", async (e)=>{
@@ -127,13 +133,13 @@ document.getElementById("f").addEventListener("submit", async (e)=>{
   if(msg.length<10){ hint.textContent=d.tooShort; hint.classList.add("err"); f.message.focus(); return; }
   const em=(f.email.value||"").trim();
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){ hint.textContent=d.emailNeed; hint.classList.add("err"); f.email.focus(); return; }
-  if(RELAY_RE.test(em)){ hint.textContent=d.emailRelay; hint.classList.add("err"); f.email.focus(); return; }
   hint.classList.remove("err"); hint.textContent=d.hintMsg;
   btn.disabled=true; btn.textContent=d.sending;
   try{
     const r=await fetch("/api/feedback",{
       method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({type:f.type.value,message:f.message.value,email:f.email.value,
+        contact_email:(document.getElementById("realEmail")||{}).value||"",
         website:f.website.value,lang:LANG})});
     if(!r.ok) throw new Error("send failed");
     document.getElementById("done").style.display="block";

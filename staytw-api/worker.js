@@ -131,9 +131,12 @@ export default {
       const frow = await env.DB.prepare("SELECT count FROM chat_quota WHERE key=?1").bind(fkey).first();
       if (frow && frow.count >= 15) return json({ ok: true }, 200, h);
       await env.DB.prepare("INSERT INTO chat_quota (key,count,day) VALUES (?1,1,?2) ON CONFLICT(key) DO UPDATE SET count=count+1, day=?2").bind(fkey, fday).run();
+      // Apple の非公開メールには返信が届かない。別に「返信用」を任意でもらう(StayJP と同じ形)。
+      const contact = String(b.contact_email || "").trim().slice(0, 200);
+      const contactOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(contact) ? contact : "";
       await env.DB.prepare(
-        "INSERT INTO feedback (type, message, email, lang, ua) VALUES (?1, ?2, ?3, ?4, ?5)"
-      ).bind(type, msg, email, String(b.lang || "").slice(0, 8),
+        "INSERT INTO feedback (type, message, email, contact_email, lang, ua) VALUES (?1, ?2, ?3, ?4, ?5, ?6)"
+      ).bind(type, msg, email, contactOk, String(b.lang || "").slice(0, 8),
              (req.headers.get("User-Agent") || "").slice(0, 300)).run();
       return json({ ok: true }, 200, h);
     }
