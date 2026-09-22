@@ -29,8 +29,6 @@ const YTS = (() => {
     { v: "ukXD5mrVQMA", cat: "news", t: "台灣人為什麼這麼愛補習？", tag: "11 分 · 志祺七七" },
     { v: "DnTa8ZVQKv0", cat: "news", t: "台灣住宿為什麼這麼貴？", tag: "12 分 · 志祺七七" },
     { v: "FCOxTLcqp8I", cat: "news", t: "全球只剩台灣在用「注音」", tag: "12 分 · 志祺七七" },
-    // 書き起こし式:中国語字幕が無いので時間軸だけ用意してある。聞いて自分で埋める上級者向け。
-    { v: "wjGfXbmd3Lk", cat: "fill", t: "許光漢・林柏宏 默契大考驗", tag: "6 分 · VOGUE Taiwan", fill: true },
     // 講演:長めだが中身がある
     { v: "j_t0XlFoCjU", cat: "talk", t: "向你的困境借東西", tag: "9 分 · TEDxTaipei" },
     { v: "snZ811wvjjw", cat: "talk", t: "如何不讓人生留下遺憾？", tag: "14 分 · TEDxTaipei" },
@@ -39,7 +37,7 @@ const YTS = (() => {
     { v: "6i7RcP39NB0", cat: "talk", t: "留十八分鐘給自己：蔣勳", tag: "25 分 · TEDxTaipei" },
   ];
 
-  const CATS = ["all", "beg", "life", "news", "talk", "fill"];
+  const CATS = ["all", "beg", "life", "news", "talk"];
 
   let player = null, apiReady = false, vid = "", lines = [], cur = 0, mode = "follow";
   let loopOn = false, spdIdx = 0, vocab = [], watchT = 0, booted = false, meta = {};
