@@ -762,6 +762,11 @@ body.more-open .ar-bar{display:none}
 html[data-theme="dark"] .hb-fire.risk{color:#f0c674;background:#3a2f18;border-color:#5c4a22}
 .hb-motto{font-size:12.5px;color:var(--tx2);margin-top:4px;line-height:1.55}
 .hb-goal{margin-top:9px}
+.hb-goal-btn{background:none;border:0;padding:0;font:inherit;font-size:11.5px;color:var(--tx3);cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.hb-goal-pen{font-size:10.5px;color:var(--ac);border:1px solid var(--ac);border-radius:999px;padding:0 6px;line-height:1.5}
+.hb-goal-set{display:flex;align-items:center;gap:6px;margin-top:9px;font-size:11.5px;color:var(--tx3);flex-wrap:wrap}
+.hb-goal-n{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:3px 11px;font:inherit;font-size:12px;font-weight:700;color:var(--tx2);cursor:pointer}
+.hb-goal-n.on{background:var(--ac);border-color:var(--ac);color:#fff}
 .hb-goal-top{display:flex;justify-content:space-between;font-size:11.5px;color:var(--tx3);margin-bottom:4px;font-variant-numeric:tabular-nums}
 .hb-goal-bar{height:7px;border-radius:999px;background:var(--bg3);overflow:hidden}
 .hb-goal-bar i{display:block;height:100%;border-radius:999px;background:var(--ac);transition:width .6s var(--ease)}
@@ -954,6 +959,8 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 .fo-wm{font-size:12.5px;color:var(--tx3)}
 .fo-wp{width:17px;height:17px;fill:none;stroke:var(--ac);stroke-width:1.8;margin-left:auto}
 @media(prefers-reduced-motion:reduce){.fo-shake.go,.fo-shake.go .fo-out,.fo-slip.in{animation:none}}
+.spk-cmp{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.spk-cmp-b{flex:1;min-width:130px;padding:9px 10px;font-size:13px}
 .pw-per{display:block;font-style:normal;font-size:10.5px;color:var(--ac);font-weight:700;margin-top:3px;line-height:1.3}
 .pw-trial{text-align:center;font-size:13px;font-weight:700;color:var(--ac);background:var(--ac-soft);border-radius:10px;padding:9px 10px;margin:0 0 12px;line-height:1.45}
 .pw-invested{text-align:center;font-size:12.5px;color:var(--tx2);background:var(--bg3);border-radius:10px;padding:9px 12px;margin:12px 0 0;line-height:1.5}
@@ -1377,7 +1384,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=109"></script>
+<script src="i18n.js?v=111"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=63"></script>
 <script src="vocab-l1.js?v=52"></script>
@@ -2287,10 +2294,60 @@ const SPK = (() => {
           <div class="spk-meter"><i style="width:${score}%;background:${score >= 60 ? "var(--ok)" : "var(--ac)"}"></i></div>
         </div>
         <div class="spk-verdict">${verdict}　<span style="color:var(--tx3)">（${heard}）</span></div>
+        ${hasMine() ? cmpHtml(it) : ""}
       </div>`;
   }
 
   let stopTimer = null;
+  // ── 自分の発音を聞き返す(韓国の購読者からの要望) ──
+  // SpeechRecognition は音声を返さないので、web では MediaRecorder で並行して録る。
+  // App 内はネイティブの認識器がマイクを使っているため取り合いになるので走らせない。
+  let mediaRec = null, mediaStream = null, myUrl = "";
+  async function startCapture(){
+    if (IS_NATIVE() || !window.MediaRecorder || !navigator.mediaDevices) return;
+    try {
+      mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const chunks = [];
+      mediaRec = new MediaRecorder(mediaStream);
+      mediaRec.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
+      mediaRec.onstop = () => {
+        try { if (myUrl) URL.revokeObjectURL(myUrl); } catch (e) {}
+        myUrl = chunks.length ? URL.createObjectURL(new Blob(chunks, { type: mediaRec.mimeType || "audio/webm" })) : "";
+        try { mediaStream.getTracks().forEach((t) => t.stop()); } catch (e) {}
+        mediaStream = null;
+      };
+      mediaRec.start();
+    } catch (e) { mediaRec = null; }   // 権限が無くても認識側は動くので黙って諦める
+  }
+  function stopCapture(){ try { mediaRec && mediaRec.state !== "inactive" && mediaRec.stop(); } catch (e) {} }
+  // App では音声ファイルは原生側にある(base64 で WebView に渡すと 1MB 級になるので渡さない)。
+  // 「有るか無いか」だけ stwSpeechAudio で受け取り、再生は原生に頼む。
+  let nativeHasVoice = false;
+  // audioend は end の後に来ることがある＝結果を描いた時点ではまだ音が無い。
+  // 後から来たら、その時にボタンを足す(そうしないと永久に出ない)。
+  if (typeof window !== "undefined") window.stwSpeechAudio = (ok) => {
+    nativeHasVoice = !!ok;
+    if (!nativeHasVoice) return;
+    try {
+      const box = document.querySelector("#spkResult .spk-result");
+      if (!box || box.querySelector(".spk-cmp")) return;
+      const it = items[idx]; if (!it) return;
+      box.insertAdjacentHTML("beforeend", cmpHtml(it));
+    } catch (e) {}
+  };
+  function cmpHtml(it){
+    return `<div class="spk-cmp">
+      <button class="btn spk-cmp-b" onclick="SPK.playMine()">${twT("spkHearMine")}</button>
+      <button class="btn spk-cmp-b" onclick="speakZh('${String(it.z).replace(/'/g, "\\'")}')">${twT("spkHearModel")}</button>
+    </div>`;
+  }
+  function hasMine(){ return IS_NATIVE() ? nativeHasVoice : !!myUrl; }
+  function playMine(){
+    try { TTS.stop(); } catch (e) {}
+    if (IS_NATIVE()) { spkPost({ type: "PLAY_MY_VOICE" }); return; }
+    if (!myUrl) return;
+    const a = new Audio(myUrl); a.play().catch(() => {});
+  }
   function toggle(){
     if (recording) {
       if (IS_NATIVE()) spkPost({ type: "SPEECH_STOP" });   // App:原生停止
@@ -2328,6 +2385,7 @@ const SPK = (() => {
     // （以前の getUserMedia 事前チェックは「許可を二重に求める＋一瞬録音が点いて消える」
     //   問題を起こしていたため撤去。拒否時は onerror('not-allowed') が拾う）
     TTS.stop(); // お手本再生を止めてから録音
+    startCapture();
     rec = new SRCls();
     rec.lang = "zh-TW"; rec.interimResults = true; rec.continuous = false; rec.maxAlternatives = 1;
     let finalText = "", gotError = "";
@@ -2347,6 +2405,7 @@ const SPK = (() => {
     rec.onend = () => {
       recording = false; mic.classList.remove("rec");
       clearTimeout(stopTimer);
+      stopCapture();
       if (finalText) { st.textContent = twT("spkRecord"); showResult(finalText); return; }
       if (gotError === "language-not-supported")
         st.textContent = twT("spkErrLang");
@@ -2363,7 +2422,7 @@ const SPK = (() => {
   function next(){ idx = (idx + 1) % items.length; render(); }
   function setSrc(s){ src = s; buildItems(); render(); }
   function reset(){ items = []; render(); }
-  return { render, toggle, next, setSrc, reset };
+  return { render, toggle, next, setSrc, reset, playMine };
 })();
 
 /* ===== ライティング ===== */
@@ -3153,8 +3212,15 @@ const PA = (() => {
         <div class="hb-greet">${esc(greet())}${fireChip(streak)}</div>
         <div class="hb-motto">${esc(motto)}</div>
         <div class="hb-goal${daily.done ? " ok" : ""}">
-          <div class="hb-goal-top"><span>${esc(twT("pfDaily"))}</span><span>${daily.n} / ${daily.goal}</span></div>
+          <div class="hb-goal-top">
+            <button class="hb-goal-btn" onclick="PA.toggleGoal(event)">${esc(twT("pfDaily"))} <span class="hb-goal-pen">${esc(twT("paGoalEdit"))}</span></button>
+            <span>${daily.n} / ${daily.goal}</span>
+          </div>
           <div class="hb-goal-bar"><i style="width:${daily.pct}%"></i></div>
+          <div class="hb-goal-set" id="hbGoalSet" hidden>
+            <span>${esc(twT("pfDailyGoal"))}</span>
+            ${[10, 20, 30, 50].map((x) => `<button class="hb-goal-n${daily.goal === x ? " on" : ""}" onclick="PA.setGoal(${x})">${x}</button>`).join("")}
+          </div>
         </div>
       </div>
     </div>`;
@@ -3270,7 +3336,17 @@ const PA = (() => {
     try { showToast(twT("paLockedMsg")); } catch (e) {}
     setTimeout(() => { try { switchPanel(key); } catch (e) {} }, 900);
   }
-  return { render, locked };
+  function toggleGoal(e){
+    try { e.stopPropagation(); } catch (err) {}
+    const el = document.getElementById("hbGoalSet");
+    if (el) el.hidden = !el.hidden;
+  }
+  function setGoal(n){
+    try { setGoalTarget(n); } catch (e) {}
+    render();
+    try { showToast(twT("paGoalSet").replace("{n}", n)); } catch (e) {}
+  }
+  return { render, locked, toggleGoal, setGoal };
 })();
 
 /* ===== 共用：本文中の生詞をタップ可能にする＋逐字ハイライト（読解・記事で共用） ===== */
