@@ -40,6 +40,13 @@ async function grab(v) {
   const zh = tracks.filter((t) => /^zh/i.test(t.languageCode || ""));
   const tr = zh.find((t) => t.kind !== "asr") || zh[0];
   if (!tr) return { v, err: "沒有中文字幕軌(有:" + (tracks.map((t) => t.languageCode).join(",") || "無") + ")" };
+  // 中国語字幕が有っても、喋っているのが中国語とは限らない(英語動画に中国語訳が付いているだけ)。
+  // YouTube の自動字幕は「聞こえた言語」で生成されるので、中国語以外の自動字幕があれば
+  // その言語を喋っている＝シャドーイング教材にならない。実例:
+  //   「外國人到手搖飲料店怎麼點餐」= zh-TW 訳 + en(自動) → 実際は英語
+  //   「要這樣撩妹才對？」          = zh-Hant 訳 + th(自動) → 中国語ではない
+  const asrOther = tracks.find((t) => t.kind === "asr" && !/^zh/i.test(t.languageCode || ""));
+  if (asrOther) return { v, err: "喋っているのは中国語ではなさそう(自動字幕が " + asrOther.languageCode + ")" };
   const oe = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${v}&format=json`);
   if (!oe.ok) return { v, err: "這支禁止嵌入(oEmbed " + oe.status + ")" };
   const u = tr.baseUrl + (tr.baseUrl.includes("fmt=") ? "" : "&fmt=json3");

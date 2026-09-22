@@ -15,10 +15,8 @@ const YTS = (() => {
     { v: "ulkM3tRfA1Q", cat: "beg", t: "台灣人的口頭禪", tag: "2 分 · 中原大學華語中心" },
     { v: "gD5kuw2EPF4", cat: "beg", t: "常用語系列 EP.2", tag: "2 分 · 中原大學華語中心" },
     { v: "VRBnr6V1gAg", cat: "beg", t: "台灣熱門網路用語", tag: "3 分 · 中原大學華語中心" },
-    { v: "5gknWTmFe0A", cat: "beg", t: "台灣華語 vs 中國普通話", tag: "10 分 · Grace Mandarin" },
     { v: "bA336OmpX38", cat: "beg", t: "搭台北捷運：買票進站・悠遊卡", tag: "7 分 · 樂樂TV" },
     // 生活:台湾で実際にやること・食べるもの
-    { v: "tqy1JaNotUA", cat: "life", t: "在手搖飲料店怎麼點餐？", tag: "5 分 · Lu Twins" },
     { v: "x5Ccp2J1ziM", cat: "life", t: "台灣早餐店是怎麼出現的？", tag: "11 分 · 志祺七七" },
     { v: "gID1iXQdUmk", cat: "life", t: "全家為什麼贏不了 7-11？", tag: "15 分 · 志祺七七" },
     { v: "ybQbUN35kR8", cat: "life", t: "珍珠奶茶怎麼走向國際？", tag: "11 分 · 志祺七七" },
