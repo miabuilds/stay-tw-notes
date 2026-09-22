@@ -1759,7 +1759,7 @@ function loadExZy(cb){
   Promise.all([
     fetch("data/ex-zhuyin.json?v=10").then(r => r.ok ? r.json() : null),
     fetch("data/ex-pinyin.json?v=1").then(r => r.ok ? r.json() : null).catch(() => null),
-    fetch("data/ex-locale.json?v=1").then(r => r.ok ? r.json() : null).catch(() => null)
+    fetch("data/ex-locale.json?v=2").then(r => r.ok ? r.json() : null).catch(() => null)
   ]).then(([zy, py, loc]) => { EX_ZY = zy || {}; EX_PY = py || {}; EX_LOC = loc || null;
     applyExLocale(); EX_ZY_LOADING = false; if (cb) cb(); })
     .catch(() => { EX_ZY_LOADING = false; });
@@ -1786,6 +1786,22 @@ function applyExLocale(){
       if (EX_PY) EX_PY[o.z] = o.py;
     }
   }
+  try {
+    if (typeof PHRASES_L1 !== "undefined") {
+      for (const sec of PHRASES_L1) {
+        for (const it of (sec.items || [])) {
+          if (!it || !it.z) continue;
+          if (!it._z0) { if (!EX_LOC[it.z]) continue; it._z0 = it.z; it._py0 = it.py; it._m0 = it.m; }
+          const o = EX_LOC[it._z0] && EX_LOC[it._z0][lg];
+          if (!o) { it.z = it._z0; it.py = it._py0; it.m = it._m0; continue; }
+          it.z = o.z; it.py = o.py;
+          it.m = Object.assign({}, it._m0); it.m[mk] = o.t; if (mk !== "e") it.m.e = o.t;
+          if (EX_ZY) EX_ZY[o.z] = o.zy;
+          if (EX_PY) EX_PY[o.z] = o.py;
+        }
+      }
+    }
+  } catch (e) {}
 }
 function exRuby(z, py){
   const zy = (EX_ZY && EX_ZY[z]) ? EX_ZY[z] : "";
