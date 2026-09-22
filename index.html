@@ -1653,8 +1653,10 @@ function switchPanel(p){
   document.querySelectorAll(".bn-item").forEach(x=>x.classList.toggle("on", x.dataset.bn===bn));
   if (p === "srs") renderSrsHome();                       // 最新の学習数を反映
   if (p === "exam" && !document.getElementById("exTimer")) renderExamHome();
+  // タブを押したら「開いた直後の画面」に戻す。ただし進行中のもの(解答中のクイズ・時間制の模試)は壊さない。
+  if (p === "quiz" && !quizStarted) qzReset();            // 前回の結果画面が残っているのを消す
   if (p === "speak") SPK.render();
-  if (p === "ytshadow" && typeof YTS !== "undefined" && !YTS.booted()) YTS.render();
+  if (p === "ytshadow" && typeof YTS !== "undefined") YTS.render();   // 動画の中では無く一覧から始める
   if (p === "essentials" && typeof ESS !== "undefined") ESS.render();
   if (p === "myvocab" && typeof MyVocab !== "undefined") MyVocab.render();
   if (p === "write") WR.render();
@@ -2208,6 +2210,7 @@ function qzShowFeedback(w, ok, pickWord){
 }
 function qzAdvance(){ qzIdx++; qzNext(); }
 function qzDone(){
+  quizStarted = false;   // 終わったのに「進行中」のままだと、タブを戻っても結果画面が残る
   try{ window.STAYTW_studyDone && window.STAYTW_studyDone(); }catch(e){}
   const nWrong = WrongBook.forLevel(currentLevel).length;
   document.getElementById("qzBox").innerHTML = `
