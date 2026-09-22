@@ -1742,10 +1742,35 @@ function loadExZy(cb){
   EX_ZY_LOADING = true;
   // 注音＋(台灣読音に修正した)拼音オーバーレイを並行ロード。EX_PY にあれば ex.py より優先。
   Promise.all([
-    fetch("data/ex-zhuyin.json?v=9").then(r => r.ok ? r.json() : null),
-    fetch("data/ex-pinyin.json?v=1").then(r => r.ok ? r.json() : null).catch(() => null)
-  ]).then(([zy, py]) => { EX_ZY = zy || {}; EX_PY = py || {}; EX_ZY_LOADING = false; if (cb) cb(); })
+    fetch("data/ex-zhuyin.json?v=10").then(r => r.ok ? r.json() : null),
+    fetch("data/ex-pinyin.json?v=1").then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch("data/ex-locale.json?v=1").then(r => r.ok ? r.json() : null).catch(() => null)
+  ]).then(([zy, py, loc]) => { EX_ZY = zy || {}; EX_PY = py || {}; EX_LOC = loc || null;
+    applyExLocale(); EX_ZY_LOADING = false; if (cb) cb(); })
     .catch(() => { EX_ZY_LOADING = false; });
+}
+// ── 例文のローカライズ ──
+// 「我是日本人」のように学習者の国籍を決め打ちしている例文を、UI 言語に合わせて差し替える。
+// 韓国語なら「我是韓國人」。注音は日本→韓國 の 2 音節だけ入れ替えた検証済みの値
+// (data/ex-locale.json)を使う。文全体を作り直すと読みを新しく間違える危険があるため。
+let EX_LOC = null;
+function applyExLocale(){
+  if (!EX_LOC) return;
+  const lg = (typeof twGetLang === "function") ? twGetLang() : "ja";
+  const mk = (typeof twMKey === "function") ? twMKey() : "j";
+  for (const lv of ["l1","l2","l3","l4","l5","l6"]) {
+    for (const v of (VOCAB_BY_LEVEL[lv] || [])) {
+      if (!v || !v.ex) continue;
+      if (!v._ex0) { const hit = EX_LOC[v.ex.z]; if (!hit) continue; v._ex0 = v.ex; }
+      const o = EX_LOC[v._ex0.z] && EX_LOC[v._ex0.z][lg];
+      if (!o) { v.ex = v._ex0; continue; }
+      const ex = Object.assign({}, v._ex0, { z: o.z, py: o.py });
+      ex[mk] = o.t; if (mk !== "e") ex.e = o.t;
+      v.ex = ex;
+      if (EX_ZY) EX_ZY[o.z] = o.zy;       // ルビも差し替え後の文で引けるように
+      if (EX_PY) EX_PY[o.z] = o.py;
+    }
+  }
 }
 function exRuby(z, py){
   const zy = (EX_ZY && EX_ZY[z]) ? EX_ZY[z] : "";
@@ -2742,6 +2767,7 @@ function fillVoiceSel(){
 
 /* ===== 言語切替時の再描画 ===== */
 function onLangChange(){
+  applyExLocale();
   renderCard(); renderPosRow(); renderList(); renderGrammar(); renderPhrases();
   renderSrsHome(); renderExamHome(); qzReset(); SPK.reset();
   renderLevelLabels();
@@ -3850,7 +3876,9 @@ function twNormalizeContent(){
   renderCard(); renderPosRow(); renderList(); renderGrammar(); renderPhrases();
   renderSrsHome(); renderExamHome(); qzReset(); updateSrsBadges(); PA.render();
   renderLevelLabels(); refreshRubyLabels();
-  if (RUBY !== "py") loadExZy(() => { try { renderCard(); renderList(); } catch(e){} });
+  // 例文のローカライズもここで一緒に読む。以前は注音モードの人しか読み込んでいなかったので、
+  // 拼音モードだと「我是日本人」のままだった。ルビ設定に関係なく必要。
+  loadExZy(() => { try { renderCard(); renderList(); } catch(e){} });
   fillVoiceSel();
   if (!localStorage.getItem("stw-onboarded")) {
     if (!localStorage.getItem("stw_persona")) document.getElementById("personaBg").classList.add("show");
