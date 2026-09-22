@@ -48,7 +48,8 @@ const YTS = (() => {
   // 中国語字幕が無い動画用。他言語トラックの「時間軸だけ」を骨組みにして、本文は本人が埋める。
   // 訳文を中国語へ訳し戻すと実際に喋っていない文になるので、それは絶対にやらない。
   // 埋めた原稿は端末の localStorage に置く(他人のコンテンツを我々の DB に溜めない)。
-  let skeleton = false, hintTrack = "";
+  let skeleton = false, hintTrack = "", practicing = false;
+  let skelLines = null;   // 骨組みの全行(添字が下書きのキーなので絶対に間引かない)
   const draftKey = (v) => "stw_yts_draft_" + v;
   function loadDraft(v) { try { return JSON.parse(localStorage.getItem(draftKey(v)) || "null"); } catch (e) { return null; } }
   function saveDraft() {
@@ -132,11 +133,12 @@ const YTS = (() => {
       return;
     }
     vid = v; meta = data; cur = 0; spdIdx = 0; loopOn = false; mode = "follow";
-    skeleton = !!data.skeleton; hintTrack = data.hintTrack || "";
+    skeleton = !!data.skeleton; hintTrack = data.hintTrack || ""; practicing = false; skelLines = null;
     if (skeleton) {
       lines = data.lines.slice();
       const d = loadDraft(v);
       if (d) lines.forEach((l, i) => { l.z = d[i] || ""; });
+      skelLines = lines;
     } else {
       lines = data.lines.filter((l) => l && l.z);
     }
@@ -154,8 +156,8 @@ const YTS = (() => {
         <div class="yts-title">${esc(meta.title || "")}</div>
       </div>
       <div class="yts-video"><div id="ytsFrame"></div></div>
-      ${skeleton ? `<div class="yts-fill-bar"><button class="btn" onclick="YTS.openFill()">${esc(T("ytsFillOpen"))}</button></div>` : ""}
-      <div class="yts-modes">
+      ${skeleton ? `<div class="yts-fill-bar" style="display:${practicing ? "" : "none"}"><button class="btn" onclick="YTS.openFill()">${esc(T("ytsFillOpen"))}</button></div>` : ""}
+      <div class="yts-modes" style="display:${(skeleton && !practicing) ? "none" : ""}">
         ${["follow", "shadow", "dict"].map((m) => `<button class="yts-mode${m === mode ? " on" : ""}" data-m="${m}" onclick="YTS.setMode('${m}')">${esc(T("ytsMode_" + m))}</button>`).join("")}
       </div>
       <div id="ytsCard"></div>`;
@@ -164,7 +166,7 @@ const YTS = (() => {
         videoId: vid, playerVars: { rel: 0, playsinline: 1, modestbranding: 1 },
         events: {
           // 骨架モードでまだ何も書けていないなら、練習カードではなく書き起こし画面を出す
-          onReady: () => { if (skeleton && lines.filter((l) => l.z).length < 3) openFill(); else card(); },
+          onReady: () => { if (skeleton && !practicing) openFill(); else card(); },
           // 使用者直接按影片自己的播放鍵時,我們的監看沒被掛上 →
           // 跟播模式字幕不動、逐句模式會一路播下去。這裡接手。
           onStateChange: (e) => {
@@ -191,6 +193,9 @@ const YTS = (() => {
   // ── 書き起こし画面(骨架モード)──
   // 1 行ずつ「その区間だけ再生 → 聞こえたとおりに打つ」。訳文はヒントとして薄く出す。
   function openFill() {
+    practicing = false;
+    if (skelLines) lines = skelLines;   // 間引いた練習用配列から、必ず全行に戻す
+    renderPlayerChrome();
     const done = lines.filter((l) => l.z).length;
     $("ytsCard").innerHTML = `
       <div class="yts-fill">
@@ -236,14 +241,23 @@ const YTS = (() => {
   }
   function playLine(i) { cur = i; playSeg(); }
   function startPractice() {
-    const filled = lines.filter((l) => l.z);
+    const filled = (skelLines || lines).filter((l) => l.z);
     if (filled.length < 1) { toast(T("ytsFillEmpty")); return; }
-    // 空行は練習に混ぜない。埋めた分だけで練習できる(全部埋めてから、では続かない)
-    lines = filled;
-    skeleton = false; cur = 0;
+    // 空行は練習に混ぜない。埋めた分だけで練習できる(全部埋めてから、では続かない)。
+    // skelLines は残しておく ← ここを潰すと「書き起こしに戻る」で未入力行が消える
+    lines = filled; practicing = true; cur = 0;
+    renderPlayerChrome();
     stwLoadExt(() => { vocab = twMergeVocab([], lines.map((l) => l.z).join("")); card(); });
   }
+  // モード行/戻るボタンの出し分けだけを描き直す(プレイヤーは作り直さない=再生が止まらない)
+  function renderPlayerChrome() {
+    const bar = $("ytsBody") && $("ytsBody").querySelector(".yts-fill-bar");
+    const modes = $("ytsBody") && $("ytsBody").querySelector(".yts-modes");
+    if (bar) bar.style.display = (skeleton && practicing) ? "" : "none";
+    if (modes) modes.style.display = (skeleton && !practicing) ? "none" : "";
+  }
   function setMode(m) {
+    if (skeleton && !practicing) { openFill(); return; }
     mode = m;
     document.querySelectorAll(".yts-mode").forEach((b) => b.classList.toggle("on", b.dataset.m === m));
     clearWatch(); clearFollow();
