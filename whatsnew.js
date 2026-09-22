@@ -27,8 +27,18 @@ const WhatsNew = (() => {
   ];
 
   function seen() { try { return localStorage.getItem(K) || ""; } catch (e) { return ""; } }
+  // 今日はじめて来た人に「新しく増えたもの」を見せても意味が無い（前の版を知らない）。
+  // 履歴がまったく無い＝新規とみなし、既読にして出さない。
+  function brandNew() {
+    const any = (k) => { try { const v = localStorage.getItem(k); return !!v && v !== "[]" && v !== "{}"; } catch (e) { return false; } };
+    return !any("stw_srs") && !any("stw_streak") && !any("stw_checkin") && !any("stw_daylog");
+  }
   function latest() { return NEWS[0] || null; }
-  function pending() { const n = latest(); return n && seen() !== n.nid ? n : null; }
+  function pending() {
+    const n = latest(); if (!n) return null;
+    if (brandNew()) { try { localStorage.setItem(K, n.nid); } catch (e) {} return null; }
+    return seen() !== n.nid ? n : null;
+  }
   function dismiss() {
     const n = latest(); if (!n) return;
     try { localStorage.setItem(K, n.nid); } catch (e) {}

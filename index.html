@@ -78,6 +78,8 @@ button{font-family:inherit}
 /* 長い英語ブランド名は詰まったら省略（…）。StayTW と右側のボタン群は絶対に切らない */
 .hd h1 a [data-i18n="brand"]{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hd h1 a > span:not([data-i18n]){flex-shrink:0}
+/* 狭い画面で「Taiwan Mandar⋯」と切れ残るくらいなら、長い名前ごと出さない方が読める */
+@media(max-width:430px){ .hd h1 a [data-i18n="brand"]{display:none} }
 .hd-links{display:flex;gap:12px;margin-left:auto;align-items:center;flex-shrink:0}
 .hd-links a{color:var(--tx2);font-size:13px;font-weight:500;white-space:nowrap}
 @media(hover:hover){.hd-links a:hover{color:var(--tx)}}
@@ -765,6 +767,7 @@ html[data-theme="dark"] .hb-fire.risk{color:#f0c674;background:#3a2f18;border-co
 .hb-goal-btn{background:none;border:0;padding:0;font:inherit;font-size:11.5px;color:var(--tx3);cursor:pointer;display:inline-flex;align-items:center;gap:5px}
 .hb-goal-pen{font-size:10.5px;color:var(--ac);border:1px solid var(--ac);border-radius:999px;padding:0 6px;line-height:1.5}
 .hb-goal-set{display:flex;align-items:center;gap:6px;margin-top:9px;font-size:11.5px;color:var(--tx3);flex-wrap:wrap}
+.hb-goal-set[hidden]{display:none}   /* hidden 属性は display 指定に負ける。明示しないと開きっぱなし */
 .hb-goal-n{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:3px 11px;font:inherit;font-size:12px;font-weight:700;color:var(--tx2);cursor:pointer}
 .hb-goal-n.on{background:var(--ac);border-color:var(--ac);color:#fff}
 .hb-goal-top{display:flex;justify-content:space-between;font-size:11.5px;color:var(--tx3);margin-bottom:4px;font-variant-numeric:tabular-nums}
@@ -1088,11 +1091,6 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
     <label class="voice-sel"><span data-i18n="voiceLabel">音声</span> <select id="voiceSel" onchange="TTS.setVoice(this.value)"></select></label>
   </div>
 
-  <!-- はじめての流れ（初回のみ） -->
-  <div class="ob-strip" id="obStrip" style="display:none">
-    <span data-i18n="obFlow">① 単語カードで覚える → ② クイズで確認 → ③ 復習で定着 → ④ 模試で腕試し</span>
-    <button onclick="dismissOb()" data-i18n="obClose">閉じる</button>
-  </div>
 
   <!-- ツールタブ -->
   <div class="tools">
@@ -1291,6 +1289,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
     <button class="sheet-item sheet-premium" data-panel="__premium"><span class="bi"></span><span data-i18n="navPremium">プレミアム</span></button>
     <button class="sheet-item" data-panel="list"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="8.5" y1="6" x2="21" y2="6"/><line x1="8.5" y1="12" x2="21" y2="12"/><line x1="8.5" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor" stroke="none"/><circle cx="4" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="4" cy="18" r="1" fill="currentColor" stroke="none"/></svg></span><span data-i18n="toolVocabList">単語リスト</span></button>
     <button class="sheet-item" data-panel="zhuyin"><span class="bi">ㄅ</span><span data-i18n="toolZhuyin">注音</span></button>
+    <button class="sheet-item" data-panel="polyphone"><span class="bi">破</span><span data-i18n="toolPoly">破音字</span></button>
     <button class="sheet-item" data-panel="essentials"><span class="bi">123</span><span data-i18n="toolEssentials">必修の基礎</span></button>
     <button class="sheet-item" data-panel="myvocab"><span class="bi">★</span><span data-i18n="toolMyVocab">My単語帳</span></button>
     <button class="sheet-item" data-panel="profile"><span class="bi"></span><span data-i18n="toolProfile">マイページ</span></button>
@@ -1303,7 +1302,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
     <button class="sheet-item" data-panel="ytshadow"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="3.5"/><polygon points="10.5 9 15.5 12 10.5 15" fill="currentColor" stroke="none"/></svg></span><span data-i18n="toolYts">YouTube 跟讀</span></button>
     <button class="sheet-item" data-panel="write"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg></span><span data-i18n="toolWrite">ライティング</span></button>
     <button class="sheet-item" onclick="toggleMore(false);twOpenSettings()"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span data-i18n="setTitle">設定</span></button>
-    <a class="sheet-item" href="contact.html"><span class="bi">📮</span><span data-i18n="navContact" style="display:block">ご意見</span></a>
+    <a class="sheet-item" href="contact.html" data-ic="contact"><span class="bi"></span><span data-i18n="navContact" style="display:block">ご意見</span></a>
   </div>
 </div>
 
@@ -1441,7 +1440,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 <script src="essentials-ui.js?v=2"></script>
 <script src="fortune.js?v=4"></script>
 <script src="myvocab.js?v=2"></script>
-<script src="whatsnew.js?v=2"></script>
+<script src="whatsnew.js?v=3"></script>
 <script src="ytshadow.js?v=7"></script>
 <script src="listen.js?v=3"></script>
 <script src="websync.js?v=62"></script>
@@ -1941,11 +1940,9 @@ function pickPersona(key){
     if (lv) setLevel(lv);
   }
   document.getElementById("personaBg").classList.remove("show");
-  document.getElementById("obStrip").style.display = "";   // 続けて学習の流れを案内
-}
-function dismissOb(){
+  // 以前はここで「はじめての流れ」の帯を出していたが、ハブのステージ一覧が同じことを
+  // 言っているので撤去した(同じ内容を 2 箇所で言うと、どちらも読まれない)。
   localStorage.setItem("stw-onboarded", "1");
-  document.getElementById("obStrip").style.display = "none";
 }
 
 /* ===== レベル名（言語別） ===== */
@@ -3851,6 +3848,10 @@ const ICONS = {
   path:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M14.5 9.5l-1.5 4-4 1.5 1.5-4z" style="fill:currentColor;stroke:none"/></svg>`,
   articles:`<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M7.5 9h6M7.5 12h6M7.5 15h4M16 9h.5v6H16z"/></svg>`,
   contact:`<svg viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M4 8l8 5 8-5"/></svg>`,
+  polyphone:`<svg viewBox="0 0 24 24"><path d="M7 5.5h10M12 5.5v13"/><path d="M8.5 11.5l-2 7M15.5 11.5l2 7"/></svg>`,
+  essentials:`<svg viewBox="0 0 24 24"><rect x="4" y="4.5" width="16" height="15" rx="2"/><path d="M4 9.5h16M9.5 9.5v10M15 9.5v10"/></svg>`,
+  myvocab:`<svg viewBox="0 0 24 24"><path d="M4 5.5h6.5a2 2 0 0 1 2 2V19a2 2 0 0 0-2-1.8H4z"/><path d="M20 5.5h-6.5a2 2 0 0 0-2 2V19a2 2 0 0 1 2-1.8H20z"/><path d="M17 8.6l.7 1.5 1.6.2-1.2 1.1.3 1.6-1.4-.8-1.4.8.3-1.6-1.2-1.1 1.6-.2z" style="fill:currentColor;stroke:none"/></svg>`,
+  ytshadow:`<svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="3.5"/><path d="M10.5 9l5 3-5 3z" style="fill:currentColor;stroke:none"/></svg>`,
 };
 function applyIcons(){
   document.querySelectorAll(".tool-btn .ti").forEach(el => el.remove());   // デスクトップのタブは文字だけ（すっきり）
@@ -3858,9 +3859,12 @@ function applyIcons(){
   document.querySelectorAll(".sheet-item").forEach(b => {
     const bi = b.querySelector(".bi"); if (!bi) return;
     if (b.dataset.panel === "__premium") return;   // はそのまま(ICONS に無いので上書きしない)
-    const k = b.dataset.panel || "contact";
-    if (k === "zhuyin") { bi.textContent = "ㄅ"; bi.style.fontFamily = "var(--serif)"; bi.style.fontWeight = "700"; }
-    else bi.innerHTML = ICONS[k] || "";
+    const k = b.dataset.panel || b.dataset.ic || "";
+    if (k === "zhuyin") { bi.textContent = "ㄅ"; bi.style.fontFamily = "var(--serif)"; bi.style.fontWeight = "700"; return; }
+    // ICONS に無いものは触らない。以前は空文字で潰していたので、
+    // 新しく足したパネル(破音字・必修の基礎・My単語帳)のアイコンが消え、
+    // data-panel の無い「設定」は contact の封筒になって「ご意見」と見分けが付かなかった。
+    if (ICONS[k]) bi.innerHTML = ICONS[k];
   });
 }
 
@@ -3902,10 +3906,7 @@ function twNormalizeContent(){
   // 拼音モードだと「我是日本人」のままだった。ルビ設定に関係なく必要。
   loadExZy(() => { try { renderCard(); renderList(); } catch(e){} });
   fillVoiceSel();
-  if (!localStorage.getItem("stw-onboarded")) {
-    if (!localStorage.getItem("stw_persona")) document.getElementById("personaBg").classList.add("show");
-    else document.getElementById("obStrip").style.display = "";
-  }
+  if (!localStorage.getItem("stw_persona")) document.getElementById("personaBg").classList.add("show");
   if ("speechSynthesis" in window) speechSynthesis.onvoiceschanged = () => { TTS.refresh(); fillVoiceSel(); };
 })();
 </script>
