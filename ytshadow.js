@@ -65,9 +65,10 @@ const YTS = (() => {
 
   // ── 判定:讀音比對(不看字形)。語音辨識常回簡體或同音異字,比字會冤枉人。 ──
   let PYMAP = null;
+  // 発音チェックの読みデータもアプリ内と共有(整句拼音 sentence-pinyin.json 込み)
   function loadPy() {
-    if (PYMAP) return Promise.resolve(PYMAP);
-    return fetch("data/hanzi-pinyin.json").then((r) => r.json()).then((m) => (PYMAP = m)).catch(() => (PYMAP = {}));
+    try { return SPK.loadPyMap(); } catch (e) {}
+    return Promise.resolve(null);
   }
   const strip = (s) => String(s).replace(/[，。！？；：、,.!?;:\s（）()「」『』…—～\-\d０-９a-zA-Z]/g, "");
   // 書き取り(dict)では数字とアルファベットも答えそのもの。strip はそれらまで落とすので、
@@ -372,7 +373,12 @@ const YTS = (() => {
     const m = $("ytsMic"), st = $("ytsStatus");
     // ここで要素が無いと例外で静かに死ぬ＝「押しても無反応」になる。必ず出口を作る。
     if (!m || !st) { try { setMode("shadow"); } catch (e) {} return; }
-    try { player && player.pauseVideo && player.pauseVideo(); } catch (e) {}
+    let micMuted = false;   // 録音のためにこちらがミュートしたか(元から消音の人は触らない)
+    try {
+      player && player.pauseVideo && player.pauseVideo();
+      if (player && player.mute && !player.isMuted()) { player.mute(); micMuted = true; }
+    } catch (e) {}
+    const unmute = () => { try { if (micMuted && player && player.unMute) player.unMute(); } catch (e) {} };
     clearWatch(); clearFollow(); clearSeek();
     if (isNative()) {
       let final = "", ended = false;
@@ -381,12 +387,13 @@ const YTS = (() => {
       // 録音中のまま固まるのを防ぐ。10 秒で自分から降りる。
       const giveUp = setTimeout(() => {
         if (ended) return;
+        unmute();
         recording = false; m.classList.remove("rec"); setMicTx(T("ytsRec")); st.textContent = T("ytsErrMic");
       }, 10000);
       stopTimer = setTimeout(() => post({ type: "SPEECH_STOP" }), 8000);
       window.stwSpeechResult = (tx, isFinal) => { if (isFinal) { if (tx) final = tx; } else if (tx) st.textContent = "… " + tx; };
       window.stwSpeechEnd = (err) => {
-        ended = true; clearTimeout(giveUp);
+        ended = true; clearTimeout(giveUp); unmute();
         recording = false; m.classList.remove("rec"); clearTimeout(stopTimer);
         setMicTx(T("ytsRec")); st.textContent = "";
         if (final) result(final);
@@ -395,19 +402,20 @@ const YTS = (() => {
       post({ type: "SPEECH_START", lang: "zh-TW" });
       return;
     }
-    if (!SR) { st.textContent = T("ytsErrNoSr"); return; }
-    rec = new SR(); rec.lang = "zh-TW"; rec.interimResults = true; rec.continuous = false;
+    if (!SR) { unmute(); st.textContent = T("ytsErrNoSr"); return; }
+    rec = new SR(); rec.lang = "zh-TW"; rec.interimResults = true; rec.continuous = false; rec.maxAlternatives = 1;
     let final = "", err = "";
     rec.onstart = () => { recording = true; m.classList.add("rec"); setMicTx(T("ytsListening")); st.textContent = "";
       stopTimer = setTimeout(() => { try { rec.stop(); } catch (e) {} }, 8000); };
     rec.onresult = (e) => { let it = ""; for (const r of e.results) (r.isFinal ? (final += r[0].transcript) : (it += r[0].transcript)); if (it) st.textContent = "… " + it; };
     rec.onerror = (e) => { err = e.error || "error"; };
     rec.onend = () => {
+      unmute();
       recording = false; m.classList.remove("rec"); clearTimeout(stopTimer); setMicTx(T("ytsRec")); st.textContent = "";
       if (final) result(final);
       else st.textContent = T(err === "not-allowed" || err === "audio-capture" ? "ytsErrMic" : err === "network" ? "ytsErrNet" : "ytsErrNone");
     };
-    try { rec.start(); } catch (e) { recording = false; m.classList.remove("rec"); setMicTx(T("ytsRec")); st.textContent = T("ytsErrMic"); }
+    try { rec.start(); } catch (e) { unmute(); recording = false; m.classList.remove("rec"); setMicTx(T("ytsRec")); st.textContent = T("ytsErrMic"); }
   }
 
   // 跟讀比「音」、聽寫比「字」。
@@ -416,13 +424,21 @@ const YTS = (() => {
   function result(said) {
     const target = lines[cur].z;
     const byChar = mode === "dict";
-    const a = byChar ? [...stripP(said)] : toPy(said);
-    const b = byChar ? [...stripP(target)] : toPy(target);
-    const { n, hit } = lcs(a, b);
-    const pct = Math.round((n / Math.max(1, b.length)) * 100);
+    let pct, chars, hit;
+    if (byChar) {
+      // 書き取り:文字そのものを比べる(数字も答えのうちなので stripP)
+      const a = [...stripP(said)], b = [...stripP(target)];
+      const r = lcs(a, b);
+      hit = r.hit; pct = Math.round((r.n / Math.max(1, b.length)) * 100);
+      chars = b;
+    } else {
+      // 跟讀:アプリ内の発音チェックと同じ採点を使う(整句拼音で破音字も解決、
+      // 分母は max(お手本,聞こえた)なので「余計に言った」も減点される)。
+      const d = SPK.diff(target, said);
+      pct = d.score; chars = d.chars.map((x) => x.c); hit = d.chars.map((x) => x.hit);
+    }
     const pass = pct >= 70;
     if (pass) markDone(vid, cur);
-    const chars = byChar ? [...stripP(target)] : [...strip(target)];   // 採点した並びと表示を必ず一致させる
     const marked = chars.map((c, i) => hit[i] ? esc(c) : `<u class="yts-miss">${esc(c)}</u>`).join("");
     $("ytsRes").innerHTML = `
       <div class="yts-res ${pass ? "ok" : "ng"}">

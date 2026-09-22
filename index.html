@@ -1455,7 +1455,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 <script src="fortune.js?v=4"></script>
 <script src="myvocab.js?v=2"></script>
 <script src="whatsnew.js?v=3"></script>
-<script src="ytshadow.js?v=24"></script>
+<script src="ytshadow.js?v=25"></script>
 <script src="listen.js?v=3"></script>
 <script src="websync.js?v=62"></script>
 <script src="srs.js?v=57"></script>
@@ -2451,7 +2451,7 @@ const SPK = (() => {
   function next(){ dropMine(); nativeHasVoice = false; idx = (idx + 1) % items.length; render(); }
   function setSrc(s){ src = s; buildItems(); render(); }
   function reset(){ items = []; render(); }
-  return { render, toggle, next, setSrc, reset, playMine };
+  return { render, toggle, next, setSrc, reset, playMine, diff, loadPyMap };   // 採点は YouTube 跟讀にも貸す
 })();
 
 /* ===== ライティング ===== */
