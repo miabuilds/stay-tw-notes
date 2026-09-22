@@ -72,6 +72,12 @@ const YTS = (() => {
     return fetch("data/hanzi-pinyin.json").then((r) => r.json()).then((m) => (PYMAP = m)).catch(() => (PYMAP = {}));
   }
   const strip = (s) => String(s).replace(/[，。！？；：、,.!?;:\s（）()「」『』…—～\-\d０-９a-zA-Z]/g, "");
+  // 書き取り(dict)では数字とアルファベットも答えそのもの。strip はそれらまで落とすので、
+  // 「全家卻總是追不上711」と「…追不上7」が同じ扱いになり 100% になっていた。
+  // 句読点と空白だけを落とす版を使う。全角数字は半角に寄せて 711 と ７１１ を同じと見なす。
+  const stripP = (s) => String(s)
+    .replace(/[０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+    .replace(/[，。！？；：、,.!?;:\s（）()「」『』…—～\-]/g, "");
   const toPy = (s) => [...strip(s)].map((c) => (PYMAP && PYMAP[c]) || c);
   function lcs(a, b) {
     if (!b.length) return { n: 0, hit: [] };
@@ -156,7 +162,7 @@ const YTS = (() => {
                 const r = segRange(cur);
                 watchSeg(r.s, r.e, () => { clearWatch(); try { player.pauseVideo(); } catch (e2) {} if (loopOn) setTimeout(playSeg, 350); });
               }
-            } else if (st === 2) { clearWatch(); clearFollow(); }   // 使用者自己按暫停
+            } else if (st === 2) { clearWatch(); clearFollow(); clearSeek(); }   // 使用者自己按暫停
           },
           onError: (e) => {
             const code = e && e.data;
@@ -171,7 +177,7 @@ const YTS = (() => {
   function setMode(m) {
     mode = m;
     document.querySelectorAll(".yts-mode").forEach((b) => b.classList.toggle("on", b.dataset.m === m));
-    clearWatch(); clearFollow();
+    clearWatch(); clearFollow(); clearSeek();
     let st = -1; try { st = player && player.getPlayerState(); } catch (e) {}
     if (st === 1) { if (m === "follow") followWatch(); else { const r = segRange(cur); watchSeg(r.s, r.e, () => { clearWatch(); try { player.pauseVideo(); } catch (e) {} }); } }
     card();
@@ -236,7 +242,10 @@ const YTS = (() => {
     if (e0 <= s0 + 0.25) e0 = s0 + 0.25;                    // 潰れたら最低限は鳴らす
     return { s: s0, e: e0 };
   }
-  function clearWatch() { clearInterval(watchT); watchT = 0; clearInterval(seekT); seekT = 0; }
+  function clearWatch() { clearInterval(watchT); watchT = 0; }
+  // seek 待ちは watchSeg とは別物。watchSeg は冒頭で clearWatch を呼ぶので、
+  // ここを一緒くたにすると「seek したのに鳴らない」になる(実際そうなった)。
+  function clearSeek() { clearInterval(seekT); seekT = 0; }
   // 再生ボタンの見た目は「プレイヤーの実際の状態」だけを見る。
   // 自前のボタンから動かしても、YouTube 側のボタンから動かしても同じ絵になる。
   function syncPlayBtn(state) {
@@ -280,7 +289,7 @@ const YTS = (() => {
   function playSeg() {
     const l = lines[cur]; if (!l || !player || !player.seekTo) return;
     const r = segRange(cur);
-    clearWatch(); clearFollow();
+    clearWatch(); clearFollow(); clearSeek(); clearSeek();
     try { player.setPlaybackRate(speed()); } catch (e) { return; }
     seekThenPlay(r.s);
     watchSeg(r.s, r.e, () => {
@@ -293,7 +302,7 @@ const YTS = (() => {
   // これが無いと「動画の再生ボタンを押しても字幕が動かない」になる。
   function followWatch() {
     if (!player) return;
-    clearWatch(); clearFollow();
+    clearWatch(); clearFollow(); clearSeek(); clearSeek();
     followT = setInterval(() => {
       try {
         const ms = player.getCurrentTime() * 1000;
@@ -327,7 +336,7 @@ const YTS = (() => {
     } else playSeg();
   }
   function go(d) {
-    clearWatch(); clearFollow();
+    clearWatch(); clearFollow(); clearSeek(); clearSeek();
     try { player && player.pauseVideo && player.pauseVideo(); } catch (e) {}
     const n = cur + d;
     if (n < 0 || n >= lines.length) return;
@@ -344,7 +353,7 @@ const YTS = (() => {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     const m = $("ytsMic"), st = $("ytsStatus");
     try { player && player.pauseVideo && player.pauseVideo(); } catch (e) {}
-    clearWatch(); clearFollow();
+    clearWatch(); clearFollow(); clearSeek();
     if (isNative()) {
       let final = "";
       recording = true; m.classList.add("rec"); st.textContent = T("ytsListening");
@@ -379,13 +388,13 @@ const YTS = (() => {
   function result(said) {
     const target = lines[cur].z;
     const byChar = mode === "dict";
-    const a = byChar ? [...strip(said)] : toPy(said);
-    const b = byChar ? [...strip(target)] : toPy(target);
+    const a = byChar ? [...stripP(said)] : toPy(said);
+    const b = byChar ? [...stripP(target)] : toPy(target);
     const { n, hit } = lcs(a, b);
     const pct = Math.round((n / Math.max(1, b.length)) * 100);
     const pass = pct >= 70;
     if (pass) markDone(vid, cur);
-    const chars = [...strip(target)];
+    const chars = byChar ? [...stripP(target)] : [...strip(target)];   // 採点した並びと表示を必ず一致させる
     const marked = chars.map((c, i) => hit[i] ? esc(c) : `<u class="yts-miss">${esc(c)}</u>`).join("");
     $("ytsRes").innerHTML = `
       <div class="yts-res ${pass ? "ok" : "ng"}">
@@ -410,7 +419,7 @@ const YTS = (() => {
   // ── 首頁:影片牆 ──
   function render() {
     booted = true;
-    clearWatch(); clearFollow();
+    clearWatch(); clearFollow(); clearSeek();
     try { if (player && player.destroy) player.destroy(); } catch (e) {}
     player = null; vid = "";
     const list = SAMPLES.filter((s) => cat === "all" || s.cat === cat);
