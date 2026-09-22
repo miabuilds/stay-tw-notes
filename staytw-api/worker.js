@@ -577,7 +577,11 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       const row = await env.DB.prepare("SELECT title, author, seconds, track, lines FROM yt_captions WHERE vid=?1").bind(v).first();
       if (row) {
         let lines = []; try { lines = JSON.parse(row.lines); } catch (e) {}
-        return json({ v, title: row.title, author: row.author, seconds: row.seconds, track: row.track, lines, cached: true }, 200, h);
+        // track が "skeleton:xx" = 中国語字幕が無く、時間軸だけ入れてある(本文は利用者が書く)
+        const sk = String(row.track || "").startsWith("skeleton:");
+        return json({ v, title: row.title, author: row.author, seconds: row.seconds, track: row.track,
+                      skeleton: sk || undefined, hintTrack: sk ? row.track.slice(9) : undefined,
+                      lines, cached: true }, 200, h);
       }
       // 快取沒有 → 現場試一次。失敗就明講,前端顯示「這支還沒準備好」。
       try {
@@ -590,7 +594,24 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
         const pj = await pr.json();
         const tracks = (pj.captions && pj.captions.playerCaptionsTracklistRenderer && pj.captions.playerCaptionsTracklistRenderer.captionTracks) || [];
         const tr = tracks.find((t) => /^zh/i.test(t.languageCode || ""));
-        if (!tr) return json({ error: "no_captions" }, 404, h);
+        if (!tr) {
+          // 中国語字幕は無いが、他言語(英語など)のトラックはある場合がある。
+          // その訳文を中国語に訳し戻すと「実際に喋っていない文」になってシャドーイングが壊れるので使わない。
+          // ただし時間軸は正しいので、骨組みとして返す。中身は利用者が自分で埋める。
+          const alt = tracks[0];
+          if (!alt) return json({ error: "no_captions" }, 404, h);
+          let au = alt.baseUrl + (alt.baseUrl.includes("fmt=") ? "" : "&fmt=json3");
+          const ab = await (await fetch(au, { headers: { "User-Agent": "Mozilla/5.0" } })).text();
+          const alines = parseCaptionBody(ab);
+          if (alines.length < 3) return json({ error: "no_captions" }, 404, h);
+          const ad = pj.videoDetails || {};
+          return json({
+            v, title: ad.title || "", author: ad.author || "",
+            seconds: Number(ad.lengthSeconds || 0),
+            skeleton: true, hintTrack: alt.languageCode || "",
+            lines: alines.map((l) => ({ t: l.t, d: l.d, z: "", hint: l.z })),
+          }, 200, h);
+        }
         let u = tr.baseUrl + (tr.baseUrl.includes("fmt=") ? "" : "&fmt=json3");
         const tb = await (await fetch(u, { headers: { "User-Agent": "Mozilla/5.0" } })).text();
         const lines = parseCaptionBody(tb);

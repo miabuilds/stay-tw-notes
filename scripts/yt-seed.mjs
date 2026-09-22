@@ -13,6 +13,9 @@ const KEY = "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w";
 const H = { "Content-Type": "application/json", "User-Agent": "com.google.android.youtube/20.10.38 (Linux; U; Android 11) gzip" };
 const CTX = { client: { clientName: "ANDROID", clientVersion: "20.10.38", androidSdkVersion: 30, hl: "zh-TW", gl: "TW" } };
 const CHECK = process.argv.includes("--check");
+// --skeleton:中国語字幕が無い動画用。他言語トラックの「時間軸だけ」を種として入れる。
+// 訳文を中国語に訳し戻すと実際に言っていない文になるので本文は空。利用者が自分で書き起こす。
+const SKEL = process.argv.includes("--skeleton");
 const VIDS = process.argv.slice(2).filter((x) => /^[A-Za-z0-9_-]{11}$/.test(x));
 
 const unesc = (s) => s.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#39;/g, "'").replace(/&quot;/g, '"');
@@ -38,15 +41,20 @@ async function grab(v) {
   const tracks = pj.captions?.playerCaptionsTracklistRenderer?.captionTracks || [];
   // 人工字幕優先(自動產生的中文斷句很糟)
   const zh = tracks.filter((t) => /^zh/i.test(t.languageCode || ""));
-  const tr = zh.find((t) => t.kind !== "asr") || zh[0];
+  const tr = SKEL ? (zh.find((t) => t.kind !== "asr") || zh[0] || tracks[0]) : (zh.find((t) => t.kind !== "asr") || zh[0]);
   if (!tr) return { v, err: "沒有中文字幕軌(有:" + (tracks.map((t) => t.languageCode).join(",") || "無") + ")" };
   const oe = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${v}&format=json`);
   if (!oe.ok) return { v, err: "這支禁止嵌入(oEmbed " + oe.status + ")" };
   const u = tr.baseUrl + (tr.baseUrl.includes("fmt=") ? "" : "&fmt=json3");
   const lines = parseBody(await (await fetch(u, { headers: { "User-Agent": "Mozilla/5.0" } })).text());
   if (lines.length < 3) return { v, err: "句數太少(" + lines.length + ")" };
+  const zhTrack = /^zh/i.test(tr.languageCode || "");
+  // 骨組みとして入れる時は、本文を空にして訳文は hint に落とす(訳し戻した中国語は絶対に作らない)
+  const out = (SKEL && !zhTrack) ? lines.map((l) => ({ t: l.t, d: l.d, z: "", hint: l.z })) : lines;
   return { v, title: String(d.title || "").slice(0, 200), author: String(d.author || "").slice(0, 120),
-           seconds: Number(d.lengthSeconds || 0), track: tr.languageCode + (tr.kind === "asr" ? "-asr" : ""), lines };
+           seconds: Number(d.lengthSeconds || 0),
+           track: (SKEL && !zhTrack) ? ("skeleton:" + tr.languageCode) : (tr.languageCode + (tr.kind === "asr" ? "-asr" : "")),
+           lines: out };
 }
 
 const q = (s) => "'" + String(s).replace(/'/g, "''") + "'";
