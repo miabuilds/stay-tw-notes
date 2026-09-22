@@ -221,17 +221,22 @@ const YTS = (() => {
   // 手打ち字幕(志祺七七など)は次の句の開始時刻が“硬い境界”。そこを跨ぐと
   // 次の文の頭が数文字聞こえてしまう(利用者からの指摘)。ASR かどうかで余白を変える。
   const isAsr = () => /-asr$/i.test((meta && meta.track) || "");
+  // 手打ち字幕(志祺七七など)は前後が隙間なく繋がっている＝逃げ場が無い。
+  // さらに seekTo は正確に止まらず少し手前に着地するので、指定どおりでも前の句の尻が鳴る。
+  // なので手打ちの時は「少し後ろから始めて、次の句の手前で切る」に寄せる。
   function segRange(i) {
     const l = lines[i], pv = lines[i - 1], nx = lines[i + 1];
-    const tail = isAsr() ? 0.25 : 0.10;                     // 手打ちは語尾の余白を詰める
-    let s0 = Math.max(0, l.t / 1000 - 0.12);                // 頭を切らない程度に少しだけ前から
-    if (pv) s0 = Math.max(s0, (pv.t + (pv.d || 0)) / 1000); // 前の句の中に戻らない
+    const asr = isAsr();
+    const head = asr ? -0.12 : 0.03;                        // seek 待ちを入れたので余白は最小限
+    const tail = asr ? 0.25 : 0.10;
+    let s0 = Math.max(0, l.t / 1000 + head);
+    if (pv) s0 = Math.max(s0, (pv.t + (pv.d || 0)) / 1000); // 前の句の中には戻らない
     let e0 = (l.t + (l.d || 4000)) / 1000 + tail;
     if (nx) e0 = Math.min(e0, nx.t / 1000 - 0.03);          // 次の句には絶対に入らない
     if (e0 <= s0 + 0.25) e0 = s0 + 0.25;                    // 潰れたら最低限は鳴らす
     return { s: s0, e: e0 };
   }
-  function clearWatch() { clearInterval(watchT); watchT = 0; }
+  function clearWatch() { clearInterval(watchT); watchT = 0; clearInterval(seekT); seekT = 0; }
   // 再生ボタンの見た目は「プレイヤーの実際の状態」だけを見る。
   // 自前のボタンから動かしても、YouTube 側のボタンから動かしても同じ絵になる。
   function syncPlayBtn(state) {
@@ -256,15 +261,28 @@ const YTS = (() => {
       } catch (e) {}
     }, 100);
   }
+  // seekTo は正確に止まらない。先に止めて seek し、位置が本当にその句に来てから鳴らす。
+  // こうしないと「前の句の最後がちょっと聞こえる」が残る(連続字幕には隙間が無いので余計に目立つ)。
+  let seekT = 0;
+  function seekThenPlay(sec, done) {
+    clearInterval(seekT);
+    try { player.pauseVideo(); player.seekTo(sec, true); } catch (e) { return; }
+    let n = 0;
+    seekT = setInterval(() => {
+      let c = -1; try { c = player.getCurrentTime(); } catch (e) {}
+      if (c >= sec - 0.05 || ++n > 12) {          // 最大 ~0.6 秒待つ。来なければ諦めて鳴らす
+        clearInterval(seekT); seekT = 0;
+        try { player.playVideo(); } catch (e) {}
+        if (done) done();
+      }
+    }, 50);
+  }
   function playSeg() {
     const l = lines[cur]; if (!l || !player || !player.seekTo) return;
     const r = segRange(cur);
     clearWatch(); clearFollow();
-    try {
-      player.setPlaybackRate(speed());
-      player.seekTo(r.s, true);
-      player.playVideo();
-    } catch (e) { return; }
+    try { player.setPlaybackRate(speed()); } catch (e) { return; }
+    seekThenPlay(r.s);
     watchSeg(r.s, r.e, () => {
       clearWatch();
       try { player.pauseVideo(); } catch (e) {}
