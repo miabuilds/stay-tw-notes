@@ -46,13 +46,6 @@ const YTS = (() => {
   // 中国語字幕が無い動画用。他言語トラックの「時間軸だけ」を骨組みにして、本文は本人が埋める。
   // 訳文を中国語へ訳し戻すと実際に喋っていない文になるので、それは絶対にやらない。
   // 埋めた原稿は端末の localStorage に置く(他人のコンテンツを我々の DB に溜めない)。
-  let skeleton = false, hintTrack = "", practicing = false;
-  let skelLines = null;   // 骨組みの全行(添字が下書きのキーなので絶対に間引かない)
-  const draftKey = (v) => "stw_yts_draft_" + v;
-  function loadDraft(v) { try { return JSON.parse(localStorage.getItem(draftKey(v)) || "null"); } catch (e) { return null; } }
-  function saveDraft() {
-    try { localStorage.setItem(draftKey(vid), JSON.stringify(lines.map((l) => l.z || ""))); } catch (e) {}
-  }
 
   const T = (k) => (typeof twT === "function" ? twT(k) : k);
   const esc = (s) => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -117,29 +110,17 @@ const YTS = (() => {
       const r = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ v }) });
       data = await r.json();
       if (!r.ok || !data.lines || !data.lines.length) throw new Error(data.error || "no_captions");
-      // skeleton = 中国語字幕が無く、他言語の時間軸だけ返ってきた状態
     } catch (e) {
       // Worker は機房 IP なので YouTube から字幕を取れない(必ずここに来る)。
       // 行き止まりにせず「この動画を追加してほしい」と送れるようにする。準備はこちらでやる。
       box.innerHTML = `<div class="yts-empty">
         <p>${esc(T("ytsNoCap"))}</p>
         <p class="yts-sub">${esc(T("ytsNoCapSub"))}</p>
-        <div class="yts-req">
-          <button class="btn primary" id="ytsReqBtn" onclick="YTS.request('${esc(v)}')">${esc(T("ytsReq"))}</button>
-          <button class="btn" onclick="YTS.render()">${esc(T("ytsBackList"))}</button>
-        </div></div>`;
+        <button class="btn" onclick="YTS.render()">${esc(T("ytsBackList"))}</button></div>`;
       return;
     }
     vid = v; meta = data; cur = 0; spdIdx = 0; loopOn = false; mode = "follow";
-    skeleton = !!data.skeleton; hintTrack = data.hintTrack || ""; practicing = false; skelLines = null;
-    if (skeleton) {
-      lines = data.lines.slice();
-      const d = loadDraft(v);
-      if (d) lines.forEach((l, i) => { l.z = d[i] || ""; });
-      skelLines = lines;
-    } else {
-      lines = data.lines.filter((l) => l && l.z);
-    }
+    lines = data.lines.filter((l) => l && l.z);
     await loadPy();
     stwLoadExt(() => {
       vocab = twMergeVocab([], lines.map((l) => l.z || "").join(""));
@@ -154,8 +135,7 @@ const YTS = (() => {
         <div class="yts-title">${esc(meta.title || "")}</div>
       </div>
       <div class="yts-video"><div id="ytsFrame"></div></div>
-      ${skeleton ? `<div class="yts-fill-bar" style="display:${practicing ? "" : "none"}"><button class="btn" onclick="YTS.openFill()">${esc(T("ytsFillOpen"))}</button></div>` : ""}
-      <div class="yts-modes" style="display:${(skeleton && !practicing) ? "none" : ""}">
+      <div class="yts-modes">
         ${["follow", "shadow", "dict"].map((m) => `<button class="yts-mode${m === mode ? " on" : ""}" data-m="${m}" onclick="YTS.setMode('${m}')">${esc(T("ytsMode_" + m))}</button>`).join("")}
       </div>
       <div id="ytsCard"></div>`;
@@ -164,7 +144,7 @@ const YTS = (() => {
         videoId: vid, playerVars: { rel: 0, playsinline: 1, modestbranding: 1 },
         events: {
           // 骨架モードでまだ何も書けていないなら、練習カードではなく書き起こし画面を出す
-          onReady: () => { if (skeleton && !practicing) openFill(); else card(); },
+          onReady: () => { card(); },
           // 使用者直接按影片自己的播放鍵時,我們的監看沒被掛上 →
           // 跟播模式字幕不動、逐句模式會一路播下去。這裡接手。
           onStateChange: (e) => {
@@ -188,74 +168,7 @@ const YTS = (() => {
     });
   }
 
-  // ── 書き起こし画面(骨架モード)──
-  // 1 行ずつ「その区間だけ再生 → 聞こえたとおりに打つ」。訳文はヒントとして薄く出す。
-  function openFill() {
-    practicing = false;
-    if (skelLines) lines = skelLines;   // 間引いた練習用配列から、必ず全行に戻す
-    renderPlayerChrome();
-    const done = lines.filter((l) => l.z).length;
-    $("ytsCard").innerHTML = `
-      <div class="yts-fill">
-        <div class="yts-fill-h">
-          <b>${esc(T("ytsFillTitle"))}</b>
-          <span class="yts-fill-n">${done} / ${lines.length}</span>
-        </div>
-        <p class="yts-sub">${esc(T("ytsFillNote"))}</p>
-        <div class="yts-fill-rows">${lines.map((l, i) => `
-          <div class="yts-fr">
-            <button class="yts-fr-p" onclick="YTS.playLine(${i})" aria-label="${esc(T("ytsPlayLine"))}">${ICON_PLAY}</button>
-            <div class="yts-fr-b">
-              ${l.hint ? `<div class="yts-fr-hint">${esc(l.hint)}</div>` : ""}
-              <input class="yts-fr-in" data-i="${i}" value="${esc(l.z || "")}" placeholder="${esc(T("ytsFillPh"))}"
-                     oninput="YTS.setLine(${i}, this.value)" autocomplete="off" lang="zh-TW">
-            </div>
-          </div>`).join("")}</div>
-        <div class="yts-fill-act">
-          <button class="btn primary" onclick="YTS.startPractice()">${esc(T("ytsFillGo"))}</button>
-          <button class="btn" onclick="YTS.render()">${esc(T("ytsBackList"))}</button>
-        </div>
-      </div>`;
-  }
-  // 「この動画を入れてほしい」= 既存の意見フォームに流す。追加できるかはこちらで確認する。
-  async function request(v) {
-    const b = $("ytsReqBtn"); if (b) { b.disabled = true; b.textContent = T("ytsReqSending"); }
-    try {
-      await fetch("/api/feedback", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "content", lang: (typeof twGetLang === "function" ? twGetLang() : ""),
-          email: "noreply@staytw.invalid",
-          message: "[YouTube 追加希望] https://www.youtube.com/watch?v=" + v }),
-      });
-      if (b) b.textContent = T("ytsReqDone");
-    } catch (e) { if (b) { b.disabled = false; b.textContent = T("ytsReq"); } }
-  }
-  function setLine(i, val) {
-    if (!lines[i]) return;
-    lines[i].z = String(val || "").trim();
-    saveDraft();
-    const n = $("ytsCard").querySelector(".yts-fill-n");
-    if (n) n.textContent = lines.filter((l) => l.z).length + " / " + lines.length;
-  }
-  function playLine(i) { cur = i; playSeg(); }
-  function startPractice() {
-    const filled = (skelLines || lines).filter((l) => l.z);
-    if (filled.length < 1) { toast(T("ytsFillEmpty")); return; }
-    // 空行は練習に混ぜない。埋めた分だけで練習できる(全部埋めてから、では続かない)。
-    // skelLines は残しておく ← ここを潰すと「書き起こしに戻る」で未入力行が消える
-    lines = filled; practicing = true; cur = 0;
-    renderPlayerChrome();
-    stwLoadExt(() => { vocab = twMergeVocab([], lines.map((l) => l.z).join("")); card(); });
-  }
-  // モード行/戻るボタンの出し分けだけを描き直す(プレイヤーは作り直さない=再生が止まらない)
-  function renderPlayerChrome() {
-    const bar = $("ytsBody") && $("ytsBody").querySelector(".yts-fill-bar");
-    const modes = $("ytsBody") && $("ytsBody").querySelector(".yts-modes");
-    if (bar) bar.style.display = (skeleton && practicing) ? "" : "none";
-    if (modes) modes.style.display = (skeleton && !practicing) ? "none" : "";
-  }
   function setMode(m) {
-    if (skeleton && !practicing) { openFill(); return; }
     mode = m;
     document.querySelectorAll(".yts-mode").forEach((b) => b.classList.toggle("on", b.dataset.m === m));
     clearWatch(); clearFollow();
@@ -490,21 +403,13 @@ const YTS = (() => {
         const d = doneSet(s.v).size;
         return `<button class="yts-card" onclick="YTS.load('${s.v}')">
           <img loading="lazy" src="https://i.ytimg.com/vi/${s.v}/mqdefault.jpg" alt="">
-          ${s.fill ? `<span class="yts-badge">${esc(T("ytsFillBadge"))}</span>` : ""}
           <div class="yts-ct"><b>${esc(s.t)}</b><span>${esc(s.tag)}</span>${d ? `<em>${d} ${esc(T("ytsDoneN"))}</em>` : ""}</div>
         </button>`;
       }).join("")}</div>
-      <details class="yts-own"><summary>${esc(T("ytsOwn"))}</summary>
-        <div class="yts-ownin">
-          <input id="ytsUrl" class="yts-in" type="text" inputmode="url" placeholder="${esc(T("ytsUrlHint"))}">
-          <button class="btn" onclick="YTS.load(document.getElementById('ytsUrl').value)">${esc(T("ytsLoad"))}</button>
-        </div>
-        <p class="yts-sub">${esc(T("ytsOwnNote"))}</p>
-      </details>`;
+      `;
   }
   function setCat(c) { cat = c; render(); }
 
-  return { render, load, setMode, play, go, cycleSpeed, toggleLoop, mic, check, setCat, booted: () => booted,
-           openFill, setLine, playLine, startPractice, request };
+  return { render, load, setMode, play, go, cycleSpeed, toggleLoop, mic, check, setCat, booted: () => booted };
 })();
 if (typeof window !== "undefined") window.YTS = YTS;   // const は window に乗らない(TTS/Paywall と同じ罠)
