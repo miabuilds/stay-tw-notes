@@ -192,9 +192,16 @@ const YTS = (() => {
          </div>
          <div id="ytsSent" class="yts-sent yts-blur"></div>`
       : `<div id="ytsSent" class="yts-sent"></div>` + (mode === "shadow"
-          ? `<div class="yts-mic-wrap"><button id="ytsMic" class="yts-mic" onclick="YTS.mic()" aria-label="${esc(T("ytsRec"))}">
-               <svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0"/><line x1="12" y1="18" x2="12" y2="21"/></svg></button>
-             <div id="ytsStatus" class="yts-status">${esc(T("ytsRec"))}</div></div>` : "");
+          // 丸いマイクだけ置いても何をすればいいか伝わらない(「どう遊ぶか分からない」と言われた)。
+          // 手順を文字で出し、ボタン自体に動詞を書く。
+          ? `<div class="yts-how">${esc(T("ytsShadowHow"))}</div>
+             <div class="yts-mic-wrap">
+               <button id="ytsMic" class="yts-mic" onclick="YTS.mic()">
+                 <svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0"/><line x1="12" y1="18" x2="12" y2="21"/></svg>
+                 <span id="ytsMicTx">${esc(T("ytsRec"))}</span>
+               </button>
+               <div id="ytsStatus" class="yts-status"></div>
+             </div>` : "");
 
     $("ytsCard").innerHTML = `
       <div class="yts-prog"><i style="width:${Math.round((done.size / lines.length) * 100)}%"></i></div>
@@ -271,15 +278,27 @@ const YTS = (() => {
   // seekTo は正確に止まらない。先に止めて seek し、位置が本当にその句に来てから鳴らす。
   // こうしないと「前の句の最後がちょっと聞こえる」が残る(連続字幕には隙間が無いので余計に目立つ)。
   let seekT = 0;
+  // 実機では getCurrentTime が目標値を返していても、実際に音が出るのは少し手前から、
+  // ということが起きる(バッファリングのため)。位置を待つだけでは前の句の尻が漏れた。
+  // なので「seek 中はミュート → 本当に開始点を過ぎてから音を戻す」で確実に殺す。
+  // 利用者が自分でミュートしていた場合は戻さない。
   function seekThenPlay(sec, done) {
     clearInterval(seekT);
-    try { player.pauseVideo(); player.seekTo(sec, true); } catch (e) { return; }
+    let wasMuted = false;
+    try { wasMuted = !!player.isMuted(); } catch (e) {}
+    try {
+      if (!wasMuted) player.mute();
+      player.pauseVideo();
+      player.seekTo(sec, true);
+      player.playVideo();
+    } catch (e) { return; }
     let n = 0;
     seekT = setInterval(() => {
       let c = -1; try { c = player.getCurrentTime(); } catch (e) {}
-      if (c >= sec - 0.05 || ++n > 12) {          // 最大 ~0.6 秒待つ。来なければ諦めて鳴らす
+      // 開始点を過ぎた／待ちすぎた、のどちらかで音を戻す(最大 ~1.5 秒)
+      if (c >= sec - 0.02 || ++n > 30) {
         clearInterval(seekT); seekT = 0;
-        try { player.playVideo(); } catch (e) {}
+        try { if (!wasMuted) player.unMute(); } catch (e) {}
         if (done) done();
       }
     }, 50);
@@ -346,21 +365,32 @@ const YTS = (() => {
   // ── 跟讀:語音辨識(瀏覽器 / App 原生橋接) ──
   const isNative = () => !!(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp);
   const post = (o) => { try { window.ReactNativeWebView && window.ReactNativeWebView.postMessage(JSON.stringify(o)); } catch (e) {} };
+  function setMicTx(t) { const e = $("ytsMicTx"); if (e) e.textContent = t; }
   function mic() {
     if (recording) return;
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     const m = $("ytsMic"), st = $("ytsStatus");
+    // ここで要素が無いと例外で静かに死ぬ＝「押しても無反応」になる。必ず出口を作る。
+    if (!m || !st) { try { setMode("shadow"); } catch (e) {} return; }
     try { player && player.pauseVideo && player.pauseVideo(); } catch (e) {}
     clearWatch(); clearFollow(); clearSeek();
     if (isNative()) {
-      let final = "";
-      recording = true; m.classList.add("rec"); st.textContent = T("ytsListening");
+      let final = "", ended = false;
+      recording = true; m.classList.add("rec"); setMicTx(T("ytsListening")); st.textContent = "";
+      // 原生側から何も返ってこない事故(音声セッションの取り合いなど)で
+      // 録音中のまま固まるのを防ぐ。10 秒で自分から降りる。
+      const giveUp = setTimeout(() => {
+        if (ended) return;
+        recording = false; m.classList.remove("rec"); setMicTx(T("ytsRec")); st.textContent = T("ytsErrMic");
+      }, 10000);
       stopTimer = setTimeout(() => post({ type: "SPEECH_STOP" }), 8000);
       window.stwSpeechResult = (tx, isFinal) => { if (isFinal) { if (tx) final = tx; } else if (tx) st.textContent = "… " + tx; };
       window.stwSpeechEnd = (err) => {
+        ended = true; clearTimeout(giveUp);
         recording = false; m.classList.remove("rec"); clearTimeout(stopTimer);
-        st.textContent = T("ytsRec");
-        if (final) result(final); else st.textContent = T(err === "not-allowed" ? "ytsErrMic" : "ytsErrNone");
+        setMicTx(T("ytsRec")); st.textContent = "";
+        if (final) result(final);
+        else st.textContent = T(err === "not-allowed" ? "ytsErrMic" : err === "network" ? "ytsErrNet" : "ytsErrNone");
       };
       post({ type: "SPEECH_START", lang: "zh-TW" });
       return;
@@ -368,16 +398,16 @@ const YTS = (() => {
     if (!SR) { st.textContent = T("ytsErrNoSr"); return; }
     rec = new SR(); rec.lang = "zh-TW"; rec.interimResults = true; rec.continuous = false;
     let final = "", err = "";
-    rec.onstart = () => { recording = true; m.classList.add("rec"); st.textContent = T("ytsListening");
+    rec.onstart = () => { recording = true; m.classList.add("rec"); setMicTx(T("ytsListening")); st.textContent = "";
       stopTimer = setTimeout(() => { try { rec.stop(); } catch (e) {} }, 8000); };
     rec.onresult = (e) => { let it = ""; for (const r of e.results) (r.isFinal ? (final += r[0].transcript) : (it += r[0].transcript)); if (it) st.textContent = "… " + it; };
     rec.onerror = (e) => { err = e.error || "error"; };
     rec.onend = () => {
-      recording = false; m.classList.remove("rec"); clearTimeout(stopTimer); st.textContent = T("ytsRec");
+      recording = false; m.classList.remove("rec"); clearTimeout(stopTimer); setMicTx(T("ytsRec")); st.textContent = "";
       if (final) result(final);
       else st.textContent = T(err === "not-allowed" || err === "audio-capture" ? "ytsErrMic" : err === "network" ? "ytsErrNet" : "ytsErrNone");
     };
-    try { rec.start(); } catch (e) { recording = false; }
+    try { rec.start(); } catch (e) { recording = false; m.classList.remove("rec"); setMicTx(T("ytsRec")); st.textContent = T("ytsErrMic"); }
   }
 
   // 跟讀比「音」、聽寫比「字」。
