@@ -58,6 +58,25 @@
   --ac: #E4715F; --ac-soft: rgba(228,113,95,.1); --ac2: #7FA5C2;
   --bd: #2C2A27; --line: #2C2A27; --sh: none; --sh2: none;
 }
+/* == イラストの配色 ==
+   手描きの SVG を本文に直書きしている(外部 <use> は Safari で崩れることがあるため)。
+   色はここの変数だけを見ているので、ダークでも塗り直さずに済む。 */
+:root{
+  --il-ink:#3B3A3E; --il-ink2:#5A575E; --il-paper:#FFFFFF; --il-cream:#F4EFE3;
+  --il-line:#DDD5C0; --il-red:#B8362A; --il-blue:#2F5D7A; --il-amber:#DFA03A;
+  --il-green:#5C8A62; --il-blush:#E9938A; --il-tea:#C9A27A;
+}
+[data-theme="dark"]{
+  --il-ink:#D9D3C7; --il-ink2:#A7A196; --il-paper:#2B292B; --il-cream:#242224;
+  --il-line:#3B3733; --il-red:#E4715F; --il-blue:#7FA5C2; --il-amber:#D3A257;
+  --il-green:#7FA886; --il-blush:#D08C84; --il-tea:#B08C68;
+}
+.il{display:block;width:100%;height:auto;overflow:visible}
+.il-persona{max-width:132px;margin:0 auto 14px}
+.il-feat{max-width:168px;margin:0 0 22px}
+.il-wide{max-width:600px;margin:0 auto 26px}
+.il-app{max-width:210px;margin:0 auto 20px}
+@media(max-width:900px){ .il-feat{max-width:148px} }
 *{margin:0;padding:0;box-sizing:border-box;transition:color .2s var(--ease),background .2s var(--ease),border-color .2s var(--ease),opacity .2s var(--ease)}
 html{scroll-behavior:smooth}
 html,body{overflow-x:hidden}
@@ -288,21 +307,56 @@ a:hover{text-decoration:underline}
     <h2 class="section-title reveal" data-i18n-html="secToolsTitle"><em>1日15分</em>から始める、八つの学習ツール。</h2>
     <div class="features">
       <div class="feature-card reveal">
+<svg class="il il-feat" viewBox="0 0 168 108" role="img" aria-hidden="true">
+  <rect x="26" y="16" width="86" height="76" rx="10" fill="var(--il-cream)" stroke="var(--il-line)" stroke-width="3"/>
+  <rect x="16" y="8" width="86" height="76" rx="10" fill="var(--il-paper)" stroke="var(--il-ink)" stroke-width="3.4"/>
+  <text x="53" y="52" font-size="30" font-weight="700" fill="var(--il-ink)" text-anchor="middle">我</text>
+  <text x="53" y="70" font-size="13" fill="var(--il-red)" text-anchor="middle">ㄨㄛˇ</text>
+  <path d="M124 38 v14 h8 l11 -11 v32 l-11 -11 h-8" fill="var(--il-ink)" stroke="var(--il-ink)" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M148 40 a14 14 0 0 1 0 22" fill="none" stroke="var(--il-red)" stroke-width="3.2" stroke-linecap="round"/>
+</svg>
         <div class="feature-num">01 · VOCAB</div>
         <div class="feature-title" data-i18n="ft1Title">単語カード</div>
         <div class="feature-desc" data-i18n="ft1Desc">TOCFL 対応の頻出語を収録。注音・拼音に日英韓の訳と例文つき。タップすれば発音も聞けます。</div>
       </div>
       <div class="feature-card reveal reveal-d1">
+<svg class="il il-feat" viewBox="0 0 168 108" role="img" aria-hidden="true">
+  <rect x="12" y="24" width="38" height="36" rx="8" fill="var(--il-paper)" stroke="var(--il-ink)" stroke-width="3.4"/>
+  <text x="31" y="49" font-size="19" font-weight="700" fill="var(--il-ink)" text-anchor="middle">我</text>
+  <rect x="58" y="24" width="38" height="36" rx="8" fill="var(--il-red)"/>
+  <text x="77" y="49" font-size="19" font-weight="700" fill="var(--il-paper)" text-anchor="middle">是</text>
+  <rect x="104" y="24" width="52" height="36" rx="8" fill="var(--il-paper)" stroke="var(--il-ink)" stroke-width="3.4"/>
+  <text x="130" y="49" font-size="19" font-weight="700" fill="var(--il-ink)" text-anchor="middle">學生</text>
+  <path d="M14 70 v10 h140 v-10" fill="none" stroke="var(--il-line)" stroke-width="3.2" stroke-linejoin="round"/>
+  <path d="M77 60 v22" stroke="var(--il-red)" stroke-width="3.2" stroke-dasharray="4 5" stroke-linecap="round"/>
+  <text x="84" y="100" font-size="13" fill="var(--il-ink2)" text-anchor="middle">A 是 B</text>
+</svg>
         <div class="feature-num">02 · GRAMMAR</div>
         <div class="feature-title" data-i18n="ft2Title">文法ポイント</div>
         <div class="feature-desc" data-i18n="ft2Desc">「是・嗎・了・過」など、つまずきやすい基本文法を、例文つきでわかりやすく整理しました。</div>
       </div>
       <div class="feature-card reveal reveal-d2">
+<svg class="il il-feat" viewBox="0 0 168 116" role="img" aria-hidden="true">
+  <path d="M20 8 h96 a12 12 0 0 1 12 12 v22 a12 12 0 0 1 -12 12 H50 l-15 13 v-13 H20 a12 12 0 0 1 -12 -12 V20 a12 12 0 0 1 12 -12z" fill="var(--il-paper)" stroke="var(--il-ink)" stroke-width="3.4" stroke-linejoin="round"/>
+  <text x="68" y="39" font-size="20" font-weight="700" fill="var(--il-ink)" text-anchor="middle">多少錢？</text>
+  <path d="M140 60 l-4 -12 -11 12z" fill="var(--il-red)"/>
+  <path d="M64 66 h84 a12 12 0 0 1 12 12 v18 a12 12 0 0 1 -12 12 H64 a12 12 0 0 1 -12 -12 V78 a12 12 0 0 1 12 -12z" fill="var(--il-red)"/>
+  <text x="106" y="95" font-size="19" font-weight="700" fill="var(--il-paper)" text-anchor="middle">五十塊</text>
+</svg>
         <div class="feature-num">03 · PHRASES</div>
         <div class="feature-title" data-i18n="ft3Title">場面別フレーズ</div>
         <div class="feature-desc" data-i18n="ft3Desc">夜市、ドリンクスタンド、MRT。台湾のリアルな場面でそのまま使えるひとことを集めました。</div>
       </div>
       <div class="feature-card reveal reveal-d3">
+<svg class="il il-feat" viewBox="0 0 168 108" role="img" aria-hidden="true">
+  <rect x="14" y="10" width="140" height="22" rx="11" fill="var(--il-cream)" stroke="var(--il-line)" stroke-width="3"/>
+  <rect x="14" y="40" width="140" height="22" rx="11" fill="var(--il-red)"/>
+  <rect x="14" y="70" width="140" height="22" rx="11" fill="var(--il-cream)" stroke="var(--il-line)" stroke-width="3"/>
+  <g stroke="var(--il-ink2)" stroke-width="3.4" stroke-linecap="round" opacity=".5"><path d="M30 21 h48"/><path d="M30 81 h60"/></g>
+  <path d="M30 51 h56" stroke="var(--il-paper)" stroke-width="3.4" stroke-linecap="round" opacity=".85"/>
+  <circle cx="136" cy="51" r="13" fill="var(--il-paper)"/>
+  <path d="M130 51 l4.5 5 8 -10" fill="none" stroke="var(--il-green)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
         <div class="feature-num">04 · QUIZ</div>
         <div class="feature-title" data-i18n="ft4Title">クイズ</div>
         <div class="feature-desc" data-i18n="ft4Desc">覚えた単語を4択でチェック。間違えた単語はその場で復習。</div>
@@ -318,17 +372,56 @@ a:hover{text-decoration:underline}
     <h2 class="section-title reveal" data-i18n-html="secPersonaTitle">学ぶ理由は人それぞれ。<em>あなたの入り口</em>を用意しました。</h2>
     <div class="pt-grid" style="margin-top:0">
       <div class="pt-card reveal">
-        <div style="font-size:34px;margin-bottom:10px">🧳</div>
+<svg class="il il-persona" viewBox="0 0 132 118" role="img" aria-hidden="true">
+  <path d="M18 34 q30 -20 58 -10" fill="none" stroke="var(--il-line)" stroke-width="2.4" stroke-dasharray="5 6" stroke-linecap="round"/>
+  <path d="M74 18 l16 5 -5 6 -4 -1 -3 6 -3 -1 1 -6 -5 -1z" fill="var(--il-red)"/>
+  <rect x="47" y="45" width="16" height="9" rx="4.5" fill="none" stroke="var(--il-ink)" stroke-width="3.4"/>
+  <rect x="26" y="52" width="58" height="52" rx="11" fill="var(--il-cream)" stroke="var(--il-ink)" stroke-width="3.4"/>
+  <path d="M42 52 v52 M68 52 v52" stroke="var(--il-ink)" stroke-width="3.2"/>
+  <rect x="48" y="70" width="14" height="16" rx="3" fill="var(--il-red)"/>
+  <path d="M34 104 v7 M76 104 v7" stroke="var(--il-ink)" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M92 66 h22 l-4 40 a6 6 0 0 1 -6 5 h-2 a6 6 0 0 1 -6 -5z" fill="var(--il-cream)" stroke="var(--il-ink)" stroke-width="3.2" stroke-linejoin="round"/>
+  <path d="M93.4 82 h19.2 l-2.6 24 a6 6 0 0 1 -6 5 h-2 a6 6 0 0 1 -6 -5z" fill="var(--il-tea)"/>
+  <rect x="89" y="60" width="28" height="7" rx="3.5" fill="var(--il-ink)"/>
+  <path d="M112 60 l6 -20" stroke="var(--il-ink)" stroke-width="3.2" stroke-linecap="round"/>
+  <circle cx="99" cy="98" r="3" fill="var(--il-ink)"/><circle cx="108" cy="102" r="3" fill="var(--il-ink)"/><circle cx="104" cy="92" r="3" fill="var(--il-ink)"/>
+</svg>
         <div class="pt-name" data-i18n="ps1t">旅行で使いたい</div>
         <div class="pt-desc" style="line-height:1.9" data-i18n-html="ps1d"></div>
       </div>
       <div class="pt-card reveal reveal-d1">
-        <div style="font-size:34px;margin-bottom:10px">🏠</div>
+<svg class="il il-persona" viewBox="0 0 132 118" role="img" aria-hidden="true">
+  <rect x="12" y="10" width="46" height="62" rx="6" fill="var(--il-cream)" stroke="var(--il-ink)" stroke-width="3.4"/>
+  <g fill="var(--il-ink)" opacity=".8"><rect x="20" y="21" width="10" height="10" rx="2"/><rect x="40" y="21" width="10" height="10" rx="2"/><rect x="20" y="40" width="10" height="10" rx="2"/></g>
+  <rect x="40" y="40" width="10" height="10" rx="2" fill="var(--il-amber)"/>
+  <rect x="66" y="16" width="16" height="48" rx="4" fill="var(--il-red)"/>
+  <g fill="var(--il-paper)" font-size="11.5" font-weight="700" text-anchor="middle"><text x="74" y="32">小</text><text x="74" y="46">吃</text><text x="74" y="59">店</text></g>
+  <rect x="94" y="30" width="14" height="34" rx="4" fill="var(--il-blue)"/>
+  <g fill="var(--il-paper)" font-size="10" font-weight="700" text-anchor="middle"><text x="101" y="44">超</text><text x="101" y="57">商</text></g>
+  <path d="M8 104 h116" stroke="var(--il-ink)" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M44 94 q-5 -14 9 -14 h14 q7 0 9 8" fill="var(--il-blue)" stroke="var(--il-ink)" stroke-width="3.2" stroke-linejoin="round"/>
+  <g fill="none" stroke="var(--il-ink)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 96 h28"/><path d="M78 96 L90 68"/><path d="M90 68 h12"/><path d="M90 68 L93 93"/>
+    <circle cx="42" cy="99" r="9.5" fill="var(--il-paper)"/>
+    <circle cx="93" cy="99" r="9.5" fill="var(--il-paper)"/>
+  </g>
+</svg>
         <div class="pt-name" data-i18n="ps2t">仕事・家庭で台湾に住む</div>
         <div class="pt-desc" style="line-height:1.9" data-i18n-html="ps2d"></div>
       </div>
       <div class="pt-card reveal reveal-d2">
-        <div style="font-size:34px;margin-bottom:10px">🎓</div>
+<svg class="il il-persona" viewBox="0 0 132 118" role="img" aria-hidden="true">
+  <rect x="26" y="16" width="62" height="82" rx="7" fill="var(--il-paper)" stroke="var(--il-ink)" stroke-width="3.4"/>
+  <path d="M38 34 h38 M38 48 h30 M38 62 h38 M38 76 h22" stroke="var(--il-line)" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M34 33 l3.5 4 6 -8" fill="none" stroke="var(--il-green)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M34 61 l3.5 4 6 -8" fill="none" stroke="var(--il-green)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="rotate(32 102 58)">
+    <rect x="95" y="20" width="14" height="52" rx="4" fill="var(--il-amber)"/>
+    <path d="M95 72 h14 l-7 14z" fill="var(--il-ink)"/>
+    <rect x="95" y="20" width="14" height="9" rx="3" fill="var(--il-red)"/>
+  </g>
+  <text x="57" y="112" font-size="15" font-weight="700" fill="var(--il-red)" text-anchor="middle">TOCFL</text>
+</svg>
         <div class="pt-name" data-i18n="ps3t">台湾の大学に進学したい</div>
         <div class="pt-desc" style="line-height:1.9" data-i18n-html="ps3d"></div>
       </div>
@@ -341,6 +434,48 @@ a:hover{text-decoration:underline}
   <div class="section-inner">
     <div class="eyebrow reveal" data-i18n="eyeAbout">ABOUT · サイトについて</div>
     <h2 class="section-title reveal" data-i18n-html="secAboutTitle">台湾人が作った、<em>逆方向</em>の学習サイト。</h2>
+<svg class="il il-wide" viewBox="0 0 600 226" role="img" aria-hidden="true">
+  <path d="M8 192 h584" stroke="var(--il-line)" stroke-width="3.4" stroke-linecap="round"/>
+  <g fill="var(--il-cream)" stroke="var(--il-ink)" stroke-width="3.2" stroke-linejoin="round">
+    <path d="M508 192 V78 h36 v114z"/>
+    <path d="M504 78 l8 -14 h28 l8 14z"/>
+    <path d="M506 62 l7 -13 h26 l7 13z"/>
+    <path d="M510 47 h32 v3 h-32z"/>
+    <path d="M518 22 h16 v25 h-16z"/>
+  </g>
+  <path d="M526 22 v-14" stroke="var(--il-ink)" stroke-width="3.2" stroke-linecap="round"/>
+  <g fill="var(--il-ink)" opacity=".45"><rect x="514" y="92" width="24" height="7" rx="2"/><rect x="514" y="110" width="24" height="7" rx="2"/><rect x="514" y="128" width="24" height="7" rx="2"/><rect x="514" y="146" width="24" height="7" rx="2"/><rect x="514" y="164" width="24" height="7" rx="2"/></g>
+  <rect x="44" y="98" width="100" height="94" rx="6" fill="var(--il-cream)" stroke="var(--il-ink)" stroke-width="3.2"/>
+  <rect x="166" y="70" width="116" height="122" rx="6" fill="var(--il-paper)" stroke="var(--il-ink)" stroke-width="3.2"/>
+  <rect x="304" y="110" width="94" height="82" rx="6" fill="var(--il-cream)" stroke="var(--il-ink)" stroke-width="3.2"/>
+  <g fill="var(--il-ink)" opacity=".65">
+    <rect x="58" y="112" width="17" height="17" rx="2"/><rect x="86" y="112" width="17" height="17" rx="2"/><rect x="114" y="112" width="17" height="17" rx="2"/>
+    <rect x="58" y="142" width="17" height="17" rx="2"/><rect x="114" y="142" width="17" height="17" rx="2"/>
+    <rect x="182" y="88" width="17" height="17" rx="2"/><rect x="238" y="88" width="17" height="17" rx="2"/>
+    <rect x="182" y="120" width="17" height="17" rx="2"/><rect x="210" y="120" width="17" height="17" rx="2"/><rect x="238" y="120" width="17" height="17" rx="2"/>
+    <rect x="318" y="128" width="17" height="17" rx="2"/><rect x="368" y="128" width="17" height="17" rx="2"/>
+  </g>
+  <rect x="210" y="88" width="17" height="17" rx="2" fill="var(--il-amber)"/>
+  <rect x="343" y="128" width="17" height="17" rx="2" fill="var(--il-amber)"/>
+  <rect x="86" y="142" width="17" height="17" rx="2" fill="var(--il-amber)"/>
+  <rect x="140" y="104" width="20" height="76" rx="4" fill="var(--il-red)"/>
+  <g fill="var(--il-paper)" font-size="13" font-weight="700" text-anchor="middle"><text x="150" y="124">牛</text><text x="150" y="142">肉</text><text x="150" y="160">麵</text></g>
+  <rect x="284" y="92" width="20" height="58" rx="4" fill="var(--il-blue)"/>
+  <g fill="var(--il-paper)" font-size="13" font-weight="700" text-anchor="middle"><text x="294" y="112">藥</text><text x="294" y="130">局</text></g>
+  <path d="M44 66 q62 24 124 0 q62 -24 124 0" fill="none" stroke="var(--il-line)" stroke-width="2.6"/>
+  <g fill="var(--il-red)" stroke="var(--il-ink)" stroke-width="2.4">
+    <ellipse cx="88" cy="72" rx="9" ry="11"/><ellipse cx="168" cy="63" rx="9" ry="11"/><ellipse cx="248" cy="72" rx="9" ry="11"/>
+  </g>
+  <path d="M420 170 q-6 -15 9 -15 h15 q8 0 10 8" fill="var(--il-blue)" stroke="var(--il-ink)" stroke-width="3.2" stroke-linejoin="round"/>
+  <g fill="none" stroke="var(--il-ink)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M428 172 h30"/><path d="M458 172 L471 140"/><path d="M471 140 h13"/><path d="M471 140 L474 169"/>
+    <circle cx="418" cy="180" r="11" fill="var(--il-paper)"/>
+    <circle cx="474" cy="180" r="11" fill="var(--il-paper)"/>
+  </g>
+  <rect x="14" y="120" width="17" height="50" rx="8" fill="var(--il-ink)"/>
+  <circle cx="22.5" cy="132" r="4.6" fill="var(--il-red)"/><circle cx="22.5" cy="145" r="4.6" fill="var(--il-amber)"/><circle cx="22.5" cy="158" r="4.6" fill="var(--il-green)"/>
+  <path d="M22.5 170 v22" stroke="var(--il-ink)" stroke-width="3.2" stroke-linecap="round"/>
+</svg>
     <div class="story-text reveal reveal-d1">
       <p data-i18n-html="story1"></p>
       <p data-i18n-html="story2"></p>
@@ -367,6 +502,22 @@ a:hover{text-decoration:underline}
 <section class="section" id="notify" style="background:var(--bg3)">
   <div class="section-inner" style="max-width:640px;text-align:center">
     <div class="eyebrow reveal" data-i18n="eyeNotify">NOW ON iOS · APP STORE</div>
+<svg class="il il-app" viewBox="0 0 210 220" role="img" aria-hidden="true">
+  <rect x="52" y="12" width="106" height="196" rx="22" fill="var(--il-ink)"/>
+  <rect x="60" y="20" width="90" height="180" rx="16" fill="var(--il-paper)"/>
+  <rect x="88" y="26" width="34" height="6" rx="3" fill="var(--il-ink)" opacity=".35"/>
+  <rect x="70" y="46" width="70" height="52" rx="9" fill="var(--il-cream)" stroke="var(--il-line)" stroke-width="2.6"/>
+  <text x="105" y="76" font-size="22" font-weight="700" fill="var(--il-ink)" text-anchor="middle">你好</text>
+  <text x="105" y="91" font-size="10" fill="var(--il-red)" text-anchor="middle">ㄋㄧˇ ㄏㄠˇ</text>
+  <rect x="70" y="108" width="70" height="9" rx="4.5" fill="var(--il-line)"/>
+  <rect x="70" y="124" width="48" height="9" rx="4.5" fill="var(--il-line)"/>
+  <rect x="70" y="146" width="70" height="20" rx="10" fill="var(--il-red)"/>
+  <g stroke="var(--il-ink)" stroke-width="2.6" stroke-linecap="round" opacity=".45"><path d="M74 184 h12"/><path d="M99 184 h12"/><path d="M124 184 h12"/></g>
+  <path d="M168 84 a16 16 0 0 1 0 26" fill="none" stroke="var(--il-red)" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M180 74 a30 30 0 0 1 0 46" fill="none" stroke="var(--il-red)" stroke-width="3.2" stroke-linecap="round" opacity=".5"/>
+  <path d="M42 110 a16 16 0 0 0 0 -26" fill="none" stroke="var(--il-blue)" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M30 120 a30 30 0 0 0 0 -46" fill="none" stroke="var(--il-blue)" stroke-width="3.2" stroke-linecap="round" opacity=".5"/>
+</svg>
     <h2 class="section-title reveal" data-i18n="notifyTitle">App Store で公開中。</h2>
     <p class="reveal reveal-d1" style="color:var(--tx2);margin:10px 0 22px" data-i18n="notifyDesc">iPhone / iPad で StayTW。単語・文法・読解・発音チェック・毎日リマインダー、無料で始められます。</p>
     <a id="dlBtn" class="hero-cta reveal reveal-d2" href="https://apps.apple.com/app/id6794272037" target="_blank" rel="noopener"
@@ -394,7 +545,7 @@ a:hover{text-decoration:underline}
         <div class="pr-rows">
           <div class="pr-row"><span data-i18n="prMonthly">月額</span><b id="prM">¥980</b></div>
           <div class="pr-row"><span data-i18n="prYearly">年額</span><b><span id="prY">¥5,800</span><small id="prPm">月あたり ¥483</small></b></div>
-          <div class="pr-row"><span data-i18n="prLifetime">買い切り</span><b id="prL">¥12,800</b></div>
+          <div class="pr-row"><span data-i18n="prLifetime">買い切り</span><b id="prL">¥17,800</b></div>
         </div>
         <div class="pt-desc" data-i18n="prPremDesc">クイズ・SRS復習・模試・スピーキング・記事、すべて無制限。学習履歴のクラウド同期つき。</div>
         <p class="pr-trial trial-only" hidden data-i18n="prTrial">月額プランは 7 日間無料トライアル。期間内に解約すれば料金はかかりません。</p>
@@ -409,8 +560,8 @@ a:hover{text-decoration:underline}
 var STW_TRIAL_DAYS = 0;
 function stwRenderPrices(){
   if (STW_TRIAL_DAYS > 0) document.querySelectorAll(".trial-only").forEach(function(el){ el.hidden = false; });
-  /* 表示通貨：pricing.html の CUR と同じ換算（基準は日本円のアプリ内価格）。vi/id は US$ 表示 */
-  var CUR={ ja:{sym:'¥',m:'980',y:'5,800',l:'12,800',pm:'483'}, en:{sym:'US$',m:'6.99',y:'39.99',l:'84.99',pm:'3.33'}, ko:{sym:'₩',m:'9,900',y:'58,000',l:'128,000',pm:'4,833'} };
+  /* App Store の実売価格。pricing.html の CUR と必ず同じにすること */
+  var CUR={ ja:{sym:'¥',m:'980',y:'5,800',l:'17,800',pm:'484'}, en:{sym:'US$',m:'5.99',y:'34.99',l:'99.99',pm:'2.92'}, ko:{sym:'₩',m:'9,900',y:'55,000',l:'149,000',pm:'4,583'}, vi:{sym:'₫',m:'199,000',y:'999,000',l:'2,999,000',pm:'83,250'}, id:{sym:'Rp',m:'99,000',y:'599,000',l:'1,999,000',pm:'49,917'} };
   var l=(typeof twGetLang==="function"?twGetLang():(localStorage.getItem("stw-lang")||"ja")); var c=CUR[l]||CUR.en;
   document.getElementById("prM").textContent=c.sym+c.m;
   document.getElementById("prY").textContent=c.sym+c.y;
@@ -497,7 +648,7 @@ document.addEventListener("DOMContentLoaded", function(){
   </div>
 </footer>
 
-<script src="i18n.js?v=120"></script>
+<script src="i18n.js?v=122"></script>
 <script>
 function toggleTheme(){
   const d = document.documentElement.dataset.theme === "dark";

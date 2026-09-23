@@ -1395,7 +1395,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=120"></script>
+<script src="i18n.js?v=122"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=63"></script>
 <script src="vocab-l1.js?v=52"></script>
@@ -1628,6 +1628,8 @@ function refreshActivePanel(){
       case "panel-zhuyin":   if(typeof ZY!=="undefined"&&ZY.render) ZY.render(); break;
       case "panel-path":     if(typeof PA!=="undefined"&&PA.render) PA.render(); break;
       case "panel-phrases":  renderPhrases(); break;
+      case "panel-list":     renderList(); break;      // 例文の差し替え後に「我是日本人」が残らないように
+      case "panel-fc":       renderCard(); break;
       case "panel-speak":    if(typeof SPK!=="undefined"&&SPK.render) SPK.render(); break;
     }
   }catch(e){}
@@ -1658,6 +1660,7 @@ function switchPanel(p){
   // タブを押したら「開いた直後の画面」に戻す。ただし進行中のもの(解答中のクイズ・時間制の模試)は壊さない。
   if (p === "quiz" && !quizStarted) qzReset();            // 前回の結果画面が残っているのを消す
   if (p === "speak") SPK.render();
+  if (p === "phrases") renderPhrases();   // 例文の差し替え(我叫山田→我叫阮心)は非同期。開く度に描き直す
   if (p === "ytshadow" && typeof YTS !== "undefined") YTS.render();   // 動画の中では無く一覧から始める
   if (p === "essentials" && typeof ESS !== "undefined") ESS.render();
   if (p === "myvocab" && typeof MyVocab !== "undefined") MyVocab.render();
@@ -1765,9 +1768,16 @@ function loadExZy(cb){
   Promise.all([
     fetch("data/ex-zhuyin.json?v=10").then(r => r.ok ? r.json() : null),
     fetch("data/ex-pinyin.json?v=1").then(r => r.ok ? r.json() : null).catch(() => null),
-    fetch("data/ex-locale.json?v=2").then(r => r.ok ? r.json() : null).catch(() => null)
+    fetch("data/ex-locale.json?v=3").then(r => r.ok ? r.json() : null).catch(() => null)
   ]).then(([zy, py, loc]) => { EX_ZY = zy || {}; EX_PY = py || {}; EX_LOC = loc || null;
-    applyExLocale(); EX_ZY_LOADING = false; if (cb) cb(); })
+    applyExLocale(); EX_ZY_LOADING = false; if (cb) cb();
+    // 例文の差し替え(我是日本人→我是越南人)は非同期。init 時点で描き終わっている画面は古い文のまま
+    // なので、表示中かどうかに関わらず例文を持つ画面を描き直す。表示中のものだけだと、
+    // 裏で描かれた単語リストやフレーズが「我是日本人」のまま残る。
+    try { renderList(); } catch (e) {}
+    try { renderCard(); } catch (e) {}
+    try { renderPhrases(); } catch (e) {}
+    try { if (typeof refreshActivePanel === "function") refreshActivePanel(); } catch (e) {} })
     .catch(() => { EX_ZY_LOADING = false; });
 }
 // ── 例文のローカライズ ──
@@ -1875,11 +1885,12 @@ function cycleRuby(){
 let HIDE_PRON = (function(){ try { return localStorage.getItem("stw_fc_hidepron") === "1"; } catch(e){ return false; } })();
 function refreshHidePron(){ document.querySelectorAll(".js-hidepron").forEach(b => b.classList.toggle("on", HIDE_PRON)); }
 // カード表の意味。既定は隠す（思い出す練習が単語カードの意味なので）。一度開けば以後は出したまま。
-let SHOW_MEAN_FRONT = (function(){ try { return localStorage.getItem("stw_fc_meanfront") === "1"; } catch(e){ return false; } })();
+let SHOW_MEAN_FRONT = (function(){ try { const v = localStorage.getItem("stw_fc_meanfront"); return v === null ? true : v === "1"; } catch(e){ return true; } })();
 function twRevealMeanFront(){
-  SHOW_MEAN_FRONT = true;
-  try { localStorage.setItem("stw_fc_meanfront", "1"); } catch(e){}
-  const el = document.getElementById("fcMeanFront"); if (el) el.classList.remove("hide");
+  // 既定は表示。タップで隠す⇄出すを切り替えられるようにする(思い出す練習をしたい人向け)
+  SHOW_MEAN_FRONT = !SHOW_MEAN_FRONT;
+  try { localStorage.setItem("stw_fc_meanfront", SHOW_MEAN_FRONT ? "1" : "0"); } catch(e){}
+  const el = document.getElementById("fcMeanFront"); if (el) el.classList.toggle("hide", !SHOW_MEAN_FRONT);
 }
 function toggleHidePron(){
   HIDE_PRON = !HIDE_PRON;
@@ -2055,7 +2066,10 @@ function renderGrammar(){
 let phFilter = "all";
 function setPhFilter(f){ phFilter = f; renderPhrases(); }
 function renderPhrases(){
-  const lang = twGetLang(), ck = {ja:"j",en:"e",ko:"k"}[lang], mk = twMKey();
+  loadExZy();          // 国籍つき例文(我叫山田…)を UI 言語に差し替えるため。読み込み後に描き直される
+  // ck は見出し(cat)と豆知識(note)用。vi/id も twFillViId が埋めているので twMKey をそのまま使う。
+  // 以前ここが {ja,en,ko} 固定で、vi/id だと見出しが undefined、note が日本語のまま出ていた。
+  const lang = twGetLang(), mk = twMKey(), ck = mk;
   document.getElementById("phFilterRow").innerHTML = [
     ["all", twT("phAll")], ["travel", "🧳 " + twT("phTravel")], ["life", "🏠 " + twT("phLife")]
   ].map(([f,label])=>`<button class="pos-btn ${phFilter===f?"on":""}" onclick="setPhFilter('${f}')">${label}</button>`).join("");
@@ -2063,14 +2077,14 @@ function renderPhrases(){
   // 生活会話（対話集 /life）への入口。フレーズは単文、/life は「相手の言葉＋自分の返し」の対話。
   const lifeLink = `<a class="ph-life" href="life?lang=${lang}&utm_source=tool_phrases"><span class="ph-life-ic">💬</span><span>${twT("phLifeLink")}</span><span class="ph-life-arr">→</span></a>`;
   document.getElementById("phList").innerHTML = lifeLink + secs.map(sec=>`
-    <div class="ph-cat">${sec.cat[ck]}</div>
+    <div class="ph-cat">${sec.cat[ck] || sec.cat.e || sec.cat.j}</div>
     ${sec.items.map(it=>`
       <div class="ph-item" onclick="speakZh(this.dataset.z)" data-z="${it.z}">
         <div class="ph-main">
           <div class="ph-z">${it.z}</div>
           <div class="ph-py">${it.py}</div>
           <div class="ph-m">${it.m[mk] || it.m.e || it.m.j}</div>
-          ${it.note ? `<div class="ph-note">💡 ${it.note[ck] || it.note.j}</div>` : ""}
+          ${it.note ? `<div class="ph-note">💡 ${it.note[ck] || it.note.e || it.note.j}</div>` : ""}
         </div>
         <button class="tts-btn" onclick="event.stopPropagation();speakZh('${it.z}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>
       </div>`).join("")}`).join("");
@@ -3991,6 +4005,7 @@ function twNormalizeContent(){
 }
 (function init(){
   twNormalizeContent();
+  try { loadExZy(); } catch (e) {}   // 例文のローカライズ(我是日本人→我是越南人)を最初に走らせる
   const lang = twGetLang();
   document.getElementById("langBtn").textContent = {ja:"日",en:"EN",ko:"한",vi:"VI",id:"ID"}[lang] || "EN";
   document.documentElement.lang = lang;
