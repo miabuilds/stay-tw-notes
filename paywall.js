@@ -11,7 +11,8 @@ const Paywall = (() => {
   const QUOTA_KEY = "stw_quota";
   // 1日の無料枠（プレミアムで無制限）
   // 2026-09-16: speak 5→2（跟讀是 App 限定＋日本人最需要的功能，當 Premium 招牌）；SRS 免費一次最多 SRS_FREE_CARDS 張
-  const LIMITS = { quiz: 3, srs: 1, exam: 1, speak: 2, writing: 1, aiscore: 1 };
+  // ytsquiz(影片測驗)= 2026-09 追加。跟讀/聽寫は無料のまま、答え合わせだけ枠を付ける。
+  const LIMITS = { quiz: 3, srs: 1, exam: 1, speak: 2, writing: 1, aiscore: 1, ytsquiz: 1 };
   const SRS_FREE_CARDS = 10;
   // 買い切りは年額の 2.2 倍しか取れていなかった（原価は永久に続くのに）。年額の約 3 倍へ。
   const PRICES = { monthly: "¥980", yearly: "¥5,800", lifetime: "¥17,800" };
@@ -117,7 +118,7 @@ const Paywall = (() => {
     const bg = document.getElementById("pwBg");
     if (!bg) return;
     track(feature);
-    const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore"), listen: twT("lsTitle"), fav: twT("pwFavName") }[feature] || "";
+    const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore"), listen: twT("lsTitle"), fav: twT("pwFavName"), ytsquiz: twT("ytsQzTitle") }[feature] || "";
     const desc = feature === "article" ? twT("pwContentHit")
       : feature === "myvocab" ? twT("pwMyVocabHit").replace("{n}", String((typeof MyVocab !== "undefined" && MyVocab.FREE_MAX) || 10))
       : feature === "fav" ? twT("pwFavHit").replace("{n}", String(FAV_FREE_MAX))

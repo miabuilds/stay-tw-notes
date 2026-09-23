@@ -37,7 +37,7 @@ const YTS = (() => {
 
   const CATS = ["all", "beg", "life", "news", "talk"];
 
-  let player = null, apiReady = false, vid = "", lines = [], cur = 0, mode = "follow";
+  let player = null, apiReady = false, vid = "", lines = [], cur = 0, mode = "follow", qz = null;
   let loopOn = false, spdIdx = 0, vocab = [], watchT = 0, booted = false, meta = {};
   let followT = 0;   // 跟播モード:動画の再生位置に合わせてカードを送る
   let cat = "all", rec = null, recording = false, stopTimer = 0;
@@ -141,7 +141,7 @@ const YTS = (() => {
       </div>
       <div class="yts-video"><div id="ytsFrame"></div></div>
       <div class="yts-modes">
-        ${["follow", "shadow", "dict"].map((m) => `<button class="yts-mode${m === mode ? " on" : ""}" data-m="${m}" onclick="YTS.setMode('${m}')">${esc(T("ytsMode_" + m))}</button>`).join("")}
+        ${["follow", "shadow", "dict", "quiz"].map((m) => `<button class="yts-mode${m === mode ? " on" : ""}" data-m="${m}" onclick="YTS.setMode('${m}')">${esc(T("ytsMode_" + m))}</button>`).join("")}
       </div>
       <div id="ytsCard"></div>`;
     loadApi(() => {
@@ -177,6 +177,7 @@ const YTS = (() => {
     mode = m;
     document.querySelectorAll(".yts-mode").forEach((b) => b.classList.toggle("on", b.dataset.m === m));
     clearWatch(); clearFollow(); clearSeek();
+    if (m === "quiz") { try { player && player.pauseVideo(); } catch (e) {} qz = null; card(); return; }
     let st = -1; try { st = player && player.getPlayerState(); } catch (e) {}
     if (st === 1) { if (m === "follow") followWatch(); else { const r = segRange(cur); watchSeg(r.s, r.e, () => { clearWatch(); try { player.pauseVideo(); } catch (e) {} }); } }
     card();
@@ -184,6 +185,7 @@ const YTS = (() => {
 
   // ── 練習卡:一次一句 ──
   function card() {
+    if (mode === "quiz") { quizHome(); return; }
     const l = lines[cur]; if (!l) return;
     const done = doneSet(vid);
     const body = mode === "dict"
@@ -450,6 +452,159 @@ const YTS = (() => {
       </div>`;
   }
 
+
+  // ── 影片測驗 ────────────────────────────────────────────────
+  // 「跟讀・聽寫は練習、測驗は答え合わせ」。同じ動画の字幕だけで作るので
+  // 追加のデータもサーバも要らない。2 種類:
+  //   listen  その一句を鳴らして、4 つの句から選ぶ(聞き分け)
+  //   blank   一句から“辞書に載っている語”を伏せて、4 つの語から選ぶ(語彙)
+  // 中国語は分かち書きが無いので、伏せ字はランダムな 2 文字ではなく
+  // stwLookup で引ける語だけを使う。そうしないと「?」が語の途中で切れる。
+  const shuf = (a) => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+  const plain = (z) => String(z || "").replace(/[\s，。！？、：；「」『』（）,.!?:;()]/g, "");
+
+  function pickWordIn(z) {
+    const t = plain(z);
+    const found = [];
+    for (let n = 3; n >= 2; n--) {
+      for (let i = 0; i + n <= t.length; i++) {
+        const w = t.slice(i, i + n);
+        if (!/^[一-鿿]+$/.test(w)) continue;
+        let e = null; try { e = stwLookup(w); } catch (err) {}
+        if (e && e.zy) found.push(w);
+      }
+      if (found.length) break;
+    }
+    return found.length ? found[Math.floor(Math.random() * found.length)] : "";
+  }
+
+  function buildQuiz() {
+    const pool = lines.map((l, i) => ({ l, i })).filter((x) => plain(x.l.z).length >= 5);
+    if (pool.length < 4) return [];
+    const picks = shuf(pool).slice(0, Math.min(8, pool.length));
+    const out = [];
+    picks.forEach((p, n) => {
+      const others = shuf(pool.filter((x) => x.i !== p.i));
+      const w = (n % 2 === 1) ? pickWordIn(p.l.z) : "";
+      if (w) {
+        const distract = [];
+        for (const o of others) {
+          const c = pickWordIn(o.l.z);
+          if (c && c !== w && c.length === w.length && !distract.includes(c)) distract.push(c);
+          if (distract.length >= 3) break;
+        }
+        if (distract.length >= 3) { out.push({ kind: "blank", idx: p.i, ans: w, opts: shuf([w, ...distract]) }); return; }
+      }
+      out.push({ kind: "listen", idx: p.i, ans: p.l.z, opts: shuf([p.l.z, ...others.slice(0, 3).map((x) => x.l.z)]) });
+    });
+    return out;
+  }
+
+  function quizHome() {
+    const box = $("ytsCard"); if (!box) return;
+    if (qz && qz.list && qz.list.length) { renderQuiz(); return; }
+    const list = buildQuiz();
+    if (!list.length) { box.innerHTML = `<div class="yts-empty"><p>${esc(T("ytsQzFew"))}</p></div>`; return; }
+    qz = { list, i: 0, picked: null, score: 0, log: [] };
+    box.innerHTML = `
+      <div class="yts-qz-start">
+        <div class="yts-qz-t">${esc(T("ytsQzTitle"))}</div>
+        <p class="yts-qz-sub">${esc(T("ytsQzIntro").replace("{n}", list.length))}</p>
+        <button class="btn primary" onclick="YTS.qzBegin()">${esc(T("ytsQzStart"))}</button>
+      </div>`;
+  }
+  // 「測驗」タブを開いただけでは出さない。始める意思を見せた瞬間にだけ課金画面。
+  function qzBegin() {
+    try { if (typeof Paywall !== "undefined") { Paywall.gate("ytsquiz", renderQuiz); return; } } catch (e) {}
+    renderQuiz();
+  }
+
+  function renderQuiz() {
+    const q = qz.list[qz.i], l = lines[q.idx], box = $("ytsCard");
+    const head = `
+      <div class="yts-qz-head"><span>${qz.i + 1} / ${qz.list.length}</span><span>${esc(T("ytsQzScore"))} ${qz.score}</span></div>
+      <div class="yts-prog"><i style="width:${Math.round(qz.i / qz.list.length * 100)}%"></i></div>`;
+    let body;
+    if (q.kind === "listen") {
+      body = `<div class="yts-qz-q">${esc(T("ytsQzAskListen"))}</div>
+        <div class="yts-qz-play"><button class="btn" onclick="YTS.qzPlay()">${icon("volume", { size: 16 })} ${esc(T("ytsQzPlay"))}</button></div>`;
+    } else {
+      const masked = esc(l.z).split(esc(q.ans)).join('<b class="yts-qz-bk">？</b>');
+      body = `<div class="yts-qz-q">${esc(T("ytsQzAskBlank"))}</div>
+        <div class="yts-qz-line">${masked}</div>
+        <div class="yts-qz-play"><button class="btn" onclick="YTS.qzPlay()">${icon("volume", { size: 16 })} ${esc(T("ytsQzPlay"))}</button></div>`;
+    }
+    body += `<div class="yts-qz-opts">${q.opts.map((o, k) =>
+      `<button class="yts-qz-opt" onclick="YTS.qzAnswer(${k})">${esc(o)}</button>`).join("")}</div>`;
+    box.innerHTML = head + body + `<div id="ytsQzEx"></div>`;
+    qz.picked = null;
+    qzPlay();
+  }
+
+  function qzPlay() {
+    const q = qz && qz.list[qz.i]; if (!q || !player) return;
+    const r = segRange(q.idx);
+    clearWatch(); clearFollow();
+    seekThenPlay(r.s, () => watchSeg(r.s, r.e, () => { clearWatch(); try { player.pauseVideo(); } catch (e) {} }));
+  }
+
+  function qzAnswer(k) {
+    if (!qz || qz.picked !== null) return;
+    const q = qz.list[qz.i], l = lines[q.idx];
+    qz.picked = k;
+    try { recordStudy(); } catch (e) {}
+    const okIdx = q.opts.indexOf(q.ans);
+    const ok = k === okIdx;
+    if (ok) qz.score++;
+    document.querySelectorAll("#ytsCard .yts-qz-opt").forEach((b, n) => {
+      b.disabled = true;
+      if (n === okIdx) b.classList.add("ok"); else if (n === k) b.classList.add("ng");
+    });
+    qz.log.push({ kind: q.kind, idx: q.idx, mine: q.opts[k], ans: q.ans, ok });
+    // 詳解:正解だけ出しても何も残らない。なぜそれかを一行そえて、その場でもう一度聞けるように。
+    const why = q.kind === "listen" ? T("ytsQzWhyListen") : T("ytsQzWhyBlank");
+    const ex = $("ytsQzEx");
+    ex.innerHTML = `
+      <div class="yts-qz-ex ${ok ? "ok" : "ng"}">
+        <div class="yts-qz-verdict">${ok ? icon("check", { size: 17 }) : icon("x", { size: 17 })} ${esc(ok ? T("ytsQzRight") : T("ytsQzWrong"))}</div>
+        <div class="yts-qz-full" id="ytsQzFull"></div>
+        <p class="yts-qz-why">${esc(why)}</p>
+        <div class="yts-qz-act">
+          <button class="btn" onclick="YTS.qzPlay()">${icon("volume", { size: 15 })} ${esc(T("ytsQzReplay"))}</button>
+          <button class="btn primary" onclick="YTS.qzNext()">${esc(qz.i + 1 >= qz.list.length ? T("ytsQzResult") : T("ytsQzNext"))} →</button>
+        </div>
+      </div>`;
+    const full = $("ytsQzFull");
+    if (full) { full.innerHTML = twRenderZh(l.z, vocab, null); twBindWords(full, vocab); }
+  }
+
+  function qzNext() {
+    if (qz.i + 1 >= qz.list.length) { qzResult(); return; }
+    qz.i++; renderQuiz();
+  }
+
+  function qzResult() {
+    const pct = Math.round(qz.score / qz.list.length * 100);
+    const msg = pct >= 80 ? T("ytsQzGood") : pct >= 50 ? T("ytsQzMid") : T("ytsQzLow");
+    const rows = qz.log.map((r, n) => {
+      const l = lines[r.idx];
+      return `<div class="yts-qz-rv">
+        <div class="yts-qz-rvh">${n + 1}. ${esc(r.kind === "listen" ? T("ytsQzKindListen") : T("ytsQzKindBlank"))}</div>
+        ${r.ok ? "" : `<div class="yts-qz-mine">✗ ${esc(r.mine)}</div>`}
+        <div class="yts-qz-corr">✓ ${esc(r.ans)}</div>
+        <div class="yts-qz-sent">${esc(l.z)}</div>
+      </div>`;
+    }).join("");
+    $("ytsCard").innerHTML = `
+      <div class="yts-qz-start">
+        <div class="yts-qz-score">${qz.score} / ${qz.list.length}</div>
+        <p class="yts-qz-sub">${esc(msg)}</p>
+        <button class="btn primary" onclick="YTS.qzRetry()">${esc(T("ytsQzRetry"))}</button>
+      </div>
+      <div class="yts-qz-rvs">${rows}</div>`;
+  }
+  function qzRetry() { qz = null; quizHome(); }
+
   // ── 聽寫 ──
   function check() {
     const i = $("ytsIn"); if (!i) return;
@@ -481,6 +636,7 @@ const YTS = (() => {
   }
   function setCat(c) { cat = c; render(); }
 
-  return { render, load, setMode, play, go, cycleSpeed, toggleLoop, mic, check, setCat, booted: () => booted };
+  return { render, load, setMode, play, go, cycleSpeed, toggleLoop, mic, check, setCat, booted: () => booted,
+           qzBegin, qzPlay, qzAnswer, qzNext, qzRetry };
 })();
 if (typeof window !== "undefined") window.YTS = YTS;   // const は window に乗らない(TTS/Paywall と同じ罠)

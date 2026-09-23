@@ -562,7 +562,7 @@ var STW_TRIAL_DAYS = 0;
 function stwRenderPrices(){
   if (STW_TRIAL_DAYS > 0) document.querySelectorAll(".trial-only").forEach(function(el){ el.hidden = false; });
   /* App Store の実売価格。pricing.html の CUR と必ず同じにすること */
-  var CUR={ ja:{sym:'¥',m:'980',y:'5,800',l:'17,800',pm:'484'}, en:{sym:'US$',m:'5.99',y:'34.99',l:'99.99',pm:'2.92'}, ko:{sym:'₩',m:'9,900',y:'55,000',l:'149,000',pm:'4,583'}, vi:{sym:'₫',m:'199,000',y:'999,000',l:'2,999,000',pm:'83,250'}, id:{sym:'Rp',m:'99,000',y:'599,000',l:'1,999,000',pm:'49,917'} };
+  var CUR={ ja:{sym:'¥',m:'980',y:'5,800',l:'17,800',pm:'483'}, en:{sym:'US$',m:'5.99',y:'34.99',l:'99.99',pm:'2.92'}, ko:{sym:'₩',m:'9,900',y:'55,000',l:'149,000',pm:'4,583'}, vi:{sym:'₫',m:'199,000',y:'999,000',l:'2,999,000',pm:'83,250'}, id:{sym:'Rp',m:'99,000',y:'599,000',l:'1,999,000',pm:'49,917'} };
   var l=(typeof twGetLang==="function"?twGetLang():(localStorage.getItem("stw-lang")||"ja")); var c=CUR[l]||CUR.en;
   document.getElementById("prM").textContent=c.sym+c.m;
   document.getElementById("prY").textContent=c.sym+c.y;
@@ -649,7 +649,7 @@ document.addEventListener("DOMContentLoaded", function(){
   </div>
 </footer>
 
-<script src="i18n.js?v=123"></script>
+<script src="i18n.js?v=125"></script>
 <script>
 function toggleTheme(){
   const d = document.documentElement.dataset.theme === "dark";
