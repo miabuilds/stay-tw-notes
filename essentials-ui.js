@@ -90,7 +90,7 @@ const ESS = (() => {
     const last = quiz.i >= quiz.pool.length - 1;
     const fb = document.getElementById("essFb");
     if (fb && right) fb.innerHTML = `<div class="qz-fb ${ok ? "ok" : "ng"}">
-      <div style="font-weight:700;font-size:15px">${ok ? "⭕ " + esc(T("qzRight")) : "❌ " + esc(T("qzWrong"))}</div>
+      <div style="font-weight:700;font-size:15px">${ok ? icon("check",{size:17}) : icon("x",{size:17})} ${ok ? esc(T("qzRight")) : esc(T("qzWrong"))}</div>
       <div style="margin-top:8px">${esc(T("qzCorrectIs"))}${cardLine(right)}</div>
       ${picked}
       <div style="margin-top:16px"><button class="btn primary" onclick="ESS.next()">${esc(T(last ? "essSeeResult" : "quizNext"))} ›</button></div>

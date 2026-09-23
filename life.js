@@ -8,16 +8,16 @@
 // ⚠️ 中国との用語差には触れない。台湾の言い方は作者(母語者)確認。
 const LIFE = {
 cats: [
-  {id:"health",   icon:"🏥", name:{ja:"病院・薬局", en:"Clinic & pharmacy"}},
-  {id:"official", icon:"🪪", name:{ja:"手続き・銀行", en:"Paperwork & bank"}},
-  {id:"home",     icon:"🏠", name:{ja:"住まい", en:"Housing"}},
-  {id:"food",     icon:"🧋", name:{ja:"買い物・食事", en:"Shopping & food"}},
-  {id:"work",     icon:"💼", name:{ja:"仕事・人づきあい", en:"Work & people"}},
-  {id:"go",       icon:"🚇", name:{ja:"移動・天気", en:"Getting around & weather"}},
+  {id:"health",   icon:"hospital", name:{ja:"病院・薬局", en:"Clinic & pharmacy"}},
+  {id:"official", icon:"idcard", name:{ja:"手続き・銀行", en:"Paperwork & bank"}},
+  {id:"home",     icon:"home", name:{ja:"住まい", en:"Housing"}},
+  {id:"food",     icon:"cup", name:{ja:"買い物・食事", en:"Shopping & food"}},
+  {id:"work",     icon:"briefcase", name:{ja:"仕事・人づきあい", en:"Work & people"}},
+  {id:"go",       icon:"train", name:{ja:"移動・天気", en:"Getting around & weather"}},
 ],
 scenes: [
 // ───────── 病院・薬局 ─────────
-{id:"clinic-checkin", cat:"health", icon:"🏥", name:{ja:"診所で受付する", en:"Checking in at a clinic"},
+{id:"clinic-checkin", cat:"health", icon:"hospital", name:{ja:"診所で受付する", en:"Checking in at a clinic"},
  tip:{ja:"「掛號」＝受付・診察の予約。初診は健保卡（保険証）と居留証を出せばOK。", en:"掛號 means registering to see the doctor. For a first visit, hand over your NHI card and ARC."},
  lines:[
  {w:"t", z:"有健保卡嗎？", py:"yǒu jiàn bǎo kǎ ma", m:{ja:"保険証（健保カード）はありますか？", en:"Do you have your NHI card?"}},
@@ -27,7 +27,7 @@ scenes: [
  {w:"t", z:"先量體溫，等一下叫你。", py:"xiān liáng tǐ wēn, děng yí xià jiào nǐ", m:{ja:"まず体温を測って、後で名前を呼びます。", en:"Take your temperature first; we'll call you shortly."}},
  {w:"y", z:"好，我在外面等。", py:"hǎo, wǒ zài wài miàn děng", m:{ja:"わかりました。外で待ちます。", en:"OK, I'll wait outside."}},
 ]},
-{id:"symptoms", cat:"health", icon:"🤒", name:{ja:"症状を伝える", en:"Describing symptoms"},
+{id:"symptoms", cat:"health", icon:"sick", name:{ja:"症状を伝える", en:"Describing symptoms"},
  tip:{ja:"「不舒服」＝具合が悪い、の万能語。どこがどう痛いかは「這裡痛」と指せば通じる。", en:"不舒服 is the all-purpose 'I feel unwell'. Pointing and saying 這裡痛 (it hurts here) works fine."},
  lines:[
  {w:"t", z:"哪裡不舒服？", py:"nǎ lǐ bù shū fú", m:{ja:"どこが悪いですか？", en:"What's bothering you?"}},
@@ -37,7 +37,7 @@ scenes: [
  {w:"y", z:"我對青黴素過敏。", py:"wǒ duì qīng méi sù guò mǐn", m:{ja:"ペニシリンにアレルギーがあります。", en:"I'm allergic to penicillin."}},
  {w:"t", z:"好，我開三天的藥給你。", py:"hǎo, wǒ kāi sān tiān de yào gěi nǐ", m:{ja:"では3日分の薬を出します。", en:"OK, I'll prescribe three days of medicine."}},
 ]},
-{id:"pharmacy", cat:"health", icon:"💊", name:{ja:"薬局で薬を買う", en:"Buying medicine at a pharmacy"},
+{id:"pharmacy", cat:"health", icon:"pill", name:{ja:"薬局で薬を買う", en:"Buying medicine at a pharmacy"},
  tip:{ja:"処方箋なしで買えるのは「成藥」。薬剤師に症状を言えば選んでくれる。", en:"Over-the-counter medicine is 成藥. Tell the pharmacist your symptoms and they'll pick one for you."},
  lines:[
  {w:"y", z:"我頭痛，有沒有止痛藥？", py:"wǒ tóu tòng, yǒu méi yǒu zhǐ tòng yào", m:{ja:"頭痛がします。痛み止めはありますか？", en:"I have a headache. Do you have painkillers?"}},
@@ -47,7 +47,7 @@ scenes: [
  {w:"y", z:"吃了會想睡嗎？", py:"chī le huì xiǎng shuì ma", m:{ja:"飲むと眠くなりますか？", en:"Will it make me sleepy?"}},
  {w:"t", z:"這個不會。", py:"zhè ge bú huì", m:{ja:"これは眠くなりません。", en:"This one won't."}},
 ]},
-{id:"take-medicine", cat:"health", icon:"📋", name:{ja:"薬の飲み方を聞く", en:"Understanding your prescription"},
+{id:"take-medicine", cat:"health", icon:"clipboard", name:{ja:"薬の飲み方を聞く", en:"Understanding your prescription"},
  tip:{ja:"薬袋には「三餐飯後」「睡前」「外用」などが書いてある。わからなければ袋を見せて聞けばいい。", en:"Medicine bags say things like 三餐飯後 (after each meal), 睡前 (before bed), 外用 (external use). Just show the bag and ask."},
  lines:[
  {w:"t", z:"這是你的藥，一天三次。", py:"zhè shì nǐ de yào, yì tiān sān cì", m:{ja:"こちらがお薬です。1日3回。", en:"Here's your medicine, three times a day."}},
@@ -57,7 +57,7 @@ scenes: [
  {w:"t", z:"一天擦兩次，薄薄一層就好。", py:"yì tiān cā liǎng cì, bó bó yì céng jiù hǎo", m:{ja:"1日2回、薄く塗るだけでいいです。", en:"Apply twice a day, just a thin layer."}},
  {w:"y", z:"謝謝，我知道了。", py:"xiè xie, wǒ zhī dào le", m:{ja:"ありがとう、わかりました。", en:"Thanks, got it."}},
 ]},
-{id:"emergency", cat:"health", icon:"🚑", name:{ja:"緊急・救急車を呼ぶ", en:"Emergencies & calling an ambulance"},
+{id:"emergency", cat:"health", icon:"ambulance", name:{ja:"緊急・救急車を呼ぶ", en:"Emergencies & calling an ambulance"},
  tip:{ja:"救急・火事は 119、警察は 110。住所が言えなければ近くの店の名前や看板を読む。", en:"Ambulance/fire: 119. Police: 110. If you can't say the address, read a nearby shop sign."},
  lines:[
  {w:"y", z:"救命！請幫我叫救護車。", py:"jiù mìng! qǐng bāng wǒ jiào jiù hù chē", m:{ja:"助けて！救急車を呼んでください。", en:"Help! Please call an ambulance."}},
@@ -68,7 +68,7 @@ scenes: [
  {w:"t", z:"救護車馬上到，不要移動他。", py:"jiù hù chē mǎ shàng dào, bú yào yí dòng tā", m:{ja:"救急車がすぐ行きます。動かさないで。", en:"The ambulance is on its way. Don't move him."}},
 ]},
 // ───────── 手続き・銀行 ─────────
-{id:"arc-renew", cat:"official", icon:"🪪", name:{ja:"居留証（ARC）の延長", en:"Renewing your ARC"},
+{id:"arc-renew", cat:"official", icon:"idcard", name:{ja:"居留証（ARC）の延長", en:"Renewing your ARC"},
  tip:{ja:"移民署では「號碼牌」（整理券）を取って待つ。期限の30日前から延長できる。", en:"At the immigration office, take a 號碼牌 (number ticket) and wait. You can renew from 30 days before expiry."},
  lines:[
  {w:"y", z:"我要延長居留證。", py:"wǒ yào yán cháng jū liú zhèng", m:{ja:"居留証を延長したいです。", en:"I'd like to renew my ARC."}},
@@ -78,7 +78,7 @@ scenes: [
  {w:"t", z:"那邊的櫃子，填好再過來。", py:"nà biān de guì zi, tián hǎo zài guò lái", m:{ja:"あちらの棚です。記入してから来てください。", en:"On that shelf. Fill it in and come back."}},
  {w:"y", z:"大概要等多久？", py:"dà gài yào děng duō jiǔ", m:{ja:"どのくらい待ちますか？", en:"How long is the wait?"}},
 ]},
-{id:"bank-account", cat:"official", icon:"🏦", name:{ja:"銀行口座を開く", en:"Opening a bank account"},
+{id:"bank-account", cat:"official", icon:"bank", name:{ja:"銀行口座を開く", en:"Opening a bank account"},
  tip:{ja:"必要なのは居留証・護照・印鑑またはサイン。「存摺」＝通帳、「提款卡」＝キャッシュカード。", en:"You need your ARC, passport, and a seal or signature. 存摺 = passbook, 提款卡 = ATM card."},
  lines:[
  {w:"y", z:"我想開戶。", py:"wǒ xiǎng kāi hù", m:{ja:"口座を開きたいです。", en:"I'd like to open an account."}},
@@ -88,7 +88,7 @@ scenes: [
  {w:"y", z:"都要，謝謝。", py:"dōu yào, xiè xie", m:{ja:"両方お願いします。", en:"Both, please."}},
  {w:"t", z:"請在這裡簽名，卡片一個禮拜後寄給你。", py:"qǐng zài zhè lǐ qiān míng, kǎ piàn yí ge lǐ bài hòu jì gěi nǐ", m:{ja:"ここにサインを。カードは1週間後に郵送します。", en:"Sign here. The card will be mailed in a week."}},
 ]},
-{id:"remit", cat:"official", icon:"💸", name:{ja:"海外送金する", en:"Sending money home"},
+{id:"remit", cat:"official", icon:"cash", name:{ja:"海外送金する", en:"Sending money home"},
  tip:{ja:"銀行窓口は「匯款」、手数料は「手續費」。金額と受取人の口座情報を紙に書いて渡すと早い。", en:"Wire transfer is 匯款, the fee is 手續費. Writing the amount and recipient's account details on paper speeds things up."},
  lines:[
  {w:"y", z:"我要匯錢回越南。", py:"wǒ yào huì qián huí yuè nán", m:{ja:"ベトナムに送金したいです。", en:"I want to send money to Vietnam."}},
@@ -98,7 +98,7 @@ scenes: [
  {w:"y", z:"今天的匯率是多少？", py:"jīn tiān de huì lǜ shì duō shǎo", m:{ja:"今日のレートはいくらですか？", en:"What's today's exchange rate?"}},
  {w:"t", z:"在這個螢幕上，請確認金額。", py:"zài zhè ge yíng mù shàng, qǐng què rèn jīn é", m:{ja:"この画面にあります。金額を確認してください。", en:"It's on this screen. Please confirm the amount."}},
 ]},
-{id:"sim-card", cat:"official", icon:"📱", name:{ja:"携帯のSIMを契約する", en:"Getting a SIM card"},
+{id:"sim-card", cat:"official", icon:"phone", name:{ja:"携帯のSIMを契約する", en:"Getting a SIM card"},
  tip:{ja:"「預付卡」＝プリペイド、「月租」＝月額契約。外国人は居留証＋護照の2点必要。", en:"預付卡 = prepaid, 月租 = monthly plan. Foreigners need both ARC and passport."},
  lines:[
  {w:"y", z:"我要辦預付卡，有吃到飽的方案嗎？", py:"wǒ yào bàn yù fù kǎ, yǒu chī dào bǎo de fāng àn ma", m:{ja:"プリペイドSIMがほしいです。使い放題プランはありますか？", en:"I'd like a prepaid SIM. Is there an unlimited data plan?"}},
@@ -108,7 +108,7 @@ scenes: [
  {w:"t", z:"可以，要辦攜碼，大概一天生效。", py:"kě yǐ, yào bàn xié mǎ, dà gài yì tiān shēng xiào", m:{ja:"できます。番号ポータビリティの手続きで、約1日で切り替わります。", en:"Yes, that's number porting; it takes about a day."}},
  {w:"y", z:"好，那就辦這個。", py:"hǎo, nà jiù bàn zhè ge", m:{ja:"では、それでお願いします。", en:"OK, let's do that one."}},
 ]},
-{id:"police-lost", cat:"official", icon:"👮", name:{ja:"落とし物・盗難を届ける", en:"Reporting lost or stolen items"},
+{id:"police-lost", cat:"official", icon:"police", name:{ja:"落とし物・盗難を届ける", en:"Reporting lost or stolen items"},
  tip:{ja:"「報案」＝被害届。カード紛失はまず銀行に電話して「停卡」（カード停止）。", en:"報案 = filing a police report. For a lost card, call the bank first and ask to 停卡 (freeze the card)."},
  lines:[
  {w:"y", z:"我的錢包不見了，我要報案。", py:"wǒ de qián bāo bú jiàn le, wǒ yào bào àn", m:{ja:"財布をなくしました。届けを出したいです。", en:"I lost my wallet. I want to file a report."}},
@@ -119,7 +119,7 @@ scenes: [
  {w:"t", z:"這是報案證明，補辦證件會用到。", py:"zhè shì bào àn zhèng míng, bǔ bàn zhèng jiàn huì yòng dào", m:{ja:"これが受理証明です。証明書の再発行に使います。", en:"This is your report receipt; you'll need it to replace your documents."}},
 ]},
 // ───────── 住まい ─────────
-{id:"view-room", cat:"home", icon:"🔑", name:{ja:"部屋を見に行く", en:"Viewing an apartment"},
+{id:"view-room", cat:"home", icon:"key", name:{ja:"部屋を見に行く", en:"Viewing an apartment"},
  tip:{ja:"「押金」＝敷金（通常2か月）、「租金」＝家賃、「含水電嗎」＝光熱費込み？は必ず聞く。", en:"押金 = deposit (usually 2 months), 租金 = rent. Always ask 含水電嗎 (are utilities included?)."},
  lines:[
  {w:"y", z:"你好，我想看房子。", py:"nǐ hǎo, wǒ xiǎng kàn fáng zi", m:{ja:"こんにちは、部屋を見たいです。", en:"Hello, I'd like to view the room."}},
@@ -129,7 +129,7 @@ scenes: [
  {w:"y", z:"可以養寵物嗎？最短租多久？", py:"kě yǐ yǎng chǒng wù ma? zuì duǎn zū duō jiǔ", m:{ja:"ペットは飼えますか？最短契約は？", en:"Are pets allowed? What's the minimum lease?"}},
  {w:"t", z:"不能養寵物，最少簽一年。", py:"bù néng yǎng chǒng wù, zuì shǎo qiān yì nián", m:{ja:"ペットは不可、最短1年契約です。", en:"No pets, and the minimum lease is one year."}},
 ]},
-{id:"landlord-repair", cat:"home", icon:"🔧", name:{ja:"房東に修理を頼む", en:"Asking the landlord for repairs"},
+{id:"landlord-repair", cat:"home", icon:"tools", name:{ja:"房東に修理を頼む", en:"Asking the landlord for repairs"},
  tip:{ja:"「壞了」＝壊れた、「漏水」＝水漏れ、「跳電」＝ブレーカーが落ちる。写真をLINEで送るのが台湾流。", en:"壞了 = broken, 漏水 = leaking, 跳電 = the breaker tripped. Sending a photo on LINE is the Taiwanese way."},
  lines:[
  {w:"y", z:"房東，冷氣壞了，不會冷。", py:"fáng dōng, lěng qì huài le, bú huì lěng", m:{ja:"大家さん、エアコンが壊れて冷えません。", en:"Hi, the AC is broken; it doesn't cool."}},
@@ -139,7 +139,7 @@ scenes: [
  {w:"y", z:"我三點以後在家。", py:"wǒ sān diǎn yǐ hòu zài jiā", m:{ja:"3時以降なら家にいます。", en:"I'll be home after three."}},
  {w:"y", z:"另外，浴室的水龍頭也在漏水。", py:"lìng wài, yù shì de shuǐ lóng tóu yě zài lòu shuǐ", m:{ja:"あと、浴室の蛇口も水漏れしています。", en:"Also, the bathroom tap is leaking."}},
 ]},
-{id:"garbage", cat:"home", icon:"🚛", name:{ja:"ゴミ出し・垃圾車", en:"Taking out the trash"},
+{id:"garbage", cat:"home", icon:"truck", name:{ja:"ゴミ出し・垃圾車", en:"Taking out the trash"},
  tip:{ja:"台湾は決まった時間に「垃圾車」が来て、音楽（エリーゼのために）が鳴る。一般ゴミは専用袋、資源ゴミは分別して別の車へ。", en:"Garbage trucks come at fixed times playing music (Für Elise). Regular trash needs the official bag; recyclables go to the second truck."},
  lines:[
  {w:"y", z:"請問垃圾車幾點來？", py:"qǐng wèn lā jī chē jǐ diǎn lái", m:{ja:"ゴミ収集車は何時に来ますか？", en:"What time does the garbage truck come?"}},
@@ -149,7 +149,7 @@ scenes: [
  {w:"y", z:"廚餘要倒哪裡？", py:"chú yú yào dào nǎ lǐ", m:{ja:"生ゴミはどこに出しますか？", en:"Where does food waste go?"}},
  {w:"t", z:"倒在垃圾車旁邊的桶子。", py:"dào zài lā jī chē páng biān de tǒng zi", m:{ja:"収集車の横のバケツに入れてください。", en:"Into the bucket next to the truck."}},
 ]},
-{id:"neighbor", cat:"home", icon:"🏢", name:{ja:"管理員・ご近所と話す", en:"Talking to the doorman & neighbors"},
+{id:"neighbor", cat:"home", icon:"building", name:{ja:"管理員・ご近所と話す", en:"Talking to the doorman & neighbors"},
  tip:{ja:"マンションの「管理員」は荷物受け取りや修理の窓口。宅配は「包裹」、届いたら「有你的包裹」と言われる。", en:"The building 管理員 (doorman) handles parcels and repairs. A parcel is 包裹; you'll hear 有你的包裹 when one arrives."},
  lines:[
  {w:"t", z:"你是新搬來的嗎？住幾樓？", py:"nǐ shì xīn bān lái de ma? zhù jǐ lóu", m:{ja:"引っ越してきた方ですか？何階ですか？", en:"Are you the new tenant? Which floor?"}},
@@ -159,7 +159,7 @@ scenes: [
  {w:"t", z:"每個月五號前拿到管理室。", py:"měi ge yuè wǔ hào qián ná dào guǎn lǐ shì", m:{ja:"毎月5日までに管理室へ。", en:"Bring it to the office before the 5th each month."}},
  {w:"y", z:"不好意思，樓上晚上很吵，可以幫我說一下嗎？", py:"bù hǎo yì si, lóu shàng wǎn shàng hěn chǎo, kě yǐ bāng wǒ shuō yí xià ma", m:{ja:"すみません、上の階が夜うるさいので、伝えてもらえますか？", en:"Sorry, the upstairs neighbor is noisy at night. Could you have a word with them?"}},
 ]},
-{id:"pay-bills", cat:"home", icon:"🧾", name:{ja:"公共料金をコンビニで払う", en:"Paying bills at a convenience store"},
+{id:"pay-bills", cat:"home", icon:"receipt", name:{ja:"公共料金をコンビニで払う", en:"Paying bills at a convenience store"},
  tip:{ja:"電気・水道・ガス・電話代は請求書のバーコードをコンビニで読んでもらうだけ。期限を過ぎると「逾期」で払えないことがある。", en:"Electricity, water, gas and phone bills can all be paid by scanning the barcode at any convenience store. Overdue (逾期) bills may be refused."},
  lines:[
  {w:"y", z:"我要繳電費。", py:"wǒ yào jiǎo diàn fèi", m:{ja:"電気代を払いたいです。", en:"I'd like to pay my electricity bill."}},
@@ -170,7 +170,7 @@ scenes: [
  {w:"t", z:"逾期的要去台電繳。", py:"yú qī de yào qù tái diàn jiǎo", m:{ja:"期限切れは台電（電力会社）で払ってください。", en:"Overdue ones have to be paid at Taipower."}},
 ]},
 // ───────── 買い物・食事 ─────────
-{id:"convenience", cat:"food", icon:"🏪", name:{ja:"コンビニで会計する", en:"Checking out at a convenience store"},
+{id:"convenience", cat:"food", icon:"store", name:{ja:"コンビニで会計する", en:"Checking out at a convenience store"},
  tip:{ja:"聞かれるのは3つだけ：袋いる？温める？統一發票（レシート）いる？「載具」はレシートをアプリに紐づける仕組みで、外国人は「不用」でOK。", en:"You'll be asked three things: bag? heat it up? receipt? 載具 is a digital receipt app; just say 不用 (no need)."},
  lines:[
  {w:"t", z:"要袋子嗎？", py:"yào dài zi ma", m:{ja:"袋はいりますか？", en:"Do you need a bag?"}},
@@ -180,7 +180,7 @@ scenes: [
  {w:"t", z:"有載具嗎？發票要印嗎？", py:"yǒu zǎi jù ma? fā piào yào yìn ma", m:{ja:"載具はありますか？レシートは印刷しますか？", en:"Do you have a receipt carrier? Print the receipt?"}},
  {w:"y", z:"沒有載具，發票給我。", py:"méi yǒu zǎi jù, fā piào gěi wǒ", m:{ja:"載具はありません。レシートはください。", en:"No carrier; I'll take the receipt."}},
 ]},
-{id:"drink-stand", cat:"food", icon:"🧋", name:{ja:"ドリンクスタンドで注文する", en:"Ordering at a drink stand"},
+{id:"drink-stand", cat:"food", icon:"cup", name:{ja:"ドリンクスタンドで注文する", en:"Ordering at a drink stand"},
  tip:{ja:"甘さ：正常／少糖／半糖／微糖／無糖。氷：正常冰／少冰／微冰／去冰。サイズは M（中杯）と L（大杯）。", en:"Sweetness: 正常, 少糖, 半糖, 微糖, 無糖. Ice: 正常冰, 少冰, 微冰, 去冰. Sizes: M (中杯) and L (大杯)."},
  lines:[
  {w:"t", z:"你好，要喝什麼？", py:"nǐ hǎo, yào hē shén me", m:{ja:"いらっしゃいませ、何にしますか？", en:"Hi, what would you like?"}},
@@ -190,7 +190,7 @@ scenes: [
  {w:"t", z:"要不要加料？", py:"yào bú yào jiā liào", m:{ja:"トッピングは？", en:"Any toppings?"}},
  {w:"y", z:"不用。可以用悠遊卡付嗎？", py:"bú yòng. kě yǐ yòng yōu yóu kǎ fù ma", m:{ja:"いいえ。悠遊カードで払えますか？", en:"No. Can I pay with EasyCard?"}},
 ]},
-{id:"night-market", cat:"food", icon:"🍢", name:{ja:"夜市で食べ物を買う", en:"Buying food at a night market"},
+{id:"night-market", cat:"food", icon:"lantern", name:{ja:"夜市で食べ物を買う", en:"Buying food at a night market"},
  tip:{ja:"「一份」＝1人前、「不要辣」＝辛くしないで、「內用／外帶」＝店内／持ち帰り。屋台は現金が基本。", en:"一份 = one portion, 不要辣 = not spicy, 內用/外帶 = eat here / take away. Stalls are mostly cash only."},
  lines:[
  {w:"y", z:"老闆，一份雞排，不要辣。", py:"lǎo bǎn, yí fèn jī pái, bú yào là", m:{ja:"すみません、鶏排（フライドチキン）を1つ、辛くしないで。", en:"One fried chicken cutlet please, not spicy."}},
@@ -200,7 +200,7 @@ scenes: [
  {w:"y", z:"這個是什麼？可以試吃嗎？", py:"zhè ge shì shén me? kě yǐ shì chī ma", m:{ja:"これは何ですか？試食できますか？", en:"What's this? Can I try a piece?"}},
  {w:"t", z:"這是地瓜球，來，試試看。", py:"zhè shì dì guā qiú, lái, shì shì kàn", m:{ja:"さつまいもボールです。どうぞ、食べてみて。", en:"Sweet potato balls. Here, try one."}},
 ]},
-{id:"market", cat:"food", icon:"🥬", name:{ja:"市場で値段を聞く", en:"Asking prices at the market"},
+{id:"market", cat:"food", icon:"veg", name:{ja:"市場で値段を聞く", en:"Asking prices at the market"},
  tip:{ja:"台湾の市場は「一斤」（600g）単位。「算便宜一點」で値引き交渉、まとめ買いなら「兩個一百」のように言ってくる。", en:"Markets sell by the 斤 (600g). 算便宜一點 asks for a discount; vendors bundle like 兩個一百 (two for 100)."},
  lines:[
  {w:"y", z:"老闆娘，這個一斤多少？", py:"lǎo bǎn niáng, zhè ge yì jīn duō shǎo", m:{ja:"おかみさん、これは1斤いくらですか？", en:"Ma'am, how much is this per jin?"}},
@@ -210,7 +210,7 @@ scenes: [
  {w:"y", z:"這是什麼菜？怎麼煮？", py:"zhè shì shén me cài? zěn me zhǔ", m:{ja:"これは何の野菜？どう料理しますか？", en:"What vegetable is this? How do you cook it?"}},
  {w:"t", z:"地瓜葉，用蒜頭炒就很好吃。", py:"dì guā yè, yòng suàn tóu chǎo jiù hěn hǎo chī", m:{ja:"さつまいもの葉。にんにくで炒めるとおいしいよ。", en:"Sweet potato leaves. Stir-fry with garlic and it's delicious."}},
 ]},
-{id:"return-item", cat:"food", icon:"🔄", name:{ja:"返品・交換する", en:"Returning or exchanging an item"},
+{id:"return-item", cat:"food", icon:"refresh", name:{ja:"返品・交換する", en:"Returning or exchanging an item"},
  tip:{ja:"台湾は7日以内なら発票（レシート）で返品できる店が多い。ネット通販は7日間の「鑑賞期」あり。", en:"Many stores accept returns within 7 days with the receipt (發票). Online purchases have a 7-day 鑑賞期 (cooling-off period)."},
  lines:[
  {w:"y", z:"不好意思，這個我想退貨。", py:"bù hǎo yì si, zhè ge wǒ xiǎng tuì huò", m:{ja:"すみません、これを返品したいです。", en:"Excuse me, I'd like to return this."}},
@@ -220,7 +220,7 @@ scenes: [
  {w:"y", z:"如果沒有大的，可以退錢嗎？", py:"rú guǒ méi yǒu dà de, kě yǐ tuì qián ma", m:{ja:"大きいのがなければ返金できますか？", en:"If you don't have a larger one, can I get a refund?"}},
  {w:"t", z:"七天內都可以退。", py:"qī tiān nèi dōu kě yǐ tuì", m:{ja:"7日以内なら返金できます。", en:"Refunds are fine within seven days."}},
 ]},
-{id:"restaurant", cat:"food", icon:"🍜", name:{ja:"食堂で注文・会計する", en:"Ordering & paying at a local eatery"},
+{id:"restaurant", cat:"food", icon:"food", name:{ja:"食堂で注文・会計する", en:"Ordering & paying at a local eatery"},
  tip:{ja:"台湾の食堂は紙の「菜單」に数字を書いて渡すスタイルが多い。「內用」と言えば席へ、会計は「買單」または「結帳」。", en:"Local eateries often use paper order slips: write quantities and hand it over. Say 內用 to eat in; ask for the bill with 買單 or 結帳."},
  lines:[
  {w:"t", z:"內用還是外帶？幾位？", py:"nèi yòng hái shì wài dài? jǐ wèi", m:{ja:"店内ですか、お持ち帰りですか？何名様？", en:"Eating in or take-out? How many?"}},
@@ -231,7 +231,7 @@ scenes: [
  {w:"t", z:"總共兩百四，要發票嗎？", py:"zǒng gòng liǎng bǎi sì, yào fā piào ma", m:{ja:"合計240元です。レシートはいりますか？", en:"240 in total. Do you want a receipt?"}},
 ]},
 // ───────── 仕事・人づきあい ─────────
-{id:"ask-leave", cat:"work", icon:"📅", name:{ja:"休みを申請する", en:"Asking for time off"},
+{id:"ask-leave", cat:"work", icon:"calendar", name:{ja:"休みを申請する", en:"Asking for time off"},
  tip:{ja:"「請假」＝休暇申請。種類：病假（病欠）、事假（私用）、特休（有給）。「補休」＝代休。", en:"請假 = request leave. Types: 病假 (sick), 事假 (personal), 特休 (paid annual leave). 補休 = compensatory day off."},
  lines:[
  {w:"y", z:"老闆，我下禮拜五想請假一天。", py:"lǎo bǎn, wǒ xià lǐ bài wǔ xiǎng qǐng jià yì tiān", m:{ja:"社長、来週の金曜日に1日休みをいただきたいです。", en:"Boss, I'd like to take next Friday off."}},
@@ -241,7 +241,7 @@ scenes: [
  {w:"y", z:"我今天身體不舒服，想請病假。", py:"wǒ jīn tiān shēn tǐ bù shū fú, xiǎng qǐng bìng jià", m:{ja:"今日は体調が悪いので、病欠をお願いします。", en:"I'm not feeling well today; I'd like to take sick leave."}},
  {w:"t", z:"好好休息，明天要交診斷證明。", py:"hǎo hǎo xiū xí, míng tiān yào jiāo zhěn duàn zhèng míng", m:{ja:"ゆっくり休んで。明日診断書を出してください。", en:"Get some rest. Bring a doctor's note tomorrow."}},
 ]},
-{id:"overtime", cat:"work", icon:"⏰", name:{ja:"残業・シフトについて", en:"Overtime & shifts"},
+{id:"overtime", cat:"work", icon:"clock", name:{ja:"残業・シフトについて", en:"Overtime & shifts"},
  tip:{ja:"「加班」＝残業、「加班費」＝残業代、「排班」＝シフト、「輪班」＝交代勤務。時給は「時薪」。", en:"加班 = overtime, 加班費 = overtime pay, 排班 = the shift schedule, 輪班 = rotating shifts. 時薪 = hourly wage."},
  lines:[
  {w:"t", z:"今天可以加班到八點嗎？", py:"jīn tiān kě yǐ jiā bān dào bā diǎn ma", m:{ja:"今日は8時まで残業できますか？", en:"Can you work overtime until eight today?"}},
@@ -251,7 +251,7 @@ scenes: [
  {w:"t", z:"貼在休息室，自己去看。", py:"tiē zài xiū xí shì, zì jǐ qù kàn", m:{ja:"休憩室に貼ってあるから見てね。", en:"It's posted in the break room; go take a look."}},
  {w:"y", z:"我想跟同事換班，可以嗎？", py:"wǒ xiǎng gēn tóng shì huàn bān, kě yǐ ma", m:{ja:"同僚とシフトを交換したいのですが、いいですか？", en:"I'd like to swap shifts with a coworker. Is that OK?"}},
 ]},
-{id:"didnt-understand", cat:"work", icon:"🙏", name:{ja:"聞き取れなかったとき", en:"When you didn't catch that"},
+{id:"didnt-understand", cat:"work", icon:"hand", name:{ja:"聞き取れなかったとき", en:"When you didn't catch that"},
  tip:{ja:"一番使うのはこの5句。「不好意思」を最初に付けると印象がやわらぐ。", en:"You'll use these five lines more than anything. Starting with 不好意思 softens it."},
  lines:[
  {w:"y", z:"不好意思，可以再說一次嗎？", py:"bù hǎo yì si, kě yǐ zài shuō yí cì ma", m:{ja:"すみません、もう一度言ってもらえますか？", en:"Sorry, could you say that again?"}},
@@ -261,7 +261,7 @@ scenes: [
  {w:"t", z:"對對對，就是這樣。", py:"duì duì duì, jiù shì zhè yàng", m:{ja:"そうそう、その通り。", en:"Yes, exactly."}},
  {w:"y", z:"我懂了，謝謝你的耐心。", py:"wǒ dǒng le, xiè xie nǐ de nài xīn", m:{ja:"わかりました。丁寧にありがとう。", en:"Got it. Thanks for your patience."}},
 ]},
-{id:"work-injury", cat:"work", icon:"🩹", name:{ja:"仕事中のけがを報告する", en:"Reporting a workplace injury"},
+{id:"work-injury", cat:"work", icon:"bandage", name:{ja:"仕事中のけがを報告する", en:"Reporting a workplace injury"},
  tip:{ja:"仕事中のけがは「職災」（労災）。必ずその日に主管へ報告し、病院では「這是職災」と伝えると労保が使える。", en:"A work injury is 職災. Report it to your supervisor the same day; at the hospital say 這是職災 so labor insurance covers it."},
  lines:[
  {w:"y", z:"主管，我剛剛工作的時候受傷了。", py:"zhǔ guǎn, wǒ gāng gāng gōng zuò de shí hòu shòu shāng le", m:{ja:"主任、今仕事中にけがをしました。", en:"Sir, I just got injured while working."}},
@@ -271,7 +271,7 @@ scenes: [
  {w:"y", z:"這算職災嗎？可以用勞保嗎？", py:"zhè suàn zhí zāi ma? kě yǐ yòng láo bǎo ma", m:{ja:"これは労災になりますか？労働保険は使えますか？", en:"Does this count as a work injury? Can I use labor insurance?"}},
  {w:"t", z:"算，我會幫你申報。", py:"suàn, wǒ huì bāng nǐ shēn bào", m:{ja:"なります。私が申請しておく。", en:"Yes, I'll file the report for you."}},
 ]},
-{id:"small-talk", cat:"work", icon:"💬", name:{ja:"話しかけられたとき・自己紹介", en:"Small talk & introducing yourself"},
+{id:"small-talk", cat:"work", icon:"chat", name:{ja:"話しかけられたとき・自己紹介", en:"Small talk & introducing yourself"},
  tip:{ja:"台湾人はよく「你哪裡人？」「來台灣多久了？」と聞く。悪気はなく興味があるだけ。「習慣了嗎」＝慣れた？", en:"Taiwanese often ask 你哪裡人 (where are you from?) and 來台灣多久了 (how long have you been here?). It's friendly curiosity."},
  lines:[
  {w:"t", z:"你是哪裡人？來台灣多久了？", py:"nǐ shì nǎ lǐ rén? lái tái wān duō jiǔ le", m:{ja:"どこの国の人？台湾に来てどのくらい？", en:"Where are you from? How long have you been in Taiwan?"}},
@@ -281,7 +281,7 @@ scenes: [
  {w:"t", z:"有空一起吃飯啊！", py:"yǒu kòng yì qǐ chī fàn a", m:{ja:"時間があったら一緒にご飯食べよう！", en:"Let's grab a meal sometime!"}},
  {w:"y", z:"好啊，加個 LINE 吧。", py:"hǎo a, jiā ge LINE ba", m:{ja:"いいね、LINE 交換しよう。", en:"Sure, let's add each other on LINE."}},
 ]},
-{id:"say-no", cat:"work", icon:"🙅", name:{ja:"勧誘・セールスを断る", en:"Turning down sales & solicitations"},
+{id:"say-no", cat:"work", icon:"x", name:{ja:"勧誘・セールスを断る", en:"Turning down sales & solicitations"},
  tip:{ja:"路上の勧誘、電話セールス、宗教の誘い。「不用，謝謝」と歩き続ければ十分。しつこければ「我沒興趣」。", en:"Street promoters, phone sales, religious invites: 不用，謝謝 and keep walking is enough. If they persist: 我沒興趣 (not interested)."},
  lines:[
  {w:"t", z:"小姐，要不要看一下我們的方案？", py:"xiǎo jiě, yào bú yào kàn yí xià wǒ men de fāng àn", m:{ja:"お姉さん、うちのプランを見てみませんか？", en:"Miss, would you like to look at our plans?"}},
@@ -292,7 +292,7 @@ scenes: [
  {w:"y", z:"請不要再打電話給我了。", py:"qǐng bú yào zài dǎ diàn huà gěi wǒ le", m:{ja:"もう電話しないでください。", en:"Please stop calling me."}},
 ]},
 // ───────── 移動・天気 ─────────
-{id:"taxi", cat:"go", icon:"🚕", name:{ja:"タクシーに乗る", en:"Taking a taxi"},
+{id:"taxi", cat:"go", icon:"taxi", name:{ja:"タクシーに乗る", en:"Taking a taxi"},
  tip:{ja:"住所を見せるのが一番早い。「跳表」＝メーター、「這裡停」＝ここで止めて。ドライバーは「運將」と呼ばれる。", en:"Showing the address on your phone is fastest. 跳表 = by the meter; 這裡停 = stop here. Drivers are called 運將."},
  lines:[
  {w:"y", z:"你好，我要到這個地址。", py:"nǐ hǎo, wǒ yào dào zhè ge dì zhǐ", m:{ja:"こんにちは、この住所までお願いします。", en:"Hi, I'd like to go to this address."}},
@@ -302,7 +302,7 @@ scenes: [
  {w:"y", z:"前面路口停就好，謝謝。", py:"qián miàn lù kǒu tíng jiù hǎo, xiè xie", m:{ja:"前の交差点で止めてください。", en:"You can stop at the next intersection, thanks."}},
  {w:"y", z:"可以給我收據嗎？", py:"kě yǐ gěi wǒ shōu jù ma", m:{ja:"領収書をもらえますか？", en:"Could I have a receipt?"}},
 ]},
-{id:"mrt-easycard", cat:"go", icon:"🚇", name:{ja:"MRT・悠遊カードをチャージ", en:"MRT & topping up your EasyCard"},
+{id:"mrt-easycard", cat:"go", icon:"train", name:{ja:"MRT・悠遊カードをチャージ", en:"MRT & topping up your EasyCard"},
  tip:{ja:"悠遊カードはコンビニでも駅でも「加值」（チャージ）できる。バスは乗車時と降車時の両方でタッチ。", en:"Top up (加值) your EasyCard at any convenience store or station. On buses, tap both when boarding and alighting."},
  lines:[
  {w:"y", z:"請問到台北車站要坐哪一線？", py:"qǐng wèn dào tái běi chē zhàn yào zuò nǎ yí xiàn", m:{ja:"台北駅にはどの路線で行きますか？", en:"Which line goes to Taipei Main Station?"}},
@@ -312,7 +312,7 @@ scenes: [
  {w:"y", z:"我要加值五百。", py:"wǒ yào jiā zhí wǔ bǎi", m:{ja:"500元チャージします。", en:"I'd like to top up 500."}},
  {w:"t", z:"好，卡片放這裡。", py:"hǎo, kǎ piàn fàng zhè lǐ", m:{ja:"はい、カードをここに置いてください。", en:"OK, place your card here."}},
 ]},
-{id:"toilet", cat:"go", icon:"🚻", name:{ja:"トイレを借りる・探す", en:"Finding or borrowing a toilet", ko:"화장실 찾기·빌리기", vi:"Tìm hoặc mượn nhà vệ sinh", id:"Mencari atau meminjam toilet"},
+{id:"toilet", cat:"go", icon:"toilet", name:{ja:"トイレを借りる・探す", en:"Finding or borrowing a toilet", ko:"화장실 찾기·빌리기", vi:"Tìm hoặc mượn nhà vệ sinh", id:"Mencari atau meminjam toilet"},
  tip:{ja:"台湾のコンビニ・MRT駅・百貨店はほぼトイレを貸してくれる。「洗手間」が丁寧、「廁所」が普通。紙は流していい所と「請丟垃圾桶」の所があるので表示を見る。", en:"Convenience stores, MRT stations and department stores almost always let you use the toilet. 洗手間 is polite, 廁所 is everyday. Check the sign: some places want paper in the bin (請丟垃圾桶).", ko:"편의점·MRT역·백화점은 거의 화장실을 빌려줘요. 洗手間이 정중한 말, 廁所가 일상 표현. 휴지를 변기에 버려도 되는 곳과 쓰레기통에 버려야 하는 곳(請丟垃圾桶)이 있으니 표시를 확인하세요.", vi:"Cửa hàng tiện lợi, ga MRT, trung tâm thương mại hầu như đều cho dùng nhà vệ sinh. 洗手間 là cách nói lịch sự, 廁所 là cách nói thường. Xem bảng: có nơi phải bỏ giấy vào thùng rác (請丟垃圾桶).", id:"Minimarket, stasiun MRT, dan mal hampir selalu mengizinkan pakai toilet. 洗手間 lebih sopan, 廁所 lebih sehari-hari. Lihat tandanya: ada tempat yang minta tisu dibuang ke tempat sampah (請丟垃圾桶)."},
  lines:[
  {w:"y", z:"不好意思，請問洗手間在哪裡？", py:"bù hǎo yì si, qǐng wèn xǐ shǒu jiān zài nǎ lǐ", m:{ja:"すみません、トイレはどこですか？", en:"Excuse me, where's the restroom?", ko:"실례합니다, 화장실이 어디예요?", vi:"Xin lỗi, cho hỏi nhà vệ sinh ở đâu?", id:"Maaf, toiletnya di mana ya?"}},
@@ -322,7 +322,7 @@ scenes: [
  {w:"y", z:"沒有衛生紙了。", py:"méi yǒu wèi shēng zhǐ le", m:{ja:"トイレットペーパーがありません。", en:"There's no toilet paper.", ko:"휴지가 없어요.", vi:"Hết giấy vệ sinh rồi.", id:"Tisunya habis."}},
  {w:"t", z:"衛生紙請丟垃圾桶，不要丟馬桶。", py:"wèi shēng zhǐ qǐng diū lā jī tǒng, bú yào diū mǎ tǒng", m:{ja:"紙はゴミ箱に捨ててください。便器に流さないで。", en:"Please put paper in the bin, not the toilet.", ko:"휴지는 쓰레기통에 버려 주세요. 변기에 넣지 마세요.", vi:"Giấy vui lòng bỏ vào thùng rác, đừng bỏ vào bồn cầu.", id:"Tisunya buang ke tempat sampah ya, jangan ke kloset."}},
 ]},
-{id:"typhoon", cat:"go", icon:"🌀", name:{ja:"台風・停班停課", en:"Typhoons & work/school closures"},
+{id:"typhoon", cat:"go", icon:"typhoon", name:{ja:"台風・停班停課", en:"Typhoons & work/school closures"},
  tip:{ja:"「停班停課」＝仕事も学校も休み。前日の夜に各県市が発表する。台風の日は外に出ないこと。", en:"停班停課 means work and school are cancelled. Each city announces it the night before. Stay indoors on typhoon days."},
  lines:[
  {w:"t", z:"明天颱風要來了，你有看新聞嗎？", py:"míng tiān tái fēng yào lái le, nǐ yǒu kàn xīn wén ma", m:{ja:"明日台風が来るよ。ニュース見た？", en:"A typhoon's coming tomorrow. Did you see the news?"}},

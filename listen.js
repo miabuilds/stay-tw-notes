@@ -110,7 +110,7 @@
     return '<div class="ls-seg">' + items.map(it => {
       const v = it[0], lbl = it[1], locked = it[2];
       return '<button type="button" class="' + (cur === v ? "on" : "") + (locked && !premium() ? " lock" : "") +
-        '" onclick="Listen.opt(\'' + name + '\',\'' + v + '\')">' + (locked && !premium() ? "🔒 " : "") + esc(lbl) + "</button>";
+        '" onclick="Listen.opt(\'' + name + '\',\'' + v + '\')">' + (locked && !premium() ? icon("lock",{size:13}) + " " : "") + esc(lbl) + "</button>";
     }).join("") + "</div>";
   }
   function sw(k) { return '<label class="ls-sw"><input type="checkbox" ' + (opts[k] ? "checked" : "") + ' onchange="Listen.opt2(\'' + k + '\')"><span></span></label>'; }
@@ -121,7 +121,7 @@
     const lvName = lv => { try { return twT("lv_" + lv); } catch (e) { return lv.toUpperCase(); } };
     const scopes = [["cur", T("lsScopeCur")], ["all", T("lsScopeAll")]].concat(LEVELS.map(l => [l, "L" + l.slice(1) + " " + lvName(l)]));
     return '<div class="ls-wrap">'
-      + '<div class="ls-top"><span class="tt">🎧 ' + esc(T("lsTitle")) + '</span><button class="ls-x" onclick="Listen.close()" aria-label="close">×</button></div>'
+      + '<div class="ls-top"><span class="tt">' + icon("headphones",{size:17}) + ' ' + esc(T("lsTitle")) + '</span><button class="ls-x" onclick="Listen.close()" aria-label="close">×</button></div>'
       + '<p class="ls-lead">' + esc(T("lsLead")) + "</p>"
       + '<div class="ls-sec">' + esc(T("lsScope")) + "</div>" + seg("scope", scopes, opts.scope)
       + '<div class="ls-sec">' + esc(T("lsFilter")) + "</div>"
@@ -143,7 +143,7 @@
     const lvName = (() => { try { return twT("lv_" + v.level); } catch (e) { return v.level; } })();
     const exOn = phase === "ex";
     return '<div class="ls-wrap">'
-      + '<div class="ls-top"><button class="ls-x" onclick="Listen.back()" aria-label="back">‹</button><span class="tt">🎧 ' + esc(T("lsTitle")) + '</span><button class="ls-x" onclick="Listen.close()" aria-label="close">×</button></div>'
+      + '<div class="ls-top"><button class="ls-x" onclick="Listen.back()" aria-label="back">‹</button><span class="tt">' + icon("headphones",{size:17}) + ' ' + esc(T("lsTitle")) + '</span><button class="ls-x" onclick="Listen.close()" aria-label="close">×</button></div>'
       + '<div class="ls-card">'
         + '<div class="ls-lv">' + esc("L" + v.level.slice(1) + " " + lvName) + "</div>"
         + '<div class="ls-w">' + esc(v.w) + "</div>"
@@ -247,7 +247,7 @@
   function done() {
     stop(); releaseWake();
     const m = mask(); if (!m) return;
-    m.innerHTML = '<div class="ls-wrap"><div class="ls-top"><span class="tt">🎧 ' + esc(T("lsTitle")) + '</span><button class="ls-x" onclick="Listen.close()">×</button></div>'
+    m.innerHTML = '<div class="ls-wrap"><div class="ls-top"><span class="tt">' + icon("headphones",{size:17}) + ' ' + esc(T("lsTitle")) + '</span><button class="ls-x" onclick="Listen.close()">×</button></div>'
       + '<div class="ls-done"><img src="images/bear.svg" alt=""><h3>' + esc(T("lsDone")) + "</h3><p>" + esc(T("lsDoneSub").replace("{n}", list.length)) + "</p></div>"
       + '<button class="ls-start" onclick="Listen.start()">▶ ' + esc(T("lsAgain")) + "</button>"
       + '<button class="ls-start ls-ghost" onclick="Listen.back()">' + esc(T("lsSettings")) + "</button></div>";

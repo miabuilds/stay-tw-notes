@@ -53,6 +53,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP"
 .cta a{display:inline-block;background:var(--ac);color:#fff;font-weight:700;font-size:14.5px;padding:11px 24px;border-radius:999px;text-decoration:none}
 .ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2}
 </style>
+<script src="icons.js?v=1"></script>
 </head>
 <body>
 <div class="wrap">
@@ -121,7 +122,7 @@ function render(){
 }
 function renderIntro(){
   document.getElementById("mIdx").textContent="";document.getElementById("mScore").textContent="";
-  stage().innerHTML='<div class="done"><div class="em">🎯</div><h2>'+tt("title")+'</h2><p class="sc" style="margin:8px 0 24px">'+tt("sub")+'</p><button class="btn" onclick="startQ()">'+tt("start")+'</button></div>';
+  stage().innerHTML='<div class="done"><div class="em"></div><h2>'+tt("title")+'</h2><p class="sc" style="margin:8px 0 24px">'+tt("sub")+'</p><button class="btn" onclick="startQ()">'+tt("start")+'</button></div>';
 }
 function startQ(){ idx=0;score=0;mode="q";render(); }
 function renderQ(){
@@ -143,7 +144,7 @@ function pick(i){
   document.getElementById("mScore").textContent="★ "+score;
   const fb=document.getElementById("fb");
   fb.innerHTML=
-    '<div class="fb-r '+(ok?"ok":"ng")+'">'+(ok?"⭕ "+tt("correct"):"❌ "+tt("wrong"))+'</div>'+
+    '<div class="fb-r '+(ok?"ok":"ng")+'">'+(ok?icon("check",{size:17})+" "+tt("correct"):icon("x",{size:17})+" "+tt("wrong"))+'</div>'+
     '<div class="ans" onclick="speak(\''+it.full+'\')"><span>'+it.full+'</span><span class="zy">'+it.zy+'</span>'+
       '<span class="play"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></span></div>'+
     '<div class="expl">'+it.ex[LANG]+'</div>'+
@@ -157,7 +158,7 @@ function renderDone(){
   const msg=pct===1?tt("perfect"):pct>=.7?tt("good"):tt("keep");
   document.getElementById("mIdx").textContent="";document.getElementById("mScore").textContent="";
   stage().innerHTML=
-    '<div class="done"><div class="em">'+(pct===1?"🏆":pct>=.7?"🎉":"💪")+'</div>'+
+    '<div class="done"><div class="em">'+(pct===1?icon("star",{size:34}):pct>=.7?icon("sparkle",{size:34}):icon("fire",{size:34}))+'</div>'+
     '<h2>'+msg+'</h2><p class="sc">'+tt("scoreLabel")+'<br><b>'+score+'</b> / '+BANK.length+'</p>'+
     '<button class="btn ghost" style="max-width:220px;margin:22px auto 0" onclick="startQ()">'+tt("again")+'</button>'+
     '<div class="cta"><p><strong>'+tt("ctaHead")+'</strong><br>'+tt("ctaP")+'</p>'+

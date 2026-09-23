@@ -20,6 +20,7 @@
 <meta name="twitter:image" content="https://staytw.pages.dev/images/og.png">
 <link rel="canonical" href="https://staytw.pages.dev/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script src="icons.js?v=1"></script>
 <script src="analytics.js?v=51"></script>
 <script>
 /* ネイティブアプリ（RN WebView）がこのランディングに来てしまったらツールへ。
@@ -648,7 +649,7 @@ document.addEventListener("DOMContentLoaded", function(){
   </div>
 </footer>
 
-<script src="i18n.js?v=122"></script>
+<script src="i18n.js?v=123"></script>
 <script>
 function toggleTheme(){
   const d = document.documentElement.dataset.theme === "dark";
@@ -681,7 +682,7 @@ function toggleTheme(){
     try{
       const r=await fetch("/api/subscribe",{method:"POST",headers:{"Content-Type":"application/json"},
         body:JSON.stringify({email,website,lang:twGetLang(),source:"home"})});
-      if(r.ok){ f.reset(); msg.style.color="var(--ok,#2F7A5D)"; msg.textContent=t("notifyOk","登録しました！リリース時にお知らせします 🎉"); }
+      if(r.ok){ f.reset(); msg.style.color="var(--ok,#2F7A5D)"; msg.textContent=t("notifyOk","登録しました！リリース時にお知らせします"); }
       else { msg.style.color="var(--ac)"; msg.textContent=t("notifyBad","メールアドレスを確認してください"); }
     }catch(err){ msg.style.color="var(--ac)"; msg.textContent=t("notifyErr","通信エラー。あとでもう一度お試しください"); }
   });

@@ -202,7 +202,7 @@ const MockExam = (() => {
     if (typeof WrongBook === "undefined") return;
     const correct = q.opts[q.ans];
     if (q.word) WrongBook.add({ type: "exam-" + q.sec, word: q.word.w,
-      q: (q.sec === "listen" ? "🎧 " + (q.word.ex ? q.word.ex.z : "") : q.word.w),
+      q: (q.sec === "listen" ? ""  + (q.word.ex ? q.word.ex.z : "") : q.word.w),
       correct: q.word.w + "：" + correct, detail: q.word.zy + "｜" + q.word.py });
     else if (q.sec === "measure") WrongBook.add({ type: "exam-measure", word: "一" + correct + q.noun, q: q.stem, correct: "一" + correct + q.noun, detail: "" });
     else WrongBook.add({ type: "exam-" + q.sec, word: "", q: (q.stem || "").replace(/<[^>]+>/g, "").replace(/（　　）/g, "___"), correct: correct, detail: "" });
@@ -220,7 +220,7 @@ const MockExam = (() => {
     // 停住:顯示正解+詳解+「下一題」，不自動跳（使用者要求）
     document.getElementById("examBox").insertAdjacentHTML("beforeend",
       `<div class="qz-fb ${ok ? "ok" : "ng"}">
-         <div style="font-weight:700;font-size:15px">${ok ? "⭕ " + twT("qzRight") : "❌ " + twT("qzWrong")}</div>
+         <div style="font-weight:700;font-size:15px">${ok ? icon("check",{size:17}) : icon("x",{size:17})} ${ok ? twT("qzRight") : twT("qzWrong")}</div>
          <div style="margin-top:6px">${examExplain(q)}</div>
          <div style="margin-top:14px"><button class="btn primary" onclick="MockExam.next()">${twT("quizNext")} ›</button></div>
        </div>`);
@@ -253,7 +253,7 @@ const MockExam = (() => {
         ${wrongs.length ? `<div style="text-align:left;max-width:520px;margin:0 auto;border-top:1px solid var(--line);padding-top:14px">
           <div style="font-size:13px;color:var(--tx3);margin-bottom:8px">${twT("exWrongList")}</div>
           ${wrongs.map(q => `<div style="font-size:14px;padding:6px 0;border-bottom:1px dashed var(--line)">
-            ${(q.sec === "listen" || q.sec === "listenW") && q.word ? `🎧 <b onclick="speakZh('${q.word.w}')" style="cursor:pointer">${q.word.w}</b>（${q.word.zy}｜${q.word.py}）— ${q.word.m[mk] || q.word.m.e || q.word.m.j}`
+            ${(q.sec === "listen" || q.sec === "listenW") && q.word ? `${icon("headphones",{size:15})} <b onclick="speakZh('${q.word.w}')" style="cursor:pointer">${q.word.w}</b>（${q.word.zy}｜${q.word.py}）— ${q.word.m[mk] || q.word.m.e || q.word.m.j}`
               : q.word ? `<b onclick="speakZh('${q.word.w}')" style="cursor:pointer">${q.word.w}</b>（${q.word.zy}｜${q.word.py}）— ${q.word.m[mk] || q.word.m.e || q.word.m.j}`
               : q.sec === "grammar" ? q.stem.replace("（　　）", `<b style="color:var(--ac)">${q.opts[q.ans]}</b>`)
               : `${q.stem}<br>→ <b style="color:var(--ac)">${q.opts[q.ans]}</b>`}

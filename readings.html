@@ -17,6 +17,7 @@
 <meta name="twitter:description" content="台湾では読み方が違う33字と、直した読みをすべて公開します。">
 <meta name="twitter:image" content="https://staytw.pages.dev/images/og.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script src="icons.js?v=1"></script>
 <script src="analytics.js?v=52"></script>
 <style>
 :root{--bg:#FAF8F3;--bg2:#FFFFFF;--bg3:#F2EEE5;--tx:#1C1C1E;--tx2:#6A6A6A;--tx3:#A9A9A9;
@@ -140,7 +141,7 @@ mark{background:rgba(184,54,42,.18);color:inherit;border-radius:3px}
   <div style="margin-top:8px;max-width:600px;margin-left:auto;margin-right:auto" data-i18n="disc">教育部の辞典に見出しが無い語（台湾語からの借用語など）は、台湾で実際に使われている読みを採用し、その旨を記しています。誤りを見つけたらぜひ教えてください。</div>
 </footer>
 
-<script src="tts.js?v=63"></script>
+<script src="tts.js?v=64"></script>
 <script src="readings-fix.js?v=1"></script>
 <script>
 const T = {
@@ -289,7 +290,7 @@ function render(){
         <div class="pair"><span class="old">${esc(r.bad||"")}</span><span class="arr">→</span><span class="new">${esc(r.good||"")}</span><span class="py">${esc(r.goodPy||"")}</span></div>
         ${r.ex?`<div class="exw"><b>${hl(r.ex,q)}</b> <span class="z">${esc(r.exZy||"")}</span>${m?" · "+esc(m):""}</div>`:""}
       </div>
-      <button class="spk" onclick="say('${esc(r.ex||r.c)}',this)" aria-label="play">🔊</button>
+      <button class="spk" onclick="say('${esc(r.ex||r.c)}',this)" aria-label="play">${icon("volume",{size:17})}</button>
     </div>`;
   }).join("");
 }
@@ -300,7 +301,7 @@ function renderCtx(){
       <div class="pair"><span class="old">${esc(r.bad)}</span><span class="arr">→</span><span class="new">${esc(r.zy)}</span></div>
       <div class="exw">${esc(t(r.note))}</div>
     </div>
-    <button class="spk" onclick="say('${esc(r.w)}',this)" aria-label="play">🔊</button>
+    <button class="spk" onclick="say('${esc(r.w)}',this)" aria-label="play">${icon("volume",{size:17})}</button>
   </div>`).join("");
 }
 function renderLog(){

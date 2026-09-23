@@ -109,7 +109,7 @@ const Sync = (() => {
     el.style.display = "";
     if (user) {
       const name = (user.displayName || "U").trim();
-      el.innerHTML = `<button class="lang-btn" title="${name} — ${twT("syncLogout")}" onclick="Sync.logout()">☁️ ${name.split(/\s+/)[0].slice(0, 6)}</button>`;
+      el.innerHTML = `<button class="lang-btn" title="${name} — ${twT("syncLogout")}" onclick="Sync.logout()">${icon("cloud",{size:15})} ${name.split(/\s+/)[0].slice(0, 6)}</button>`;
     } else {
       el.innerHTML = `<button class="lang-btn" onclick="Sync.login()">${twT("syncLogin")}</button>`;
     }

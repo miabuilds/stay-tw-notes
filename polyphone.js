@@ -194,7 +194,7 @@ const POLY = (() => {
       <div class="poly-r-h"><b>${r.zy}</b> <span style="color:var(--tx3)">${r.py}</span> — ${r.m[mk] || r.m.j}</div>
       <div class="poly-r-ex">${r.ex.map(w => `<button class="poly-ex" onclick="POLY.say('${w}','${p.c}','${r.py}')">${w} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>`).join("")}</div></div>`).join("");
     document.getElementById("polyFb").innerHTML = `<div class="qz-fb ${ok?'ok':'ng'}">
-      <div style="font-weight:700;font-size:15px">${ok ? "⭕ "+twT("qzRight") : "❌ "+twT("qzWrong")}</div>
+      <div style="font-weight:700;font-size:15px">${ok ? icon("check",{size:17}) : icon("x",{size:17})} ${ok ? twT("qzRight") : twT("qzWrong")}</div>
       <div style="margin:8px 0 4px">${twT("polyIn").replace("%w", it.word)}<b style="font-size:20px">${p.c}</b> ＝ <b style="font-size:20px;color:var(--ac)">${p.r[it.ri].zy}</b>（${p.r[it.ri].py}）${favBtn(p.c)}</div>
       <div style="text-align:left;margin-top:10px">${rows}</div>
       <div style="margin-top:14px"><button class="btn primary" onclick="POLY.next()">${twT("quizNext")} ›</button></div></div>`;

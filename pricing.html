@@ -51,12 +51,13 @@ h1{font-size:30px;font-weight:800;margin:26px 0 6px;letter-spacing:.5px}
 footer{margin-top:36px;font-size:12.5px;color:var(--tx3);border-top:1px solid var(--line);padding-top:18px}
 footer a{color:var(--tx2)}
 </style>
+<script src="icons.js?v=1"></script>
 </head>
 <body>
 <main class="wrap">
   <div class="top">
     <button onclick="stwBack()" aria-label="Back" style="font:inherit;font-size:14px;color:var(--tx2);background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:6px 12px;cursor:pointer;line-height:1;display:inline-flex;align-items:center;gap:5px"><span style="font-size:16px">←</span> <span id="backTxt"></span></button>
-    <div class="logo">🐻</div>
+    <img class="logo" src="images/bear.svg" alt="" style="width:26px;height:30px">
     <b>台灣華語 StayTW</b>
     <div class="langs" id="langs"></div>
   </div>
@@ -85,7 +86,7 @@ var CUR={
 };
 var T={
  ja:{name:'日本語',title:'プランと料金',lead:'基礎コンテンツは無料。練習ツールを無制限に使いたい・全コンテンツを解放したいときに有料プランへ。',
-   freeH:'✅ 無料で使える',freeP:'単語カード・単語リスト・注音（ㄅㄆㄇ）・文法・場面別フレーズ・分級リーディング —— 登録不要・無料。',
+   freeH:'無料で使える',freeP:'単語カード・単語リスト・注音（ㄅㄆㄇ）・文法・場面別フレーズ・分級リーディング —— 登録不要・無料。',
    mN:'月額',yN:'年額',lN:'買い切り',
    mC:'自動更新・いつでも解約可',yC:(pm)=>'月あたり '+CUR.ja.sym+pm+' ・自動更新',lC:'一度きり・更新なし',
    f1:['練習ツールすべて無制限','記事すべて解放','学習履歴のクラウド同期'],
@@ -97,7 +98,7 @@ var T={
    lTerms:'利用規約',lRefund:'返金ポリシー',lPriv:'プライバシー',lContact:'お問い合わせ',
    foot:'台灣華語 StayTW · 台湾華語（繁体字）オンライン学習'},
  zh:{name:'繁中',title:'方案與價目表',lead:'基礎學習內容永久免費。想無限次使用練習工具、解鎖全部內容，再升級付費方案即可。',
-   freeH:'✅ 免費開放',freeP:'單字卡與單字列表、注音（ㄅㄆㄇ）、文法、生活情境片語、分級閱讀 —— 免付費、免註冊即可使用。',
+   freeH:'免費開放',freeP:'單字卡與單字列表、注音（ㄅㄆㄇ）、文法、生活情境片語、分級閱讀 —— 免付費、免註冊即可使用。',
    mN:'月費訂閱',yN:'年費訂閱',lN:'買斷方案',
    mC:'自動續扣，可隨時取消',yC:(pm)=>'平均每月 '+CUR.zh.sym+pm+' ・自動續扣',lC:'一次付清・永不續扣',
    f1:['全部練習工具無限使用','全部深度文章解鎖','學習記錄雲端同步'],
@@ -109,7 +110,7 @@ var T={
    lTerms:'服務條款',lRefund:'退款政策',lPriv:'隱私權政策',lContact:'聯絡我們',
    foot:'台灣華語 StayTW · 線上台灣華語（繁體中文）學習平台'},
  en:{name:'EN',title:'Plans & Pricing',lead:'Core content is free forever. Upgrade when you want unlimited practice tools and all content unlocked.',
-   freeH:'✅ Free to use',freeP:'Flashcards & word list, Zhuyin (ㄅㄆㄇ), grammar, situational phrases, graded reading —— free, no sign-up.',
+   freeH:'Free to use',freeP:'Flashcards & word list, Zhuyin (ㄅㄆㄇ), grammar, situational phrases, graded reading —— free, no sign-up.',
    mN:'Monthly',yN:'Yearly',lN:'Lifetime',
    mC:'Auto-renews, cancel anytime',yC:(pm)=>'≈ '+CUR.en.sym+pm+' / month · auto-renews',lC:'One-time · no renewal',
    f1:['All practice tools, unlimited','All articles unlocked','Cloud sync of progress'],
@@ -121,7 +122,7 @@ var T={
    lTerms:'Terms',lRefund:'Refund Policy',lPriv:'Privacy',lContact:'Contact',
    foot:'StayTW · Learn Taiwan Mandarin (Traditional Chinese) online'},
  ko:{name:'한국어',title:'요금제',lead:'기본 콘텐츠는 무료. 연습 도구를 무제한으로 쓰고 모든 콘텐츠를 열려면 유료 플랜으로 업그레이드하세요.',
-   freeH:'✅ 무료 이용',freeP:'단어 카드·단어 목록, 주음(ㄅㄆㄇ), 문법, 상황별 표현, 등급별 읽기 —— 무료, 가입 불필요.',
+   freeH:'무료 이용',freeP:'단어 카드·단어 목록, 주음(ㄅㄆㄇ), 문법, 상황별 표현, 등급별 읽기 —— 무료, 가입 불필요.',
    mN:'월간',yN:'연간',lN:'평생',
    mC:'자동 갱신, 언제든 해지',yC:(pm)=>'월 약 '+CUR.ko.sym+pm+' · 자동 갱신',lC:'1회 결제 · 갱신 없음',
    f1:['모든 연습 도구 무제한','모든 아티클 잠금 해제','학습 기록 클라우드 동기화'],
@@ -209,7 +210,7 @@ function startSubscribe(btn){
   showNotice(); return false;
 }
 function showNotice(){
-  var msg={ja:'ご選択ありがとうございます！Web のカード決済（PayUni）は近日開通予定です 🙌',zh:'感謝您的選擇！網頁信用卡結帳（統一金流 PayUni）即將開通 🙌',en:'Thanks! Web card checkout (PayUni) is coming soon 🙌',ko:'감사합니다! 웹 카드 결제(PayUni)가 곧 열립니다 🙌'}[lang];
+  var msg={ja:'ご選択ありがとうございます！Web のカード決済（PayUni）は近日開通予定です',zh:'感謝您的選擇！網頁信用卡結帳（統一金流 PayUni）即將開通',en:'Thanks! Web card checkout (PayUni) is coming soon',ko:'감사합니다! 웹 카드 결제(PayUni)가 곧 열립니다'}[lang];
   var n=document.getElementById('stwNotice');
   if(!n){n=document.createElement('div');n.id='stwNotice';n.style.cssText='position:fixed;left:50%;bottom:26px;transform:translateX(-50%);max-width:90%;background:var(--tx);color:var(--bg);padding:13px 20px;border-radius:12px;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:999;text-align:center;line-height:1.6';document.body.appendChild(n);}
   n.innerHTML=msg+'<br><a href="mailto:stayjpplan@gmail.com" style="color:#ffb3ac">stayjpplan@gmail.com</a>';

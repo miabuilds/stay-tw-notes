@@ -107,6 +107,7 @@ main{flex:1;padding:18px}
 .cta p{font-size:13.5px;color:var(--tx2);margin-bottom:12px}
 .cta a{display:inline-block;background:var(--ac);color:#fff;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;text-decoration:none}
 </style>
+<script src="icons.js?v=1"></script>
 </head>
 <body>
 <div class="app">
@@ -120,39 +121,39 @@ main{flex:1;padding:18px}
   <div class="hints" id="hints"></div>
   <div id="micNote" class="micnote"></div>
   <div class="inbar" id="inbar" style="display:none">
-    <button id="micBtn" class="mic" onclick="toggleRec()" title="🎤"><svg viewBox="0 0 24 24" class="ic" style="width:20px;height:20px"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M19 12a7 7 0 0 1-14 0M12 19v3"/></svg></button>
+    <button id="micBtn" class="mic" onclick="toggleRec()" title=""><svg viewBox="0 0 24 24" class="ic" style="width:20px;height:20px"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M19 12a7 7 0 0 1-14 0M12 19v3"/></svg></button>
     <input id="inp" placeholder="…" autocomplete="off">
     <button id="sendBtn" onclick="send()"><svg viewBox="0 0 24 24" class="ic" style="width:20px;height:20px"><path d="M4 12l16-8-6 8 6 8z"/></svg></button>
   </div>
 </div>
 <script>
 const T = {
-  ja:{ h1:"AI と台湾華語で会話", sub:"シーンを選んで、繁体字＋台湾の言い方で実際に話してみよう。AI が優しく直してくれます。", ph:"台湾華語で入力…", showTr:"訳", play:"再生", startOver:"別のシーン", quota:"本日の無料体験を使い切りました。アプリでもっと話せます。", ctaP:"実際に「使える」まで練習するなら。単語タップで意味・注音、間違えたら自動で復習。", ctaBtn:"StayTW を無料で試す →", err:"通信エラー。もう一度試してください。", micOn:"🎤 聞いています…台湾華語で話してみて（話し終わったらもう一度タップ）", micNo:"このブラウザは音声入力に非対応。入力欄に打ってね（スマホの Chrome / Safari は対応）", micDenied:"🎤 マイクがブロックされています。サイトのマイク許可をオンにして再試行。", micErr:"🎤 認識が中断。もう一度マイクをタップ。", hintToggle:"💡 なんて返す?ヒントを見る", hintLabel:"💬 こう言えます（タップで入力欄に、直してから送信OK）:", hearIt:"聞く", save:"保存", favTitle:"保存した文", favEmpty:"まだありません。会話中に「☆保存」でお気に入りの言い回しを貯めよう。", endBtn:"終了・採点", capMsg:"たくさん話せました！採点します", reviewing:"あなたの表現を整理中…", rvHead:"今回の会話の出来", rvGood:"良かった点", rvImprove:"改善点", rvTip:"アドバイス", again:"もう一度", logsTitle:"会話の記録", logsEmpty:"まだ記録がありません。会話を終えて採点を見ると、ここに保存されます。", turns:"往復", logConvo:"会話の内容",
+  ja:{ h1:"AI と台湾華語で会話", sub:"シーンを選んで、繁体字＋台湾の言い方で実際に話してみよう。AI が優しく直してくれます。", ph:"台湾華語で入力…", showTr:"訳", play:"再生", startOver:"別のシーン", quota:"本日の無料体験を使い切りました。アプリでもっと話せます。", ctaP:"実際に「使える」まで練習するなら。単語タップで意味・注音、間違えたら自動で復習。", ctaBtn:"StayTW を無料で試す →", err:"通信エラー。もう一度試してください。", micOn:"聞いています…台湾華語で話してみて（話し終わったらもう一度タップ）", micNo:"このブラウザは音声入力に非対応。入力欄に打ってね（スマホの Chrome / Safari は対応）", micDenied:"マイクがブロックされています。サイトのマイク許可をオンにして再試行。", micErr:"認識が中断。もう一度マイクをタップ。", hintToggle:"なんて返す?ヒントを見る", hintLabel:"こう言えます（タップで入力欄に、直してから送信OK）:", hearIt:"聞く", save:"保存", favTitle:"保存した文", favEmpty:"まだありません。会話中に「☆保存」でお気に入りの言い回しを貯めよう。", endBtn:"終了・採点", capMsg:"たくさん話せました！採点します", reviewing:"あなたの表現を整理中…", rvHead:"今回の会話の出来", rvGood:"良かった点", rvImprove:"改善点", rvTip:"アドバイス", again:"もう一度", logsTitle:"会話の記録", logsEmpty:"まだ記録がありません。会話を終えて採点を見ると、ここに保存されます。", turns:"往復", logConvo:"会話の内容",
     scenes:[
-      {id:"boba", em:"🧋", nm:"ドリンク店", rl:"あなた=お客", scene:"A Taiwanese bubble tea shop (珍珠奶茶店). The learner is a customer ordering a drink. Ask about sweetness (甜度) and ice (冰塊)."},
-      {id:"mrt", em:"🚇", nm:"捷運で道案内", rl:"あなた=旅行者", scene:"At a Taipei MRT (捷運) station. The learner is a traveler asking how to get somewhere and how to use the 悠遊卡."},
-      {id:"night", em:"🏮", nm:"夜市で注文", rl:"あなた=お客", scene:"A lively Taiwan night market (夜市) food stall. The learner orders street food and asks the price."},
-      {id:"friend", em:"🙋", nm:"台湾の友達", rl:"あなた=初対面", scene:"Meeting a friendly Taiwanese person for the first time. Casual small talk: name, where you're from, why you're learning Chinese."},
-      {id:"conv", em:"🏪", nm:"コンビニ", rl:"あなた=お客", scene:"A Taiwanese convenience store (便利商店). The learner buys something, tops up an 悠遊卡, or picks up a package."},
-      {id:"rest", em:"🍜", nm:"レストラン", rl:"あなた=お客", scene:"A Taiwan restaurant. The learner is seated, orders a meal, asks for recommendations."}
+      {id:"boba", em:"cup", nm:"ドリンク店", rl:"あなた=お客", scene:"A Taiwanese bubble tea shop (珍珠奶茶店). The learner is a customer ordering a drink. Ask about sweetness (甜度) and ice (冰塊)."},
+      {id:"mrt", em:"train", nm:"捷運で道案内", rl:"あなた=旅行者", scene:"At a Taipei MRT (捷運) station. The learner is a traveler asking how to get somewhere and how to use the 悠遊卡."},
+      {id:"night", em:"lantern", nm:"夜市で注文", rl:"あなた=お客", scene:"A lively Taiwan night market (夜市) food stall. The learner orders street food and asks the price."},
+      {id:"friend", em:"user", nm:"台湾の友達", rl:"あなた=初対面", scene:"Meeting a friendly Taiwanese person for the first time. Casual small talk: name, where you're from, why you're learning Chinese."},
+      {id:"conv", em:"store", nm:"コンビニ", rl:"あなた=お客", scene:"A Taiwanese convenience store (便利商店). The learner buys something, tops up an 悠遊卡, or picks up a package."},
+      {id:"rest", em:"food", nm:"レストラン", rl:"あなた=お客", scene:"A Taiwan restaurant. The learner is seated, orders a meal, asks for recommendations."}
     ]},
-  ko:{ h1:"AI와 대만 중국어로 대화", sub:"상황을 골라 번체자＋대만식 표현으로 실제로 말해보세요. AI가 부드럽게 고쳐줍니다.", ph:"대만 중국어로 입력…", showTr:"번역", play:"재생", startOver:"다른 상황", quota:"오늘의 무료 체험을 다 썼어요. 앱에서 더 대화할 수 있어요.", ctaP:"실제로 '쓸 수 있을' 때까지 연습하려면. 단어 탭하면 뜻·주음, 틀리면 자동 복습.", ctaBtn:"StayTW 무료로 시작 →", err:"통신 오류. 다시 시도해 주세요.", micOn:"🎤 듣고 있어요… 대만 중국어로 말해보세요 (끝나면 다시 탭)", micNo:"이 브라우저는 음성 입력을 지원하지 않아요. 직접 입력하세요 (모바일 Chrome / Safari 지원).", micDenied:"🎤 마이크가 차단됐어요. 사이트 마이크 권한을 허용하고 다시 시도.", micErr:"🎤 인식이 중단됐어요. 마이크를 다시 탭하세요.", hintToggle:"💡 뭐라고 답하지? 힌트 보기", hintLabel:"💬 이렇게 말할 수 있어요 (탭하면 입력창에, 고쳐서 보내도 OK):", hearIt:"듣기", save:"저장", favTitle:"저장한 문장", favEmpty:"아직 없어요. 대화 중 '☆저장'으로 마음에 드는 표현을 모아보세요.", endBtn:"종료・채점", capMsg:"충분히 대화했어요! 채점해 드릴게요", reviewing:"당신의 표현을 정리하는 중…", rvHead:"이번 대화의 결과", rvGood:"잘한 점", rvImprove:"개선할 점", rvTip:"팁", again:"다시 하기", logsTitle:"대화 기록", logsEmpty:"아직 기록이 없어요. 대화를 마치고 채점을 보면 여기에 저장됩니다.", turns:"번", logConvo:"대화 내용",
+  ko:{ h1:"AI와 대만 중국어로 대화", sub:"상황을 골라 번체자＋대만식 표현으로 실제로 말해보세요. AI가 부드럽게 고쳐줍니다.", ph:"대만 중국어로 입력…", showTr:"번역", play:"재생", startOver:"다른 상황", quota:"오늘의 무료 체험을 다 썼어요. 앱에서 더 대화할 수 있어요.", ctaP:"실제로 '쓸 수 있을' 때까지 연습하려면. 단어 탭하면 뜻·주음, 틀리면 자동 복습.", ctaBtn:"StayTW 무료로 시작 →", err:"통신 오류. 다시 시도해 주세요.", micOn:"듣고 있어요… 대만 중국어로 말해보세요 (끝나면 다시 탭)", micNo:"이 브라우저는 음성 입력을 지원하지 않아요. 직접 입력하세요 (모바일 Chrome / Safari 지원).", micDenied:"마이크가 차단됐어요. 사이트 마이크 권한을 허용하고 다시 시도.", micErr:"인식이 중단됐어요. 마이크를 다시 탭하세요.", hintToggle:"뭐라고 답하지? 힌트 보기", hintLabel:"이렇게 말할 수 있어요 (탭하면 입력창에, 고쳐서 보내도 OK):", hearIt:"듣기", save:"저장", favTitle:"저장한 문장", favEmpty:"아직 없어요. 대화 중 '☆저장'으로 마음에 드는 표현을 모아보세요.", endBtn:"종료・채점", capMsg:"충분히 대화했어요! 채점해 드릴게요", reviewing:"당신의 표현을 정리하는 중…", rvHead:"이번 대화의 결과", rvGood:"잘한 점", rvImprove:"개선할 점", rvTip:"팁", again:"다시 하기", logsTitle:"대화 기록", logsEmpty:"아직 기록이 없어요. 대화를 마치고 채점을 보면 여기에 저장됩니다.", turns:"번", logConvo:"대화 내용",
     scenes:[
-      {id:"boba", em:"🧋", nm:"버블티 가게", rl:"당신=손님", scene:"A Taiwanese bubble tea shop (珍珠奶茶店). The learner is a customer ordering a drink. Ask about sweetness (甜度) and ice (冰塊)."},
-      {id:"mrt", em:"🚇", nm:"MRT 길 묻기", rl:"당신=여행자", scene:"At a Taipei MRT (捷運) station. The learner is a traveler asking how to get somewhere and how to use the 悠遊卡."},
-      {id:"night", em:"🏮", nm:"야시장 주문", rl:"당신=손님", scene:"A lively Taiwan night market (夜市) food stall. The learner orders street food and asks the price."},
-      {id:"friend", em:"🙋", nm:"대만 친구", rl:"당신=초면", scene:"Meeting a friendly Taiwanese person for the first time. Casual small talk: name, where you're from, why you're learning Chinese."},
-      {id:"conv", em:"🏪", nm:"편의점", rl:"당신=손님", scene:"A Taiwanese convenience store (便利商店). The learner buys something, tops up an 悠遊卡, or picks up a package."},
-      {id:"rest", em:"🍜", nm:"식당", rl:"당신=손님", scene:"A Taiwan restaurant. The learner is seated, orders a meal, asks for recommendations."}
+      {id:"boba", em:"cup", nm:"버블티 가게", rl:"당신=손님", scene:"A Taiwanese bubble tea shop (珍珠奶茶店). The learner is a customer ordering a drink. Ask about sweetness (甜度) and ice (冰塊)."},
+      {id:"mrt", em:"train", nm:"MRT 길 묻기", rl:"당신=여행자", scene:"At a Taipei MRT (捷運) station. The learner is a traveler asking how to get somewhere and how to use the 悠遊卡."},
+      {id:"night", em:"lantern", nm:"야시장 주문", rl:"당신=손님", scene:"A lively Taiwan night market (夜市) food stall. The learner orders street food and asks the price."},
+      {id:"friend", em:"user", nm:"대만 친구", rl:"당신=초면", scene:"Meeting a friendly Taiwanese person for the first time. Casual small talk: name, where you're from, why you're learning Chinese."},
+      {id:"conv", em:"store", nm:"편의점", rl:"당신=손님", scene:"A Taiwanese convenience store (便利商店). The learner buys something, tops up an 悠遊卡, or picks up a package."},
+      {id:"rest", em:"food", nm:"식당", rl:"당신=손님", scene:"A Taiwan restaurant. The learner is seated, orders a meal, asks for recommendations."}
     ]},
-  en:{ h1:"Chat in Taiwan Mandarin with AI", sub:"Pick a scene and actually talk — traditional characters, Taiwan phrasing. The AI gently corrects you.", ph:"Type in Taiwan Mandarin…", showTr:"Translate", play:"Play", startOver:"New scene", quota:"You've used today's free practice. The app lets you chat more.", ctaP:"Practice until you can really use it. Tap any word for meaning & zhuyin; mistakes go to review.", ctaBtn:"Try StayTW free →", err:"Network error. Please try again.", micOn:"🎤 Listening… speak in Taiwan Mandarin (tap again when done)", micNo:"This browser doesn't support voice input — please type instead (mobile Chrome / Safari work).", micDenied:"🎤 Microphone blocked: allow mic access for this site and try again.", micErr:"🎤 Recognition stopped — tap the mic to retry.", hintToggle:"💡 Not sure how to reply? See hints", hintLabel:"💬 You could say (tap to fill in, then edit before sending):", hearIt:"Hear it", save:"Save", favTitle:"Saved sentences", favEmpty:"Nothing yet. Tap ☆ Save during a chat to collect phrases you like.", endBtn:"Finish & score", capMsg:"Great chat! Let's see your score", reviewing:"Reviewing your performance…", rvHead:"How this chat went", rvGood:"Well done", rvImprove:"To improve", rvTip:"Tip", again:"Chat again", logsTitle:"Chat history", logsEmpty:"No records yet. Finish a chat and view the score — it will be saved here.", turns:"turns", logConvo:"The conversation",
+  en:{ h1:"Chat in Taiwan Mandarin with AI", sub:"Pick a scene and actually talk — traditional characters, Taiwan phrasing. The AI gently corrects you.", ph:"Type in Taiwan Mandarin…", showTr:"Translate", play:"Play", startOver:"New scene", quota:"You've used today's free practice. The app lets you chat more.", ctaP:"Practice until you can really use it. Tap any word for meaning & zhuyin; mistakes go to review.", ctaBtn:"Try StayTW free →", err:"Network error. Please try again.", micOn:"Listening… speak in Taiwan Mandarin (tap again when done)", micNo:"This browser doesn't support voice input — please type instead (mobile Chrome / Safari work).", micDenied:"Microphone blocked: allow mic access for this site and try again.", micErr:"Recognition stopped — tap the mic to retry.", hintToggle:"Not sure how to reply? See hints", hintLabel:"You could say (tap to fill in, then edit before sending):", hearIt:"Hear it", save:"Save", favTitle:"Saved sentences", favEmpty:"Nothing yet. Tap ☆ Save during a chat to collect phrases you like.", endBtn:"Finish & score", capMsg:"Great chat! Let's see your score", reviewing:"Reviewing your performance…", rvHead:"How this chat went", rvGood:"Well done", rvImprove:"To improve", rvTip:"Tip", again:"Chat again", logsTitle:"Chat history", logsEmpty:"No records yet. Finish a chat and view the score — it will be saved here.", turns:"turns", logConvo:"The conversation",
     scenes:[
-      {id:"boba", em:"🧋", nm:"Bubble tea", rl:"You = customer", scene:"A Taiwanese bubble tea shop (珍珠奶茶店). The learner is a customer ordering a drink. Ask about sweetness (甜度) and ice (冰塊)."},
-      {id:"mrt", em:"🚇", nm:"MRT directions", rl:"You = traveler", scene:"At a Taipei MRT (捷運) station. The learner is a traveler asking how to get somewhere and how to use the 悠遊卡."},
-      {id:"night", em:"🏮", nm:"Night market", rl:"You = customer", scene:"A lively Taiwan night market (夜市) food stall. The learner orders street food and asks the price."},
-      {id:"friend", em:"🙋", nm:"Make a friend", rl:"You = new", scene:"Meeting a friendly Taiwanese person for the first time. Casual small talk: name, where you're from, why you're learning Chinese."},
-      {id:"conv", em:"🏪", nm:"Convenience store", rl:"You = customer", scene:"A Taiwanese convenience store (便利商店). The learner buys something, tops up an 悠遊卡, or picks up a package."},
-      {id:"rest", em:"🍜", nm:"Restaurant", rl:"You = customer", scene:"A Taiwan restaurant. The learner is seated, orders a meal, asks for recommendations."}
+      {id:"boba", em:"cup", nm:"Bubble tea", rl:"You = customer", scene:"A Taiwanese bubble tea shop (珍珠奶茶店). The learner is a customer ordering a drink. Ask about sweetness (甜度) and ice (冰塊)."},
+      {id:"mrt", em:"train", nm:"MRT directions", rl:"You = traveler", scene:"At a Taipei MRT (捷運) station. The learner is a traveler asking how to get somewhere and how to use the 悠遊卡."},
+      {id:"night", em:"lantern", nm:"Night market", rl:"You = customer", scene:"A lively Taiwan night market (夜市) food stall. The learner orders street food and asks the price."},
+      {id:"friend", em:"user", nm:"Make a friend", rl:"You = new", scene:"Meeting a friendly Taiwanese person for the first time. Casual small talk: name, where you're from, why you're learning Chinese."},
+      {id:"conv", em:"store", nm:"Convenience store", rl:"You = customer", scene:"A Taiwanese convenience store (便利商店). The learner buys something, tops up an 悠遊卡, or picks up a package."},
+      {id:"rest", em:"food", nm:"Restaurant", rl:"You = customer", scene:"A Taiwan restaurant. The learner is seated, orders a meal, asks for recommendations."}
     ]}
 };
 let LANG=(function(){try{var s=localStorage.getItem("stw-lang");return(s&&T[s])?s:"ja";}catch(e){return"ja";}})();
@@ -232,8 +233,8 @@ function toIntro(){
   document.getElementById("inbar").style.display="none";
   document.getElementById("hints").innerHTML="";
   main().innerHTML='<div class="intro"><h1>'+tt("h1")+'</h1><p>'+tt("sub")+'</p><div class="scenes">'+
-    scenes().map(s=>'<div class="scene" onclick="startScene(\''+s.id+'\')"><span class="em">'+s.em+'</span><span class="nm">'+s.nm+'</span><div class="rl">'+s.rl+'</div></div>').join("")+'</div>'+
-    '<div class="intro-links"><button class="favlink" onclick="openLogs()">📋 '+tt("logsTitle")+(logList().length?' ('+logList().length+')':'')+'</button>'+
+    scenes().map(s=>'<div class="scene" onclick="startScene(\''+s.id+'\')"><span class="em">'+icon(s.em,{size:30})+'</span><span class="nm">'+s.nm+'</span><div class="rl">'+s.rl+'</div></div>').join("")+'</div>'+
+    '<div class="intro-links"><button class="favlink" onclick="openLogs()">'+tt("logsTitle")+(logList().length?' ('+logList().length+')':'')+'</button>'+
     '<button class="favlink" onclick="openFav()">⭐ '+tt("favTitle")+(favList().length?' ('+favList().length+')':'')+'</button></div></div>';
 }
 // 早退/換主題也要評分:對話中按 ‹,若已聊過就進評分頁,否則直接回首頁
@@ -254,7 +255,7 @@ function renderChat(){
   const c=document.getElementById("chat"); if(!c)return;
   c.innerHTML=history.map((m,i)=>{
     if(m.role==="me") return '<div class="msg me"><div class="bub"><div class="zh">'+esc(m.text)+'</div></div></div>';
-    if(m.role==="corr") return '<div class="corr">💡 '+esc(m.text)+'</div>';
+    if(m.role==="corr") return '<div class="corr">'+esc(m.text)+'</div>';
     return '<div class="msg ai"><div class="bub"><div class="zh">'+esc(m.reply)+'</div>'+(m.zhuyin?'<div class="zy">'+esc(m.zhuyin)+'</div>':'')+(m.translation?'<div class="tr" id="tr'+i+'">'+esc(m.translation)+'</div>':'')+'</div>'+
       '<div class="mrow"><button onclick="speak(\''+String(m.reply).replace(/'/g,"\\'")+'\')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg>'+tt("play")+'</button>'+(m.translation?'<button onclick="document.getElementById(\'tr'+i+'\').classList.toggle(\'show\')">'+tt("showTr")+'</button>':'')+'<button class="favstar'+(isFav(m.reply)?' on':'')+'" onclick="toggleFav(this,'+i+')">'+(isFav(m.reply)?"★":"☆")+' '+tt("save")+'</button></div></div>';
   }).join("");
@@ -273,7 +274,7 @@ function expandHints(){
   box.innerHTML='<div class="hints-lb">'+tt("hintLabel")+'</div><div class="hint-row">'+
     _hints.slice(0,3).map(h=>{ const j=JSON.stringify(h).replace(/"/g,"&quot;");
       return '<span class="hint-wrap"><button class="hint-chip" onclick="useHint('+j+')">'+esc(h)+'</button>'+
-        '<button class="hint-spk" title="'+tt("hearIt")+'" onclick="event.stopPropagation();speak('+j+')">🔊</button></span>';
+        '<button class="hint-spk" title="'+tt("hearIt")+'" onclick="event.stopPropagation();speak('+j+')">'+icon("volume",{size:15})+'</button></span>';
     }).join("")+'</div>';
 }
 function useHint(h){ const inp=document.getElementById("inp"); inp.value=h; inp.focus(); }
@@ -294,7 +295,7 @@ function openFav(){
   document.getElementById("hints").innerHTML="";
   document.getElementById("backBtn").style.display="";
   const l=favList();
-  const body=l.length? l.map((x,i)=>'<div class="favitem"><div class="favtx"><div class="fzh">'+esc(x.reply)+'</div>'+(x.zhuyin?'<div class="fzy">'+esc(x.zhuyin)+'</div>':'')+(x.translation?'<div class="ftr">'+esc(x.translation)+'</div>':'')+'</div><div class="favact"><button onclick="speak('+JSON.stringify(x.reply).replace(/"/g,"&quot;")+')">🔊</button><button onclick="removeFav('+i+')">🗑</button></div></div>').join("") : '<div class="favempty">'+tt("favEmpty")+'</div>';
+  const body=l.length? l.map((x,i)=>'<div class="favitem"><div class="favtx"><div class="fzh">'+esc(x.reply)+'</div>'+(x.zhuyin?'<div class="fzy">'+esc(x.zhuyin)+'</div>':'')+(x.translation?'<div class="ftr">'+esc(x.translation)+'</div>':'')+'</div><div class="favact"><button onclick="speak('+JSON.stringify(x.reply).replace(/"/g,"&quot;")+')">'+icon("volume",{size:15})+'</button><button onclick="removeFav('+i+')">'+icon("trash",{size:15})+'</button></div></div>').join("") : '<div class="favempty">'+tt("favEmpty")+'</div>';
   main().innerHTML='<div class="favwrap"><h2 class="favh">'+tt("favTitle")+'</h2>'+body+'</div>';
 }
 
@@ -332,7 +333,7 @@ function renderReviewScreen(sc, rv){
   main().innerHTML='<div class="rvwrap">'+head+reviewLinesHTML(rv)+
     '<div class="rv-btns"><button class="primary" onclick="startScene(\''+sc.id+'\')">'+tt("again")+'</button>'+
     '<button class="ghost" onclick="toIntro()">'+tt("startOver")+'</button>'+
-    '<button class="ghost" onclick="openLogs()">📋 '+tt("logsTitle")+'</button></div></div>';
+    '<button class="ghost" onclick="openLogs()">'+tt("logsTitle")+'</button></div></div>';
 }
 // ── 對話紀錄(localStorage,最近20場)──
 const LOG_KEY="stw-chat-logs";
@@ -343,7 +344,7 @@ function saveLogEntry(sc, rv){
     ?{r:"me",t:m.text||""}:{r:"ai",t:m.reply||"",zy:m.zhuyin||"",tr:m.translation||""}).filter(m=>m.t);
   if(!msgs.length) return;
   const l=logList();
-  l.unshift({t:Date.now(),id:sc.id,em:sc.em||"💬",nm:sc.nm||"",score:(rv.score==null?null:Number(rv.score)),
+  l.unshift({t:Date.now(),id:sc.id,em:sc.em||"chat",nm:sc.nm||"",score:(rv.score==null?null:Number(rv.score)),
     good:rv.good||"",improve:rv.improve||"",tip:rv.tip||"",encourage:rv.encourage||"",msgs});
   logSaveAll(l);
 }
@@ -357,16 +358,16 @@ function openLogs(){
   const body=l.length? l.map((x,i)=>{ const has=x.score!=null;
     const ring=has?'<div class="logscore" style="background:'+scoreColor(x.score)+'">'+x.score+'</div>':'<div class="logscore" style="background:var(--tx3)">–</div>';
     const d=new Date(x.t); const dd=(d.getMonth()+1)+"/"+d.getDate();
-    return '<div class="logitem" onclick="viewLog('+i+')">'+ring+'<div class="logmeta"><div class="lt">'+esc(x.em+" "+x.nm)+'</div><div class="ld">'+dd+' ・ '+x.msgs.filter(m=>m.r==="me").length+' '+tt("turns")+'</div></div><button class="logdel" onclick="event.stopPropagation();removeLog('+i+')">🗑</button></div>';
+    return '<div class="logitem" onclick="viewLog('+i+')">'+ring+'<div class="logmeta"><div class="lt">'+esc(x.em+" "+x.nm)+'</div><div class="ld">'+dd+' ・ '+x.msgs.filter(m=>m.r==="me").length+' '+tt("turns")+'</div></div><button class="logdel" onclick="event.stopPropagation();removeLog('+i+')">'+icon("trash",{size:15})+'</button></div>';
   }).join("") : '<div class="favempty">'+tt("logsEmpty")+'</div>';
-  main().innerHTML='<div class="favwrap"><h2 class="favh">📋 '+tt("logsTitle")+'</h2>'+body+'</div>';
+  main().innerHTML='<div class="favwrap"><h2 class="favh">'+tt("logsTitle")+'</h2>'+body+'</div>';
 }
 function viewLog(i){
   const x=logList()[i]; if(!x)return;
   document.getElementById("backBtn").style.display="";
   const chat=x.msgs.map(m=>m.r==="me"
     ?'<div class="msg me"><div class="bub"><div class="zh">'+esc(m.t)+'</div></div></div>'
-    :'<div class="msg ai"><div class="bub"><div class="zh">'+esc(m.t)+'</div>'+(m.zy?'<div class="zy">'+esc(m.zy)+'</div>':'')+(m.tr?'<div class="tr show">'+esc(m.tr)+'</div>':'')+'</div><div class="mrow"><button onclick="speak('+JSON.stringify(m.t).replace(/"/g,"&quot;")+')">🔊 '+tt("play")+'</button></div></div>').join("");
+    :'<div class="msg ai"><div class="bub"><div class="zh">'+esc(m.t)+'</div>'+(m.zy?'<div class="zy">'+esc(m.zy)+'</div>':'')+(m.tr?'<div class="tr show">'+esc(m.tr)+'</div>':'')+'</div><div class="mrow"><button onclick="speak('+JSON.stringify(m.t).replace(/"/g,"&quot;")+')">'+icon("volume",{size:15})+' '+tt("play")+'</button></div></div>').join("");
   const has=x.score!=null;
   const head=has?'<div class="rv-head"><div class="ring" style="background:'+scoreColor(x.score)+'">'+x.score+'</div><div class="rv-htext">'+esc(x.em+" "+x.nm)+'</div></div>':'';
   main().innerHTML='<div class="rvwrap">'+head+reviewLinesHTML(x)+'<div style="margin:16px 0 6px;font-size:12px;color:var(--tx2)">'+tt("logConvo")+'</div><div class="chat">'+chat+'</div><div class="rv-btns"><button class="ghost" onclick="openLogs()">‹ '+tt("logsTitle")+'</button></div></div>';
@@ -385,7 +386,7 @@ async function callAI(){
     if(ai.correction){ history.splice(history.length-1,0,{role:"corr",text:ai.correction}); }
     renderChat(); renderHints(ai.hints); speak(ai.reply);
     if(history.filter(m=>m.role==="me").length>=MAX_TURNS){   // 輪數到頂→自動收尾看評分(成本天花板)
-      const c=document.getElementById("chat"); if(c)c.insertAdjacentHTML("beforeend",'<div class="corr">🎉 '+tt("capMsg")+'</div>');
+      const c=document.getElementById("chat"); if(c)c.insertAdjacentHTML("beforeend",'<div class="corr">'+tt("capMsg")+'</div>');
       window.scrollTo(0,document.body.scrollHeight);
       setTimeout(function(){ if(curScene) endReview(); }, 1600);
     }

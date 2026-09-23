@@ -142,7 +142,7 @@ const Paywall = (() => {
           <em class="pw-per">${twT("pwPerMonth").replace("{p}", YEARLY_PER_MONTH)}</em></div>
         <div class="pw-plan"><b>${PRICES.lifetime}</b><span>${twT("pwLifetime")}</span></div>
       </div>
-      <p class="pw-trial">🎁 ${twT("pwTrial").replace("{n}", String(TRIAL_DAYS))}</p>
+      <p class="pw-trial">${icon("gift",{size:15})} ${twT("pwTrial").replace("{n}", String(TRIAL_DAYS))}</p>
       ${isNative() ? `<button class="btn primary" style="width:100%;padding:13px" onclick="Paywall.openNative()">${twT("pwCtaNative")}</button>` : webCta()}
       ${feature === "fav" || feature === "article" || feature === "myvocab" ? "" : `<p style="text-align:center;font-size:12px;color:var(--tx3);margin-top:10px">${twT("pwTomorrow")}</p>`}`;
     bg.classList.add("show");

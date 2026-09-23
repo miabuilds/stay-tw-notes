@@ -1251,7 +1251,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
   <div id="inAppNote" style="display:none;text-align:left;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-top:4px">
     <div style="font-weight:700;margin-bottom:8px" data-i18n="inAppTitle">アプリ内ブラウザでは Google ログインできません</div>
     <p style="font-size:13px;color:var(--tx2);line-height:1.9;margin-bottom:12px" data-i18n="inAppMsg">LINE・Threads・Instagram などのアプリ内ブラウザは Google ログインをブロックします。右上か右下の「…」メニューから「ブラウザで開く（Safari / Chrome）」を選んで、そちらでログインしてください。</p>
-    <button class="btn primary" style="width:100%" onclick="STW_WEB.copyUrl()"><span data-i18n="inAppCopy">🔗 リンクをコピー</span></button>
+    <button class="btn primary" style="width:100%" onclick="STW_WEB.copyUrl()"><i data-ic="link" data-sz="16"></i><span data-i18n="inAppCopy">リンクをコピー</span></button>
   </div>
 </div></div>
 
@@ -1395,9 +1395,9 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=122"></script>
+<script src="i18n.js?v=123"></script>
 <script src="native-ui.js?v=1"></script>
-<script src="tts.js?v=63"></script>
+<script src="tts.js?v=64"></script>
 <script src="vocab-l1.js?v=52"></script>
 <script src="vocab-l2.js?v=53"></script>
 <script src="vocab-l3.js?v=52"></script>
@@ -1449,18 +1449,19 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 <script src="articles-19.js?v=1"></script>
 <script src="articles-20.js?v=1"></script>
 <script src="writing-data.js?v=52"></script>
-<script src="paywall.js?v=104"></script>
+<script src="icons.js?v=1"></script>
+<script src="paywall.js?v=105"></script>
 <script src="essentials.js?v=2"></script>
-<script src="essentials-ui.js?v=2"></script>
+<script src="essentials-ui.js?v=3"></script>
 <script src="fortune.js?v=4"></script>
 <script src="myvocab.js?v=2"></script>
 <script src="whatsnew.js?v=3"></script>
 <script src="ytshadow.js?v=25"></script>
-<script src="listen.js?v=3"></script>
-<script src="websync.js?v=62"></script>
-<script src="srs.js?v=57"></script>
-<script src="mock-exam.js?v=58"></script>
-<script src="polyphone.js?v=3"></script>
+<script src="listen.js?v=4"></script>
+<script src="websync.js?v=63"></script>
+<script src="srs.js?v=58"></script>
+<script src="mock-exam.js?v=59"></script>
+<script src="polyphone.js?v=4"></script>
 <script>
 /* ===== テーマ ===== */
 /* ===== 表示設定：テーマ・文字サイズ・アクセント・言語（統一設定シート）===== */
@@ -1613,7 +1614,7 @@ function openWrongBook(lv){
       <div class="wb-q">${x.q?esc(x.q)+' → ':''}<b class="wb-a" onclick="speakZh('${(x.word||'').replace(/'/g,"")}')">${esc(x.correct||"")}</b>
         ${x.word?`<button class="tts-btn" style="width:26px;height:26px;font-size:11px" onclick="speakZh('${(x.word||'').replace(/'/g,"")}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>`:''}</div>
       ${x.detail?`<div class="wb-d">${esc(x.detail)}</div>`:''}
-      <button class="wb-del" onclick="WrongBook.removeTs(${x.ts});openWrongBook('${lv}')">🗑</button></div>`).join("");
+      <button class="wb-del" onclick="WrongBook.removeTs(${x.ts});openWrongBook('${lv}')">${icon("trash",{size:16})}</button></div>`).join("");
 }
 function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
@@ -2071,11 +2072,11 @@ function renderPhrases(){
   // 以前ここが {ja,en,ko} 固定で、vi/id だと見出しが undefined、note が日本語のまま出ていた。
   const lang = twGetLang(), mk = twMKey(), ck = mk;
   document.getElementById("phFilterRow").innerHTML = [
-    ["all", twT("phAll")], ["travel", "🧳 " + twT("phTravel")], ["life", "🏠 " + twT("phLife")]
+    ["all", twT("phAll")], ["travel", icon("briefcase",{size:15}) + " " + twT("phTravel")], ["life", icon("home",{size:15}) + " " + twT("phLife")]
   ].map(([f,label])=>`<button class="pos-btn ${phFilter===f?"on":""}" onclick="setPhFilter('${f}')">${label}</button>`).join("");
   const secs = PHRASES_L1.filter(s => phFilter === "all" || s.t === phFilter || s.t === "both");
   // 生活会話（対話集 /life）への入口。フレーズは単文、/life は「相手の言葉＋自分の返し」の対話。
-  const lifeLink = `<a class="ph-life" href="life?lang=${lang}&utm_source=tool_phrases"><span class="ph-life-ic">💬</span><span>${twT("phLifeLink")}</span><span class="ph-life-arr">→</span></a>`;
+  const lifeLink = `<a class="ph-life" href="life?lang=${lang}&utm_source=tool_phrases"><span class="ph-life-ic">${icon("chat",{size:18})}</span><span>${twT("phLifeLink")}</span><span class="ph-life-arr">→</span></a>`;
   document.getElementById("phList").innerHTML = lifeLink + secs.map(sec=>`
     <div class="ph-cat">${sec.cat[ck] || sec.cat.e || sec.cat.j}</div>
     ${sec.items.map(it=>`
@@ -2084,7 +2085,7 @@ function renderPhrases(){
           <div class="ph-z">${it.z}</div>
           <div class="ph-py">${it.py}</div>
           <div class="ph-m">${it.m[mk] || it.m.e || it.m.j}</div>
-          ${it.note ? `<div class="ph-note">💡 ${it.note[ck] || it.note.e || it.note.j}</div>` : ""}
+          ${it.note ? `<div class="ph-note">${icon("bulb",{size:15})} ${it.note[ck] || it.note.e || it.note.j}</div>` : ""}
         </div>
         <button class="tts-btn" onclick="event.stopPropagation();speakZh('${it.z}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>
       </div>`).join("")}`).join("");
@@ -2180,7 +2181,7 @@ function qzTypeAnswer(){
   const ex = (w.ex && w.ex.z) ? `<div style="font-size:13px;color:var(--tx2);margin-top:6px">${w.ex.z}<br>${w.ex[mk] || w.ex.e || w.ex.j||""}</div>` : "";
   document.getElementById("qzTypeResult").innerHTML =
     `<div class="qz-fb ${ok?'ok':'ng'}">
-      <div style="font-size:15px;font-weight:700">${ok ? "⭕ "+twT("qzRight") : "❌ "+twT("qzWrong")}</div>
+      <div style="font-size:15px;font-weight:700">${(ok ? icon("check",{size:17}) : icon("x",{size:17}))} ${ok ? twT("qzRight") : twT("qzWrong")}</div>
       <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${twZy(w.zy)}｜${w.py}）</div>
       <div style="font-size:14px;color:var(--tx2);margin-top:2px">${w.m[mk] || w.m.e || w.m.j}</div>${ex}
       <div style="margin-top:16px"><button class="btn primary" onclick="qzAdvance()">${twT("quizNext")} ›</button></div>
@@ -2217,7 +2218,7 @@ function qzShowFeedback(w, ok, pickWord){
   const ex = (w.ex && w.ex.z) ? `<div style="font-size:13px;color:var(--tx2);margin-top:6px">${w.ex.z}<br>${w.ex[mk] || w.ex.e || w.ex.j||""}</div>` : "";
   document.getElementById("qzBox").insertAdjacentHTML("beforeend",
     `<div class="qz-fb ${ok?'ok':'ng'}">
-      <div style="font-weight:700;font-size:15px">${ok?"⭕ "+twT("qzRight"):"❌ "+twT("qzWrong")}</div>
+      <div style="font-weight:700;font-size:15px">${(ok ? icon("check",{size:17}) : icon("x",{size:17}))} ${ok ? twT("qzRight") : twT("qzWrong")}</div>
       <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${twZy(w.zy)}｜${w.py}）</div>
       <div style="font-size:14px;color:var(--tx2);margin-top:2px">${w.m[mk] || w.m.e || w.m.j}</div>${ex}${qzPickLine(pickWord)}
       <div style="margin-top:16px"><button class="btn primary" onclick="qzAdvance()">${twT("quizNext")} ›</button></div>
@@ -2364,8 +2365,8 @@ const SPK = (() => {
   function hasMine(){ return IS_NATIVE() ? nativeHasVoice : !!myUrl; }
   function cmpHtml(it){
     return `<div class="spk-cmp">
-      <button class="btn spk-cmp-b" onclick="SPK.playMine()">${twT("spkHearMine")}</button>
-      <button class="btn spk-cmp-b" onclick="speakZh('${String(it.z).replace(/'/g, "\\'")}')">${twT("spkHearModel")}</button>
+      <button class="btn spk-cmp-b" onclick="SPK.playMine()">${icon("volume",{size:16})} ${twT("spkHearMine")}</button>
+      <button class="btn spk-cmp-b" onclick="speakZh('${String(it.z).replace(/'/g, "\\'")}')">${icon("speak",{size:16})} ${twT("spkHearModel")}</button>
     </div>`;
   }
   async function startCapture(){
@@ -2696,7 +2697,7 @@ function recordStudy(){
   // 今日はじめての学習なら、その場で連続日数を祝う(ハブに戻らないと見えないのでは意味がない)
   if (!before.todayDone) {
     const after = getStreak();
-    try { showToast("🔥 " + twT("hbStreakToast").replace("{n}", after.cur)); } catch (e) {}
+    try { showToast(twT("hbStreakToast").replace("{n}", after.cur)); } catch (e) {}
   }
 }
 
@@ -3228,11 +3229,11 @@ const PA = (() => {
 
   // 連続日数のチップ。0 なら誘い、切れそうなら警告、続いていれば普通に表示。
   function fireChip(st){
-    if (!st || !st.cur) return `<span class="hb-fire zero">🔥 ${esc(twT("hbStreakStart"))}</span>`;
+    if (!st || !st.cur) return `<span class="hb-fire zero">${icon("fire",{size:15})} ${esc(twT("hbStreakStart"))}</span>`;
     const n = twT("hbStreak").replace("{n}", st.cur);
     return st.todayDone
-      ? `<span class="hb-fire">🔥 ${esc(n)}</span>`
-      : `<span class="hb-fire risk">🔥 ${esc(n)}・${esc(twT("hbStreakRisk"))}</span>`;
+      ? `<span class="hb-fire">${icon("fire",{size:15})} ${esc(n)}</span>`
+      : `<span class="hb-fire risk">${icon("fire",{size:15})} ${esc(n)}・${esc(twT("hbStreakRisk"))}</span>`;
   }
   function render(){
     const lvName = { l1:twT("lv_l1"), l2:twT("lv_l2"), l3:twT("lv_l3"), l4:twT("lv_l4"), l5:twT("lv_l5"), l6:twT("lv_l6") }[currentLevel] || "";
@@ -3296,17 +3297,17 @@ const PA = (() => {
         <div class="hb-wod-r">${twZy(wod.zy || "")}${wod.py ? " · " + esc(wod.py) : ""}</div>
         <div class="hb-wod-s">${esc((wod.m && (wod.m[mk] || wod.m.e || wod.m.j)) || "")}</div>
       </div>
-      <button class="hb-wod-b" onclick="speakZh('${esc(wod.w).replace(/'/g, "\\'")}')" aria-label="play">🔊</button>
+      <button class="hb-wod-b" onclick="speakZh('${esc(wod.w).replace(/'/g, "\\'")}')" aria-label="play">${icon("volume",{size:18})}</button>
     </div>` : "";
 
     const quick = `<div class="hb-sec">${esc(twT("hbQuick"))}</div>
     <div class="hb-quick">
-      <button class="hot" onclick="Listen.open()"><span class="qi">🎧</span>${esc(twT("lsTitle"))}</button>
-      <button onclick="SRS.start('${currentLevel}')"><span class="qi">🔁</span>${esc(twT("toolSrs"))}</button>
+      <button class="hot" onclick="Listen.open()"><span class="qi">${icon("headphones",{size:18})}</span>${esc(twT("lsTitle"))}</button>
+      <button onclick="SRS.start('${currentLevel}')"><span class="qi">${icon("refresh",{size:18})}</span>${esc(twT("toolSrs"))}</button>
       <button onclick="switchPanel('fc')"><span class="qi">🃏</span>${esc(twT("toolVocabCard"))}</button>
-      <button onclick="switchPanel('quiz')"><span class="qi">✏️</span>${esc(twT("toolQuiz"))}</button>
+      <button onclick="switchPanel('quiz')"><span class="qi">${icon("edit",{size:18})}</span>${esc(twT("toolQuiz"))}</button>
       <button onclick="switchPanel('zhuyin')"><span class="qi">ㄅ</span>${esc(twT("toolZhuyin"))}</button>
-      <a href="life?utm_source=hub"><span class="qi">💬</span>${esc(twT("hbLife"))}</a>
+      <a href="life?utm_source=hub"><span class="qi">${icon("chat",{size:18})}</span>${esc(twT("hbLife"))}</a>
     </div>`;
 
     const gated = withGates(s);
@@ -3603,7 +3604,7 @@ const RD = (() => {
       <h4 class="rd-h4">${twT("rdVocab")}</h4>
       <div class="rd-vocs">${vocab}</div>
       <div id="rdQ"></div>
-      <div class="rd-report"><a href="contact.html">${twT("reportError")}</a></div>`;
+      <div class="rd-report"><a href="contact.html">${icon("flag",{size:14})} ${twT("reportError")}</a></div>`;
     twBindWords(box(), mergedVoc);
     renderQ();
   }
@@ -3659,7 +3660,7 @@ const RD = (() => {
     if (!ok) box().querySelectorAll(".rd-opt")[i].classList.add("ng");
     const why = document.getElementById("rdWhy");
     why.className = "rd-why " + (ok?"ok":"ng");
-    why.innerHTML = `<b>${ok?"⭕":"❌"}</b> ${q.why[mk] || q.why.e || q.why.j}`;
+    why.innerHTML = `<b>${ok ? icon("check",{size:17}) : icon("x",{size:17})}</b> ${q.why[mk] || q.why.e || q.why.j}`;
     markRead(cur.id);
     recordStudy();   // ストリーク＋今日の学習数
   }
@@ -3774,7 +3775,7 @@ const AR = (() => {
       <div class="rd-vocs">${vocab}</div>
       ${(a.vocab&&a.vocab.length)?`<div style="text-align:center;margin:20px 0 4px"><button class="btn primary" onclick="AR.quiz()">${twT("arQuiz")}</button></div>`:""}
       <div class="ar-note" style="font-size:${Math.max(14,arFont-4)}px"><div class="ar-note-h">${twT("arNote")}</div>${a.note[mk] || a.note.e || a.note.j}</div>
-      <div class="rd-report"><a href="contact.html">${twT("reportError")}</a></div>
+      <div class="rd-report"><a href="contact.html">${icon("flag",{size:14})} ${twT("reportError")}</a></div>
       <div style="height:78px"></div>`;
     renderBar();
     twBindWords(box(), mergedVoc);
@@ -3872,7 +3873,7 @@ const AR = (() => {
         <div class="wb-q"><b class="wb-a" onclick="speakZh('${x.z.replace(/'/g,"")}')">${x.z}</b>
           <button class="tts-btn" style="width:26px;height:26px;font-size:11px" onclick="speakZh('${x.z.replace(/'/g,"")}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
         ${x.m ? `<div class="wb-d">${x.m}</div>` : ""}${x.art ? `<div class="wb-d" style="opacity:.7">— ${x.art}</div>` : ""}
-        <button class="wb-del" onclick="AR.favDel(${i})">🗑</button></div>`).join("") : `<p class="rd-empty">${twT("arFavEmpty")}</p>`;
+        <button class="wb-del" onclick="AR.favDel(${i})">${icon("trash",{size:16})}</button></div>`).join("") : `<p class="rd-empty">${twT("arFavEmpty")}</p>`;
     box().innerHTML = `<div class="ar-top"><button class="ar-back" onclick="AR.render()"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button></div>
       <h3 class="ar-zhtitle">★ ${twT("arFavTitle")}</h3><div style="margin-top:16px">${items}</div><div style="height:40px"></div>`;
   }
@@ -3908,7 +3909,7 @@ const AR = (() => {
     if (ok) aq.score++;
     else { document.querySelectorAll("#aqOpts .qz-opt")[i].classList.add("ng"); if (typeof WrongBook !== "undefined") WrongBook.add({ type:"article", word:w.w, q:(w.m[mk] || w.m.e || w.m.j), correct:w.w, detail:w.zy+"｜"+w.py }); }
     document.getElementById("aqFb").innerHTML = `<div class="qz-fb ${ok?"ok":"ng"}">
-      <div style="font-weight:700;font-size:15px">${ok ? "⭕ "+twT("qzRight") : "❌ "+twT("qzWrong")}</div>
+      <div style="font-weight:700;font-size:15px">${(ok ? icon("check",{size:17}) : icon("x",{size:17}))} ${ok ? twT("qzRight") : twT("qzWrong")}</div>
       <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${twZy(w.zy)}｜${w.py}）</div>
       <div style="font-size:14px;color:var(--tx2);margin-top:2px">${w.m[mk] || w.m.e || w.m.j}</div>
       <div style="margin-top:16px"><button class="btn primary" onclick="AR.aqNext()">${twT("quizNext")} ›</button></div></div>`;

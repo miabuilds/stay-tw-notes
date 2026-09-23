@@ -17,6 +17,7 @@
 <meta name="twitter:description" content="手紙＝トイレットペーパー、娘＝母、勉強＝無理をする。台湾の読み方と例文つき。">
 <meta name="twitter:image" content="https://staytw.pages.dev/images/og.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script src="icons.js?v=1"></script>
 <script src="analytics.js?v=52"></script>
 <style>
 :root {
@@ -128,7 +129,7 @@ a{color:var(--ac2)}
 <canvas id="cv" width="1080" height="1350" style="display:none"></canvas>
 
 <script src="py2zy.js?v=1"></script>
-<script src="tts.js?v=63"></script>
+<script src="tts.js?v=64"></script>
 <script src="kanji-gap.js?v=1"></script>
 <script>
 const T = {
@@ -183,7 +184,7 @@ function render(){
   document.getElementById("grid").innerHTML = rows.map((k, i) => `
     <article class="card" data-i="${KANJI_GAP.indexOf(k)}">
       <div class="w">${esc(k.tw)}${k.jp ? `<small>${esc(t("jpForm"))}: ${esc(k.jp)}</small>` : ""}</div>
-      <div class="rd"><span>${esc(k.py)}</span><span class="zy">${esc(zy(k.py))}</span><button onclick="speak('${esc(k.tw)}')" aria-label="play">🔊</button></div>
+      <div class="rd"><span>${esc(k.py)}</span><span class="zy">${esc(zy(k.py))}</span><button onclick="speak('${esc(k.tw)}')" aria-label="play">${icon("volume",{size:17})}</button></div>
       <div class="mean">
         <div class="jp"><b>🇯🇵 ${esc(t("jp"))}</b>${esc(k.m[l].jp)}</div>
         <div class="tw"><b>🇹🇼 ${esc(t("tw"))}</b>${esc(k.m[l].tw)}</div>

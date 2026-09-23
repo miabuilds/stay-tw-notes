@@ -183,7 +183,7 @@ const SRS = (() => {
     document.getElementById("quizBox").innerHTML = `
       <div class="qhd"><span>${twT("srsDone")}</span><button class="qclose" onclick="SRS.close()">✕</button></div>
       <div style="text-align:center;padding:26px 10px">
-        <div style="font-size:44px">🎉</div>
+        <div style="color:var(--ac)">${icon("sparkle",{size:40})}</div>
         <p style="margin:12px 0;color:var(--tx2)">${twT("srsToday")}: ${queue.length}</p>
         ${capped ? `<p style="margin:0 0 12px;font-size:13px;color:var(--ac);cursor:pointer" onclick="Paywall.show('srs')">${twT("srsFreeCap").replace("{n}", String((typeof Paywall !== "undefined" && Paywall.SRS_FREE_CARDS) || 10))}</p>` : ""}
         <p style="font-size:13px;color:var(--tx3)">${twT("srsLearned")} ${st.total}・${twT("srsMastered")} ${st.mastered}</p>
