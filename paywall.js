@@ -9,10 +9,19 @@
 //   単体 Web では「iOS アプリで解鎖」の案内を表示（Web 決済はやらない方針）
 const Paywall = (() => {
   const QUOTA_KEY = "stw_quota";
-  // 1日の無料枠（プレミアムで無制限）
-  // 2026-09-16: speak 5→2（跟讀是 App 限定＋日本人最需要的功能，當 Premium 招牌）；SRS 免費一次最多 SRS_FREE_CARDS 張
-  // ytsquiz(影片測驗)= 2026-09 追加。跟讀/聽寫は無料のまま、答え合わせだけ枠を付ける。
-  const LIMITS = { quiz: 3, srs: 1, exam: 1, speak: 2, writing: 1, aiscore: 1, ytsquiz: 1 };
+  // 1日の無料枠。2026-09 に線を引き直した。
+  //
+  // 前は quiz3/speak2/writing1/aiscore1/ytsquiz1 と細かく数えていたが、
+  // 小さな「ダメ」が一日に何度も出るだけで、転換にはつながっていなかった
+  // (課金画面が出るのは全訪問の 3%、そのほとんどが苛立った瞬間)。やめた。
+  //
+  // 今の考え方:
+  //   ・元手のかからないもの(クイズ・発音採点＝端末内の LCS 比較)は無制限で無料。
+  //     発音採点はこのアプリで一番「おっ」と言われる所なので、絶対に閉じない。
+  //   ・毎日きちんとやる人にだけ効く 1 つ(復習)と、区切りの 1 つ(模試)だけ 1 日 1 回。
+  //   ・呼ぶたびに本当にお金がかかるもの(作文の AI 採点・AI 会話)と、
+  //     答え合わせ(影片測驗)は Premium 限定。LIMITS に無い=0 回なので枠は書かない。
+  const LIMITS = { srs: 1, exam: 1 };
   const SRS_FREE_CARDS = 10;
   // 買い切りは年額の 2.2 倍しか取れていなかった（原価は永久に続くのに）。年額の約 3 倍へ。
   const PRICES = { monthly: "¥980", yearly: "¥5,800", lifetime: "¥17,800" };
@@ -85,9 +94,15 @@ const Paywall = (() => {
     return true;
   }
 
-  // ツールのホーム画面に出す残り枠バッジ
+  // Premium だけのもの。枠が「0 回」なのではなく、そもそも枠という考え方ではない。
+  const PRO_ONLY = ["writing", "aiscore", "ytsquiz", "article", "provocab"];
+
+  // ツールのホーム画面に出すバッジ。3 通りある:
+  //   枠があるもの → 残り回数 / Premium のみ → その旨 / 無料で無制限 → 何も出さない
   function quotaBadge(feature) {
     if (isPremium()) return "";
+    if (PRO_ONLY.indexOf(feature) >= 0) return `<div class="pw-quota pro">${twT("pwProOnly")}</div>`;
+    if (!LIMITS[feature]) return "";
     return `<div class="pw-quota">${twT("pwQuotaLeft")}: <b>${left(feature)} / ${LIMITS[feature]}</b></div>`;
   }
 
