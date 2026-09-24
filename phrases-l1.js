@@ -2,7 +2,7 @@
 // t: "travel"=旅行者向け / "life"=台湾暮らし向け / "both"=共通
 // 形式: cat={j,e,k}, items[{z,py,m:{j,e,k},note:{j,e,k}?}]
 const PHRASES_L1 = [
-{icon:"👋",t:"both",cat:{j:"あいさつ・自己紹介",e:"Greetings & Introductions",k:"인사・자기소개"},items:[
+{icon:"hand",t:"both",cat:{j:"あいさつ・自己紹介",e:"Greetings & Introductions",k:"인사・자기소개"},items:[
 {z:"你好！",py:"Nǐ hǎo!",m:{j:"こんにちは！",e:"Hello!",k:"안녕하세요!"}},
 {z:"早安！",py:"Zǎo'ān!",m:{j:"おはよう！",e:"Good morning!",k:"좋은 아침이에요!"},note:{j:"台湾では「早！」だけでもOK。",e:"In Taiwan just \"早!\" also works.",k:"대만에서는 \"早!\"만 해도 된다."}},
 {z:"我叫山田，我是日本人。",py:"Wǒ jiào Shāntián, wǒ shì Rìběnrén.",m:{j:"山田といいます。日本人です。",e:"My name is Yamada. I'm Japanese.",k:"야마다라고 합니다. 일본인입니다."}},
@@ -10,7 +10,7 @@ const PHRASES_L1 = [
 {z:"我在學中文，請多多指教。",py:"Wǒ zài xué Zhōngwén, qǐng duōduō zhǐjiào.",m:{j:"中国語を勉強しています。よろしくお願いします。",e:"I'm learning Chinese. Please be patient with me.",k:"중국어를 배우고 있어요. 잘 부탁드립니다."}},
 {z:"你吃飽了嗎？",py:"Nǐ chībǎo le ma?",m:{j:"ご飯食べた？（台湾式あいさつ）",e:"Have you eaten? (a common Taiwanese greeting)",k:"밥 먹었어요? (대만식 인사)"},note:{j:"本当に食事の心配をしているわけではなく「元気？」のニュアンス。",e:"It's small talk, like \"How are you?\" — not literally about food.",k:"실제 식사 걱정이 아니라 '잘 지내?' 정도의 인사."}},
 ]},
-{icon:"🧋",t:"travel",cat:{j:"ドリンクスタンド・夜市",e:"Drink Stands & Night Markets",k:"음료 가게・야시장"},items:[
+{icon:"cup",t:"travel",cat:{j:"ドリンクスタンド・夜市",e:"Drink Stands & Night Markets",k:"음료 가게・야시장"},items:[
 {z:"我要一杯珍珠奶茶。",py:"Wǒ yào yì bēi zhēnzhū nǎichá.",m:{j:"タピオカミルクティーを一杯ください。",e:"One bubble milk tea, please.",k:"버블 밀크티 한 잔 주세요."}},
 {z:"半糖，少冰。",py:"Bàntáng, shǎobīng.",m:{j:"砂糖半分、氷少なめで。",e:"Half sugar, less ice.",k:"설탕 반, 얼음 적게요."},note:{j:"甘さ：正常糖→半糖→微糖→無糖。氷：正常冰→少冰→微冰→去冰。この2軸は台湾ドリンク注文の必修！",e:"Sugar: 正常→半→微→無; Ice: 正常→少→微→去. The two axes of every Taiwan drink order!",k:"당도: 正常→半→微→無, 얼음: 正常→少→微→去. 대만 음료 주문의 필수 개념!"}},
 {z:"老闆，這個多少錢？",py:"Lǎobǎn, zhège duōshǎo qián?",m:{j:"すみません、これいくらですか。",e:"Boss, how much is this?",k:"사장님, 이거 얼마예요?"},note:{j:"店の人は男女問わず「老闆」「老闆娘」と呼ぶと親しみが出る。",e:"Calling the vendor 老闆 (boss) is friendly and very local.",k:"가게 주인을 \"老闆\"이라고 부르면 현지인 느낌."}},
@@ -19,7 +19,7 @@ const PHRASES_L1 = [
 {z:"不要香菜。",py:"Bú yào xiāngcài.",m:{j:"パクチー抜きで。",e:"No cilantro, please.",k:"고수는 빼 주세요."}},
 {z:"有一點辣嗎？",py:"Yǒu yìdiǎn là ma?",m:{j:"ちょっと辛いですか。",e:"Is it a bit spicy?",k:"조금 매워요?"}},
 ]},
-{icon:"🍜",t:"travel",cat:{j:"レストラン",e:"At a Restaurant",k:"레스토랑"},items:[
+{icon:"food",t:"travel",cat:{j:"レストラン",e:"At a Restaurant",k:"레스토랑"},items:[
 {z:"請問幾位？——兩位。",py:"Qǐngwèn jǐ wèi? — Liǎng wèi.",m:{j:"何名様ですか。——2人です。",e:"How many? — Two.",k:"몇 분이세요? — 두 명이요."}},
 {z:"請給我菜單。",py:"Qǐng gěi wǒ càidān.",m:{j:"メニューをください。",e:"The menu, please.",k:"메뉴판 주세요."}},
 {z:"我要點餐。",py:"Wǒ yào diǎncān.",m:{j:"注文お願いします。",e:"I'd like to order.",k:"주문할게요."}},
@@ -27,7 +27,7 @@ const PHRASES_L1 = [
 {z:"買單！／結帳！",py:"Mǎidān! / Jiézhàng!",m:{j:"お会計お願いします！",e:"Check, please!",k:"계산이요!"}},
 {z:"可以刷卡嗎？",py:"Kěyǐ shuākǎ ma?",m:{j:"カードで払えますか。",e:"Can I pay by card?",k:"카드 돼요?"},note:{j:"夜市や小さい店は現金のみが多い。LINE Pay・悠遊付も普及中。",e:"Night markets and small shops are often cash only.",k:"야시장이나 작은 가게는 현금만 받는 곳이 많다."}},
 ]},
-{icon:"🏨",t:"travel",cat:{j:"ホテル・宿泊",e:"Hotels & Lodging",k:"호텔・숙박"},items:[
+{icon:"building",t:"travel",cat:{j:"ホテル・宿泊",e:"Hotels & Lodging",k:"호텔・숙박"},items:[
 {z:"我有訂房，這是我的護照。",py:"Wǒ yǒu dìngfáng, zhè shì wǒ de hùzhào.",m:{j:"予約しています。これがパスポートです。",e:"I have a reservation. Here's my passport.",k:"예약했습니다. 여기 여권이요."}},
 {z:"幾點退房？",py:"Jǐ diǎn tuìfáng?",m:{j:"チェックアウトは何時ですか。",e:"What time is checkout?",k:"체크아웃은 몇 시예요?"}},
 {z:"可以寄放行李嗎？",py:"Kěyǐ jìfàng xínglǐ ma?",m:{j:"荷物を預かってもらえますか。",e:"Can I leave my luggage here?",k:"짐을 맡길 수 있나요?"}},
@@ -35,21 +35,21 @@ const PHRASES_L1 = [
 {z:"冷氣好像壞了。",py:"Lěngqì hǎoxiàng huài le.",m:{j:"エアコンが壊れているみたいです。",e:"The AC seems to be broken.",k:"에어컨이 고장 난 것 같아요."}},
 {z:"WiFi 密碼是多少？",py:"WiFi mìmǎ shì duōshǎo?",m:{j:"WiFiのパスワードは何ですか。",e:"What's the WiFi password?",k:"와이파이 비밀번호가 뭐예요?"}},
 ]},
-{icon:"🚇",t:"both",cat:{j:"交通・移動",e:"Getting Around",k:"교통・이동"},items:[
+{icon:"train",t:"both",cat:{j:"交通・移動",e:"Getting Around",k:"교통・이동"},items:[
 {z:"我要去台北車站。",py:"Wǒ yào qù Táiběi chēzhàn.",m:{j:"台北駅へ行きたいです。",e:"I want to go to Taipei Main Station.",k:"타이베이역에 가려고 해요."}},
 {z:"捷運站怎麼走？",py:"Jiéyùn zhàn zěnme zǒu?",m:{j:"MRTの駅へはどう行きますか。",e:"How do I get to the MRT station?",k:"MRT 역은 어떻게 가요?"}},
 {z:"到了請告訴我。",py:"Dào le qǐng gàosù wǒ.",m:{j:"着いたら教えてください。",e:"Please tell me when we arrive.",k:"도착하면 알려 주세요."}},
 {z:"我要加值一百塊。",py:"Wǒ yào jiāzhí yìbǎi kuài.",m:{j:"（悠遊カードに）100元チャージお願いします。",e:"I'd like to top up 100 NTD (EasyCard).",k:"(이지카드) 100위안 충전해 주세요."},note:{j:"悠遊卡（EasyCard）はコンビニでもチャージできる。",e:"You can top up an EasyCard at any convenience store.",k:"이지카드는 편의점에서도 충전 가능."}},
 {z:"這班車去淡水嗎？",py:"Zhè bān chē qù Dànshuǐ ma?",m:{j:"この電車は淡水へ行きますか。",e:"Does this train go to Tamsui?",k:"이 차는 단수이에 가나요?"}},
 ]},
-{icon:"🛍️",t:"travel",cat:{j:"買い物",e:"Shopping",k:"쇼핑"},items:[
+{icon:"bag",t:"travel",cat:{j:"買い物",e:"Shopping",k:"쇼핑"},items:[
 {z:"我只是看看。",py:"Wǒ zhǐshì kànkan.",m:{j:"見ているだけです。",e:"I'm just looking.",k:"그냥 구경하는 거예요."}},
 {z:"有別的顏色嗎？",py:"Yǒu bié de yánsè ma?",m:{j:"別の色はありますか。",e:"Do you have other colors?",k:"다른 색깔 있어요?"}},
 {z:"可以便宜一點嗎？",py:"Kěyǐ piányí yìdiǎn ma?",m:{j:"少し安くしてもらえますか。",e:"Can you give me a discount?",k:"좀 깎아 주실 수 있어요?"}},
 {z:"我要這個。",py:"Wǒ yào zhège.",m:{j:"これをください。",e:"I'll take this one.",k:"이걸로 할게요."}},
 {z:"需要袋子嗎？——不用，謝謝。",py:"Xūyào dàizi ma? — Búyòng, xièxie.",m:{j:"袋は要りますか。——要りません、ありがとう。",e:"Need a bag? — No thanks.",k:"봉투 필요하세요? — 괜찮아요, 감사합니다."},note:{j:"台湾はレジ袋有料。断るときは「不要」より「不用」が柔らかい。",e:"Plastic bags cost extra in Taiwan. 不用 is the soft way to decline.",k:"대만은 비닐봉투가 유료. 거절할 때는 \"不用\"이 부드럽다."}},
 ]},
-{icon:"🏠",t:"life",cat:{j:"部屋探し・大家さん",e:"Renting & Landlords",k:"집 구하기・집주인"},items:[
+{icon:"home",t:"life",cat:{j:"部屋探し・大家さん",e:"Renting & Landlords",k:"집 구하기・집주인"},items:[
 {z:"請問這間還有在租嗎？",py:"Qǐngwèn zhè jiān hái yǒu zài zū ma?",m:{j:"この部屋はまだ募集していますか。",e:"Is this room still available for rent?",k:"이 방 아직 임대 중인가요?"}},
 {z:"房租含水電嗎？",py:"Fángzū hán shuǐdiàn ma?",m:{j:"家賃に水道・電気代は含まれますか。",e:"Does the rent include utilities?",k:"집세에 수도·전기 요금이 포함되나요?"},note:{j:"台湾の賃貸は「電費另計（電気代別）」が多い。夏の冷氣代に注意！",e:"Electricity is usually billed separately (電費另計). Watch out for summer AC bills!",k:"대만 월세는 전기요금 별도(電費另計)가 많다. 여름 에어컨 요금 주의!"}},
 {z:"押金是兩個月嗎？",py:"Yājīn shì liǎng ge yuè ma?",m:{j:"敷金は2か月分ですか。",e:"Is the deposit two months' rent?",k:"보증금은 두 달치인가요?"}},
@@ -57,7 +57,7 @@ const PHRASES_L1 = [
 {z:"熱水器壞了，可以請人來修嗎？",py:"Rèshuǐqì huài le, kěyǐ qǐng rén lái xiū ma?",m:{j:"給湯器が壊れたので、修理を呼んでもらえますか。",e:"The water heater is broken—can you send someone to fix it?",k:"온수기가 고장 났는데 수리 기사를 불러 주실 수 있나요?"}},
 {z:"垃圾車幾點來？",py:"Lèsèchē jǐ diǎn lái?",m:{j:"ゴミ収集車は何時に来ますか。",e:"What time does the garbage truck come?",k:"쓰레기차는 몇 시에 와요?"},note:{j:"台湾は「エリーゼのために」を流すゴミ収集車に自分でゴミを持って行くスタイル。",e:"In Taiwan you bring your trash to the truck (the one playing Für Elise).",k:"대만은 '엘리제를 위하여'를 트는 수거차에 직접 쓰레기를 갖다 버린다."}},
 ]},
-{icon:"🏥",t:"life",cat:{j:"病院・薬局",e:"Clinics & Pharmacies",k:"병원・약국"},items:[
+{icon:"hospital",t:"life",cat:{j:"病院・薬局",e:"Clinics & Pharmacies",k:"병원・약국"},items:[
 {z:"我要掛號，初診。",py:"Wǒ yào guàhào, chūzhěn.",m:{j:"受付お願いします。初診です。",e:"I'd like to register—first visit.",k:"접수할게요. 초진입니다."}},
 {z:"我有健保卡。",py:"Wǒ yǒu jiànbǎokǎ.",m:{j:"健保カードを持っています。",e:"I have an NHI card.",k:"건강보험증 있습니다."},note:{j:"台湾の健保は外国人も加入OK（居留証取得後6か月など条件あり）。診察が数百元で済む神制度。",e:"Foreign residents can join Taiwan's NHI. Visits often cost just a few hundred NTD.",k:"외국인도 대만 건보 가입 가능. 진료비가 몇백 위안이면 되는 좋은 제도."}},
 {z:"我從昨天開始發燒。",py:"Wǒ cóng zuótiān kāishǐ fāshāo.",m:{j:"昨日から熱があります。",e:"I've had a fever since yesterday.",k:"어제부터 열이 나요."}},
@@ -65,14 +65,14 @@ const PHRASES_L1 = [
 {z:"這個藥飯後吃嗎？",py:"Zhège yào fànhòu chī ma?",m:{j:"この薬は食後に飲みますか。",e:"Do I take this medicine after meals?",k:"이 약은 식후에 먹나요?"}},
 {z:"附近有藥局嗎？",py:"Fùjìn yǒu yàojú ma?",m:{j:"近くに薬局はありますか。",e:"Is there a pharmacy nearby?",k:"근처에 약국이 있나요?"}},
 ]},
-{icon:"🏦",t:"life",cat:{j:"銀行・携帯・手続き",e:"Banking, Phones & Paperwork",k:"은행・휴대폰・수속"},items:[
+{icon:"bank",t:"life",cat:{j:"銀行・携帯・手続き",e:"Banking, Phones & Paperwork",k:"은행・휴대폰・수속"},items:[
 {z:"我想開戶。",py:"Wǒ xiǎng kāihù.",m:{j:"口座を開設したいです。",e:"I'd like to open an account.",k:"계좌를 개설하고 싶습니다."},note:{j:"必要なもの：居留證＋パスポート＋印鑑（台湾は今も印鑑社会！）。",e:"Bring your ARC, passport, and a personal seal — Taiwan still loves seals!",k:"거류증+여권+도장 필요. 대만은 아직도 도장 사회!"}},
 {z:"我要辦手機門號。",py:"Wǒ yào bàn shǒujī ménhào.",m:{j:"携帯の番号契約をしたいです。",e:"I'd like to sign up for a mobile plan.",k:"휴대폰 번호를 개통하고 싶어요."}},
 {z:"這是我的居留證。",py:"Zhè shì wǒ de jūliúzhèng.",m:{j:"これが私の居留証（ARC）です。",e:"This is my ARC (residence permit).",k:"이것이 제 거류증(ARC)입니다."}},
 {z:"請問要填哪些資料？",py:"Qǐngwèn yào tián nǎxiē zīliào?",m:{j:"どの書類に記入すればいいですか。",e:"Which forms do I need to fill out?",k:"어떤 서류를 작성해야 하나요?"}},
 {z:"可以幫我叫外送嗎？",py:"Kěyǐ bāng wǒ jiào wàisòng ma?",m:{j:"デリバリーを頼んでもらえますか。",e:"Can you order delivery for me?",k:"배달 좀 시켜 줄 수 있어요?"},note:{j:"foodpanda と Uber Eats が二大勢力。「外送」=デリバリー。",e:"foodpanda and Uber Eats dominate. 外送 = delivery.",k:"푸드판다와 우버이츠가 양대 산맥. 外送 = 배달."}},
 ]},
-{icon:"💼",t:"life",cat:{j:"職場",e:"At Work",k:"직장"},items:[
+{icon:"briefcase",t:"life",cat:{j:"職場",e:"At Work",k:"직장"},items:[
 {z:"不好意思，我想請假一天。",py:"Bù hǎoyìsi, wǒ xiǎng qǐngjià yì tiān.",m:{j:"すみません、1日休みを取りたいのですが。",e:"Excuse me, I'd like to take a day off.",k:"죄송한데 하루 휴가를 내고 싶습니다."}},
 {z:"這個案子進度到哪了？",py:"Zhège ànzi jìndù dào nǎ le?",m:{j:"この案件の進捗はどこまで進んでいますか。",e:"Where are we on this project?",k:"이 프로젝트 진행 상황이 어떻게 되나요?"}},
 {z:"我下午要開會，晚點回你。",py:"Wǒ xiàwǔ yào kāihuì, wǎndiǎn huí nǐ.",m:{j:"午後は会議なので、後で返事します。",e:"I have a meeting this afternoon—I'll get back to you later.",k:"오후에 회의가 있어서 나중에 답할게요."}},
@@ -80,7 +80,7 @@ const PHRASES_L1 = [
 {z:"麻煩你了，感謝！",py:"Máfán nǐ le, gǎnxiè!",m:{j:"お手数おかけします、ありがとうございます！",e:"Sorry to trouble you—thanks!",k:"번거롭게 해서 죄송해요, 감사합니다!"}},
 {z:"我先下班囉，明天見！",py:"Wǒ xiān xiàbān lo, míngtiān jiàn!",m:{j:"お先に失礼します、また明日！",e:"I'm heading out—see you tomorrow!",k:"먼저 퇴근할게요, 내일 봐요!"}},
 ]},
-{icon:"🆘",t:"both",cat:{j:"困ったとき・緊急",e:"Trouble & Emergencies",k:"곤란할 때・긴급"},items:[
+{icon:"warning",t:"both",cat:{j:"困ったとき・緊急",e:"Trouble & Emergencies",k:"곤란할 때・긴급"},items:[
 {z:"不好意思，請問一下。",py:"Bù hǎoyìsi, qǐngwèn yíxià.",m:{j:"すみません、ちょっとお尋ねします。",e:"Excuse me, may I ask something?",k:"실례합니다, 뭐 좀 여쭤볼게요."},note:{j:"「不好意思」は台湾会話の万能クッション言葉。1日10回は聞く。",e:"不好意思 is Taiwan's all-purpose softener — you'll hear it 10 times a day.",k:"\"不好意思\"는 대만 회화의 만능 쿠션어."}},
 {z:"我聽不懂。",py:"Wǒ tīng bù dǒng.",m:{j:"（聞いて）分かりません。",e:"I don't understand.",k:"못 알아듣겠어요."}},
 {z:"請說慢一點。",py:"Qǐng shuō màn yìdiǎn.",m:{j:"ゆっくり話してください。",e:"Please speak slowly.",k:"천천히 말해 주세요."}},
@@ -90,7 +90,7 @@ const PHRASES_L1 = [
 {z:"我迷路了，這裡是哪裡？",py:"Wǒ mílù le, zhèlǐ shì nǎlǐ?",m:{j:"道に迷いました。ここはどこですか。",e:"I'm lost—where am I?",k:"길을 잃었어요. 여기가 어디예요?"}},
 {z:"沒問題！",py:"Méi wèntí!",m:{j:"問題ないよ！",e:"No problem!",k:"문제없어요!"}},
 ]},
-{icon:"",t:"both",cat:{j:"コンビニ（超商）",e:"Convenience Stores",k:"편의점(超商)"},items:[
+{icon:"store",t:"both",cat:{j:"コンビニ（超商）",e:"Convenience Stores",k:"편의점(超商)"},items:[
 {z:"我要在這裡繳費。",py:"Wǒ yào zài zhèlǐ jiǎofèi.",m:{j:"ここで支払い（公共料金など）をしたいです。",e:"I'd like to pay a bill here.",k:"여기서 요금을 내고 싶어요."},note:{j:"台湾のコンビニは水道・電気・ガス・駐車場・交通違反・クレジットカードまで払える万能窓口。",e:"Taiwan convenience stores pay almost anything — utilities, parking, fines, even credit-card bills.",k:"대만 편의점은 공과금·주차·과태료·카드값까지 거의 다 낼 수 있는 만능 창구."}},
 {z:"我要取貨，這是我的手機號碼。",py:"Wǒ yào qǔhuò, zhè shì wǒ de shǒujī hàomǎ.",m:{j:"荷物の受け取りです。これが私の携帯番号です。",e:"I'm here to pick up a package—here's my phone number.",k:"택배 찾으러 왔어요. 이게 제 휴대폰 번호예요."},note:{j:"ネット通販は「超商取貨」が定番。店頭でバーコードか電話番号を見せて受け取る。",e:"Online orders often ship to a store — show a barcode or phone number to collect.",k:"온라인 쇼핑은 '超商取貨'가 기본. 매장에서 바코드나 번호를 보여주고 수령."}},
 {z:"這個可以幫我微波嗎？",py:"Zhège kěyǐ bāng wǒ wéibō ma?",m:{j:"これ、温めてもらえますか。",e:"Could you heat this up for me?",k:"이거 데워 주실 수 있어요?"}},
@@ -98,7 +98,7 @@ const PHRASES_L1 = [
 {z:"這裡可以影印嗎？",py:"Zhèlǐ kěyǐ yǐngyìn ma?",m:{j:"ここでコピーできますか。",e:"Can I make copies here?",k:"여기서 복사할 수 있어요?"},note:{j:"ibon（7-11）や FamiPort（全家）でコピー・印刷・チケット購入・書類まで手続きできる。",e:"Kiosks like ibon (7-11) handle copies, printing, tickets and paperwork.",k:"ibon(세븐) 같은 키오스크로 복사·인쇄·티켓·서류 처리 가능."}},
 {z:"袋子不用，謝謝。",py:"Dàizi búyòng, xièxie.",m:{j:"袋はいりません、ありがとう。",e:"No bag, thanks.",k:"봉투는 필요 없어요, 감사합니다."},note:{j:"レジ袋は有料。エコバッグ持参が普通。",e:"Plastic bags cost extra; bringing your own is normal.",k:"비닐봉투는 유료라 에코백을 들고 다니는 게 보통."}},
 ]},
-{icon:"",t:"both",cat:{j:"天気・台風・地震",e:"Weather, Typhoons & Earthquakes",k:"날씨・태풍・지진"},items:[
+{icon:"typhoon",t:"both",cat:{j:"天気・台風・地震",e:"Weather, Typhoons & Earthquakes",k:"날씨・태풍・지진"},items:[
 {z:"今天會下雨嗎？記得帶傘。",py:"Jīntiān huì xiàyǔ ma? Jìdé dài sǎn.",m:{j:"今日は雨降るかな？傘を忘れずに。",e:"Will it rain today? Don't forget an umbrella.",k:"오늘 비 올까요? 우산 챙기세요."}},
 {z:"聽說颱風要來了。",py:"Tīngshuō táifēng yào lái le.",m:{j:"台風が来るらしいよ。",e:"I hear a typhoon is coming.",k:"태풍이 온다더라고요."},note:{j:"台風接近時は各県市が「停班停課（＝台風休み）」を発表。前夜にニュースや市政府の公式SNSで確認する。",e:"When a typhoon nears, each city may declare work/school off. Check the news or the city's official page the night before.",k:"태풍이 오면 지자체가 휴무·휴교를 발표. 전날 밤 뉴스나 시청 공식 계정을 확인."}},
 {z:"明天放颱風假嗎？",py:"Míngtiān fàng táifēngjià ma?",m:{j:"明日は台風休みですか。",e:"Is tomorrow a typhoon day off?",k:"내일 태풍 휴무인가요?"}},
@@ -106,7 +106,7 @@ const PHRASES_L1 = [
 {z:"今天好熱，室內都開冷氣。",py:"Jīntiān hǎo rè, shìnèi dōu kāi lěngqì.",m:{j:"今日は暑いね、室内はどこも冷房。",e:"So hot today—everywhere indoors has the AC on.",k:"오늘 너무 덥네요, 실내는 다 에어컨 틀어요."}},
 {z:"外面在下大雨，等一下再走。",py:"Wàimiàn zài xià dàyǔ, děng yíxià zài zǒu.",m:{j:"外は土砂降りだから、少し待ってから行こう。",e:"It's pouring outside—let's wait a bit before we go.",k:"밖에 비 많이 와요, 좀 있다 가요."}},
 ]},
-{icon:"",t:"both",cat:{j:"お参り・年中行事",e:"Temples & Festivals",k:"참배・명절"},items:[
+{icon:"lantern",t:"both",cat:{j:"お参り・年中行事",e:"Temples & Festivals",k:"참배・명절"},items:[
 {z:"我們去廟裡拜拜。",py:"Wǒmen qù miào lǐ bàibài.",m:{j:"お寺（廟）にお参りに行こう。",e:"Let's go pray at the temple.",k:"우리 사당에 참배하러 가요."},note:{j:"「拜拜」はお参り。線香を持ち手を合わせて平安を祈る、台湾の日常的な信仰文化。",e:"拜拜 means to worship — holding incense and praying for safety, part of everyday Taiwanese life.",k:"'拜拜'는 참배. 향을 들고 평안을 비는 대만의 일상 신앙 문화."}},
 {z:"這是一點心意，紅包給你。",py:"Zhè shì yìdiǎn xīnyì, hóngbāo gěi nǐ.",m:{j:"ほんの気持ちです、ご祝儀（紅包）どうぞ。",e:"A small token—here's a red envelope for you.",k:"작은 성의예요, 홍바오 드릴게요."},note:{j:"紅包＝ご祝儀・お年玉。金額は「4」（＝死と同音）を避け、偶数の縁起数字にするのが習わし。",e:"Red envelopes: avoid amounts with 4 (sounds like 'death'); pick even, lucky numbers.",k:"홍바오는 축의금·세뱃돈. '4'(죽음과 발음)를 피하고 짝수 길한 금액으로."}},
 {z:"中秋節要不要一起烤肉？",py:"Zhōngqiūjié yào bú yào yìqǐ kǎoròu?",m:{j:"中秋節、一緒にバーベキューしない？",e:"Want to barbecue together for Mid-Autumn Festival?",k:"추석에 같이 바비큐 할래요?"},note:{j:"台湾の中秋節は家族や友人でBBQ、月餅と文旦（ザボン）を食べる独特の過ごし方。",e:"Taiwan's Mid-Autumn is uniquely spent grilling with family, eating mooncakes and pomelo.",k:"대만 추석은 가족·친구와 바비큐, 월병과 유자를 먹는 독특한 방식."}},

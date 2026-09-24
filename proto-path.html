@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>闖關モード 試作 — StayTW</title>
+<style>
+:root{--bg:#FAF8F3;--bg2:#FFF;--bg3:#F2EEE5;--tx:#1C1C1E;--tx2:#6A6A6A;--tx3:#A9A9A9;
+ --ac:#B8362A;--ac-soft:rgba(184,54,42,.08);--bd:#E5DECF;--line:#DDD5C0;
+ --serif:"Hiragino Mincho ProN","Noto Serif JP","Songti TC",serif}
+@media(prefers-color-scheme:dark){:root{--bg:#121113;--bg2:#1B1A1C;--bg3:#1F1E20;--tx:#EDE8DE;
+ --tx2:#8F8A7E;--tx3:#5D5A53;--ac:#E4715F;--ac-soft:rgba(228,113,95,.1);--bd:#2C2A27;--line:#2C2A27}}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font:16px/1.7 -apple-system,"Hiragino Sans","Noto Sans TC",sans-serif;
+ -webkit-font-smoothing:antialiased;padding-bottom:40px}
+.wrap{max-width:520px;margin:0 auto;padding:0 18px}
+.note{background:var(--ac-soft);border:1px solid var(--ac);color:var(--ac);border-radius:12px;
+ padding:11px 14px;font-size:12.5px;line-height:1.75;margin:14px 0 18px}
+h1.t{font-family:var(--serif);font-size:30px;font-weight:700;letter-spacing:-.01em;padding:24px 0 4px}
+
+/* 軌道タブ:今は「更多」の引き出しに 18 個入っているものを 3 本にまとめる案 */
+.tracks{display:flex;gap:4px;background:var(--bg3);border-radius:999px;padding:4px;margin:14px 0 20px}
+.tracks button{flex:1;border:0;background:none;font:inherit;font-size:14.5px;font-weight:600;color:var(--tx2);
+ padding:10px 4px;border-radius:999px;cursor:pointer}
+.tracks button.on{background:var(--bg2);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+/* 次の 1 課(hero)。道具名ではなく、これから出てくる“中身”を見せる */
+.hero{background:var(--bg2);border:1px solid var(--bd);border-radius:18px;padding:20px;margin-bottom:26px}
+.hero-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px}
+.hero-unit{color:var(--ac);font-weight:700}
+.hero-n{color:var(--tx3)}
+.hero-z{font-size:27px;line-height:1.55;margin:14px 0 4px;font-weight:600;letter-spacing:.01em}
+.hero-z em{color:var(--ac);font-style:normal}
+.hero-m{color:var(--tx2);font-size:14px}
+.hero-bar{height:5px;background:var(--line);border-radius:3px;margin:16px 0 6px;overflow:hidden}
+.hero-bar i{display:block;height:100%;background:var(--ac);border-radius:3px}
+.hero-c{display:flex;justify-content:flex-end;font-size:12.5px;color:var(--tx3);margin-bottom:14px}
+.cta{display:block;width:100%;border:0;border-radius:14px;background:var(--tx);color:var(--bg);
+ font:inherit;font-size:16px;font-weight:700;padding:15px;cursor:pointer}
+.cta:active{transform:scale(.99)}
+
+.uhead{display:flex;align-items:center;gap:12px;margin:26px 0 12px}
+.uhead b{font-size:14px;font-weight:700;letter-spacing:.04em}
+.uhead i{flex:1;height:1px;background:var(--line)}
+.uhead span{font-size:13px;color:var(--tx3)}
+
+.lesson{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--bg2);
+ border:1px solid var(--bd);border-radius:16px;padding:14px 16px;margin-bottom:10px;font:inherit;cursor:pointer}
+.lesson[disabled]{opacity:.45;cursor:default}
+.lesson .dot{width:44px;height:44px;border-radius:50%;flex:none;display:grid;place-items:center;
+ background:var(--bg3);color:var(--tx2);font-weight:700;font-size:15px}
+.lesson.now .dot{background:var(--tx);color:var(--bg)}
+.lesson.done .dot{background:var(--ac);color:#fff}
+.lesson .mid{flex:1;min-width:0}
+.lesson .nm{font-weight:600;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lesson .pv{font-size:12.5px;color:var(--tx3);margin-top:3px}
+.lesson .bar{height:4px;background:var(--line);border-radius:2px;margin-top:8px;overflow:hidden}
+.lesson .bar i{display:block;height:100%;background:var(--ac)}
+.lesson .n{font-size:13.5px;font-weight:700;color:var(--ac);flex:none}
+
+/* 課の中 */
+#play{position:fixed;inset:0;background:var(--bg);z-index:9;display:none;overflow:auto}
+#play.on{display:block}
+.pbar{display:flex;align-items:center;gap:12px;padding:16px 18px 0;max-width:520px;margin:0 auto}
+.pbar .x{border:0;background:none;font-size:22px;color:var(--tx3);cursor:pointer;line-height:1}
+.pbar .pg{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.pbar .pg i{display:block;height:100%;background:var(--ac);transition:width .25s}
+.card{background:var(--bg2);border:1px solid var(--bd);border-radius:20px;padding:40px 20px;text-align:center;margin:26px 0 18px}
+.card .w{font-size:62px;font-weight:700;line-height:1.25}
+.card .zy{color:var(--ac);font-size:19px;margin-top:8px;letter-spacing:.08em}
+.card .py{color:var(--tx3);font-size:15px;margin-top:2px}
+.card .m{font-size:18px;margin-top:16px}
+.card .ex{color:var(--tx2);font-size:14.5px;margin-top:16px;line-height:1.9;border-top:1px dashed var(--line);padding-top:14px}
+.opts{display:grid;gap:10px;margin-top:18px}
+.opt{padding:15px 16px;border:1px solid var(--bd);border-radius:13px;background:var(--bg2);color:var(--tx);
+ font:inherit;font-size:15.5px;text-align:left;cursor:pointer}
+.opt.ok{border-color:#3F7D53;background:rgba(63,125,83,.1);font-weight:700}
+.opt.ng{border-color:var(--ac);background:var(--ac-soft)}
+.opt:disabled{cursor:default}
+.qz-w{font-size:46px;font-weight:700;text-align:center;margin:30px 0 4px}
+.qz-zy{text-align:center;color:var(--ac);letter-spacing:.08em;margin-bottom:8px}
+.done-w{text-align:center;padding:60px 0}
+.done-w .big{font-size:46px;font-weight:800;color:var(--ac)}
+.done-w p{color:var(--tx2);margin:10px 0 26px}
+.sec{display:none}.sec.on{display:block}
+</style></head>
+<body>
+<div class="wrap" id="home">
+  <h1 class="t">闖關モード <span style="font-size:15px;color:var(--tx3)">試作</span></h1>
+  <div class="note">
+    これは<b>試作ページ</b>です。今の app には繋いでいません。<br>
+    変えたのは 2 点だけ ——(1) 関が「道具」ではなく<b>中身</b>になっている (2) 分母が 441 ではなく <b>8</b>。<br>
+    単語は本物のデータ、単元は vocab-l1.js のテーマコメントから機械的に作っています。
+  </div>
+  <div class="tracks">
+    <button>注音</button><button class="on">単語</button><button>文法</button>
+  </div>
+  <div id="hero"></div>
+  <div id="units"></div>
+</div>
+
+<div id="play">
+ <div class="wrap">
+  <div class="pbar"><button class="x" onclick="P.quit()">✕</button><div class="pg"><i id="pgi" style="width:0"></i></div><span id="pgt" style="font-size:12.5px;color:var(--tx3)"></span></div>
+  <div id="stage"></div>
+ </div>
+</div>
+
+<script src="vocab-l1.js?v=52"></script>
+<script src="vocab-l1-b.js?v=53"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (x) => String(x==null?"":x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const LANG = (new URLSearchParams(location.search).get("lang")) || "ja";
+const MK = {ja:"j", en:"e", ko:"k", vi:"vi", id:"id"}[LANG] || "j";
+const WORDS = {};
+[].concat(typeof VOCAB_L1!=="undefined"?VOCAB_L1:[], typeof VOCAB_L1_B!=="undefined"?VOCAB_L1_B:[])
+  .forEach(v => { WORDS[v.w] = v; });
+const mean = (v) => (v && v.m && (v.m[MK] || v.m.e || v.m.j)) || "";
+const exOf = (v) => (v && v.ex) || null;
+
+let DATA = null;
+const KEY = "stw_proto_lessons";
+const state = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; } };
+const setDone = (k) => { const s = state(); s[k] = 1; localStorage.setItem(KEY, JSON.stringify(s)); };
+
+function flat(){
+  const out = [];
+  DATA.units.forEach((u, ui) => u.lessons.forEach((ws, li) =>
+    out.push({ key: u.id+":"+li, ui, li, unit: u, ws: ws.filter(w => WORDS[w]) })));
+  return out;
+}
+function nextLesson(){ const s = state(); return flat().find(l => !s[l.key]) || null; }
+
+function renderHome(){
+  const s = state(), all = flat(), nx = nextLesson();
+  // hero:これから出てくる語の“例文そのもの”を見せる。道具名(単語カードを使う)では手が動かない。
+  if (nx){
+    const v = WORDS[nx.ws[0]], ex = exOf(v);
+    const z = ex ? esc(ex.z).replace(esc(v.w), `<em>${esc(v.w)}</em>`) : `<em>${esc(v.w)}</em>`;
+    const tr = ex ? (ex[MK] || ex.e || ex.j) : mean(v);
+    $("hero").innerHTML = `
+      <div class="hero">
+        <div class="hero-top"><span class="hero-unit">第 ${nx.ui+1} 単元 · ${esc(nx.unit.name[LANG]||nx.unit.name.ja)}</span>
+          <span class="hero-n">第 ${nx.li+1} / ${nx.unit.lessons.length} 課</span></div>
+        <div class="hero-z">${z}</div>
+        <div class="hero-m">${esc(tr)}</div>
+        <div class="hero-bar"><i style="width:0%"></i></div>
+        <div class="hero-c">0 / ${nx.ws.length}</div>
+        <button class="cta" onclick="P.start('${nx.key}')">▷ この課をはじめる</button>
+      </div>`;
+  } else {
+    $("hero").innerHTML = `<div class="hero"><div class="hero-z">ぜんぶ終わりました</div>
+      <button class="cta" onclick="P.reset()">最初からやり直す</button></div>`;
+  }
+  $("units").innerHTML = DATA.units.map((u, ui) => {
+    const ls = u.lessons;
+    const doneN = ls.filter((_, li) => s[u.id+":"+li]).length;
+    const rows = ls.map((ws, li) => {
+      const k = u.id+":"+li, done = !!s[k], isNow = nx && nx.key === k;
+      const preview = ws.slice(0, 3).join("・");
+      return `<button class="lesson ${done?"done":""} ${isNow?"now":""}" onclick="P.start('${k}')">
+        <span class="dot">${done ? "✓" : (isNow ? "▶" : li+1)}</span>
+        <span class="mid">
+          <span class="nm">${esc(u.name[LANG]||u.name.ja)} ${li+1}</span>
+          <span class="pv">${esc(preview)}…</span>
+          <span class="bar"><i style="width:${done?100:0}%"></i></span>
+        </span>
+        <span class="n">${done?ws.length:0}/${ws.length}</span>
+      </button>`;
+    }).join("");
+    return `<div class="uhead"><b>${esc(u.name[LANG]||u.name.ja)}</b><i></i><span>${doneN}/${ls.length}</span></div>${rows}`;
+  }).join("");
+}
+
+// ── 1 課の中身:8 枚めくる → 同じ 8 語を 4 択 → 過関 ──
+const P = (() => {
+  let L = null, step = 0, phase = "card", qs = [], score = 0;
+  const shuf = (a) => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[b[i],b[j]]=[b[j],b[i]];} return b; };
+  function start(key){
+    L = flat().find(x => x.key === key); if (!L) return;
+    step = 0; phase = "card"; score = 0;
+    const pool = Object.keys(WORDS);
+    qs = shuf(L.ws).map(w => {
+      const wrong = shuf(pool.filter(x => x !== w)).slice(0,3).map(x => mean(WORDS[x]));
+      return { w, ans: mean(WORDS[w]), opts: shuf([mean(WORDS[w]), ...wrong]) };
+    });
+    $("play").classList.add("on"); draw();
+  }
+  function quit(){ $("play").classList.remove("on"); renderHome(); }
+  function reset(){ localStorage.removeItem(KEY); renderHome(); }
+  function prog(){
+    const tot = L.ws.length * 2;
+    const cur = phase === "card" ? step : L.ws.length + step;
+    $("pgi").style.width = Math.round(cur/tot*100) + "%";
+    $("pgt").textContent = phase === "done" ? "" : `${cur+1} / ${tot}`;
+  }
+  function draw(){
+    prog();
+    if (phase === "card"){
+      const v = WORDS[L.ws[step]], ex = exOf(v);
+      $("stage").innerHTML = `
+        <div class="card">
+          <div class="w">${esc(v.w)}</div>
+          <div class="zy">${esc(v.zy||"")}</div><div class="py">${esc(v.py||"")}</div>
+          <div class="m">${esc(mean(v))}</div>
+          ${ex ? `<div class="ex">${esc(ex.z)}<br>${esc(ex[MK]||ex.e||ex.j)}</div>` : ""}
+        </div>
+        <button class="cta" onclick="P.next()">${step+1 < L.ws.length ? "次へ" : "8 語おぼえた → 確認"}</button>`;
+    } else if (phase === "quiz"){
+      const q = qs[step], v = WORDS[q.w];
+      $("stage").innerHTML = `
+        <div class="qz-w">${esc(v.w)}</div><div class="qz-zy">${esc(v.zy||"")}</div>
+        <div class="opts">${q.opts.map((o,i)=>`<button class="opt" onclick="P.pick(${i})">${esc(o)}</button>`).join("")}</div>
+        <div id="after"></div>`;
+    } else {
+      $("stage").innerHTML = `
+        <div class="done-w"><div class="big">${score} / ${qs.length}</div>
+          <p>${esc(L.unit.name[LANG]||L.unit.name.ja)} ${L.li+1} 完了</p>
+          <button class="cta" onclick="P.again()">次の課へ ›</button>
+          <p style="margin-top:14px"><a href="javascript:void(0)" onclick="P.quit()" style="color:var(--tx3);font-size:13px">一覧にもどる</a></p>
+        </div>`;
+    }
+  }
+  function next(){
+    if (step+1 < L.ws.length){ step++; } else { phase = "quiz"; step = 0; }
+    draw();
+  }
+  function pick(i){
+    const q = qs[step], ok = q.opts[i] === q.ans;
+    if (ok) score++;
+    document.querySelectorAll(".opt").forEach((b,n)=>{ b.disabled = true;
+      if (q.opts[n] === q.ans) b.classList.add("ok"); else if (n===i) b.classList.add("ng"); });
+    $("after").innerHTML = `<button class="cta" style="margin-top:16px" onclick="P.qnext()">
+      ${step+1 < qs.length ? "次の問題" : "結果"}</button>`;
+  }
+  function qnext(){
+    if (step+1 < qs.length){ step++; draw(); return; }
+    setDone(L.key); phase = "done"; draw();
+  }
+  function again(){ const nx = nextLesson(); if (nx) start(nx.key); else quit(); }
+  return { start, quit, next, pick, qnext, again, reset };
+})();
+
+fetch("data/lessons-l1.json?v=1").then(r=>r.json()).then(d=>{ DATA = d; renderHome(); });
+</script>
+</body></html>
