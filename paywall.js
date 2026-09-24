@@ -94,8 +94,6 @@ const Paywall = (() => {
     return true;
   }
 
-  // Premium だけのもの。枠が「0 回」なのではなく、そもそも枠という考え方ではない。
-  const PRO_ONLY = ["writing", "aiscore", "ytsquiz", "article", "provocab"];
 
   // ツールのホーム画面に出すバッジ。3 通りある:
   //   枠があるもの → 残り回数 / Premium のみ → その旨 / 無料で無制限 → 何も出さない
@@ -129,14 +127,19 @@ const Paywall = (() => {
     return `<p class="pw-invested">${t}</p>`;
   }
 
+  // Premium だけのもの。枠が「0 回」なのではなく、そもそも枠という考え方ではない。
+  const PRO_ONLY = ["writing", "aiscore", "ytsquiz", "article", "provocab", "lessons"];
+
   function show(feature) {
     const bg = document.getElementById("pwBg");
     if (!bg) return;
     track(feature);
-    const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore"), listen: twT("lsTitle"), fav: twT("pwFavName"), ytsquiz: twT("ytsQzTitle"), ytshadow: twT("toolYts"), provocab: twT("pwProVocab") }[feature] || "";
+    const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore"), listen: twT("lsTitle"), fav: twT("pwFavName"), ytsquiz: twT("ytsQzTitle"), ytshadow: twT("toolYts"), provocab: twT("pwProVocab"), lessons: twT("pwLessons") }[feature] || "";
     const desc = feature === "article" ? twT("pwContentHit")
       : feature === "myvocab" ? twT("pwMyVocabHit").replace("{n}", String((typeof MyVocab !== "undefined" && MyVocab.FREE_MAX) || 10))
       : feature === "fav" ? twT("pwFavHit").replace("{n}", String(FAV_FREE_MAX))
+      // Premium 限定のものに「今日の無料枠を使い切りました」と出すのは嘘。枠ではなく線。
+      : PRO_ONLY.indexOf(feature) >= 0 ? twT("pwProHit").replace("{f}", featName)
       : twT("pwLimitHit").replace("{f}", featName);
     document.getElementById("pwBox").innerHTML = `
       <button class="qclose" style="float:right" onclick="Paywall.close()">✕</button>

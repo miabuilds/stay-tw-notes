@@ -11,7 +11,7 @@ const STW_WEB_CLIENT_ID = "949214636130-e2dl3h0t1l789fggve3vsd6pu670lnb1.apps.go
 // ※ Worker 側も secret APPLE_WEB_SERVICE_ID を同じ値にすること（aud 検証用）。
 const STW_APPLE_SERVICE_ID = "com.staytw.web";
 const STW_APPLE_REDIRECT = "https://staytw.pages.dev/";
-const SYNC_KEYS = ["stw_srs", "stw_exam_history", "stw_writing", "stw_wr_opened", "stw-level", "stw_streak", "stw_read", "stw_goal", "stw_art_read", "stw_myvocab", "stw_custom_cards", "stw_checkin"];
+const SYNC_KEYS = ["stw_srs", "stw_exam_history", "stw_writing", "stw_wr_opened", "stw-level", "stw_streak", "stw_read", "stw_goal", "stw_art_read", "stw_myvocab", "stw_custom_cards", "stw_checkin", "stw_lessons"];
 
 const STW_WEB = (() => {
   let session = localStorage.getItem("stw_session") || null;

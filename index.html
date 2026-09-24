@@ -766,6 +766,89 @@ body.more-open .ar-bar{display:none}
 /* 鍵のかかった語。意味と例文を伏せて、字と読みだけ見せる(棚は見せる) */
 .vcard-lock{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:13px;color:var(--ac);
  background:var(--ac-soft);border-radius:10px;padding:8px 11px}
+/* ── 闖關（一課 8 語）────────────────────────────────
+   一覧はハブの中に置く。パネルは増やさない＝入口の数は変えない。
+   プレイヤーは全面のオーバーレイ:1 課やっている間は他のものを見せない。 */
+.ls-skel{color:var(--tx3);font-size:13px;padding:18px 2px}
+.ls-head{display:flex;justify-content:flex-end;font-size:12.5px;color:var(--tx3);margin:-4px 0 6px}
+.ls-uh{display:flex;align-items:center;gap:11px;margin:20px 0 10px}
+.ls-uh b{font-size:13.5px;font-weight:700;letter-spacing:.03em}
+.ls-uh i{flex:1;height:1px;background:var(--line)}
+.ls-uh span{font-size:12.5px;color:var(--tx3)}
+.ls-row{display:flex;align-items:center;gap:13px;width:100%;text-align:left;background:var(--bg2);
+ border:1px solid var(--bd);border-radius:15px;padding:13px 15px;margin-bottom:9px;font:inherit;cursor:pointer}
+.ls-row:active{transform:scale(.995)}
+.ls-row.locked{opacity:.55}
+.ls-dot{width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;
+ background:var(--bg3);color:var(--tx2);font-weight:700;font-size:14.5px}
+.ls-row.now .ls-dot{background:var(--tx);color:var(--bg2)}
+.ls-row.done .ls-dot{background:var(--ac);color:#fff}
+.ls-mid{flex:1;min-width:0}
+.ls-nm{display:block;font-weight:600;font-size:15px;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ls-pv{display:block;font-size:12.5px;color:var(--tx3);margin-top:2px}
+.ls-bar{display:block;height:4px;background:var(--line);border-radius:2px;margin-top:7px;overflow:hidden}
+.ls-bar i{display:block;height:100%;background:var(--ac)}
+.ls-n{font-size:13px;font-weight:700;color:var(--ac);flex:none}
+body.ls-open{overflow:hidden}
+#lsPlay{position:fixed;inset:0;background:var(--bg);z-index:60;display:none;overflow:auto;-webkit-overflow-scrolling:touch}
+#lsPlay.on{display:block}
+#lsPlay>*{max-width:560px;margin:0 auto;padding:0 18px}
+.ls-top{display:flex;align-items:center;gap:12px;padding-top:calc(16px + env(safe-area-inset-top))}
+.ls-x{border:0;background:none;font-size:21px;color:var(--tx3);cursor:pointer;line-height:1;padding:4px}
+.ls-pg{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.ls-pg i{display:block;height:100%;width:0;background:var(--ac);transition:width .25s}
+.ls-c{font-size:12.5px;color:var(--tx3);min-width:52px;text-align:right}
+.ls-card{background:var(--bg2);border:1px solid var(--bd);border-radius:20px;padding:38px 20px;text-align:center;margin:24px 0 16px}
+.ls-w{font-family:var(--serif);font-size:58px;font-weight:700;line-height:1.2;cursor:pointer}
+.ls-zy{color:var(--ac);font-size:18px;margin-top:8px;letter-spacing:.06em}
+.ls-py{color:var(--tx3);font-size:14.5px;margin-top:2px}
+.ls-m{font-size:17px;margin-top:15px}
+.ls-ex{color:var(--tx2);font-size:14px;margin-top:15px;line-height:1.9;border-top:1px dashed var(--line);padding-top:13px}
+.ls-ex span{color:var(--tx3)}
+.ls-q{text-align:center;color:var(--tx3);font-size:12.5px;letter-spacing:.06em;margin-top:26px}
+.ls-big{font-family:var(--serif);font-size:50px;font-weight:700;text-align:center;margin:10px 0 2px;line-height:1.2;cursor:pointer}
+.ls-mid2{font-size:24px;font-weight:600;text-align:center;margin:12px 0 2px}
+.ls-cloze{font-size:23px;line-height:1.95;text-align:center;margin:14px 0 2px}
+.ls-cloze b{color:var(--ac);border-bottom:2px solid var(--ac);padding:0 12px}
+.ls-spk{display:block;margin:16px auto 0;width:88px;height:88px;border-radius:50%;border:1px solid var(--bd);
+ background:var(--bg2);color:var(--ac);cursor:pointer}
+.ls-opts{display:grid;gap:10px;margin:18px 0 4px}
+.ls-opt{padding:15px 16px;border:1px solid var(--bd);border-radius:13px;background:var(--bg2);color:var(--tx);
+ font:inherit;font-size:15.5px;text-align:left;cursor:pointer;line-height:1.6}
+.ls-opt.ok{border-color:#3F7D53;background:rgba(63,125,83,.1);font-weight:700}
+.ls-opt.ng{border-color:var(--ac);background:var(--ac-soft)}
+.ls-opt:disabled{cursor:default;opacity:1}
+.ls-again{text-align:center;margin-top:18px}
+.ls-again::before{content:attr(data-x)}
+.ls-ans{background:var(--bg2);border:1px solid var(--bd);border-radius:15px;padding:16px;margin-top:16px}
+.ls-ans-w{font-size:21px;font-weight:700}
+.ls-ans-w span{color:var(--ac);font-size:14.5px;letter-spacing:.06em;margin-left:6px}
+.ls-ans-m{color:var(--tx2);font-size:14px;margin-top:3px}
+.ls-ans-ex{color:var(--tx2);font-size:13.5px;margin-top:9px;line-height:1.85}
+.ls-cta{width:100%;margin-top:14px;padding:15px;font-size:16px}
+.ls-fin{padding:34px 0 24px;text-align:center}
+.ls-ring{width:132px;height:132px;margin:0 auto 6px;position:relative}
+.ls-ring svg{transform:rotate(-90deg)}
+.ls-ringv{position:absolute;inset:0;display:grid;place-items:center;font-size:33px;font-weight:800}
+.ls-fin-t{font-family:var(--serif);font-size:21px;font-weight:700;margin-top:8px}
+.ls-fin-s{color:var(--tx2);font-size:13px;margin-top:5px}
+.ls-fin-row{display:flex;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--bd);
+ border-radius:14px;padding:13px 15px;margin:22px 0 10px;text-align:left;opacity:0;transform:translateY(8px);
+ transition:opacity .45s ease,transform .45s ease}
+.ls-fin-row.in{opacity:1;transform:none}
+.ls-fin-row .k{flex:1;font-size:13px;color:var(--tx2)}
+.ls-fin-row .v{font-weight:800;color:var(--ac)}
+.ls-ubar{display:block;height:7px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:7px}
+.ls-ubar i{display:block;height:100%;width:0;background:var(--ac);border-radius:4px;transition:width 1s cubic-bezier(.22,1,.36,1)}
+.ls-unlock{border:1px dashed var(--ac);background:var(--ac-soft);border-radius:14px;padding:13px 15px;
+ margin:12px 0 18px;text-align:left;opacity:0;transform:translateY(8px);transition:opacity .45s ease .25s,transform .45s ease .25s}
+.ls-unlock.in{opacity:1;transform:none}
+.ls-unlock b{display:block;font-size:11.5px;color:var(--ac);letter-spacing:.07em}
+.ls-unlock span{font-size:15px;font-weight:600}
+.ls-unlock em{font-style:normal;color:var(--tx3);font-weight:400;font-size:13px}
+.ls-lockmsg{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--ac);font-size:12.5px;margin-top:12px}
+.ls-back{margin-top:14px}
+.ls-back a{color:var(--tx3);font-size:13px}
 .pw-quota.pro{color:var(--ac);font-weight:700}
 .yts-load,.yts-empty{text-align:center;padding:38px 16px;color:var(--tx3);font-size:14px;line-height:1.7}
 .yts-empty .btn{margin-top:13px}
@@ -1270,7 +1353,15 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
   <section class="panel" id="panel-ytshadow"><div class="yts" id="ytsBody"></div></section>
 
   <!-- 復習 SRS -->
-  <section class="panel" id="panel-srs"><div class="srs-home" id="srsHome"></div></section>
+  <div id="lsPlay">
+  <div class="ls-top">
+    <button class="ls-x" onclick="LS.quit()" aria-label="close">✕</button>
+    <div class="ls-pg"><i id="lsBar"></i></div>
+    <span class="ls-c" id="lsCount"></span>
+  </div>
+  <div id="lsStage"></div>
+</div>
+<section class="panel" id="panel-srs"><div class="srs-home" id="srsHome"></div></section>
 
   <!-- 模試 -->
   <section class="panel" id="panel-exam"><div class="ex-home" id="examBox"></div></section>
@@ -1442,7 +1533,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=128"></script>
+<script src="i18n.js?v=130"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=64"></script>
 <script src="vocab-l1.js?v=52"></script>
@@ -1498,15 +1589,16 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 <script src="articles-20.js?v=1"></script>
 <script src="writing-data.js?v=52"></script>
 <script src="icons.js?v=1"></script>
-<script src="paywall.js?v=108"></script>
+<script src="paywall.js?v=110"></script>
 <script src="essentials.js?v=2"></script>
 <script src="essentials-ui.js?v=3"></script>
 <script src="fortune.js?v=4"></script>
 <script src="myvocab.js?v=2"></script>
 <script src="whatsnew.js?v=3"></script>
+<script src="lessons.js?v=1"></script>
 <script src="ytshadow.js?v=28"></script>
 <script src="listen.js?v=4"></script>
-<script src="websync.js?v=63"></script>
+<script src="websync.js?v=64"></script>
 <script src="srs.js?v=58"></script>
 <script src="mock-exam.js?v=59"></script>
 <script src="polyphone.js?v=4"></script>
@@ -3421,9 +3513,9 @@ const PA = (() => {
       ${(typeof WhatsNew !== "undefined") ? WhatsNew.card() : ""}
       ${(typeof Fortune !== "undefined") ? Fortune.card() : ""}
       <div>
-        <div class="pa-found-h">${twT("paLevelH").replace("{lv}", lvName)}<span class="pa-count">${cleared} / ${gated.length}</span></div>
-        <div class="pa-level-sub">${twT("paLevelSub")}</div>
-        <div class="pa-steps">${rows}</div>
+        <div class="pa-found-h">${twT("paLevelH").replace("{lv}", lvName)}</div>
+        <div class="pa-level-sub">${twT("lsLevelSub")}</div>
+        ${(typeof LS !== "undefined") ? LS.section(currentLevel) : ""}
       </div>
       <div>
         <div class="pa-found-h">${twT("paFoundH")}</div>
