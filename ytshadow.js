@@ -37,6 +37,19 @@ const YTS = (() => {
 
   const CATS = ["all", "beg", "life", "news", "talk"];
 
+  // 無料は各カテゴリの 1 本目だけ。残りは Premium。
+  // ここを全部無料にしていたが「入り口は見せる、棚は買ってもらう」に寄せた(2026-09)。
+  // 判定は並び順から作る。データに free フラグを持たせると、動画を足すたびに付け忘れる。
+  const FREE_V = (() => {
+    const seen = new Set(), out = new Set();
+    for (const s of SAMPLES) if (!seen.has(s.cat)) { seen.add(s.cat); out.add(s.v); }
+    return out;
+  })();
+  const vLocked = (v) => {
+    if (FREE_V.has(v)) return false;
+    try { return !Paywall.isPremium(); } catch (e) { return false; }
+  };
+
   let player = null, apiReady = false, vid = "", lines = [], cur = 0, mode = "follow", qz = null;
   let loopOn = false, spdIdx = 0, vocab = [], watchT = 0, booted = false, meta = {};
   let followT = 0;   // 跟播モード:動画の再生位置に合わせてカードを送る
@@ -106,6 +119,8 @@ const YTS = (() => {
 
   // ── 讀取影片 ──
   async function load(input) {
+    // 一覧のカードだけでなく、ここでも見る。URL 直打ちや古いリンクから来ることがある。
+    { const v0 = parseVid(input); if (v0 && vLocked(v0)) { try { Paywall.show("ytshadow"); } catch (e) {} return; } }
     const v = parseVid(input);
     if (!v) { toast(T("ytsBadUrl")); return; }
     const box = $("ytsBody");
@@ -626,9 +641,11 @@ const YTS = (() => {
       <p class="yts-lead">${esc(T("ytsLead"))}</p>
       <div class="yts-cats">${CATS.map((c) => `<button class="yts-cat${c === cat ? " on" : ""}" onclick="YTS.setCat('${c}')">${esc(T("ytsCat_" + c))}</button>`).join("")}</div>
       <div class="yts-grid">${list.map((s) => {
-        const d = doneSet(s.v).size;
-        return `<button class="yts-card" onclick="YTS.load('${s.v}')">
+        const d = doneSet(s.v).size, lk = vLocked(s.v);
+        return `<button class="yts-card${lk ? " locked" : ""}" onclick="YTS.load('${s.v}')">
           <img loading="lazy" src="https://i.ytimg.com/vi/${s.v}/mqdefault.jpg" alt="">
+          ${lk ? `<span class="yts-lock">${icon("lock", { size: 15 })}</span>`
+               : (FREE_V.has(s.v) ? `<span class="yts-free">${esc(T("ytsFree"))}</span>` : "")}
           <div class="yts-ct"><b>${esc(s.t)}</b><span>${esc(s.tag)}</span>${d ? `<em>${d} ${esc(T("ytsDoneN"))}</em>` : ""}</div>
         </button>`;
       }).join("")}</div>

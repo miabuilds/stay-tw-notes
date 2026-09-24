@@ -118,7 +118,7 @@ const Paywall = (() => {
     const bg = document.getElementById("pwBg");
     if (!bg) return;
     track(feature);
-    const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore"), listen: twT("lsTitle"), fav: twT("pwFavName"), ytsquiz: twT("ytsQzTitle") }[feature] || "";
+    const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore"), listen: twT("lsTitle"), fav: twT("pwFavName"), ytsquiz: twT("ytsQzTitle"), ytshadow: twT("toolYts"), provocab: twT("pwProVocab") }[feature] || "";
     const desc = feature === "article" ? twT("pwContentHit")
       : feature === "myvocab" ? twT("pwMyVocabHit").replace("{n}", String((typeof MyVocab !== "undefined" && MyVocab.FREE_MAX) || 10))
       : feature === "fav" ? twT("pwFavHit").replace("{n}", String(FAV_FREE_MAX))

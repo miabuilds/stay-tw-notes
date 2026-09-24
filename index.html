@@ -755,6 +755,17 @@ body.more-open .ar-bar{display:none}
 .yts-qz-mine{color:var(--ac);font-size:14px;margin-top:4px}
 .yts-qz-corr{color:#3F7D53;font-size:14px;margin-top:2px;font-weight:600}
 .yts-qz-sent{font-size:13.5px;color:var(--tx2);margin-top:4px;line-height:1.8}
+/* 無料は各カテゴリ 1 本目だけ。鍵は薄くかける——真っ黒にすると「壊れている」に見える */
+.yts-card{position:relative}
+.yts-card.locked img{opacity:.42;filter:grayscale(.5)}
+.yts-card.locked .yts-ct b{color:var(--tx2)}
+.yts-lock,.yts-free{position:absolute;top:8px;left:8px;display:inline-flex;align-items:center;gap:4px;
+ border-radius:999px;padding:4px 9px;font-size:11px;font-weight:700;line-height:1}
+.yts-lock{background:rgba(0,0,0,.62);color:#fff}
+.yts-free{background:var(--ac);color:#fff}
+/* 鍵のかかった語。意味と例文を伏せて、字と読みだけ見せる(棚は見せる) */
+.vcard-lock{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:13px;color:var(--ac);
+ background:var(--ac-soft);border-radius:10px;padding:8px 11px}
 .yts-load,.yts-empty{text-align:center;padding:38px 16px;color:var(--tx3);font-size:14px;line-height:1.7}
 .yts-empty .btn{margin-top:13px}
 /* ホームの Premium カード：使い切ってから見せるのではなく、最初から「何が開くか」を見せる。
@@ -1430,7 +1441,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=126"></script>
+<script src="i18n.js?v=127"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=64"></script>
 <script src="vocab-l1.js?v=52"></script>
@@ -1449,6 +1460,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 <script src="vocab-l4-c.js?v=59"></script>
 <script src="vocab-l5-c.js?v=60"></script>
 <script src="vocab-l6.js?v=3"></script>
+<script src="vocab-l6-b.js?v=1"></script>
 <script src="grammar-l1.js?v=53"></script>
 <script src="grammar-l2.js?v=52"></script>
 <script src="grammar-l3.js?v=52"></script>
@@ -1485,13 +1497,13 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 <script src="articles-20.js?v=1"></script>
 <script src="writing-data.js?v=52"></script>
 <script src="icons.js?v=1"></script>
-<script src="paywall.js?v=106"></script>
+<script src="paywall.js?v=107"></script>
 <script src="essentials.js?v=2"></script>
 <script src="essentials-ui.js?v=3"></script>
 <script src="fortune.js?v=4"></script>
 <script src="myvocab.js?v=2"></script>
 <script src="whatsnew.js?v=3"></script>
-<script src="ytshadow.js?v=27"></script>
+<script src="ytshadow.js?v=28"></script>
 <script src="listen.js?v=4"></script>
 <script src="websync.js?v=63"></script>
 <script src="srs.js?v=58"></script>
@@ -1575,6 +1587,19 @@ const VOCAB_BY_LEVEL   = {
 };
 const GRAMMAR_BY_LEVEL = { l1: GRAMMAR_L1, l2: GRAMMAR_L2, l3: GRAMMAR_L3, l4: GRAMMAR_L4, l5: GRAMMAR_L5, l6: (typeof GRAMMAR_L6!=="undefined"?GRAMMAR_L6:[]) };
 function getVocabData(lv){ return VOCAB_BY_LEVEL[lv] || []; }
+// 練習(カード・クイズ・復習・模試・聞き取り)に回す語。
+// pro:1 は 2026-09 以降に足した語で Premium 限定。既存の語は一つも取り上げない。
+// 一覧(renderList)だけは pro も出す——鍵のかかった棚が見えていないと、買う理由が伝わらない。
+function twOpenVocab(lv){
+  const all = getVocabData(lv);
+  let pro = false;
+  try { pro = Paywall.isPremium(); } catch (e) {}
+  return pro ? all : all.filter(v => !v.pro);
+}
+function twVocabLocked(v){
+  if (!v || !v.pro) return false;
+  try { return !Paywall.isPremium(); } catch (e) { return false; }
+}
 function getGrammarData(lv){ return GRAMMAR_BY_LEVEL[lv] || []; }
 // ===== 全域辞書インデックス：全レベルの語彙を word → entry(+_lv) で引く =====
 // タップ辞書（twWord / .tapc）と「復習に追加」が参照。低レベル優先＝より基本的な語の級を採用。
@@ -1674,7 +1699,7 @@ function setLevel(lv){
   currentLevel = lv;
   localStorage.setItem("stw-level", lv);
   document.querySelectorAll(".lv-btn").forEach(b => b.classList.toggle("on", b.dataset.lv === lv));
-  deck = [...getVocabData(lv)]; fcIdx = restoreFcIdx(); posFilter = "all";
+  deck = [...twOpenVocab(lv)]; fcIdx = restoreFcIdx(); posFilter = "all";
   renderCard(); renderPosRow(); renderList(); renderGrammar(); renderPhrases(); renderSrsHome(); renderExamHome();
   qzReset(); SPK.reset();
   refreshActivePanel();   // 目前顯示中的 tab 立刻反映新 level
@@ -1756,7 +1781,7 @@ document.addEventListener("visibilitychange", () => { if (document.visibilitySta
 window.addEventListener("pagehide", twStopAllAudio);
 
 /* ===== 単語カード（枠内タップで発音＋めくり = 原サイトと同じ）===== */
-let deck = [...getVocabData(currentLevel)], fcIdx = 0;
+let deck = [...twOpenVocab(currentLevel)], fcIdx = 0;
 
 /* ===== 収藏・レジューム（前回位置）・レベル読了 ===== */
 const FAV_KEY="stw_fav", POS_KEY="stw_fc_pos", SEEN_KEY="stw_fc_seen", DONE_KEY="stw_fc_done";
@@ -1785,7 +1810,7 @@ function markSeen(){
   if(!arr.includes(w)) arr.push(w);
   s[currentLevel]=arr; _lsSet(SEEN_KEY,s);
   const done=_lsGet(DONE_KEY,[]);
-  if(arr.length>=getVocabData(currentLevel).length && !done.includes(currentLevel)){
+  if(arr.length>=twOpenVocab(currentLevel).length && !done.includes(currentLevel)){
     done.push(currentLevel); _lsSet(DONE_KEY,done);
     setTimeout(()=>showToast(twT("lvDone")), 400);
   }
@@ -2067,14 +2092,17 @@ function renderList(){
         <button class="vcard-fav" data-fav="${i}" aria-label="収藏" style="background:none;border:none;cursor:pointer;font-size:19px;padding:2px 6px;color:${isFav(currentLevel,v.w)?"var(--ac)":"var(--tx3)"}">${isFav(currentLevel,v.w)?"★":"♡"}</button>
         <span class="vcard-pos">${v.c}</span>
       </div>
-      <div class="vcard-m">${v.m[mk] || v.m.e || v.m.j}</div>
-      <div class="vcard-ex" data-ex="1"><b>${v.ex.z}</b> <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg><br>${exRuby(v.ex.z, v.ex.py)}<br>${v.ex[mk] || v.ex.e || v.ex.j}</div>
+      ${twVocabLocked(v)
+        ? `<div class="vcard-lock" data-lock="1">${icon("lock",{size:15})} ${esc(twT("proLocked"))}</div>`
+        : `<div class="vcard-m">${v.m[mk] || v.m.e || v.m.j}</div>
+      <div class="vcard-ex" data-ex="1"><b>${v.ex.z}</b> <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg><br>${exRuby(v.ex.z, v.ex.py)}<br>${v.ex[mk] || v.ex.e || v.ex.j}</div>`}
     </div>`).join("");
   // 枠内タップで発音（例文部分は例文を読む）
   document.querySelectorAll("#vList .vcard").forEach(card=>{
     const v = rows[+card.dataset.i];
     card.onclick = e => {
       if (e.target.closest(".vcard-fav")) return;   // ♡ は別処理
+      if (twVocabLocked(v)) { try { Paywall.show("provocab"); } catch (e2) {} return; }
       speakZh(e.target.closest(".vcard-ex") ? v.ex.z : v.w);
     };
   });
@@ -2153,7 +2181,7 @@ function qzStart(){
 }
 // 優先復習：復習期限が来た単語・過去に間違えた単語を先に選び、残りはランダムで埋める
 function qzPickWords(n){
-  const vocab = getVocabData(currentLevel);
+  const vocab = twOpenVocab(currentLevel);
   const byWord = {}; vocab.forEach(v => byWord[v.w] = v);
   const srs = (window.SRS && SRS.getData) ? SRS.getData() : {};
   const now = Date.now(), pfx = currentLevel + ":";
@@ -2187,7 +2215,7 @@ function qzNext(){
     speakZh(w.w);
     return;
   }
-  const wrong = getVocabData(currentLevel).filter(v=>v.w!==w.w).sort(()=>Math.random()-.5).slice(0,3);
+  const wrong = twOpenVocab(currentLevel).filter(v=>v.w!==w.w).sort(()=>Math.random()-.5).slice(0,3);
   const opts = [w, ...wrong].sort(()=>Math.random()-.5);
   document.getElementById("qzBox").innerHTML = `
     <div style="font-size:13px;color:var(--tx3)">${qzIdx+1} / ${qzOrder.length}　${twT("quizScore")}: ${qzScore}</div>
@@ -2288,7 +2316,7 @@ const SPK = (() => {
     if (src === "phrase") {
       items = PHRASES_L1.flatMap(s => s.items.map(it => ({ z: it.z, py: it.py, tr: it.m[mk] || it.m.e || it.m.j })));
     } else {
-      items = getVocabData(currentLevel).map(v => ({ z: v.ex.z, py: v.ex.py, tr: v.ex[mk] || v.ex.e || v.ex.j }));
+      items = twOpenVocab(currentLevel).map(v => ({ z: v.ex.z, py: v.ex.py, tr: v.ex[mk] || v.ex.e || v.ex.j }));
     }
     items.sort(() => Math.random() - .5);
     idx = 0;
@@ -2859,7 +2887,7 @@ async function twDoDeleteAccount(){
 function renderSrsHome(){
   const st = SRS.getStats(currentLevel);
   const due = SRS.getDueCount();
-  const total = getVocabData(currentLevel).length;
+  const total = twOpenVocab(currentLevel).length;
   document.getElementById("srsHome").innerHTML = `
     <p style="font-size:14.5px;color:var(--tx2);line-height:1.9">${twT("srsIntro")}</p>
     <div class="srs-stats-grid">
@@ -3197,7 +3225,8 @@ const PA = (() => {
 
   function stages(){
     const lv = currentLevel;
-    const vocabTotal = (typeof getVocabData === "function" ? getVocabData(lv).length : 0) || 0;
+    // 進度の分母は「その人が使える語」。鍵のかかった語まで数えると永遠に 100% にならない
+    const vocabTotal = (typeof twOpenVocab === "function" ? twOpenVocab(lv).length : 0) || 0;
     const st = (typeof SRS !== "undefined" && SRS.getStats) ? SRS.getStats(lv) : { total:0, due:0, mastered:0, learning:0 };
     const stories = twReading(lv);
     const readIds = parse("stw_read", []);
@@ -3244,7 +3273,7 @@ const PA = (() => {
   function plan(){
     const lv = currentLevel;
     const st = (typeof SRS !== "undefined" && SRS.getStats) ? SRS.getStats(lv) : { total:0, due:0 };
-    const all = (typeof getVocabData === "function" ? getVocabData(lv).length : 0) || 0;
+    const all = (typeof twOpenVocab === "function" ? twOpenVocab(lv).length : 0) || 0;
     const fresh = Math.max(0, all - st.total);
     const nw = Math.min(10, fresh);
     const due = st.due;
