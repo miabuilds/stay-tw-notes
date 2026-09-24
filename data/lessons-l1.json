@@ -1,10 +1,13 @@
 {
  "level": "l1",
  "per": 8,
+ "by": "theme",
  "units": [
   {
-   "id": "self",
-   "name": {
+   "id": "u1",
+   "no": 1,
+   "lead": {
+    "g": "self",
     "ja": "自分と相手",
     "en": "You and me",
     "ko": "나와 상대",
@@ -12,189 +15,133 @@
     "id": "Aku dan kamu"
    },
    "lessons": [
-    [
-     "我",
-     "你",
-     "您",
-     "他",
-     "她",
-     "我們",
-     "大家",
-     "人"
-    ],
-    [
-     "朋友",
-     "名字",
-     "先生",
-     "小姐",
-     "同學",
-     "胖",
-     "瘦",
-     "客人"
-    ],
-    [
-     "老闆娘",
-     "小孩",
-     "嬰兒",
-     "老師",
-     "學生",
-     "醫生",
-     "工程師",
-     "你好"
-    ],
-    [
-     "謝謝",
-     "不客氣",
-     "對不起",
-     "不好意思",
-     "沒關係",
-     "再見",
-     "請問",
-     "老闆"
-    ]
+    {
+     "name": {
+      "g": "self",
+      "ja": "自分と相手",
+      "en": "You and me",
+      "ko": "나와 상대",
+      "vi": "Tôi và bạn",
+      "id": "Aku dan kamu"
+     },
+     "words": [
+      "我",
+      "你",
+      "您",
+      "他",
+      "她",
+      "我們",
+      "大家",
+      "人"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "self",
+      "ja": "自分と相手",
+      "en": "You and me",
+      "ko": "나와 상대",
+      "vi": "Tôi và bạn",
+      "id": "Aku dan kamu"
+     },
+     "words": [
+      "朋友",
+      "名字",
+      "先生",
+      "小姐",
+      "家人",
+      "爸爸"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "family",
+      "ja": "家族",
+      "en": "Family",
+      "ko": "가족",
+      "vi": "Gia đình",
+      "id": "Keluarga"
+     },
+     "words": [
+      "媽媽",
+      "哥哥",
+      "姊姊",
+      "弟弟",
+      "妹妹",
+      "老師"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "self",
+      "ja": "自分と相手",
+      "en": "You and me",
+      "ko": "나와 상대",
+      "vi": "Tôi và bạn",
+      "id": "Aku dan kamu"
+     },
+     "words": [
+      "學生",
+      "醫生",
+      "工程師",
+      "台灣",
+      "日本",
+      "台北"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "place",
+      "ja": "場所と移動",
+      "en": "Places & getting around",
+      "ko": "장소와 이동",
+      "vi": "Nơi chốn & đi lại",
+      "id": "Tempat & perjalanan"
+     },
+     "words": [
+      "家",
+      "學校",
+      "公司",
+      "醫院",
+      "銀行",
+      "餐廳",
+      "夜市",
+      "便利商店"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "place",
+      "ja": "場所と移動",
+      "en": "Places & getting around",
+      "ko": "장소와 이동",
+      "vi": "Nơi chốn & đi lại",
+      "id": "Tempat & perjalanan"
+     },
+     "words": [
+      "廁所",
+      "捷運",
+      "公車",
+      "火車",
+      "高鐵",
+      "機車",
+      "計程車",
+      "車站"
+     ],
+     "idx": 2
+    }
    ]
   },
   {
-   "id": "family",
-   "name": {
-    "ja": "家族",
-    "en": "Family",
-    "ko": "가족",
-    "vi": "Gia đình",
-    "id": "Keluarga"
-   },
-   "lessons": [
-    [
-     "家人",
-     "爸爸",
-     "媽媽",
-     "哥哥",
-     "姊姊",
-     "弟弟",
-     "妹妹",
-     "爺爺"
-    ],
-    [
-     "奶奶",
-     "兒子",
-     "女兒",
-     "阿姨",
-     "叔叔",
-     "外公",
-     "外婆",
-     "男生",
-     "女生",
-     "同事"
-    ]
-   ]
-  },
-  {
-   "id": "number",
-   "name": {
-    "ja": "数と量詞",
-    "en": "Numbers & counters",
-    "ko": "숫자와 단위",
-    "vi": "Số và lượng từ",
-    "id": "Angka & kata bantu"
-   },
-   "lessons": [
-    [
-     "一",
-     "兩",
-     "三",
-     "十",
-     "百",
-     "錢",
-     "塊",
-     "個"
-    ],
-    [
-     "杯",
-     "四",
-     "五",
-     "六",
-     "七",
-     "八",
-     "九",
-     "千"
-    ],
-    [
-     "萬",
-     "隻",
-     "本",
-     "條",
-     "位",
-     "台",
-     "次",
-     "歲"
-    ],
-    [
-     "些",
-     "張",
-     "件",
-     "雙",
-     "碗"
-    ]
-   ]
-  },
-  {
-   "id": "time",
-   "name": {
-    "ja": "時間と曜日",
-    "en": "Time & days",
-    "ko": "시간과 요일",
-    "vi": "Thời gian & ngày",
-    "id": "Waktu & hari"
-   },
-   "lessons": [
-    [
-     "今天",
-     "明天",
-     "昨天",
-     "現在",
-     "早上",
-     "晚上",
-     "星期",
-     "時間"
-    ],
-    [
-     "點",
-     "上午",
-     "下午",
-     "週末",
-     "每天",
-     "年",
-     "星期一",
-     "星期日"
-    ],
-    [
-     "月",
-     "號",
-     "生日",
-     "左邊",
-     "右邊",
-     "上面",
-     "下面",
-     "這裡"
-    ],
-    [
-     "那裡",
-     "剛才",
-     "馬路",
-     "路口",
-     "春天",
-     "秋天",
-     "夏天",
-     "冬天",
-     "小時",
-     "以前",
-     "以後"
-    ]
-   ]
-  },
-  {
-   "id": "place",
-   "name": {
+   "id": "u2",
+   "no": 2,
+   "lead": {
+    "g": "place",
     "ja": "場所と移動",
     "en": "Places & getting around",
     "ko": "장소와 이동",
@@ -202,236 +149,133 @@
     "id": "Tempat & perjalanan"
    },
    "lessons": [
-    [
-     "台灣",
-     "日本",
-     "台北",
-     "家",
-     "學校",
-     "公司",
-     "醫院",
-     "銀行"
-    ],
-    [
-     "餐廳",
-     "夜市",
-     "便利商店",
-     "廁所",
-     "公園",
-     "圖書館",
-     "郵局",
-     "超市"
-    ],
-    [
-     "飯店",
-     "教室",
-     "大學",
-     "房間",
-     "市場",
-     "廚房",
-     "辦公室",
-     "附近"
-    ],
-    [
-     "房子",
-     "捷運",
-     "公車",
-     "火車",
-     "高鐵",
-     "機車",
-     "計程車",
-     "車站"
-    ],
-    [
-     "機場",
-     "飛機",
-     "腳踏車",
-     "車",
-     "前面",
-     "後面",
-     "裡面",
-     "外面",
-     "旁邊"
-    ]
+    {
+     "name": {
+      "g": "place",
+      "ja": "場所と移動",
+      "en": "Places & getting around",
+      "ko": "장소와 이동",
+      "vi": "Nơi chốn & đi lại",
+      "id": "Tempat & perjalanan"
+     },
+     "words": [
+      "機場",
+      "水",
+      "茶",
+      "咖啡",
+      "珍珠奶茶",
+      "啤酒"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "food",
+      "ja": "食べる・飲む",
+      "en": "Eating & drinking",
+      "ko": "먹고 마시기",
+      "vi": "Ăn và uống",
+      "id": "Makan & minum"
+     },
+     "words": [
+      "飯",
+      "麵",
+      "小籠包",
+      "滷肉飯",
+      "水果",
+      "芒果",
+      "早餐",
+      "晚餐"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "time",
+      "ja": "時間と曜日",
+      "en": "Time & days",
+      "ko": "시간과 요일",
+      "vi": "Thời gian & ngày",
+      "id": "Waktu & hari"
+     },
+     "words": [
+      "今天",
+      "明天",
+      "昨天",
+      "現在",
+      "早上",
+      "晚上",
+      "星期",
+      "時間"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "time",
+      "ja": "時間と曜日",
+      "en": "Time & days",
+      "ko": "시간과 요일",
+      "vi": "Thời gian & ngày",
+      "id": "Waktu & hari"
+     },
+     "words": [
+      "點",
+      "一",
+      "兩",
+      "三",
+      "十",
+      "百"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "num",
+      "ja": "数と量詞",
+      "en": "Numbers & counters",
+      "ko": "숫자와 단위",
+      "vi": "Số và lượng từ",
+      "id": "Angka & satuan"
+     },
+     "words": [
+      "錢",
+      "塊",
+      "個",
+      "杯",
+      "是",
+      "有"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "verb",
+      "ja": "よく使う動作",
+      "en": "Everyday actions",
+      "ko": "자주 쓰는 동작",
+      "vi": "Hành động thường ngày",
+      "id": "Tindakan sehari-hari"
+     },
+     "words": [
+      "去",
+      "來",
+      "吃",
+      "喝",
+      "買",
+      "看",
+      "聽",
+      "說"
+     ],
+     "idx": 1
+    }
    ]
   },
   {
-   "id": "food",
-   "name": {
-    "ja": "食べる・飲む",
-    "en": "Eating & drinking",
-    "ko": "먹고 마시기",
-    "vi": "Ăn và uống",
-    "id": "Makan & minum"
-   },
-   "lessons": [
-    [
-     "水",
-     "茶",
-     "咖啡",
-     "珍珠奶茶",
-     "啤酒",
-     "飯",
-     "麵",
-     "小籠包"
-    ],
-    [
-     "滷肉飯",
-     "水果",
-     "芒果",
-     "早餐",
-     "晚餐",
-     "雞肉",
-     "豬肉",
-     "牛肉"
-    ],
-    [
-     "蛋",
-     "麵包",
-     "湯",
-     "肉",
-     "便當",
-     "鳳梨",
-     "番茄",
-     "冰淇淋"
-    ],
-    [
-     "甜點",
-     "鹹酥雞",
-     "果汁",
-     "牛奶",
-     "可樂",
-     "冰塊",
-     "糖",
-     "鹽"
-    ],
-    [
-     "油",
-     "醬油",
-     "水餃",
-     "包子",
-     "豆腐",
-     "青菜",
-     "蘋果",
-     "香蕉",
-     "西瓜",
-     "叉子"
-    ]
-   ]
-  },
-  {
-   "id": "things",
-   "name": {
-    "ja": "身のまわりの物",
-    "en": "Everyday things",
-    "ko": "일상 물건",
-    "vi": "Đồ dùng hằng ngày",
-    "id": "Barang sehari-hari"
-   },
-   "lessons": [
-    [
-     "桌子",
-     "椅子",
-     "床",
-     "門",
-     "窗戶",
-     "書",
-     "筆",
-     "傘"
-    ],
-    [
-     "眼鏡",
-     "行李",
-     "電話",
-     "照片",
-     "報紙",
-     "雜誌",
-     "信封",
-     "郵票"
-    ],
-    [
-     "盒子",
-     "瓶子",
-     "杯子",
-     "中午",
-     "分鐘",
-     "臉",
-     "裙子",
-     "鼻子"
-    ],
-    [
-     "頭髮",
-     "手機",
-     "電腦",
-     "電視",
-     "衣服",
-     "鞋子"
-    ]
-   ]
-  },
-  {
-   "id": "body",
-   "name": {
-    "ja": "体・色・自然",
-    "en": "Body, colours, nature",
-    "ko": "몸·색·자연",
-    "vi": "Cơ thể, màu sắc, thiên nhiên",
-    "id": "Tubuh, warna, alam"
-   },
-   "lessons": [
-    [
-     "頭",
-     "手",
-     "腳",
-     "眼睛",
-     "耳朵",
-     "嘴巴",
-     "身體",
-     "肚子"
-    ],
-    [
-     "牙齒",
-     "紅色",
-     "藍色",
-     "白色",
-     "黑色",
-     "綠色",
-     "黃色",
-     "顏色"
-    ],
-    [
-     "粉紅色",
-     "灰色",
-     "橘色",
-     "狗",
-     "貓",
-     "鳥",
-     "魚",
-     "太陽"
-    ],
-    [
-     "月亮",
-     "星星",
-     "天空",
-     "山",
-     "海",
-     "河",
-     "樹",
-     "花"
-    ],
-    [
-     "草",
-     "天氣",
-     "下雨",
-     "風",
-     "雲",
-     "颱風"
-    ]
-   ]
-  },
-  {
-   "id": "verb",
-   "name": {
+   "id": "u3",
+   "no": 3,
+   "lead": {
+    "g": "verb",
     "ja": "よく使う動作",
     "en": "Everyday actions",
     "ko": "자주 쓰는 동작",
@@ -439,94 +283,395 @@
     "id": "Tindakan sehari-hari"
    },
    "lessons": [
-    [
-     "是",
-     "有",
-     "去",
-     "來",
-     "吃",
-     "喝",
-     "買",
-     "看"
-    ],
-    [
-     "聽",
-     "說",
-     "寫",
-     "學",
-     "工作",
-     "喜歡",
-     "要",
-     "想"
-    ],
-    [
-     "會",
-     "可以",
-     "知道",
-     "住",
-     "睡覺",
-     "起床",
-     "給",
-     "站"
-    ],
-    [
-     "穿",
-     "唱歌",
-     "休息",
-     "需要",
-     "上班",
-     "下班",
-     "覺得",
-     "開始"
-    ],
-    [
-     "開",
-     "關",
-     "坐",
-     "走",
-     "拿",
-     "用",
-     "做",
-     "玩"
-    ],
-    [
-     "問",
-     "洗",
-     "找",
-     "教",
-     "認識",
-     "等",
-     "幫",
-     "賣"
-    ],
-    [
-     "租",
-     "飛",
-     "跳",
-     "畫",
-     "推",
-     "拉",
-     "抱",
-     "脫"
-    ],
-    [
-     "戴",
-     "上網",
-     "打球",
-     "跑步",
-     "散步",
-     "點菜",
-     "外帶",
-     "電影",
-     "音樂",
-     "蛋糕",
-     "地方"
-    ]
+    {
+     "name": {
+      "g": "verb",
+      "ja": "よく使う動作",
+      "en": "Everyday actions",
+      "ko": "자주 쓰는 동작",
+      "vi": "Hành động thường ngày",
+      "id": "Tindakan sehari-hari"
+     },
+     "words": [
+      "寫",
+      "學",
+      "工作",
+      "喜歡",
+      "要",
+      "想",
+      "會",
+      "可以"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "verb",
+      "ja": "よく使う動作",
+      "en": "Everyday actions",
+      "ko": "자주 쓰는 동작",
+      "vi": "Hành động thường ngày",
+      "id": "Tindakan sehari-hari"
+     },
+     "words": [
+      "知道",
+      "住",
+      "好",
+      "大",
+      "小",
+      "多"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "adj",
+      "ja": "様子をいう",
+      "en": "Describing things",
+      "ko": "상태 말하기",
+      "vi": "Miêu tả",
+      "id": "Menggambarkan"
+     },
+     "words": [
+      "貴",
+      "便宜",
+      "好吃",
+      "好喝",
+      "漂亮",
+      "熱",
+      "冷",
+      "忙"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "adj",
+      "ja": "様子をいう",
+      "en": "Describing things",
+      "ko": "상태 말하기",
+      "vi": "Miêu tả",
+      "id": "Menggambarkan"
+     },
+     "words": [
+      "累",
+      "開心",
+      "近",
+      "遠",
+      "什麼",
+      "誰"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "ask",
+      "ja": "質問する",
+      "en": "Asking questions",
+      "ko": "질문하기",
+      "vi": "Đặt câu hỏi",
+      "id": "Bertanya"
+     },
+     "words": [
+      "哪裡",
+      "幾",
+      "多少",
+      "怎麼",
+      "這",
+      "那"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "self",
+      "ja": "自分と相手",
+      "en": "You and me",
+      "ko": "나와 상대",
+      "vi": "Tôi và bạn",
+      "id": "Aku dan kamu"
+     },
+     "words": [
+      "你好",
+      "謝謝",
+      "不客氣",
+      "對不起",
+      "不好意思",
+      "沒關係",
+      "再見",
+      "請問"
+     ],
+     "idx": 4
+    }
    ]
   },
   {
-   "id": "adj",
-   "name": {
+   "id": "u4",
+   "no": 4,
+   "lead": {
+    "g": "self",
+    "ja": "自分と相手",
+    "en": "You and me",
+    "ko": "나와 상대",
+    "vi": "Tôi và bạn",
+    "id": "Aku dan kamu"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "self",
+      "ja": "自分と相手",
+      "en": "You and me",
+      "ko": "나와 상대",
+      "vi": "Tôi và bạn",
+      "id": "Aku dan kamu"
+     },
+     "words": [
+      "老闆",
+      "四",
+      "五",
+      "六",
+      "七",
+      "八"
+     ],
+     "idx": 5
+    },
+    {
+     "name": {
+      "g": "num",
+      "ja": "数と量詞",
+      "en": "Numbers & counters",
+      "ko": "숫자와 단위",
+      "vi": "Số và lượng từ",
+      "id": "Angka & satuan"
+     },
+     "words": [
+      "九",
+      "千",
+      "萬",
+      "隻",
+      "本",
+      "星期一"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "time",
+      "ja": "時間と曜日",
+      "en": "Time & days",
+      "ko": "시간과 요일",
+      "vi": "Thời gian & ngày",
+      "id": "Waktu & hari"
+     },
+     "words": [
+      "星期日",
+      "月",
+      "號",
+      "生日",
+      "紅色",
+      "藍色"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "body",
+      "ja": "体・色・自然",
+      "en": "Body, colours, nature",
+      "ko": "몸·색·자연",
+      "vi": "Cơ thể, màu sắc, thiên nhiên",
+      "id": "Tubuh, warna, alam"
+     },
+     "words": [
+      "白色",
+      "黑色",
+      "綠色",
+      "黃色",
+      "頭",
+      "手",
+      "腳",
+      "眼睛"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "body",
+      "ja": "体・色・自然",
+      "en": "Body, colours, nature",
+      "ko": "몸·색·자연",
+      "vi": "Cơ thể, màu sắc, thiên nhiên",
+      "id": "Tubuh, warna, alam"
+     },
+     "words": [
+      "耳朵",
+      "嘴巴",
+      "狗",
+      "貓",
+      "鳥",
+      "魚"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "food",
+      "ja": "食べる・飲む",
+      "en": "Eating & drinking",
+      "ko": "먹고 마시기",
+      "vi": "Ăn và uống",
+      "id": "Makan & minum"
+     },
+     "words": [
+      "雞肉",
+      "豬肉",
+      "牛肉",
+      "蛋",
+      "麵包",
+      "湯",
+      "果汁",
+      "牛奶"
+     ],
+     "idx": 2
+    }
+   ]
+  },
+  {
+   "id": "u5",
+   "no": 5,
+   "lead": {
+    "g": "food",
+    "ja": "食べる・飲む",
+    "en": "Eating & drinking",
+    "ko": "먹고 마시기",
+    "vi": "Ăn và uống",
+    "id": "Makan & minum"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "food",
+      "ja": "食べる・飲む",
+      "en": "Eating & drinking",
+      "ko": "먹고 마시기",
+      "vi": "Ăn và uống",
+      "id": "Makan & minum"
+     },
+     "words": [
+      "可樂",
+      "冰塊",
+      "公園",
+      "圖書館",
+      "郵局",
+      "超市"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "place",
+      "ja": "場所と移動",
+      "en": "Places & getting around",
+      "ko": "장소와 이동",
+      "vi": "Nơi chốn & đi lại",
+      "id": "Tempat & perjalanan"
+     },
+     "words": [
+      "飯店",
+      "教室",
+      "大學",
+      "桌子",
+      "椅子",
+      "床"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "g": "thing",
+      "ja": "身のまわりの物",
+      "en": "Everyday things",
+      "ko": "일상 물건",
+      "vi": "Đồ dùng hằng ngày",
+      "id": "Barang sehari-hari"
+     },
+     "words": [
+      "門",
+      "窗戶",
+      "書",
+      "筆",
+      "傘",
+      "眼鏡"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "family",
+      "ja": "家族",
+      "en": "Family",
+      "ko": "가족",
+      "vi": "Gia đình",
+      "id": "Keluarga"
+     },
+     "words": [
+      "爺爺",
+      "奶奶",
+      "兒子",
+      "女兒",
+      "開",
+      "關"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "verb",
+      "ja": "よく使う動作",
+      "en": "Everyday actions",
+      "ko": "자주 쓰는 동작",
+      "vi": "Hành động thường ngày",
+      "id": "Tindakan sehari-hari"
+     },
+     "words": [
+      "坐",
+      "走",
+      "拿",
+      "用",
+      "做",
+      "玩",
+      "問",
+      "洗"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "g": "verb",
+      "ja": "よく使う動作",
+      "en": "Everyday actions",
+      "ko": "자주 쓰는 동작",
+      "vi": "Hành động thường ngày",
+      "id": "Tindakan sehari-hari"
+     },
+     "words": [
+      "找",
+      "教",
+      "認識",
+      "高",
+      "長",
+      "短"
+     ],
+     "idx": 5
+    }
+   ]
+  },
+  {
+   "id": "u6",
+   "no": 6,
+   "lead": {
+    "g": "adj",
     "ja": "様子をいう",
     "en": "Describing things",
     "ko": "상태 말하기",
@@ -534,89 +679,801 @@
     "id": "Menggambarkan"
    },
    "lessons": [
-    [
-     "好",
-     "大",
-     "小",
-     "多",
-     "貴",
-     "便宜",
-     "好吃",
-     "好喝"
-    ],
-    [
-     "漂亮",
-     "熱",
-     "冷",
-     "忙",
-     "累",
-     "開心",
-     "近",
-     "遠"
-    ],
-    [
-     "少",
-     "舊",
-     "難",
-     "容易",
-     "乾淨",
-     "髒",
-     "舒服",
-     "可愛"
-    ],
-    [
-     "高",
-     "長",
-     "短",
-     "快",
-     "慢",
-     "新",
-     "早",
-     "晚"
-    ],
-    [
-     "乾",
-     "濕",
-     "亮",
-     "暗",
-     "滿",
-     "空",
-     "輕",
-     "重"
-    ],
-    [
-     "厚",
-     "薄",
-     "圓",
-     "方",
-     "手錶"
-    ]
+    {
+     "name": {
+      "g": "adj",
+      "ja": "様子をいう",
+      "en": "Describing things",
+      "ko": "상태 말하기",
+      "vi": "Miêu tả",
+      "id": "Menggambarkan"
+     },
+     "words": [
+      "快",
+      "慢",
+      "新",
+      "早",
+      "晚",
+      "上午"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "time",
+      "ja": "時間と曜日",
+      "en": "Time & days",
+      "ko": "시간과 요일",
+      "vi": "Thời gian & ngày",
+      "id": "Waktu & hari"
+     },
+     "words": [
+      "下午",
+      "週末",
+      "每天",
+      "年",
+      "自己",
+      "一起"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "g": "ask",
+      "ja": "質問する",
+      "en": "Asking questions",
+      "ko": "질문하기",
+      "vi": "Đặt câu hỏi",
+      "id": "Bertanya"
+     },
+     "words": [
+      "東西",
+      "條",
+      "位",
+      "台",
+      "次",
+      "歲"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "num",
+      "ja": "数と量詞",
+      "en": "Numbers & counters",
+      "ko": "숫자와 단위",
+      "vi": "Số và lượng từ",
+      "id": "Angka & satuan"
+     },
+     "words": [
+      "些",
+      "糖",
+      "鹽",
+      "油",
+      "醬油",
+      "水餃"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "food",
+      "ja": "食べる・飲む",
+      "en": "Eating & drinking",
+      "ko": "먹고 마시기",
+      "vi": "Ăn và uống",
+      "id": "Makan & minum"
+     },
+     "words": [
+      "包子",
+      "豆腐",
+      "青菜",
+      "蘋果",
+      "香蕉",
+      "西瓜",
+      "叉子"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "g": "thing",
+      "ja": "身のまわりの物",
+      "en": "Everyday things",
+      "ko": "일상 물건",
+      "vi": "Đồ dùng hằng ngày",
+      "id": "Barang sehari-hari"
+     },
+     "words": [
+      "行李",
+      "電話",
+      "照片",
+      "報紙",
+      "雜誌",
+      "信封",
+      "郵票",
+      "盒子"
+     ],
+     "idx": 2
+    }
    ]
   },
   {
-   "id": "ask",
-   "name": {
-    "ja": "質問する",
-    "en": "Asking questions",
-    "ko": "질문하기",
-    "vi": "Đặt câu hỏi",
-    "id": "Bertanya"
+   "id": "u7",
+   "no": 7,
+   "lead": {
+    "g": "thing",
+    "ja": "身のまわりの物",
+    "en": "Everyday things",
+    "ko": "일상 물건",
+    "vi": "Đồ dùng hằng ngày",
+    "id": "Barang sehari-hari"
    },
    "lessons": [
-    [
-     "什麼",
-     "誰",
-     "哪裡",
-     "幾",
-     "多少",
-     "怎麼",
-     "這",
-     "那",
-     "自己",
-     "一起",
-     "東西"
-    ]
+    {
+     "name": {
+      "g": "thing",
+      "ja": "身のまわりの物",
+      "en": "Everyday things",
+      "ko": "일상 물건",
+      "vi": "Đồ dùng hằng ngày",
+      "id": "Barang sehari-hari"
+     },
+     "words": [
+      "瓶子",
+      "杯子",
+      "中午",
+      "分鐘",
+      "臉",
+      "裙子",
+      "鼻子",
+      "頭髮"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "body",
+      "ja": "体・色・自然",
+      "en": "Body, colours, nature",
+      "ko": "몸·색·자연",
+      "vi": "Cơ thể, màu sắc, thiên nhiên",
+      "id": "Tubuh, warna, alam"
+     },
+     "words": [
+      "太陽",
+      "月亮",
+      "星星",
+      "天空",
+      "山",
+      "海",
+      "河",
+      "樹"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "body",
+      "ja": "体・色・自然",
+      "en": "Body, colours, nature",
+      "ko": "몸·색·자연",
+      "vi": "Cơ thể, màu sắc, thiên nhiên",
+      "id": "Tubuh, warna, alam"
+     },
+     "words": [
+      "花",
+      "草",
+      "飛機",
+      "腳踏車",
+      "車",
+      "等"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "g": "verb",
+      "ja": "よく使う動作",
+      "en": "Everyday actions",
+      "ko": "자주 쓰는 동작",
+      "vi": "Hành động thường ngày",
+      "id": "Tindakan sehari-hari"
+     },
+     "words": [
+      "幫",
+      "賣",
+      "租",
+      "飛",
+      "跳",
+      "畫",
+      "推",
+      "拉"
+     ],
+     "idx": 6
+    },
+    {
+     "name": {
+      "g": "verb",
+      "ja": "よく使う動作",
+      "en": "Everyday actions",
+      "ko": "자주 쓰는 동작",
+      "vi": "Hành động thường ngày",
+      "id": "Tindakan sehari-hari"
+     },
+     "words": [
+      "抱",
+      "脫",
+      "戴",
+      "乾",
+      "濕",
+      "亮"
+     ],
+     "idx": 7
+    },
+    {
+     "name": {
+      "g": "adj",
+      "ja": "様子をいう",
+      "en": "Describing things",
+      "ko": "상태 말하기",
+      "vi": "Miêu tả",
+      "id": "Menggambarkan"
+     },
+     "words": [
+      "暗",
+      "滿",
+      "空",
+      "輕",
+      "重",
+      "厚",
+      "薄",
+      "圓"
+     ],
+     "idx": 4
+    }
+   ]
+  },
+  {
+   "id": "u8",
+   "no": 8,
+   "lead": {
+    "g": "adj",
+    "ja": "様子をいう",
+    "en": "Describing things",
+    "ko": "상태 말하기",
+    "vi": "Miêu tả",
+    "id": "Menggambarkan"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "adj",
+      "ja": "様子をいう",
+      "en": "Describing things",
+      "ko": "상태 말하기",
+      "vi": "Miêu tả",
+      "id": "Menggambarkan"
+     },
+     "words": [
+      "方",
+      "手錶",
+      "左邊",
+      "右邊",
+      "上面",
+      "下面"
+     ],
+     "idx": 5
+    },
+    {
+     "name": {
+      "g": "time",
+      "ja": "時間と曜日",
+      "en": "Time & days",
+      "ko": "시간과 요일",
+      "vi": "Thời gian & ngày",
+      "id": "Waktu & hari"
+     },
+     "words": [
+      "這裡",
+      "那裡",
+      "剛才",
+      "馬路",
+      "路口",
+      "同學"
+     ],
+     "idx": 5
+    },
+    {
+     "name": {
+      "g": "self",
+      "ja": "自分と相手",
+      "en": "You and me",
+      "ko": "나와 상대",
+      "vi": "Tôi và bạn",
+      "id": "Aku dan kamu"
+     },
+     "words": [
+      "胖",
+      "瘦",
+      "客人",
+      "老闆娘",
+      "小孩",
+      "嬰兒"
+     ],
+     "idx": 6
+    },
+    {
+     "name": {
+      "g": "verb",
+      "ja": "よく使う動作",
+      "en": "Everyday actions",
+      "ko": "자주 쓰는 동작",
+      "vi": "Hành động thường ngày",
+      "id": "Tindakan sehari-hari"
+     },
+     "words": [
+      "上網",
+      "打球",
+      "跑步",
+      "散步",
+      "點菜",
+      "外帶",
+      "電影",
+      "音樂"
+     ],
+     "idx": 8
+    },
+    {
+     "name": {
+      "g": "verb",
+      "ja": "よく使う動作",
+      "en": "Everyday actions",
+      "ko": "자주 쓰는 동작",
+      "vi": "Hành động thường ngày",
+      "id": "Tindakan sehari-hari"
+     },
+     "words": [
+      "蛋糕",
+      "地方",
+      "春天",
+      "秋天",
+      "阿姨",
+      "叔叔"
+     ],
+     "idx": 9
+    },
+    {
+     "name": {
+      "g": "family",
+      "ja": "家族",
+      "en": "Family",
+      "ko": "가족",
+      "vi": "Gia đình",
+      "id": "Keluarga"
+     },
+     "words": [
+      "外公",
+      "外婆",
+      "男生",
+      "女生",
+      "同事",
+      "身體"
+     ],
+     "idx": 3
+    }
+   ]
+  },
+  {
+   "id": "u9",
+   "no": 9,
+   "lead": {
+    "g": "body",
+    "ja": "体・色・自然",
+    "en": "Body, colours, nature",
+    "ko": "몸·색·자연",
+    "vi": "Cơ thể, màu sắc, thiên nhiên",
+    "id": "Tubuh, warna, alam"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "body",
+      "ja": "体・色・自然",
+      "en": "Body, colours, nature",
+      "ko": "몸·색·자연",
+      "vi": "Cơ thể, màu sắc, thiên nhiên",
+      "id": "Tubuh, warna, alam"
+     },
+     "words": [
+      "肚子",
+      "牙齒",
+      "顏色",
+      "粉紅色",
+      "灰色",
+      "橘色"
+     ],
+     "idx": 5
+    },
+    {
+     "name": {
+      "g": "verb",
+      "ja": "よく使う動作",
+      "en": "Everyday actions",
+      "ko": "자주 쓰는 동작",
+      "vi": "Hành động thường ngày",
+      "id": "Tindakan sehari-hari"
+     },
+     "words": [
+      "睡覺",
+      "起床",
+      "給",
+      "站",
+      "穿",
+      "唱歌",
+      "休息",
+      "需要"
+     ],
+     "idx": 10
+    },
+    {
+     "name": {
+      "g": "verb",
+      "ja": "よく使う動作",
+      "en": "Everyday actions",
+      "ko": "자주 쓰는 동작",
+      "vi": "Hành động thường ngày",
+      "id": "Tindakan sehari-hari"
+     },
+     "words": [
+      "上班",
+      "下班",
+      "覺得",
+      "開始",
+      "少",
+      "舊"
+     ],
+     "idx": 11
+    },
+    {
+     "name": {
+      "g": "adj",
+      "ja": "様子をいう",
+      "en": "Describing things",
+      "ko": "상태 말하기",
+      "vi": "Miêu tả",
+      "id": "Menggambarkan"
+     },
+     "words": [
+      "難",
+      "容易",
+      "乾淨",
+      "髒",
+      "舒服",
+      "可愛"
+     ],
+     "idx": 6
+    },
+    {
+     "name": {
+      "g": "time",
+      "ja": "時間と曜日",
+      "en": "Time & days",
+      "ko": "시간과 요일",
+      "vi": "Thời gian & ngày",
+      "id": "Waktu & hari"
+     },
+     "words": [
+      "夏天",
+      "冬天",
+      "小時",
+      "以前",
+      "以後",
+      "天氣"
+     ],
+     "idx": 6
+    },
+    {
+     "name": {
+      "g": "body",
+      "ja": "体・色・自然",
+      "en": "Body, colours, nature",
+      "ko": "몸·색·자연",
+      "vi": "Cơ thể, màu sắc, thiên nhiên",
+      "id": "Tubuh, warna, alam"
+     },
+     "words": [
+      "下雨",
+      "風",
+      "雲",
+      "颱風",
+      "肉",
+      "便當"
+     ],
+     "idx": 6
+    }
+   ]
+  },
+  {
+   "id": "u10",
+   "no": 10,
+   "lead": {
+    "g": "food",
+    "ja": "食べる・飲む",
+    "en": "Eating & drinking",
+    "ko": "먹고 마시기",
+    "vi": "Ăn và uống",
+    "id": "Makan & minum"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "food",
+      "ja": "食べる・飲む",
+      "en": "Eating & drinking",
+      "ko": "먹고 마시기",
+      "vi": "Ăn và uống",
+      "id": "Makan & minum"
+     },
+     "words": [
+      "鳳梨",
+      "番茄",
+      "冰淇淋",
+      "甜點",
+      "鹹酥雞",
+      "房間"
+     ],
+     "idx": 5
+    },
+    {
+     "name": {
+      "g": "place",
+      "ja": "場所と移動",
+      "en": "Places & getting around",
+      "ko": "장소와 이동",
+      "vi": "Nơi chốn & đi lại",
+      "id": "Tempat & perjalanan"
+     },
+     "words": [
+      "市場",
+      "廚房",
+      "辦公室",
+      "附近",
+      "房子",
+      "張"
+     ],
+     "idx": 5
+    },
+    {
+     "name": {
+      "g": "num",
+      "ja": "数と量詞",
+      "en": "Numbers & counters",
+      "ko": "숫자와 단위",
+      "vi": "Số và lượng từ",
+      "id": "Angka & satuan"
+     },
+     "words": [
+      "件",
+      "雙",
+      "碗",
+      "前面",
+      "後面",
+      "裡面"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "g": "place",
+      "ja": "場所と移動",
+      "en": "Places & getting around",
+      "ko": "장소와 이동",
+      "vi": "Nơi chốn & đi lại",
+      "id": "Tempat & perjalanan"
+     },
+     "words": [
+      "外面",
+      "旁邊",
+      "手機",
+      "電腦",
+      "電視",
+      "衣服"
+     ],
+     "idx": 6
+    },
+    {
+     "name": {
+      "g": "thing",
+      "ja": "身のまわりの物",
+      "en": "Everyday things",
+      "ko": "일상 물건",
+      "vi": "Đồ dùng hằng ngày",
+      "id": "Barang sehari-hari"
+     },
+     "words": [
+      "鞋子",
+      "太太",
+      "孩子",
+      "司機",
+      "手指",
+      "腿"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "背",
+      "皮膚",
+      "咖啡色",
+      "紫色",
+      "零",
+      "半"
+     ],
+     "idx": 1
+    }
+   ]
+  },
+  {
+   "id": "u11",
+   "no": 11,
+   "lead": {
+    "ja": "その他",
+    "en": "More",
+    "ko": "기타",
+    "vi": "Khác",
+    "id": "Lainnya"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "その他",
+      "en": "More",
+      "ko": "기타",
+      "vi": "Khác",
+      "id": "Lainnya"
+     },
+     "words": [
+      "顆",
+      "種",
+      "盤",
+      "回",
+      "介紹",
+      "逛"
+     ],
+     "idx": 0
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "炒飯",
+      "白飯",
+      "三明治",
+      "漢堡",
+      "糖果",
+      "蝦"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "ja": "形容詞",
+      "en": "Adjectives",
+      "ko": "형용사",
+      "vi": "Tính từ",
+      "id": "Kata sifat"
+     },
+     "words": [
+      "辣",
+      "最近",
+      "半夜",
+      "平常",
+      "早安",
+      "晚安"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "歡迎",
+      "請",
+      "恭喜",
+      "沒問題",
+      "對",
+      "加油"
+     ],
+     "idx": 0
+    },
+    {
+     "name": {
+      "ja": "形容詞",
+      "en": "Adjectives",
+      "ko": "형용사",
+      "vi": "Tính từ",
+      "id": "Kata sifat"
+     },
+     "words": [
+      "錯",
+      "一樣",
+      "有名",
+      "真",
+      "沙發",
+      "鏡子"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "錢包",
+      "盤子",
+      "筷子",
+      "湯匙",
+      "電燈",
+      "電影院",
+      "藥局",
+      "早餐店"
+     ],
+     "idx": 3
+    }
+   ]
+  },
+  {
+   "id": "u12",
+   "no": 12,
+   "lead": {
+    "ja": "名詞",
+    "en": "Nouns",
+    "ko": "명사",
+    "vi": "Danh từ",
+    "id": "Kata benda"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "停車場",
+      "帽子",
+      "襪子",
+      "外套"
+     ],
+     "idx": 4
+    }
    ]
   }
- ]
+ ],
+ "total": 441,
+ "lessons": 67
 }
