@@ -83,6 +83,40 @@ h1.t{font-family:var(--serif);font-size:30px;font-weight:700;letter-spacing:-.01
 .done-w .big{font-size:46px;font-weight:800;color:var(--ac)}
 .done-w p{color:var(--tx2);margin:10px 0 26px}
 .sec{display:none}.sec.on{display:block}
+
+/* ── 終点の手応え ──
+   前の試作は「8/8 完了」の 4 文字で終わっていて、何も残らなかった。
+   ここで動かすのは 3 つだけ:点数が数え上がる / 単元の進度条がその場で伸びる / 次の課が開く。 */
+.fin{padding:36px 0 20px;text-align:center}
+.fin-ring{width:132px;height:132px;margin:0 auto 6px;position:relative}
+.fin-ring svg{transform:rotate(-90deg)}
+.fin-ring .val{position:absolute;inset:0;display:grid;place-items:center;font-size:34px;font-weight:800}
+.fin-ttl{font-family:var(--serif);font-size:22px;font-weight:700;margin-top:8px}
+.fin-sub{color:var(--tx2);font-size:13.5px;margin-top:4px}
+.fin-row{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--bd);
+ border-radius:14px;padding:13px 15px;margin:22px 0 10px;text-align:left;opacity:0;transform:translateY(8px);
+ transition:opacity .45s ease,transform .45s ease}
+.fin-row.in{opacity:1;transform:none}
+.fin-row .k{font-size:13px;color:var(--tx2);flex:1}
+.fin-row .v{font-weight:800;color:var(--ac)}
+.fin-ubar{height:7px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:8px}
+.fin-ubar i{display:block;height:100%;background:var(--ac);border-radius:4px;width:0;transition:width 1s cubic-bezier(.22,1,.36,1)}
+.unlock{border:1px dashed var(--ac);background:var(--ac-soft);border-radius:14px;padding:14px 15px;
+ margin:14px 0 20px;text-align:left;opacity:0;transform:translateY(8px);transition:opacity .45s ease .25s,transform .45s ease .25s}
+.unlock.in{opacity:1;transform:none}
+.unlock b{display:block;font-size:12px;color:var(--ac);letter-spacing:.06em}
+.unlock span{font-size:15px;font-weight:600}
+.retry{display:inline-block;font-size:12px;color:var(--ac);background:var(--ac-soft);
+ border-radius:999px;padding:3px 10px;margin-bottom:10px}
+.qhint{text-align:center;color:var(--tx3);font-size:12.5px;letter-spacing:.06em;margin-top:26px}
+.qbig{font-size:52px;font-weight:700;text-align:center;margin:10px 0 2px;line-height:1.2}
+.qmid{font-size:26px;font-weight:600;text-align:center;margin:10px 0 2px}
+.qzy{text-align:center;color:var(--ac);letter-spacing:.1em;margin-bottom:6px}
+.qcloze{font-size:24px;line-height:1.9;text-align:center;margin:14px 0 4px}
+.qcloze b{color:var(--ac);border-bottom:2px solid var(--ac);padding:0 14px}
+.spk{display:block;margin:18px auto 0;width:92px;height:92px;border-radius:50%;border:1px solid var(--bd);
+ background:var(--bg2);cursor:pointer;font-size:34px;color:var(--ac)}
+.spk:active{transform:scale(.96)}
 </style></head>
 <body>
 <div class="wrap" id="home">
@@ -106,6 +140,7 @@ h1.t{font-family:var(--serif);font-size:30px;font-weight:700;letter-spacing:-.01
  </div>
 </div>
 
+<script src="tts.js?v=64"></script>
 <script src="vocab-l1.js?v=52"></script>
 <script src="vocab-l1-b.js?v=53"></script>
 <script>
@@ -173,73 +208,152 @@ function renderHome(){
   }).join("");
 }
 
-// ── 1 課の中身:8 枚めくる → 同じ 8 語を 4 択 → 過関 ──
+// ── 1 課の中身 ────────────────────────────────────────────
+// 前の試作:カード 8 枚 → 4 択 8 問。同じ動作の繰り返しで、終わっても何も残らなかった。
+// ここでやること:
+//   ・出題を 5 種類まぜる(意味/逆引き/注音/穴うめ/聞き取り)。同じ語でも違う角度で 2 回出る
+//   ・間違えた語はその場で捨てずに、後ろに積んで必ずもう一度出す(落第させない)
+//   ・終わりに「点数が数え上がる → 単元の進度条が伸びる → 次の課が開く」を順に見せる
 const P = (() => {
-  let L = null, step = 0, phase = "card", qs = [], score = 0;
+  let L = null, queue = [], idx = 0, score = 0, asked = 0, wrongSet = null;
   const shuf = (a) => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[b[i],b[j]]=[b[j],b[i]];} return b; };
+  const pool = () => Object.keys(WORDS);
+
+  function distract(fn, not, n){
+    const out = [];
+    for (const w of shuf(pool())) {
+      if (w === not) continue;
+      const v = fn(WORDS[w]);
+      if (!v || out.includes(v)) continue;
+      out.push(v); if (out.length >= n) break;
+    }
+    return out;
+  }
+  function mkQ(w, kind){
+    const v = WORDS[w], ex = exOf(v);
+    if (kind === "cloze" && ex && ex.z.indexOf(v.w) >= 0)
+      return { kind, w, ans: v.w, opts: shuf([v.w, ...distract(x=>x.w, w, 3)]) };
+    if (kind === "zhuyin" && v.zy)
+      return { kind, w, ans: v.zy, opts: shuf([v.zy, ...distract(x=>x.zy, w, 3)]) };
+    if (kind === "reverse")
+      return { kind, w, ans: v.w, opts: shuf([v.w, ...distract(x=>x.w, w, 3)]) };
+    if (kind === "listen")
+      return { kind, w, ans: v.w, opts: shuf([v.w, ...distract(x=>x.w, w, 3)]) };
+    return { kind: "meaning", w, ans: mean(v), opts: shuf([mean(v), ...distract(x=>mean(x), w, 3)]) };
+  }
+
   function start(key){
     L = flat().find(x => x.key === key); if (!L) return;
-    step = 0; phase = "card"; score = 0;
-    const pool = Object.keys(WORDS);
-    qs = shuf(L.ws).map(w => {
-      const wrong = shuf(pool.filter(x => x !== w)).slice(0,3).map(x => mean(WORDS[x]));
-      return { w, ans: mean(WORDS[w]), opts: shuf([mean(WORDS[w]), ...wrong]) };
-    });
+    score = 0; asked = 0; idx = 0; wrongSet = new Set();
+    const ws = L.ws;
+    // 先に全部 1 回見せる → そのあと角度を変えて 2 周。1 周目は易しい型、2 周目は難しい型。
+    // 24 問(2 周)にしたら長すぎて、終わる前に飽きた。1 周 8 問のまま“型を散らす”。
+    // 同じ 4 択でも、意味・逆引き・注音・穴うめ・聞き取りが混ざると体感がまったく違う。
+    const kinds = shuf(["meaning", "reverse", "zhuyin", "cloze", "listen", "meaning", "reverse", "cloze"]);
+    queue = ws.map(w => ({ kind: "learn", w }));
+    shuf(ws).forEach((w, i) => queue.push(mkQ(w, kinds[i % kinds.length])));
     $("play").classList.add("on"); draw();
   }
   function quit(){ $("play").classList.remove("on"); renderHome(); }
   function reset(){ localStorage.removeItem(KEY); renderHome(); }
+
   function prog(){
-    const tot = L.ws.length * 2;
-    const cur = phase === "card" ? step : L.ws.length + step;
-    $("pgi").style.width = Math.round(cur/tot*100) + "%";
-    $("pgt").textContent = phase === "done" ? "" : `${cur+1} / ${tot}`;
+    const pct = Math.min(100, Math.round(idx / queue.length * 100));
+    $("pgi").style.width = pct + "%";
+    $("pgt").textContent = idx < queue.length ? (idx+1) + " / " + queue.length : "";
   }
+  function speak(w){ try { speakZh(w); } catch(e){} }
+
   function draw(){
+    if (idx >= queue.length) { finish(); return; }
     prog();
-    if (phase === "card"){
-      const v = WORDS[L.ws[step]], ex = exOf(v);
+    const q = queue[idx], v = WORDS[q.w], ex = exOf(v);
+    const again = q.again ? `<div style="text-align:center"><span class="retry">もう一度</span></div>` : "";
+    if (q.kind === "learn"){
       $("stage").innerHTML = `
         <div class="card">
-          <div class="w">${esc(v.w)}</div>
+          <div class="w" onclick="P.say('${esc(v.w)}')">${esc(v.w)}</div>
           <div class="zy">${esc(v.zy||"")}</div><div class="py">${esc(v.py||"")}</div>
           <div class="m">${esc(mean(v))}</div>
           ${ex ? `<div class="ex">${esc(ex.z)}<br>${esc(ex[MK]||ex.e||ex.j)}</div>` : ""}
         </div>
-        <button class="cta" onclick="P.next()">${step+1 < L.ws.length ? "次へ" : "8 語おぼえた → 確認"}</button>`;
-    } else if (phase === "quiz"){
-      const q = qs[step], v = WORDS[q.w];
-      $("stage").innerHTML = `
-        <div class="qz-w">${esc(v.w)}</div><div class="qz-zy">${esc(v.zy||"")}</div>
-        <div class="opts">${q.opts.map((o,i)=>`<button class="opt" onclick="P.pick(${i})">${esc(o)}</button>`).join("")}</div>
-        <div id="after"></div>`;
-    } else {
-      $("stage").innerHTML = `
-        <div class="done-w"><div class="big">${score} / ${qs.length}</div>
-          <p>${esc(L.unit.name[LANG]||L.unit.name.ja)} ${L.li+1} 完了</p>
-          <button class="cta" onclick="P.again()">次の課へ ›</button>
-          <p style="margin-top:14px"><a href="javascript:void(0)" onclick="P.quit()" style="color:var(--tx3);font-size:13px">一覧にもどる</a></p>
-        </div>`;
+        <button class="cta" onclick="P.next()">${idx+1 < L.ws.length ? "次へ" : "おぼえた → 確認"}</button>`;
+      speak(v.w);
+      return;
     }
+    let head;
+    if (q.kind === "meaning")      head = `<div class="qhint">意味は?</div><div class="qbig" onclick="P.say('${esc(v.w)}')">${esc(v.w)}</div><div class="qzy">${esc(v.zy||"")}</div>`;
+    else if (q.kind === "reverse") head = `<div class="qhint">どの語?</div><div class="qmid">${esc(mean(v))}</div>`;
+    else if (q.kind === "zhuyin")  head = `<div class="qhint">読み方は?</div><div class="qbig">${esc(v.w)}</div>`;
+    else if (q.kind === "listen")  head = `<div class="qhint">聞こえたのは?</div><button class="spk" onclick="P.say('${esc(v.w)}')">♪</button>`;
+    else                           head = `<div class="qhint">空いているのは?</div><div class="qcloze">${esc(ex.z).replace(esc(v.w), "<b>　</b>")}</div>`;
+    $("stage").innerHTML = again + head +
+      `<div class="opts">${q.opts.map((o,i)=>`<button class="opt" onclick="P.pick(${i})">${esc(o)}</button>`).join("")}</div><div id="after"></div>`;
+    if (q.kind === "listen") speak(v.w);
   }
-  function next(){
-    if (step+1 < L.ws.length){ step++; } else { phase = "quiz"; step = 0; }
-    draw();
-  }
+  function next(){ idx++; draw(); }
+  function say(w){ speak(w); }
+
   function pick(i){
-    const q = qs[step], ok = q.opts[i] === q.ans;
-    if (ok) score++;
+    const q = queue[idx], v = WORDS[q.w], ok = q.opts[i] === q.ans;
+    asked++; if (ok) score++; else wrongSet.add(q.w);
     document.querySelectorAll(".opt").forEach((b,n)=>{ b.disabled = true;
       if (q.opts[n] === q.ans) b.classList.add("ok"); else if (n===i) b.classList.add("ng"); });
-    $("after").innerHTML = `<button class="cta" style="margin-top:16px" onclick="P.qnext()">
-      ${step+1 < qs.length ? "次の問題" : "結果"}</button>`;
+    // 落第させない:間違えた語は後ろに積んで必ずもう一度出す
+    if (!ok) queue.push(Object.assign(mkQ(q.w, "meaning"), { again: true }));
+    const ex = exOf(v);
+    $("after").innerHTML = `
+      <div class="card" style="padding:18px 16px;margin:16px 0 0;text-align:left">
+        <div style="font-size:22px;font-weight:700">${esc(v.w)} <span style="color:var(--ac);font-size:15px;letter-spacing:.08em">${esc(v.zy||"")}</span></div>
+        <div style="color:var(--tx2);font-size:14px;margin-top:2px">${esc(mean(v))}</div>
+        ${ex ? `<div style="color:var(--tx2);font-size:13.5px;margin-top:8px;line-height:1.85">${esc(ex.z)}</div>` : ""}
+      </div>
+      <button class="cta" style="margin-top:14px" onclick="P.next()">${idx+1 < queue.length ? "次へ" : "結果"}</button>`;
   }
-  function qnext(){
-    if (step+1 < qs.length){ step++; draw(); return; }
-    setDone(L.key); phase = "done"; draw();
+
+  // ── 終わり:順番に見せる。全部いっぺんに出すと何も印象に残らない ──
+  function finish(){
+    setDone(L.key);
+    $("pgi").style.width = "100%"; $("pgt").textContent = "";
+    const s = state();
+    const ls = L.unit.lessons;
+    const doneN = ls.filter((_, li) => s[L.unit.id+":"+li]).length;
+    const before = Math.round((doneN-1) / ls.length * 100), after = Math.round(doneN / ls.length * 100);
+    const nx = nextLesson();
+    const pct = asked ? Math.round(score/asked*100) : 100;
+    const R = 60, C = 2*Math.PI*R;
+    $("stage").innerHTML = `
+      <div class="fin">
+        <div class="fin-ring">
+          <svg width="132" height="132"><circle cx="66" cy="66" r="${R}" fill="none" stroke="var(--line)" stroke-width="9"/>
+            <circle id="ring" cx="66" cy="66" r="${R}" fill="none" stroke="var(--ac)" stroke-width="9" stroke-linecap="round"
+              stroke-dasharray="${C}" stroke-dashoffset="${C}" style="transition:stroke-dashoffset 1.1s cubic-bezier(.22,1,.36,1)"/></svg>
+          <div class="val" id="ringv">0%</div>
+        </div>
+        <div class="fin-ttl">${esc(L.unit.name[LANG]||L.unit.name.ja)} ${L.li+1} クリア</div>
+        <div class="fin-sub">${L.ws.length} 語 ／ まちがえた ${wrongSet.size} 語は復習に回りました</div>
+
+        <div class="fin-row" id="r1">
+          <span class="k">${esc(L.unit.name[LANG]||L.unit.name.ja)}<div class="fin-ubar"><i id="ub"></i></div></span>
+          <span class="v">${doneN} / ${ls.length}</span>
+        </div>
+        ${nx ? `<div class="unlock" id="r2"><b>NEXT</b>
+          <span>${esc(nx.unit.name[LANG]||nx.unit.name.ja)} ${nx.li+1}　<span style="color:var(--tx3);font-weight:400">${esc(nx.ws.slice(0,3).join("・"))}…</span></span></div>` : ""}
+        <button class="cta" onclick="P.again()">${nx ? "次の課へ ›" : "一覧へ"}</button>
+        <p style="margin-top:14px"><a href="javascript:void(0)" onclick="P.quit()" style="color:var(--tx3);font-size:13px">一覧にもどる</a></p>
+      </div>`;
+    // 1) 点数が数え上がる
+    const ring = $("ring"), rv = $("ringv");
+    setTimeout(()=>{ ring.style.strokeDashoffset = String(C * (1 - pct/100)); }, 80);
+    let n = 0; const t = setInterval(()=>{ n += Math.max(1, Math.ceil(pct/28)); if (n >= pct){ n = pct; clearInterval(t); } rv.textContent = n + "%"; }, 32);
+    // 2) 単元の進度条が「さっきまでの位置から」伸びる
+    setTimeout(()=>{ $("r1").classList.add("in"); const ub = $("ub"); ub.style.width = before + "%";
+      setTimeout(()=>{ ub.style.width = after + "%"; }, 260); }, 700);
+    // 3) 次の課が開く
+    setTimeout(()=>{ const r2 = $("r2"); if (r2) r2.classList.add("in"); }, 1250);
   }
   function again(){ const nx = nextLesson(); if (nx) start(nx.key); else quit(); }
-  return { start, quit, next, pick, qnext, again, reset };
+  return { start, quit, next, pick, again, reset, say };
 })();
 
 fetch("data/lessons-l1.json?v=1").then(r=>r.json()).then(d=>{ DATA = d; renderHome(); });
