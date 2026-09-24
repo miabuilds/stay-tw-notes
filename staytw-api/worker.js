@@ -716,17 +716,29 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       }
       if (url.pathname === "/api/admin/feedback") {
         const r = await env.DB.prepare(
-          `SELECT id, ts, type, message, email, lang, replied_at FROM feedback ORDER BY id DESC LIMIT 200`).all();
+          `SELECT id, ts, type, message, email, contact_email, lang, replied_at, status FROM feedback ORDER BY id DESC LIMIT 200`).all();
         return json(r.results, 200, h);
       }
-      // 回信済みマーク（管理者が Gmail で返信したあと押す）
+      // 回信済みマーク（管理者が Gmail で返信したあと押す）。status も一緒に動かす
       if (url.pathname === "/api/admin/feedback-reply" && req.method === "POST") {
         let fb; try { fb = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
         const fid = parseInt(fb.id, 10);
         if (!fid) return json({ error: "no id" }, 400, h);
         const val = fb.undo ? null : new Date().toISOString().slice(0, 19).replace("T", " ");
-        await env.DB.prepare(`UPDATE feedback SET replied_at=?1 WHERE id=?2`).bind(val, fid).run();
-        return json({ ok: true, replied_at: val }, 200, h);
+        const st = fb.undo ? "new" : "replied";
+        await env.DB.prepare(`UPDATE feedback SET replied_at=?1, status=?2 WHERE id=?3`).bind(val, st, fid).run();
+        return json({ ok: true, replied_at: val, status: st }, 200, h);
+      }
+      // 返した/返さないの 2 値だけだと、返さないと決めたものが「待ち」に居座る。
+      // Gmail を開かずに捌けるよう status を直接立てる口。replied の時だけ時刻も入れる。
+      if (url.pathname === "/api/admin/feedback-status" && req.method === "POST") {
+        let b2; try { b2 = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
+        const fid = Number(b2.id);
+        const st = ["new", "replied", "done", "wontfix", "spam"].includes(b2.status) ? b2.status : null;
+        if (!fid || !st) return json({ error: "bad id/status" }, 400, h);
+        const at = st === "replied" ? new Date().toISOString().slice(0, 19).replace("T", " ") : null;
+        await env.DB.prepare(`UPDATE feedback SET status=?1, replied_at=?2 WHERE id=?3`).bind(st, at, fid).run();
+        return json({ ok: true, status: st, replied_at: at }, 200, h);
       }
       if (url.pathname === "/api/admin/traffic") {
         const [total, today, daily, countries, paths, refs, bySource] = await Promise.all([

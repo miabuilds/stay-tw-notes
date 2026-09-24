@@ -42,6 +42,13 @@ a{color:#2F5D7A}
 .fb-btn{background:var(--ac);color:#fff;border:none;border-radius:8px;padding:8px 15px;font-size:13px;font-weight:600;cursor:pointer}
 .fb-btn.done{background:transparent;color:var(--ok);border:1px solid var(--line)}
 @media(max-width:640px){.wrap{padding:22px 13px 90px}.traf-grid{grid-template-columns:1fr!important}h1{font-size:21px}}
+.fb-chip{font-size:11px;font-weight:700;border-radius:999px;padding:2px 9px;margin-left:8px}
+.fb-chip.ok{background:rgba(63,125,83,.14);color:#3F7D53}
+.fb-chip.mute{background:rgba(0,0,0,.07);color:#8a8a8a}
+.fb-acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,0,0,.07)}
+.fb-mini{font:inherit;font-size:12px;padding:5px 11px;border-radius:999px;border:1px solid rgba(0,0,0,.14);
+ background:transparent;color:inherit;cursor:pointer;opacity:.8}
+.fb-mini:hover{opacity:1;border-color:currentColor}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -61,7 +68,11 @@ a{color:#2F5D7A}
     <h2>使用者回饋 <span class="muted" id="fbUnreplied"></span></h2>
     <div class="fb-filter">
       <button class="fb-fbtn on" data-fbf="all" onclick="fbFilter('all')">全部</button>
-      <button class="fb-fbtn" data-fbf="todo" onclick="fbFilter('todo')">待回信</button>
+      <button class="fb-fbtn" data-fbf="todo" onclick="fbFilter('todo')">待處理</button>
+      <button class="fb-fbtn" data-fbf="st:replied" onclick="fbFilter('st:replied')">已回信</button>
+      <button class="fb-fbtn" data-fbf="st:done" onclick="fbFilter('st:done')">已處理</button>
+      <button class="fb-fbtn" data-fbf="st:wontfix" onclick="fbFilter('st:wontfix')">不處理</button>
+      <button class="fb-fbtn" data-fbf="st:spam" onclick="fbFilter('st:spam')">垃圾</button>
       <button class="fb-fbtn" data-fbf="bug" onclick="fbFilter('bug')">bug</button>
       <button class="fb-fbtn" data-fbf="content" onclick="fbFilter('content')">content</button>
       <button class="fb-fbtn" data-fbf="feature" onclick="fbFilter('feature')">feature</button>
@@ -135,22 +146,43 @@ async function fbMark(id,undo){
   }catch(e){ alert("標記失敗:"+e.message); }
 }
 function fbFilter(k){ FB_FILTER=k; document.querySelectorAll(".fb-fbtn").forEach(b=>b.classList.toggle("on",b.dataset.fbf===k)); renderFb(); }
+// 「返信した/しない」だけだと、返さないと決めたものが永遠に待ちに残る。
+// status(new/replied/done/wontfix/spam)で捌けるようにした。待ち＝new のものだけ。
+const FB_ST = { replied:{t:"已回信",c:"ok"}, done:{t:"已處理",c:"ok"}, wontfix:{t:"不處理",c:"mute"}, spam:{t:"垃圾",c:"mute"} };
+function fbStatus(f){ return f.status || (f.replied_at ? "replied" : "new"); }
+async function fbSet(id, st){
+  try{
+    await fetch(API+"/api/admin/feedback-status",{method:"POST",
+      headers:{"Content-Type":"application/json",Authorization:"Bearer "+localStorage.getItem("stw_admin_tok")},
+      body:JSON.stringify({id,status:st})});
+    const f=FB_DATA.find(x=>x.id===id);
+    if(f){ f.status=st; f.replied_at = st==="replied" ? new Date().toISOString().slice(0,19).replace("T"," ") : null; }
+    renderFb();
+  }catch(e){ alert("標記失敗:"+e.message); }
+}
 function renderFb(){
   let list=FB_DATA;
-  if(FB_FILTER==="todo") list=list.filter(f=>!f.replied_at && f.email);
+  if(FB_FILTER==="todo") list=list.filter(f=>fbStatus(f)==="new");
+  else if(FB_FILTER.indexOf("st:")===0) list=list.filter(f=>fbStatus(f)===FB_FILTER.slice(3));
   else if(FB_FILTER!=="all") list=list.filter(f=>f.type===FB_FILTER);
-  const todo=FB_DATA.filter(f=>!f.replied_at && f.email).length;
-  document.getElementById("fbUnreplied").textContent=todo?`（待回信 ${todo}）`:"";
+  const todo=FB_DATA.filter(f=>fbStatus(f)==="new").length;
+  document.getElementById("fbUnreplied").textContent=todo?`（待處理 ${todo}）`:"";
   document.getElementById("fbList").innerHTML = list.length ? list.map(f=>{
-    const noMail=!f.email||f.email.indexOf("@")<0;
-    const btn = f.replied_at
-      ? `<button class="fb-btn done" onclick="fbMark(${f.id},true)">✓ 已回信 <span class="muted">（點取消）</span></button>`
-      : (noMail ? `<span class="muted" style="font-size:12px">未留 email</span>`
-                : `<button class="fb-btn" onclick="fbReply(${f.id})">回信（開 Gmail）</button>`);
-    return `<div class="fb-card ${f.replied_at?'replied':''}">
-      <div class="fb-top"><span class="tag ${esc(f.type)}">${esc(f.type)}</span><span class="fb-meta">${esc(f.ts)}　${esc(f.lang||'')}</span></div>
+    const mail=(f.contact_email&&f.contact_email.indexOf("@")>=0)?f.contact_email:f.email;
+    const noMail=!mail||mail.indexOf("@")<0;
+    const st=fbStatus(f), meta=FB_ST[st];
+    const chip = meta ? `<span class="fb-chip ${meta.c}">${meta.t}</span>` : "";
+    // 捌く先は 4 つ。今の状態のボタンは出さない(押しても何も起きないボタンは迷いのもと)
+    const acts=[["replied","已回信"],["done","已處理"],["wontfix","不處理"],["spam","垃圾"]]
+      .filter(([k])=>k!==st)
+      .map(([k,t])=>`<button class="fb-mini" onclick="fbSet(${f.id},'${k}')">${t}</button>`).join("");
+    const undo = st!=="new" ? `<button class="fb-mini" onclick="fbSet(${f.id},'new')">復原</button>` : "";
+    const gmail = noMail ? "" : `<button class="fb-btn" onclick="fbReply(${f.id})">回信（開 Gmail）</button>`;
+    return `<div class="fb-card ${st!=="new"?'replied':''}">
+      <div class="fb-top"><span class="tag ${esc(f.type)}">${esc(f.type)}</span>${chip}<span class="fb-meta">${esc(f.ts)}　${esc(f.lang||'')}</span></div>
       <div class="fb-msg">${esc(f.message)}</div>
-      <div class="fb-bot">${noMail?'<span class="muted">—</span>':`<a href="mailto:${esc(f.email)}">${esc(f.email)}</a>`}${btn}</div>
+      <div class="fb-bot">${noMail?'<span class="muted">未留 email</span>':`<a href="mailto:${esc(mail)}">${esc(mail)}</a>`}${gmail}</div>
+      <div class="fb-acts">${acts}${undo}</div>
     </div>`;
   }).join("") : `<p class="muted" style="padding:16px">沒有符合的回饋</p>`;
 }

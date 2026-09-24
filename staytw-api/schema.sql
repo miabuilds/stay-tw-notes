@@ -6,7 +6,10 @@ CREATE TABLE IF NOT EXISTS feedback (
   message TEXT NOT NULL,
   email TEXT DEFAULT '',
   lang TEXT DEFAULT '',
-  ua TEXT DEFAULT ''
+  ua TEXT DEFAULT '',
+  -- new / replied / done(回信不要だが対応済み) / wontfix / spam
+  -- replied_at は「いつ返したか」だけを持つ。捌いたかどうかは status を見る。
+  status TEXT NOT NULL DEFAULT 'new'
 );
 CREATE TABLE IF NOT EXISTS rc_events (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
