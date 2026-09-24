@@ -147,6 +147,8 @@ button{font-family:inherit}
 #fcMeanFront.hide .fc-mf{display:none}
 #fcMeanFront.hide .fc-reveal{display:block}
 .fc-mf{font-size:15px;color:var(--tx2);line-height:1.5;max-width:22em;margin:0 auto}
+/* 意味が出ている間も「押せば隠せる」と分かるように、目に斜線のしるしを添える */
+.fc-mf-eye{width:15px;height:15px;fill:none;stroke:var(--tx3);stroke-width:1.8;stroke-linecap:round;vertical-align:-2px;margin-left:6px;opacity:.75}
 .fc-word{font-family:var(--serif);font-size:clamp(44px,9vw,64px);font-weight:700;line-height:1.2}
 .fc-zy{font-family:var(--zhuyin);font-size:20px;font-weight:600;color:var(--ac);margin-top:10px;letter-spacing:.1em}
 .fc-py{font-size:17px;color:var(--tx2);margin-top:2px}
@@ -1176,7 +1178,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
           </div>
           <div class="fc-pos" id="fcPos"></div>
           <div id="fcMeanFront" onclick="event.stopPropagation();twRevealMeanFront()">
-            <div class="fc-mf" id="fcMfTx"></div>
+            <div class="fc-mf"><span id="fcMfTx"></span><svg class="fc-mf-eye" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 5.2A9.9 9.9 0 0 1 12 5c6.5 0 10 7 10 7a18 18 0 0 1-3.2 4.2"/><path d="M6.5 6.6A18 18 0 0 0 2 12s3.5 7 10 7a9.6 9.6 0 0 0 4.2-.9"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></div>
             <div class="fc-reveal" data-i18n="fcTapMean">タップで意味を表示</div>
           </div>
         </div>
@@ -1428,7 +1430,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=125"></script>
+<script src="i18n.js?v=126"></script>
 <script src="native-ui.js?v=1"></script>
 <script src="tts.js?v=64"></script>
 <script src="vocab-l1.js?v=52"></script>
@@ -1919,7 +1921,10 @@ function cycleRuby(){
 let HIDE_PRON = (function(){ try { return localStorage.getItem("stw_fc_hidepron") === "1"; } catch(e){ return false; } })();
 function refreshHidePron(){ document.querySelectorAll(".js-hidepron").forEach(b => b.classList.toggle("on", HIDE_PRON)); }
 // カード表の意味。既定は隠す（思い出す練習が単語カードの意味なので）。一度開けば以後は出したまま。
-let SHOW_MEAN_FRONT = (function(){ try { const v = localStorage.getItem("stw_fc_meanfront"); return v === null ? true : v === "1"; } catch(e){ return true; } })();
+// 表に意味を出すかどうか。既定は「出さない」。
+// 一度だけ既定を「出す」にしたが、「裏返す前に答えが見えてしまう」と苦情が来た(2026-09-23)。
+// 意味を並べて眺めたい人は単語リストと「用聽的背單字」で足りる。カードは思い出す場所。
+let SHOW_MEAN_FRONT = (function(){ try { return localStorage.getItem("stw_fc_meanfront") === "1"; } catch(e){ return false; } })();
 function twRevealMeanFront(){
   // 既定は表示。タップで隠す⇄出すを切り替えられるようにする(思い出す練習をしたい人向け)
   SHOW_MEAN_FRONT = !SHOW_MEAN_FRONT;
