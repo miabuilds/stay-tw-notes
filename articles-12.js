@@ -108,12 +108,12 @@ const ARTICLES_12 = [
       }
     },
     {
-      z:"熱炒的靈魂，除了菜，就是「台啤」。台灣啤酒是本地最經典的品牌，冰得透心涼，配上炒海瓜子、鹽酥雞、三杯雞、炒飯，就是最道地的組合。大家會一邊「乾杯」一邊聊天，杯子碰在一起，喊一聲「乎乾啦！」（台語，把酒喝乾的意思）。這種不拘小節、大口吃菜大口喝酒的氣氛，正是台灣人放鬆、交心的方式。",
-      py:"Rèchǎo de línghún, chúle cài, jiùshì “táipí”. Táiwān píjiǔ shì běndì zuì jīngdiǎn de pǐnpái, bīng de tòuxīnliáng, pèi shàng chǎo hǎiguāzǐ, yánsūjī, sānbēijī, chǎofàn, jiùshì zuì dàodì de zǔhé. Dàjiā huì yìbiān “gānbēi” yìbiān liáotiān, bēizi pèng zài yìqǐ, hǎn yì shēng “hū gān la!”（Táiyǔ, bǎ jiǔ hēgān de yìsi）. Zhè zhǒng bùjū xiǎojié, dàkǒu chī cài dàkǒu hē jiǔ de qìfēn, zhèng shì Táiwānrén fàngsōng, jiāoxīn de fāngshì.",
+      z:"熱炒的靈魂，除了菜，就是「台啤」。台灣啤酒是本地最經典的品牌，冰得透心涼，配上炒海瓜子、鹽酥雞、三杯雞、炒飯，就是最道地的組合。大家會一邊「乾杯」一邊聊天，杯子碰在一起，喊一聲「乾啦！」，意思就是把酒喝光。這種不拘小節、大口吃菜大口喝酒的氣氛，正是台灣人放鬆、交心的方式。",
+      py:"Rèchǎo de línghún, chúle cài, jiùshì “táipí”. Táiwān píjiǔ shì běndì zuì jīngdiǎn de pǐnpái, bīng de tòuxīnliáng, pèi shàng chǎo hǎiguāzǐ, yánsūjī, sānbēijī, chǎofàn, jiùshì zuì dàodì de zǔhé. Dàjiā huì yìbiān “gānbēi” yìbiān liáotiān, bēizi pèng zài yìqǐ, hǎn yì shēng “gān la!”, yìsi jiùshì bǎ jiǔ hē guāng. Zhè zhǒng bùjū xiǎojié, dàkǒu chī cài dàkǒu hē jiǔ de qìfēn, zhèng shì Táiwānrén fàngsōng, jiāoxīn de fāngshì.",
       m:{
-        j:"熱炒の魂は、料理のほかに「台啤（タイビール）」です。台湾ビールは地元で最も定番のブランドで、キンキンに冷やして、あさりの炒め物、台湾風唐揚げ（塩酥鶏）、三杯鶏、チャーハンと合わせるのが、最も本格的な組み合わせ。みんな「乾杯」しながらおしゃべりし、グラスを合わせて「ホーガンラー！（台湾語で『飲み干せ』の意）」と声をあげます。細かいことにこだわらず、豪快に食べて豪快に飲むこの雰囲気こそ、台湾人がリラックスし、心を通わせるやり方なのです。",
-        e:"The soul of rechao, besides the food, is 'Taiwan Beer.' It's the island's most classic brand, chilled ice-cold, and paired with stir-fried clams, popcorn chicken, three-cup chicken, and fried rice for the most authentic combo. Everyone chats while they 'ganbei' (bottoms up), clinking glasses and shouting 'Ho gan la!'—Taiwanese for 'drink it dry.' This unfussy atmosphere of big bites and big gulps is exactly how Taiwanese relax and bond.",
-        k:"러차오의 영혼은 요리 외에 '타이완 맥주'입니다. 타이완 맥주는 현지에서 가장 대표적인 브랜드로, 얼음처럼 차갑게 해서 조개 볶음, 대만식 닭튀김(옌쑤지), 싼베이지, 볶음밥과 곁들이는 것이 가장 정통 조합입니다. 모두 '건배'하며 수다를 떨고, 잔을 부딪치며 '호간라!'(대만어로 '술을 다 마셔라'라는 뜻)라고 외칩니다. 사소한 것에 얽매이지 않고 호쾌하게 먹고 마시는 이 분위기야말로 대만 사람이 긴장을 풀고 마음을 나누는 방식입니다."
+        j:"熱炒の魂は、料理のほかに「台啤（タイビール）」です。台湾ビールは地元で最も定番のブランドで、キンキンに冷やして、あさりの炒め物、台湾風唐揚げ（塩酥鶏）、三杯鶏、チャーハンと合わせるのが、最も本格的な組み合わせ。みんな「乾杯」しながらおしゃべりし、グラスを合わせて「乾啦（ガンラー）！」と声をあげます。『飲み干せ』という意味です。細かいことにこだわらず、豪快に食べて豪快に飲むこの雰囲気こそ、台湾人がリラックスし、心を通わせるやり方なのです。",
+        e:"The soul of rechao, besides the food, is 'Taiwan Beer.' It's the island's most classic brand, chilled ice-cold, and paired with stir-fried clams, popcorn chicken, three-cup chicken, and fried rice for the most authentic combo. Everyone chats while they 'ganbei' (bottoms up), clinking glasses and shouting 'Gan la!'—meaning 'drink it all.' This unfussy atmosphere of big bites and big gulps is exactly how Taiwanese relax and bond.",
+        k:"러차오의 영혼은 요리 외에 '타이완 맥주'입니다. 타이완 맥주는 현지에서 가장 대표적인 브랜드로, 얼음처럼 차갑게 해서 조개 볶음, 대만식 닭튀김(옌쑤지), 싼베이지, 볶음밥과 곁들이는 것이 가장 정통 조합입니다. 모두 '건배'하며 수다를 떨고, 잔을 부딪치며 '간라!'('술을 다 마셔라'라는 뜻)라고 외칩니다. 사소한 것에 얽매이지 않고 호쾌하게 먹고 마시는 이 분위기야말로 대만 사람이 긴장을 풀고 마음을 나누는 방식입니다."
       }
     },
     {
@@ -168,20 +168,20 @@ const ARTICLES_12 = [
     { w:"釋放壓力", zy:"ㄕˋ ㄈㄤˋ ㄧㄚ ㄌㄧˋ", py:"shìfàng yālì", m:{ j:"ストレスを発散する", e:"to release stress", k:"스트레스를 풀다" } }
   ],
   note:{
-    j:"熱炒店では、酔うと必ず登場する台湾語の掛け声「乎乾啦（ホーガンラー）」がおなじみです。もともとはビールのCMソングから広まった言葉で、今では『飲み干せ！』の合図として定着しています。また台湾では飲酒運転（酒駕）の罰則が非常に厳しく、飲んだら『代駕（運転代行）』を呼ぶか、タクシー・MRTで帰るのが常識。だからこそ、みんな安心して續攤（はしご酒）を楽しめるのです。飲めない人には『喝茶配（お茶で付き合う）』という優しい文化もあります。",
-    e:"At rechao joints, the Taiwanese rallying cry 'ho gan la' inevitably appears once people are tipsy. It originally spread from a beer commercial jingle and is now the standard signal for 'drink it dry!' Taiwan also punishes drunk driving (jiujia) very harshly, so after drinking, the norm is to call a 'designated driver' (daijia) or head home by taxi or MRT. That's exactly why everyone can enjoy barhopping worry-free. For non-drinkers, there's also the kind custom of 'joining with tea' instead of alcohol.",
-    k:"러차오 가게에서는 취기가 오르면 반드시 등장하는 대만어 구호 '호간라'가 익숙합니다. 원래 맥주 광고 노래에서 퍼진 말로, 이제는 '다 마셔라!'라는 신호로 자리 잡았습니다. 또 대만에서는 음주운전(주가) 처벌이 매우 엄격해서, 마신 뒤에는 '대리운전(다이자)'을 부르거나 택시·MRT로 귀가하는 것이 상식입니다. 그래서 모두 안심하고 2차를 즐길 수 있는 것이죠. 못 마시는 사람에게는 '차로 함께한다'는 배려의 문화도 있습니다."
+    j:"熱炒店では、酔うと必ず登場する掛け声「乾啦（ガンラー）」がおなじみで、『飲み干せ！』の合図として定着しています。また台湾では飲酒運転（酒駕）の罰則が非常に厳しく、飲んだら『代駕（運転代行）』を呼ぶか、タクシー・MRTで帰るのが常識。だからこそ、みんな安心して續攤（はしご酒）を楽しめるのです。飲めない人には『喝茶配（お茶で付き合う）』という優しい文化もあります。",
+    e:"At rechao joints, the rallying cry 'gan la' inevitably appears once people are tipsy—it's the standard signal for 'drink it dry!' Taiwan also punishes drunk driving (jiujia) very harshly, so after drinking, the norm is to call a 'designated driver' (daijia) or head home by taxi or MRT. That's exactly why everyone can enjoy barhopping worry-free. For non-drinkers, there's also the kind custom of 'joining with tea' instead of alcohol.",
+    k:"러차오 가게에서는 취기가 오르면 반드시 등장하는 구호 '간라'가 익숙하며, '다 마셔라!'라는 신호로 자리 잡았습니다. 또 대만에서는 음주운전(주가) 처벌이 매우 엄격해서, 마신 뒤에는 '대리운전(다이자)'을 부르거나 택시·MRT로 귀가하는 것이 상식입니다. 그래서 모두 안심하고 2차를 즐길 수 있는 것이죠. 못 마시는 사람에게는 '차로 함께한다'는 배려의 문화도 있습니다."
   }
 },
 {
   id:"boss-spirit-small-business",
   cat:{ j:"仕事・くらし", e:"Work & Living", k:"일·생활" },
   zhTitle:"頭家精神：從黑手到老闆的台灣夢",
-  title:{ j:"頭家（トウケ）精神：職人から社長へという台湾の夢", e:"The 'Boss' Spirit: From Grease-Stained Hands to Owner, a Taiwanese Dream", k:"터우자 정신: 기술공에서 사장으로, 대만의 꿈" },
+  title:{ j:"頭家（トウジア）精神：職人から社長へという台湾の夢", e:"The 'Boss' Spirit: From Grease-Stained Hands to Owner, a Taiwanese Dream", k:"터우자 정신: 기술공에서 사장으로, 대만의 꿈" },
   intro:{
-    j:"台湾を歩くと、通りのあちこちに小さな店や工場がひしめいています。朝市の弁当屋、路地裏の町工場、夜市の屋台——その多くが、家族で切り盛りする小さな商売です。台湾語で社長を「頭家（トウケ）」と呼び、『いつか自分の店を持ちたい』という思いは、多くの台湾人の胸の奥に流れています。台湾経済を底から支える、この起業のDNAをのぞいてみましょう。",
-    e:"Walk through Taiwan and you'll find small shops and workshops packed along every street—the morning-market lunchbox stand, the back-alley machine shop, the night-market stall—most of them small businesses run by families. In Taiwanese, a boss is called 'touke,' and the wish to 'one day have a shop of my own' runs deep in many Taiwanese hearts. Let's look at the entrepreneurial DNA that supports Taiwan's economy from the ground up.",
-    k:"대만을 걷다 보면 거리 곳곳에 작은 가게와 공장이 빽빽합니다. 아침 시장의 도시락집, 뒷골목의 작은 공장, 야시장의 노점—그 대부분이 가족이 꾸려 가는 작은 장사입니다. 대만어로 사장을 '터우자'라 부르며, '언젠가 내 가게를 갖고 싶다'는 마음은 많은 대만 사람의 가슴 깊이 흐릅니다. 대만 경제를 밑에서 떠받치는 이 창업의 DNA를 들여다봅시다."
+    j:"台湾を歩くと、通りのあちこちに小さな店や工場がひしめいています。朝市の弁当屋、路地裏の町工場、夜市の屋台——その多くが、家族で切り盛りする小さな商売です。台湾では社長のことを「頭家（トウジア）」とも呼び、『いつか自分の店を持ちたい』という思いは、多くの台湾人の胸の奥に流れています。台湾経済を底から支える、この起業のDNAをのぞいてみましょう。",
+    e:"Walk through Taiwan and you'll find small shops and workshops packed along every street—the morning-market lunchbox stand, the back-alley machine shop, the night-market stall—most of them small businesses run by families. In Taiwan, a boss is often called 'tóujiā,' and the wish to 'one day have a shop of my own' runs deep in many Taiwanese hearts. Let's look at the entrepreneurial DNA that supports Taiwan's economy from the ground up.",
+    k:"대만을 걷다 보면 거리 곳곳에 작은 가게와 공장이 빽빽합니다. 아침 시장의 도시락집, 뒷골목의 작은 공장, 야시장의 노점—그 대부분이 가족이 꾸려 가는 작은 장사입니다. 대만에서는 사장을 '터우자'라고도 부르며, '언젠가 내 가게를 갖고 싶다'는 마음은 많은 대만 사람의 가슴 깊이 흐릅니다. 대만 경제를 밑에서 떠받치는 이 창업의 DNA를 들여다봅시다."
   },
   paras:[
     {
@@ -194,12 +194,12 @@ const ARTICLES_12 = [
       }
     },
     {
-      z:"在台灣，有一句很生動的話：「黑手變頭家」。「黑手」指的是修車、做黑手工、在工廠裡雙手沾滿油污的技術工人；「頭家」則是台語裡「老闆」的意思。這句話說的，是一個學徒從基層做起，靠著一身好技術和多年打拚，最後自己出來開店、當老闆的故事。這種靠雙手翻身的傳奇，在台灣的上一代身上比比皆是。",
-      py:"Zài Táiwān, yǒu yí jù hěn shēngdòng de huà: “hēishǒu biàn tóujiā”. “Hēishǒu” zhǐ de shì xiūchē, zuò hēishǒugōng, zài gōngchǎng lǐ shuāngshǒu zhānmǎn yóuwū de jìshù gōngrén; “tóujiā” zé shì Táiyǔ lǐ “lǎobǎn” de yìsi. Zhè jù huà shuō de, shì yí ge xuétú cóng jīcéng zuò qǐ, kàozhe yìshēn hǎo jìshù hé duōnián dǎpīn, zuìhòu zìjǐ chūlái kāidiàn, dāng lǎobǎn de gùshì. Zhè zhǒng kào shuāngshǒu fānshēn de chuánqí, zài Táiwān de shàng yí dài shēnshàng bǐbǐjiēshì.",
+      z:"在台灣，有一句很生動的話：「黑手變頭家」。「黑手」指的是修車、做黑手工、在工廠裡雙手沾滿油污的技術工人；「頭家」則是「老闆」的意思。這句話說的，是一個學徒從基層做起，靠著一身好技術和多年打拚，最後自己出來開店、當老闆的故事。這種靠雙手翻身的傳奇，在台灣的上一代身上比比皆是。",
+      py:"Zài Táiwān, yǒu yí jù hěn shēngdòng de huà: “hēishǒu biàn tóujiā”. “Hēishǒu” zhǐ de shì xiūchē, zuò hēishǒugōng, zài gōngchǎng lǐ shuāngshǒu zhānmǎn yóuwū de jìshù gōngrén; “tóujiā” zé shì “lǎobǎn” de yìsi. Zhè jù huà shuō de, shì yí ge xuétú cóng jīcéng zuò qǐ, kàozhe yìshēn hǎo jìshù hé duōnián dǎpīn, zuìhòu zìjǐ chūlái kāidiàn, dāng lǎobǎn de gùshì. Zhè zhǒng kào shuāngshǒu fānshēn de chuánqí, zài Táiwān de shàng yí dài shēnshàng bǐbǐjiēshì.",
       m:{
-        j:"台湾には、とても生き生きとした言い回しがあります。「黑手變頭家（クロテが社長になる）」。「黑手（クロテ）」とは、自動車修理や機械仕事で、工場のなか両手を油だらけにして働く技術工のこと。「頭家（トウケ）」は台湾語で「社長」の意味です。この言葉が語るのは、一人の徒弟が下働きから始まり、確かな技術と長年の頑張りを頼りに、ついには自分で店を構え、社長になるという物語。こうした自らの手で人生を切り開いた伝説は、台湾の上の世代には数えきれないほどあります。",
-        e:"Taiwan has a vivid saying: 'grease-stained hands become the boss' (heishou bian touke). 'Heishou'—literally 'black hands'—refers to skilled workers who repair cars or do machine work, their hands coated in grease in the factory; 'touke' is Taiwanese for 'boss.' The saying tells the story of an apprentice who starts at the bottom and, relying on solid skills and years of hard graft, finally opens a shop and becomes the boss. Such legends of turning one's life around by hand abound among Taiwan's older generation.",
-        k:"대만에는 아주 생생한 표현이 있습니다. '기름손이 사장이 된다(黑手變頭家)'. '헤이서우(검은 손)'는 자동차 수리나 기계 일로 공장에서 두 손이 기름투성이가 되는 기술공을 말하고, '터우자'는 대만어로 '사장'이라는 뜻입니다. 이 말이 전하는 것은, 한 견습생이 밑바닥부터 시작해 탄탄한 기술과 오랜 노력에 힘입어 마침내 자기 가게를 열고 사장이 되는 이야기입니다. 이렇게 두 손으로 인생을 뒤집은 전설은 대만의 윗세대에게 셀 수 없이 많습니다."
+        j:"台湾には、とても生き生きとした言い回しがあります。「黑手變頭家（クロテが社長になる）」。「黑手（クロテ）」とは、自動車修理や機械仕事で、工場のなか両手を油だらけにして働く技術工のこと。「頭家（トウジア）」は「社長」の意味です。この言葉が語るのは、一人の徒弟が下働きから始まり、確かな技術と長年の頑張りを頼りに、ついには自分で店を構え、社長になるという物語。こうした自らの手で人生を切り開いた伝説は、台湾の上の世代には数えきれないほどあります。",
+        e:"Taiwan has a vivid saying: 'grease-stained hands become the boss' (hēishǒu biàn tóujiā). 'Heishou'—literally 'black hands'—refers to skilled workers who repair cars or do machine work, their hands coated in grease in the factory; 'tóujiā' means 'boss.' The saying tells the story of an apprentice who starts at the bottom and, relying on solid skills and years of hard graft, finally opens a shop and becomes the boss. Such legends of turning one's life around by hand abound among Taiwan's older generation.",
+        k:"대만에는 아주 생생한 표현이 있습니다. '기름손이 사장이 된다(黑手變頭家)'. '헤이서우(검은 손)'는 자동차 수리나 기계 일로 공장에서 두 손이 기름투성이가 되는 기술공을 말하고, '터우자'는 '사장'이라는 뜻입니다. 이 말이 전하는 것은, 한 견습생이 밑바닥부터 시작해 탄탄한 기술과 오랜 노력에 힘입어 마침내 자기 가게를 열고 사장이 되는 이야기입니다. 이렇게 두 손으로 인생을 뒤집은 전설은 대만의 윗세대에게 셀 수 없이 많습니다."
       }
     },
     {
@@ -207,7 +207,7 @@ const ARTICLES_12 = [
       py:"Duì hěnduō Táiwānrén lái shuō, “dāng lǎobǎn” bùzhǐ shì zhuànqián, gèng shì yì zhǒng rénshēng mùbiāo hé gǔzi lǐ de jiàzhíguān. Nìngyuàn zìjǐ dāng tóujiā, xīnkǔ yìdiǎn, yě bùxiǎng yíbèizi tì biérén dǎgōng——zhè zhǒng xīntài, ràng Táiwānrén tèbié yuànyì màoxiǎn chuàngyè. Nǎpà zhǐshì dǐng xià yì jiān xiǎoxiǎo de yǐnliào diàn, yì tái cānchē, huò zài yèshì zū yí ge tānwèi, hěnduō rén dōu xiǎng shìshì kàn “zìjǐ zuò shēngyì” de zīwèi. Zhè gǔ bùfúshū, xiǎng pīn chū tóutiān de jīngshén, jiùshì suǒwèi de “tóujiā jīngshén”.",
       m:{
         j:"多くの台湾人にとって、「社長になる」ことは、単に金を稼ぐだけでなく、人生の目標であり、骨の髄まで染みついた価値観です。少々苦労しても自分が頭家になりたい、一生他人に雇われて働きたくはない——この心持ちが、台湾人をとりわけ起業のリスクに飛び込ませます。たとえ小さな飲料店やキッチンカーを一台引き継ぐだけでも、夜市に屋台を一つ借りるだけでも、多くの人が「自分で商売をする」味を試してみたいと思う。この負けん気の、一旗あげたいという精神こそ、いわゆる「頭家精神」です。",
-        e:"For many Taiwanese, 'being the boss' is not just about making money—it's a life goal and a bone-deep value. They'd rather be their own touke and toil a bit harder than spend a lifetime working for someone else; this mindset makes Taiwanese especially willing to take the risk of starting a business. Even just taking over a tiny drink shop or a food truck, or renting a stall at the night market, many people want to taste what it's like to 'run your own business.' This unyielding spirit of wanting to make it big is precisely the 'boss spirit' (touke jingshen).",
+        e:"For many Taiwanese, 'being the boss' is not just about making money—it's a life goal and a bone-deep value. They'd rather be their own tóujiā and toil a bit harder than spend a lifetime working for someone else; this mindset makes Taiwanese especially willing to take the risk of starting a business. Even just taking over a tiny drink shop or a food truck, or renting a stall at the night market, many people want to taste what it's like to 'run your own business.' This unyielding spirit of wanting to make it big is precisely the 'boss spirit' (tóujiā jingshen).",
         k:"많은 대만 사람에게 '사장이 되는 것'은 단순히 돈을 버는 것이 아니라 인생의 목표이자 뼛속 깊이 밴 가치관입니다. 조금 고생하더라도 스스로 터우자가 되고 싶지, 평생 남 밑에서 일하고 싶지 않다—이런 마음가짐이 대만 사람을 특히 창업의 위험에 뛰어들게 합니다. 작은 음료 가게나 푸드트럭 하나를 인수하는 것이든, 야시장에 노점 하나를 빌리는 것이든, 많은 사람이 '스스로 장사하는' 맛을 보고 싶어 합니다. 이 지지 않으려는, 크게 성공하고 싶은 정신이 바로 '터우자 정신'입니다."
       }
     },
@@ -240,7 +240,7 @@ const ARTICLES_12 = [
     }
   ],
   vocab:[
-    { w:"頭家", zy:"ㄊㄡˊ ㄐㄧㄚ", py:"tóujiā", m:{ j:"（台湾語）社長・オーナー・店主", e:"(Taiwanese) boss, business owner", k:"(대만어) 사장·주인" } },
+    { w:"頭家", zy:"ㄊㄡˊ ㄐㄧㄚ", py:"tóujiā", m:{ j:"社長・オーナー・店主", e:"boss, business owner", k:"사장·주인" } },
     { w:"中小企業", zy:"ㄓㄨㄥ ㄒㄧㄠˇ ㄑㄧˋ ㄧㄝˋ", py:"zhōngxiǎo qǐyè", m:{ j:"中小企業", e:"small and medium-sized enterprises (SMEs)", k:"중소기업" } },
     { w:"創業", zy:"ㄔㄨㄤˋ ㄧㄝˋ", py:"chuàngyè", m:{ j:"起業・開業", e:"to start a business", k:"창업" } },
     { w:"黑手", zy:"ㄏㄟ ㄕㄡˇ", py:"hēishǒu", m:{ j:"（油まみれの）機械・整備の技術工", e:"grease-handed mechanic; blue-collar technician", k:"기름손 기술공·정비공" } },
@@ -251,12 +251,12 @@ const ARTICLES_12 = [
     { w:"租金", zy:"ㄗㄨ ㄐㄧㄣ", py:"zūjīn", m:{ j:"家賃・賃料", e:"rent", k:"임대료" } },
     { w:"成本", zy:"ㄔㄥˊ ㄅㄣˇ", py:"chéngběn", m:{ j:"コスト・原価", e:"cost", k:"원가·비용" } },
     { w:"雞排", zy:"ㄐㄧ ㄆㄞˊ", py:"jīpái", m:{ j:"（夜市の名物）フライドチキンカツ", e:"fried chicken cutlet (night-market snack)", k:"닭튀김(지파이, 야시장 명물)" } },
-    { w:"出頭天", zy:"ㄔㄨ ㄊㄡˊ ㄊㄧㄢ", py:"chū tóutiān", m:{ j:"（台湾語由来）成功して世に出る・一旗あげる", e:"to make it; rise to success (from Taiwanese)", k:"성공해 두각을 나타내다(대만어 유래)" } }
+    { w:"出頭天", zy:"ㄔㄨ ㄊㄡˊ ㄊㄧㄢ", py:"chū tóutiān", m:{ j:"成功して世に出る・一旗あげる", e:"to make it; rise to success", k:"성공해 두각을 나타내다" } }
   ],
   note:{
-    j:"「頭家（トウケ）」は台湾語（台語）の言葉で、日常会話にもよく登場します。市場や屋台で値切るとき、客が『頭家、算便宜一點啦（社長、ちょっと安くしてよ）』と声をかけるのは定番のやり取り。台湾の中小企業の多くは家族経営で、1960〜80年代の高度成長期には『客庁即工厰（居間がそのまま工場）』と言われ、一家総出で夜なべして輸出品を作った時代がありました。この草の根の起業力が、台湾を『MIT（Made in Taiwan）』の国へと押し上げた原動力です。",
-    e:"'Touke' is a Taiwanese (Hokkien) word that shows up often in everyday talk. Haggling at a market or stall, a customer calling out 'Touke, make it a bit cheaper!' is a classic exchange. Many Taiwanese SMEs are family-run; during the boom of the 1960s–80s, people spoke of 'the living room as the factory,' when whole families stayed up through the night making goods for export. This grassroots entrepreneurial power is the force that pushed Taiwan into being a land of 'MIT' (Made in Taiwan).",
-    k:"'터우자'는 대만어(민난어) 단어로 일상 대화에도 자주 등장합니다. 시장이나 노점에서 흥정할 때 손님이 '터우자, 좀 싸게 해 줘요!'라고 부르는 것은 전형적인 대화입니다. 대만 중소기업의 상당수는 가족 경영이며, 1960~80년대 고도성장기에는 '거실이 곧 공장'이라는 말이 있을 만큼 온 가족이 밤새워 수출품을 만들던 시절이 있었습니다. 이 풀뿌리 창업의 힘이 대만을 'MIT(Made in Taiwan)'의 나라로 밀어 올린 원동력입니다."
+    j:"「頭家（トウジア）」は「社長・店主」を指す言葉で、日常会話にもよく登場します。市場や屋台で値切るとき、客が『頭家、算便宜一點啦（社長、ちょっと安くしてよ）』と声をかけるのは定番のやり取り。台湾の中小企業の多くは家族経営で、1960〜80年代の高度成長期には『客庁即工厰（居間がそのまま工場）』と言われ、一家総出で夜なべして輸出品を作った時代がありました。この草の根の起業力が、台湾を『MIT（Made in Taiwan）』の国へと押し上げた原動力です。",
+    e:"'Tóujiā' (boss, shop owner) shows up often in everyday talk. Haggling at a market or stall, a customer calling out 'Tóujiā, make it a bit cheaper!' is a classic exchange. Many Taiwanese SMEs are family-run; during the boom of the 1960s–80s, people spoke of 'the living room as the factory,' when whole families stayed up through the night making goods for export. This grassroots entrepreneurial power is the force that pushed Taiwan into being a land of 'MIT' (Made in Taiwan).",
+    k:"'터우자'는 '사장·가게 주인'을 가리키는 말로 일상 대화에도 자주 등장합니다. 시장이나 노점에서 흥정할 때 손님이 '터우자, 좀 싸게 해 줘요!'라고 부르는 것은 전형적인 대화입니다. 대만 중소기업의 상당수는 가족 경영이며, 1960~80년대 고도성장기에는 '거실이 곧 공장'이라는 말이 있을 만큼 온 가족이 밤새워 수출품을 만들던 시절이 있었습니다. 이 풀뿌리 창업의 힘이 대만을 'MIT(Made in Taiwan)'의 나라로 밀어 올린 원동력입니다."
   }
 }
 ];
