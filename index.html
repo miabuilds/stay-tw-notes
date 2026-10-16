@@ -36,6 +36,8 @@ html,body{touch-action:manipulation}.ph-life{display:flex;align-items:center;gap
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script src="analytics.js?v=52"></script>
 <link rel="apple-touch-icon" href="images/bear.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700;900&display=swap">
 <style>
 /* ======================================================
    台湾華語スタディ StayTW Study — 学習ツール
@@ -53,6 +55,8 @@ html,body{touch-action:manipulation}.ph-life{display:flex;align-items:center;gap
   /* 注音専用：黒体系は声調記号(ˊˇˋ˙)が明朝より太く鮮明。ゴシックで小サイズでも潰れにくい */
   --zhuyin: "PingFang TC", "Heiti TC", "Microsoft JhengHei", "Noto Sans TC", "Hiragino Sans", sans-serif;
 }
+/* 中文字型「黑體」(ゴシック)。明朝は筆画が細く覚えにくいという声(2026-09)。中国語の見出し・例文はすべて --serif を通るので変数を差し替えるだけ */
+html[data-zhfont="sans"]{--serif:"PingFang TC","Hiragino Sans","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif}
 [data-theme="dark"] {
   --bg: #121113; --bg2: #1B1A1C; --bg3: #1F1E20; --hd: #121113;
   --tx: #EDE8DE; --tx2: #8F8A7E; --tx-s: #5D5A53; --tx3: #5D5A53;
@@ -290,7 +294,7 @@ button{font-family:inherit}
 .zw-info{display:flex;align-items:center;justify-content:center;gap:12px;margin:6px 0 14px}
 .zw-py{font-family:var(--serif);font-size:22px;color:var(--ac)}
 .zw-pad{position:relative;width:min(320px,80vw);aspect-ratio:1;margin:0 auto;background:var(--bg2);border:1px solid var(--line);border-radius:16px;overflow:hidden}
-.zw-pad::before,.zw-pad::after{content:"";position:absolute;background:var(--line)}
+.zw-pad::before,.zw-pad::after{content:"";position:absolute;background:var(--line);pointer-events:none}   /* 2026-10 ユーザー報告:中央の横線(::after)がキャンバスの上に乗り、線の上から書き始めると描けずにページがスクロールしていた */
 .zw-pad::before{left:50%;top:0;bottom:0;width:1px;transform:translateX(-.5px)}
 .zw-pad::after{top:50%;left:0;right:0;height:1px;transform:translateY(-.5px)}
 .zw-guide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:min(230px,58vw);line-height:1;color:var(--tx);opacity:.13;pointer-events:none;user-select:none}
@@ -442,10 +446,15 @@ button{font-family:inherit}
 .pf-h{font-size:13px;letter-spacing:.05em;color:var(--tx2);font-weight:700;margin:24px 0 12px}
 .pf-levels{display:flex;flex-direction:column;gap:10px}
 .pf-lv{display:flex;align-items:center;gap:12px}
-.pf-lvn{font-size:13px;font-weight:700;width:64px;flex:none}
+.pf-lvn{font-size:13px;font-weight:700;width:96px;flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pf-bar{flex:1;height:8px;background:var(--bg3);border-radius:999px;overflow:hidden}
 .pf-bar i{display:block;height:100%;background:var(--ac);border-radius:999px;transition:width .5s var(--ease)}
-.pf-lvc{font-size:12px;color:var(--tx3);width:58px;text-align:right;flex:none}
+.pf-lvc{font-size:12px;color:var(--tx3);width:84px;text-align:right;flex:none;font-variant-numeric:tabular-nums}
+.pf-bar2{display:flex}
+.pf-bar2 i{border-radius:0 !important}
+.pf-bar2 i.l,.pf-lvkey i.l{background:color-mix(in srgb,var(--ac) 35%,var(--bg3))}
+.pf-lvkey{display:flex;gap:14px;justify-content:flex-end;font-size:11.5px;color:var(--tx3);margin-top:2px}
+.pf-lvkey i{display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--ac);margin-right:5px;vertical-align:-1px}
 .pf-streak{display:flex;align-items:center;gap:16px;margin-top:12px;background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 66%,#000));color:#fff;border-radius:14px;padding:16px 22px}
 .pf-streak-n{font-family:var(--serif);font-size:42px;font-weight:700;line-height:1;flex:none}
 .pf-streak-n small{font-size:15px;font-weight:600;margin-left:3px}
@@ -492,7 +501,7 @@ button{font-family:inherit}
 .rd-back{background:none;border:none;color:var(--tx2);font-size:13.5px;cursor:pointer;font-family:inherit;padding:0;margin-bottom:10px}
 .rd-title{font-family:var(--serif);font-size:22px;font-weight:700;margin-bottom:14px}
 .rd-toggles{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
-.rd-tg{border:1px solid var(--bd);background:var(--bg);color:var(--tx2);border-radius:999px;padding:5px 14px;font-size:13px;cursor:pointer;font-family:inherit}
+.rd-tg{white-space:nowrap;border:1px solid var(--bd);background:var(--bg);color:var(--tx2);border-radius:999px;padding:5px 14px;font-size:13px;cursor:pointer;font-family:inherit}
 .rd-tg.on{background:var(--ac);color:#fff;border-color:var(--ac)}
 .rd-line{position:relative;padding:14px 46px 14px 6px;border-bottom:1px solid var(--line);border-radius:10px;transition:background .2s;-webkit-tap-highlight-color:transparent}
 .rd-line.playing{background:var(--ac-soft)}
@@ -518,7 +527,25 @@ button{font-family:inherit}
 .ar-fc{border:1px solid var(--bd);background:var(--bg2);color:var(--tx2);border-radius:999px;padding:5px 13px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
 .ar-fc.on{background:var(--ac);border-color:var(--ac);color:#fff}
 @media(hover:hover){.ar-fc:hover{border-color:var(--ac)}}
-.ar-card{display:block;width:100%;text-align:left;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:13px;cursor:pointer;font-family:inherit;transition:border-color .15s var(--ease),transform .1s var(--ease)}
+.ar-card{display:flex;align-items:stretch;gap:16px;width:100%;text-align:left;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:13px;cursor:pointer;font-family:inherit;transition:border-color .15s var(--ease),transform .1s var(--ease)}
+.ar-card-im{flex:0 0 112px;height:112px;border-radius:12px;overflow:hidden;background:var(--bg3)}
+.ar-card-im img{width:100%;height:100%;object-fit:cover;display:block}
+.ar-card-b{flex:1;min-width:0;display:block;padding-top:2px}
+@media (max-width:520px){.ar-card{gap:12px;padding:12px}.ar-card-im{flex-basis:84px;height:84px}.ar-card-zh{font-size:17px}.ar-card-prev{display:none}}
+.ar-hero{margin:4px 0 18px;border-radius:16px;overflow:hidden;aspect-ratio:16/9;background:var(--bg3)}
+.ar-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.hb-sech{display:flex;align-items:center;justify-content:space-between;margin-bottom:-8px}
+.hb-sech .hb-sec{margin-bottom:0}
+.hb-sech button{background:none;border:0;color:var(--ac);font:inherit;font-size:13px;font-weight:700;cursor:pointer;padding:6px 0}
+.hb-art{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 8px;margin:0 -2px;scrollbar-width:none}
+.hb-art::-webkit-scrollbar{display:none}
+.hb-art-c{flex:0 0 152px;scroll-snap-align:start;display:flex;flex-direction:column;text-align:left;background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow:hidden;padding:0;cursor:pointer;font-family:inherit;color:var(--tx)}
+.hb-art-im{position:relative;display:block;width:100%;aspect-ratio:1/1;background:var(--bg3)}
+.hb-art-im img{width:100%;height:100%;object-fit:cover;display:block}
+.hb-art-lk{position:absolute;top:7px;right:7px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:grid;place-items:center}
+.hb-art-ok{position:absolute;top:7px;right:7px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.92);color:#16a34a;display:grid;place-items:center;font-size:13px;font-weight:800}
+.hb-art-t{display:block;padding:9px 11px 2px;font-family:var(--serif);font-size:15px;font-weight:700;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.hb-art-s{display:block;padding:0 11px 11px;font-size:11.5px;color:var(--tx3);line-height:1.4;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .ar-card:active{transform:scale(.99)}
 .ar-card-prev{font-family:var(--serif);font-size:14px;color:var(--tx3);margin-top:8px;line-height:1.6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(hover:hover){.ar-card:hover{border-color:var(--ac)}}
@@ -548,8 +575,8 @@ button{font-family:inherit}
 .stw-backfab{position:fixed;left:14px;top:calc(var(--hh) + env(safe-area-inset-top) + 12px);z-index:140;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:color-mix(in srgb,var(--bg2) 92%,transparent);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);color:var(--tx);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 6px 20px rgba(0,0,0,.16);opacity:0;transform:translateY(-6px) scale(.9);pointer-events:none;transition:opacity .2s var(--ease),transform .2s var(--ease)}
 .stw-backfab.show{opacity:1;transform:none;pointer-events:auto}
 .stw-backfab .ic{width:22px;height:22px}
-.ar-back{width:42px;height:42px;border-radius:50%;border:1px solid var(--bd);background:var(--bg2);color:var(--tx2);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
-.ar-back .ic{width:22px;height:22px}
+.ar-back{width:48px;height:48px;border-radius:50%;border:1px solid var(--bd);background:var(--bg2);color:var(--tx2);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.ar-back .ic{width:28px;height:28px;stroke-width:2.4}
 .ar-fontctl{display:flex;gap:8px}
 .ar-fontctl button{width:44px;height:42px;border-radius:12px;border:1px solid var(--bd);background:var(--bg2);color:var(--tx);font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center}
 .ar-fontctl button small{font-size:12px}
@@ -624,7 +651,13 @@ html[data-tone="on"] .zy-t5{color:var(--zt5)}   /* 親要素の letter-spacing �
 .ar-bar{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(160%);opacity:0;pointer-events:none;z-index:150;display:flex;gap:8px;background:color-mix(in srgb,var(--bg2) 94%,transparent);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);border:1px solid var(--line);border-radius:999px;padding:7px 9px;box-shadow:0 8px 30px rgba(0,0,0,.18);transition:transform .28s var(--ease),opacity .2s var(--ease)}
 .ar-bar.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
 body.more-open .ar-bar{display:none}
-.ar-bt{min-width:52px;height:42px;border-radius:999px;border:none;background:transparent;color:var(--tx2);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;padding:0 14px}
+.ar-bt{min-width:52px;height:42px;border-radius:999px;border:none;background:transparent;color:var(--tx2);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;padding:0 14px;white-space:nowrap;flex:none}
+.ar-bar{max-width:calc(100vw - 20px)}
+@media(max-width:400px){.ar-bt{padding:0 11px;min-width:46px}.ar-bar{gap:4px}}
+.spk-rate{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;flex-wrap:wrap;font-size:13px;color:var(--tx2)}
+.spk-rate span{margin-right:4px;font-weight:600}
+.spk-rate button{min-width:52px;height:38px;border-radius:999px;border:1px solid var(--bd);background:var(--bg2);color:var(--tx2);font:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
+.spk-rate button.on{background:var(--ac);border-color:var(--ac);color:#fff}
 .ar-bt.on{background:var(--ac);color:#fff}
 .ar-bt.play{background:var(--tx);color:var(--bg);font-size:17px;min-width:52px}
 @media(min-width:721px){.ar-bar{bottom:24px}}
@@ -646,6 +679,8 @@ body.more-open .ar-bar{display:none}
 .ws-ex .tr{display:block;font-family:inherit;font-size:13px;color:var(--tx2);margin-top:4px;line-height:1.7}
 .ws-srs{margin-top:18px;width:100%;padding:13px;border-radius:12px;border:1px solid var(--ac);background:var(--ac-soft);color:var(--ac);font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.02em}
 .ws-srs:active{transform:translateY(1px)}
+.ws-mv{margin-top:9px;border-color:var(--line);background:var(--bg2);color:var(--tx2);display:flex;align-items:center;justify-content:center;gap:6px}
+.ws-mv svg{width:15px;height:15px}
 .ws-srs.added{border-color:var(--bd);background:var(--bg3);color:var(--tx3);cursor:default}
 /* 学習パス */
 .pa-lv{font-family:var(--serif);font-size:22px;font-weight:700}
@@ -685,7 +720,7 @@ body.more-open .ar-bar{display:none}
 .yts-in{flex:1;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--tx);font:inherit;font-size:15px}
 .yts-sub{font-size:12px;color:var(--tx3);line-height:1.6;margin:9px 0 0}
 .yts-head{display:flex;align-items:center;gap:10px;margin-bottom:11px}
-.yts-back{background:none;border:0;font:inherit;font-size:13px;color:var(--ac);cursor:pointer;padding:4px 0;flex:0 0 auto}
+.yts-back{background:none;border:0;font:inherit;font-size:16px;font-weight:700;color:var(--ac);cursor:pointer;padding:10px 0;min-height:44px;flex:0 0 auto}
 .yts-title{font-size:13px;color:var(--tx3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .yts-video{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000}
 .yts-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
@@ -769,12 +804,167 @@ body.more-open .ar-bar{display:none}
 /* ── 闖關（一課 8 語）────────────────────────────────
    一覧はハブの中に置く。パネルは増やさない＝入口の数は変えない。
    プレイヤーは全面のオーバーレイ:1 課やっている間は他のものを見せない。 */
+/* ── 闖關マップ ── */
+
+
+/* ── 面板を可愛く(2026-10「搞可愛點」)。面板(#panel-path)の中だけ ── */
+#panel-path{--round:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Arial Rounded MT Bold",var(--serif)}
+#panel-path .hb-greet,#panel-path .lm-uh b,#panel-path .hb-ring b,#panel-path .hb-plan-n b,#panel-path .hb-wod-w,#panel-path .hb-sec,#panel-path .lm-node{font-family:var(--round);font-weight:900}
+#panel-path .hb-hero{position:relative;overflow:hidden;border-radius:26px;border:2px solid #f6d5cb;box-shadow:0 5px 0 #f3d9d0;
+  background:radial-gradient(circle at 12px 12px,rgba(255,255,255,.55) 2px,transparent 2.5px) 0 0/22px 22px,linear-gradient(160deg,#ffe9e1,#fff6ea 60%,#fffaf2)}
+#panel-path .hb-hero::before,#panel-path .hb-hero::after{content:"✦";position:absolute;color:#f5b74a;font-size:15px;pointer-events:none;animation:cuteTw 2.4s ease-in-out infinite}
+#panel-path .hb-hero::before{top:10px;left:58px}
+#panel-path .hb-hero::after{top:72px;left:16px;font-size:11px;color:#f08a7a;animation-delay:1.1s}
+@keyframes cuteTw{0%,100%{opacity:.25;transform:scale(.8) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(20deg)}}
+#panel-path .hb-hero-top img{width:62px;height:70px;animation:cuteSway 3s ease-in-out infinite;transform-origin:50% 100%;cursor:pointer}
+#panel-path .hb-hero-top img.jump{animation:cuteJump .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes cuteSway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+@keyframes cuteJump{0%{transform:translateY(0) scale(1)}40%{transform:translateY(-14px) scale(1.06,.95)}100%{transform:translateY(0) scale(1)}}
+#panel-path .hb-ring{box-shadow:0 4px 0 #f1d6cc}
+#panel-path .hb-wd.on .hb-wd-c{background:linear-gradient(180deg,#ffb36b,#f0705a);box-shadow:0 3px 0 #d9563f}
+#panel-path .hb-plan,#panel-path .hb-wod,#panel-path .pa-found,#panel-path .hb-art-c,#panel-path .hb-quick button,#panel-path .hb-quick a{border-radius:22px;border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+#panel-path .hb-plan{background:linear-gradient(170deg,#fff,#fff8f1)}
+#panel-path .hb-plan-n{border:0;gap:8px;margin:12px 0 16px}
+#panel-path .hb-plan-n div{border:0;border-radius:18px;padding:12px 4px;background:#eef6ff}
+#panel-path .hb-plan-n div:nth-child(2){background:#fff0ec}
+#panel-path .hb-plan-n div:nth-child(3){background:#eefaf1}
+#panel-path .hb-go,#panel-path .btn.primary{border-radius:999px;box-shadow:0 5px 0 color-mix(in srgb,var(--ac) 70%,#000);transition:transform .08s,box-shadow .08s}
+#panel-path .hb-go:active,#panel-path .btn.primary:active{transform:translateY(4px);box-shadow:0 1px 0 color-mix(in srgb,var(--ac) 70%,#000)}
+#panel-path .hb-quick button:active,#panel-path .hb-quick a:active,#panel-path .hb-art-c:active,#panel-path .pa-found:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+#panel-path .hb-quick .qi{border-radius:14px;width:42px;height:42px}
+#panel-path .lm-node.done::after{content:"✦";position:absolute;margin:-40px 0 0 46px;font-size:13px;color:#f5b74a;animation:cuteTw 2.2s ease-in-out infinite}
+#panel-path .lm-node{position:relative}
+#panel-path .lm-bear{animation:lmBob 1.8s ease-in-out infinite}
+#panel-path .lm-tip{border-radius:16px;border-color:#f6d5cb;box-shadow:0 3px 0 #f6d5cb}
+#panel-path .hb-foot img{animation:cuteSway 3.4s ease-in-out infinite;transform-origin:50% 100%}
+:root[data-theme="dark"] #panel-path .hb-hero{border-color:#4a3532;box-shadow:0 5px 0 #2c2120;background:radial-gradient(circle at 12px 12px,rgba(255,255,255,.05) 2px,transparent 2.5px) 0 0/22px 22px,linear-gradient(160deg,#3a2925,#2d2622)}
+:root[data-theme="dark"] #panel-path .hb-plan{background:var(--bg2)}
+:root[data-theme="dark"] #panel-path .hb-plan-n div{background:var(--bg3)}
+:root[data-theme="dark"] #panel-path .hb-ring{box-shadow:0 4px 0 #2c2120}
+@media (prefers-reduced-motion:reduce){#panel-path *{animation:none !important}}
+
+.hb-hero{display:block !important}
+.hb-hero-top{display:flex;align-items:center;gap:12px}
+.hb-hero-top .hb-hi{display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+.hb-ring{--p:0;flex:none;width:92px;height:92px;border-radius:50%;border:0;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;
+  background:radial-gradient(closest-side,var(--bg2) 79%,transparent 80% 100%),conic-gradient(var(--ac) calc(var(--p)*1%),var(--bg3) 0)}
+.hb-ring.ok{background:radial-gradient(closest-side,var(--bg2) 79%,transparent 80% 100%),conic-gradient(var(--ok) calc(var(--p)*1%),var(--bg3) 0)}
+.hb-ring b{font-family:var(--serif);font-size:26px;line-height:1;color:var(--tx);font-variant-numeric:tabular-nums}
+.hb-ring span{font-size:11px;color:var(--tx3);margin-top:1px}
+.hb-ring small{font-size:9.5px;color:var(--tx3);margin-top:2px;max-width:64px;text-align:center;line-height:1.2}
+.hb-week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.hb-wd{display:flex;flex-direction:column;align-items:center;gap:4px}
+.hb-wd-c{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;border:2px dashed var(--line);color:#fff}
+.hb-wd.on .hb-wd-c{border:0;background:linear-gradient(180deg,#f2994a,var(--ac))}
+.hb-wd.today .hb-wd-c{border:2px solid var(--ac)}
+.hb-wd.today.on .hb-wd-c{box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 25%,transparent)}
+.hb-wd.fut .hb-wd-c{opacity:.55}
+.hb-wd-l{font-size:11px;color:var(--tx3);font-weight:600}
+.hb-wd.today .hb-wd-l{color:var(--ac)}
+.hb-quick button,.hb-quick a{border-width:1px !important}
+.hb-quick .qi{width:38px;height:38px;border-radius:12px;display:grid !important;place-items:center;background:hsl(var(--qh,8) 70% 93%);color:hsl(var(--qh,8) 55% 42%)}
+.hb-quick > :nth-child(1){--qh:8}.hb-quick > :nth-child(2){--qh:200}.hb-quick > :nth-child(3){--qh:145}
+.hb-quick > :nth-child(4){--qh:32}.hb-quick > :nth-child(5){--qh:265}.hb-quick > :nth-child(6){--qh:340}
+:root[data-theme="dark"] .hb-quick .qi{background:hsl(var(--qh,8) 35% 22%);color:hsl(var(--qh,8) 70% 75%)}
+.hb-mvcard{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:12px 14px;cursor:pointer;font-family:inherit;color:var(--tx)}
+.hb-mvcard img{width:58px;height:58px;flex:none}
+.hb-mvcard > span{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.hb-mvcard b{font-size:15px;font-weight:800}
+.hb-mvcard > span > span{font-size:12.5px;color:var(--tx3);line-height:1.45}
+.hb-mvcard em{font-style:normal;font-family:var(--round,var(--serif));font-size:20px;font-weight:900;color:var(--ac);min-width:30px;text-align:right}
+.hb-mvcard:active{transform:translateY(2px)}
+.hb-foot{text-align:center;padding:6px 0 4px}
+.hb-foot img{width:110px;height:110px;display:block;margin:0 auto}
+.hb-foot p{font-size:13px;color:var(--tx3);margin-top:4px}
+.lm-uh:not(.op):not(.here){background:hsl(var(--h) 60% 96%) !important;border-color:hsl(var(--h) 45% 85%) !important;box-shadow:0 4px 0 hsl(var(--h) 40% 86%) !important}
+.lm-uh:not(.op):not(.here) .lm-uno{color:hsl(var(--h) 50% 40%);opacity:1}
+:root[data-theme="dark"] .lm-uh:not(.op):not(.here){background:hsl(var(--h) 25% 18%) !important;border-color:hsl(var(--h) 25% 28%) !important;box-shadow:0 4px 0 hsl(var(--h) 25% 12%) !important}
+.lm-map{padding-top:14px !important}
+.lm-step.cur{margin-top:46px}
+.lm-step.cur:first-child{margin-top:40px}
+
+.lm-uh{--h:8;display:grid;grid-template-columns:1fr auto;grid-template-areas:"no c" "b b" "bar bar";gap:2px 10px;width:100%;text-align:left;margin:14px 0 4px;padding:14px 16px 13px;border:0;border-radius:18px;cursor:pointer;font-family:inherit;color:#fff;
+  background:hsl(var(--h) 58% 50%);box-shadow:0 5px 0 hsl(var(--h) 55% 38%);transition:transform .08s}
+.lm-uh:active{transform:translateY(3px);box-shadow:0 2px 0 hsl(var(--h) 55% 38%)}
+.lm-uh:not(.op):not(.here){background:var(--bg2);color:var(--tx);box-shadow:0 4px 0 var(--line);border:1px solid var(--line)}
+.lm-uno{grid-area:no;font-size:11.5px;font-weight:800;letter-spacing:.08em;opacity:.85}
+.lm-uh b{grid-area:b;font-size:17px;font-weight:800;line-height:1.35}
+.lm-uc{grid-area:c;font-size:12.5px;font-weight:700;opacity:.9;white-space:nowrap}
+.lm-ubar{grid-area:bar;display:block;height:6px;border-radius:3px;background:rgba(255,255,255,.3);overflow:hidden;margin-top:8px}
+.lm-uh:not(.op):not(.here) .lm-ubar{background:var(--line)}
+.lm-ubar i{display:block;height:100%;background:#fff;border-radius:3px}
+.lm-uh:not(.op):not(.here) .lm-ubar i{background:hsl(var(--h) 58% 50%)}
+.lm-uh.clear .lm-uno::after{content:" ✓"}
+.lm-map{position:relative;display:flex;flex-direction:column;align-items:center;padding:18px 0 10px}
+.lm-step{position:relative;transform:translateX(var(--x));display:flex;flex-direction:column;align-items:center;margin-bottom:16px}
+.lm-node{--c:var(--ac);width:68px;height:64px;border-radius:50%;border:0;cursor:pointer;font-family:inherit;display:grid;place-items:center;
+  color:#fff;font-size:22px;font-weight:800;background:var(--c);box-shadow:0 6px 0 color-mix(in srgb,var(--c) 70%,#000);transition:transform .08s}
+.lm-node:active{transform:translateY(4px);box-shadow:0 2px 0 color-mix(in srgb,var(--c) 70%,#000)}
+.lm-node.done{--c:#e2a321}
+.lm-node.todo{--c:hsl(var(--h,8) 70% 90%);color:hsl(var(--h,8) 45% 42%)}
+:root[data-theme="dark"] .lm-node.todo{--c:hsl(var(--h,8) 25% 26%);color:hsl(var(--h,8) 60% 75%)}
+.lm-node.locked{--c:var(--bg3,#e9e4dc);color:var(--tx3)}
+.lm-node.g{border-radius:20px}
+.lm-node.now{width:80px;height:76px;font-size:26px;animation:lmPulse 1.8s ease-in-out infinite}
+.lm-node.run{background:conic-gradient(var(--c) calc(var(--p)*1%),color-mix(in srgb,var(--c) 45%,#fff) 0)}
+@keyframes lmPulse{0%,100%{outline:0 solid color-mix(in srgb,var(--ac) 35%,transparent)}50%{outline:9px solid color-mix(in srgb,var(--ac) 18%,transparent)}}
+.lm-lbl{margin-top:9px;font-size:12px;font-weight:600;color:var(--tx2);max-width:150px;text-align:center;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.lm-tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);white-space:nowrap;background:var(--bg2);color:var(--ac);border:2px solid var(--line);font-size:12.5px;font-weight:800;padding:5px 11px;border-radius:12px;animation:lmBob 1.6s ease-in-out infinite}
+.lm-tip::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:var(--line)}
+@keyframes lmBob{0%,100%{translate:0 0}50%{translate:0 -4px}}
+.lm-bear{position:absolute;top:2px;left:calc(100% + 4px);width:52px;height:auto;pointer-events:none}
+.lm-step[style*="--x:66px"] .lm-bear,.lm-step[style*="--x:104px"] .lm-bear{left:auto;right:calc(100% + 4px)}
+.lm-goal{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;background:var(--bg3,#e9e4dc);color:var(--tx3);font-size:24px;box-shadow:0 5px 0 var(--line)}
+.lm-goal.on{background:#e2a321;color:#fff;box-shadow:0 5px 0 #b37d12}
+@media (prefers-reduced-motion:reduce){.lm-node.now,.lm-tip{animation:none}}
+/* 2026-10「空白が多い」:詰める+背景に模様+道ばたに熊 */
+.lm-map{margin:6px 0 4px;border-radius:26px;padding-bottom:6px !important;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%23000' stroke-opacity='.07' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 40c0-7 6-12 13-12 4-6 14-7 19 0 6 0 10 4 10 10H22z'/%3E%3Cpath d='M140 30l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z'/%3E%3Cpath d='M38 128c10-14 26-14 34 0-10 6-24 6-34 0zM44 128h22'/%3E%3Ccircle cx='130' cy='120' r='9'/%3E%3Cpath d='M126 120h8M130 116v8' stroke-opacity='.05'/%3E%3Cpath d='M95 82l4 4M99 82l-4 4'/%3E%3Cpath d='M152 158c3-5 9-5 12 0'/%3E%3C/g%3E%3C/svg%3E") 0 0/180px 180px,
+    radial-gradient(circle,hsl(var(--h,8) 60% 70% / .18) 1.6px,transparent 2px) 0 0/20px 20px,
+    linear-gradient(180deg,hsl(var(--h,8) 75% 97%),hsl(var(--h,8) 60% 98.5%))}
+:root[data-theme="dark"] .lm-map{background:radial-gradient(circle,hsl(var(--h,8) 40% 60% / .12) 1.6px,transparent 2px) 0 0/20px 20px,linear-gradient(180deg,hsl(var(--h,8) 20% 15%),hsl(var(--h,8) 15% 13%))}
+.lm-step{margin-bottom:8px}
+.lm-node{width:62px;height:58px}
+.lm-node.now{width:72px;height:68px}
+.lm-lbl{margin-top:6px;font-size:11.5px;max-width:132px}
+.lm-step.cur{margin-top:40px}
+.lm-stk{position:absolute;top:-6px;width:84px;height:84px;pointer-events:none;animation:cuteSway 3.6s ease-in-out infinite;transform-origin:50% 100%}
+.lm-stk.l{right:calc(100% + 26px)}
+.lm-stk.r{left:calc(100% + 26px)}
+.fo-zy>span,.fo-wz>span{white-space:nowrap}
+/* 2026-10 面板の並び替え demo:今日の数字は頭のカードへ、闖關を 2 番目に。文章・快捷は枠なしで層を分ける */
+#panel-path .hb-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+#panel-path .hb-mini span{display:flex;align-items:baseline;justify-content:center;gap:5px;background:rgba(255,255,255,.7);border-radius:14px;padding:8px 4px;font-size:11.5px;color:var(--tx3);white-space:nowrap}
+#panel-path .hb-mini b{font-family:var(--round);font-size:19px;font-weight:900;color:var(--tx)}
+#panel-path .hb-mini .due b{color:var(--ac)}
+:root[data-theme="dark"] #panel-path .hb-mini span{background:rgba(255,255,255,.06)}
+#panel-path .hb-go-rv{width:100%;margin-top:12px}
+#panel-path .hb-art-c{box-shadow:none;border-width:1px}
+#panel-path .hb-quick button,#panel-path .hb-quick a{box-shadow:none;border-width:1px;background:transparent}
+#panel-path .hb-sec,#panel-path .pa-found-h{font-size:15px;font-weight:900;color:var(--tx);letter-spacing:.02em;font-family:var(--round)}
 .ls-skel{color:var(--tx3);font-size:13px;padding:18px 2px}
-.ls-head{display:flex;justify-content:flex-end;font-size:12.5px;color:var(--tx3);margin:-4px 0 6px}
-.ls-uh{display:flex;align-items:center;gap:11px;margin:20px 0 10px}
-.ls-uh b{font-size:13.5px;font-weight:700;letter-spacing:.03em}
-.ls-uh i{flex:1;height:1px;background:var(--line)}
+.ls-head{display:flex;align-items:baseline;justify-content:space-between;font-size:12.5px;color:var(--tx3);margin:-4px 0 7px}
+.ls-head b{font-size:15px;font-weight:700;color:var(--tx2)}
+/* このレベル全体でどこまで来たか。課の中の進度とは別もの */
+.ls-headbar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.ls-headbar i{display:block;height:100%;background:var(--ac);transition:width .4s cubic-bezier(.22,1,.36,1)}
+/* 単元の見出しは押して開け閉めするボタン。畳んだ一覧から今の単元だけ開く */
+.ls-more{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin:14px 0 4px;padding:13px;border:1px dashed var(--bd);border-radius:12px;background:none;color:var(--tx2);font:inherit;font-size:14.5px;font-weight:600;cursor:pointer}
+.ls-more:active{background:var(--bg3)}
+.ls-more-c{font-size:12px}
+.ls-uh{display:flex;align-items:center;gap:11px;width:100%;margin:0;padding:13px 4px;
+ background:none;border:0;border-bottom:1px solid var(--line);font:inherit;text-align:left;
+ color:var(--tx2);cursor:pointer}
+.ls-uh:last-child{border-bottom:0}
+.ls-uh.op{border-bottom-color:transparent;padding-bottom:9px}
+.ls-uh b{font-size:13.5px;font-weight:700;letter-spacing:.03em;color:var(--tx2)}
+.ls-uh.here b,.ls-uh.op b{color:var(--tx)}
+.ls-uh i{flex:1;height:1px;background:transparent}
 .ls-uh span{font-size:12.5px;color:var(--tx3)}
+.ls-uc{width:20px;flex:none;text-align:center;font-size:15px;font-weight:700;color:var(--tx3)}
+.ls-uh.here .ls-uc{color:var(--ac)}
+.ls-uh+.ls-row{margin-top:2px}
 .ls-row{display:flex;align-items:center;gap:13px;width:100%;text-align:left;background:var(--bg2);
  border:1px solid var(--bd);border-radius:15px;padding:13px 15px;margin-bottom:9px;font:inherit;cursor:pointer}
 .ls-row:active{transform:scale(.995)}
@@ -790,23 +980,188 @@ body.more-open .ar-bar{display:none}
 .ls-bar i{display:block;height:100%;background:var(--ac)}
 .ls-n{font-size:13px;font-weight:700;color:var(--ac);flex:none}
 body.ls-open{overflow:hidden}
-#lsPlay{position:fixed;inset:0;background:var(--bg);z-index:60;display:none;overflow:auto;-webkit-overflow-scrolling:touch}
-#lsPlay.on{display:block}
-#lsPlay>*{max-width:560px;margin:0 auto;padding:0 18px}
-.ls-top{display:flex;align-items:center;gap:12px;padding-top:calc(16px + env(safe-area-inset-top))}
-.ls-x{border:0;background:none;font-size:21px;color:var(--tx3);cursor:pointer;line-height:1;padding:4px}
+/* 課の中は「集中する画面」。サイトヘッダ(.hd)は z-index:100 なので、
+   それより上に出さないと ✕ も進度も隠れる(前はカードがヘッダ直下に貼り付いて見えた)。
+   縦は 3 段: 上の帯 / 進度 / 中身。中身だけスクロールし、短ければ上下中央に来る。 */
+#lsPlay{position:fixed;inset:0;background:var(--bg);z-index:140;display:none;flex-direction:column;
+ padding-bottom:env(safe-area-inset-bottom)}
+#lsPlay.on{display:flex}
+/* はじめてのガイド。周りを暗くして、指している所だけ丸く抜く */
+.tour-hole{position:fixed;z-index:300;border-radius:14px;box-shadow:0 0 0 9999px rgba(0,0,0,.55);pointer-events:none;transition:all .25s var(--ease)}
+.tour-box{position:fixed;left:16px;right:16px;max-width:420px;margin:0 auto;z-index:301;background:var(--bg2);color:var(--tx);
+ border-radius:16px;padding:16px 18px 14px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+.tour-box b{display:block;font-size:17px;margin:2px 0 6px}
+.tour-box p{font-size:14px;line-height:1.75;color:var(--tx2);margin:0}
+.tour-step{font-size:11.5px;color:var(--ac);font-weight:700;letter-spacing:.06em}
+.tour-btns{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.tour-skip{background:none;border:0;color:var(--tx3);font:inherit;font-size:13.5px;padding:10px 6px;cursor:pointer}
+
+/* 文字サイズ設定は中身だけに効かせる(枠と上のバーは画面に収める)。twApplyFs が --fsz を入れる */
+#lsStage>*{zoom:var(--fsz,1)}
+/* 横の余白だけ。縦は下の .ls-top / .ls-pgrow が持つ。
+   ここで padding のショートハンドを書くと #lsPlay> の方が詳細度で勝って
+   縦の余白が 0 に潰れる(端末で上に貼りついていた原因)。 */
+#lsPlay>.ls-top,#lsPlay>.ls-pgrow{flex:none;width:100%;max-width:560px;margin:0 auto;
+ padding-left:18px;padding-right:18px}
+/* ネイティブの WebView では env(safe-area-inset-top) が 0 になる(黒いステータスバーは
+   WebView の外側)。safe-area だけに頼ると端末で上に貼りつくので、素の余白を確保する。 */
+.ls-top{display:flex;align-items:center;gap:10px;
+ padding-top:calc(26px + env(safe-area-inset-top));padding-bottom:16px}
+/* いつでもやめられる的。指で押す前提なので 44px 確保する */
+.ls-x{border:0;background:none;color:var(--tx2);cursor:pointer;flex:none;
+ width:48px;height:48px;margin-left:-10px;display:grid;place-items:center;border-radius:50%;font-size:34px;line-height:1;color:var(--tx)}
+.ls-x:active{background:var(--bg3)}
+.ls-ti{flex:1;min-width:0;font-size:13.5px;font-weight:600;color:var(--tx2);
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.ls-skip{flex:none;border:1px solid var(--bd);background:var(--bg2);color:var(--tx3);
+ font:inherit;font-size:12px;padding:6px 11px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.ls-skip:active{transform:scale(.97)}
+.ls-pgrow{display:flex;align-items:center;gap:12px;padding-bottom:16px}
 .ls-pg{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
 .ls-pg i{display:block;height:100%;width:0;background:var(--ac);transition:width .25s}
 .ls-c{font-size:12.5px;color:var(--tx3);min-width:52px;text-align:right}
-.ls-card{background:var(--bg2);border:1px solid var(--bd);border-radius:20px;padding:38px 20px;text-align:center;margin:24px 0 16px}
+#lsStage{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+ width:100%;max-width:560px;margin:0 auto;padding:4px 18px 26px;
+ display:flex;flex-direction:column;justify-content:safe center}
+/* 「もう知っている」の確認。押し間違いで課が飛ぶのは嫌なので一枚挟む */
+.ls-sheet{position:absolute;inset:0;z-index:2;background:color-mix(in srgb,var(--bg) 72%,transparent);
+ display:none;align-items:flex-end;justify-content:center;padding:18px}
+.ls-sheet.on{display:flex}
+.ls-sheet-in{width:100%;max-width:420px;background:var(--bg2);border:1px solid var(--bd);
+ border-radius:20px;padding:22px 20px 18px}
+.ls-sheet-t{font-size:17px;font-weight:700;margin-bottom:8px}
+.ls-sheet-b{font-size:14px;color:var(--tx2);line-height:1.8;margin-bottom:18px}
+.ls-sheet-in .btn{width:100%;padding:14px;font-size:15.5px}
+.ls-sheet-no{margin-top:9px;background:none;border:0;color:var(--tx3)}
+.ls-pyx{color:var(--tx3);font-size:.9em;margin-left:4px}
+.ls-card{position:relative;background:var(--bg2);border:1px solid var(--bd);border-radius:20px;padding:38px 20px;text-align:center;margin:0 0 16px}
+.ls-save{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--tx3);font-size:22px;line-height:1;cursor:pointer}
+.ls-save.on{color:#e2a321;border-color:#f0d49a;background:#fdf6e6}
+.ls-savelist{margin:14px 0 4px;text-align:left;background:var(--bg2);border:1px solid var(--bd);border-radius:14px;padding:12px 14px}
+.ls-savelist-h{font-size:12.5px;font-weight:700;color:var(--tx2);display:flex;align-items:center;gap:5px;margin-bottom:9px}
+.ls-savechips{display:flex;flex-wrap:wrap;gap:7px}
+.ls-sc{border:1px solid var(--line);background:var(--bg);color:var(--tx);border-radius:999px;padding:7px 12px;font:inherit;font-size:14px;cursor:pointer;min-height:36px}
+.ls-sc.on{color:#9a6a00;border-color:#f0d49a;background:#fdf6e6}
+:root[data-theme="dark"] .ls-save.on,:root[data-theme="dark"] .ls-sc.on{background:#3a2f18;border-color:#5c4a22;color:#f0c674}
 .ls-w{font-family:var(--serif);font-size:58px;font-weight:700;line-height:1.2;cursor:pointer}
-.ls-zy{color:var(--ac);font-size:18px;margin-top:8px;letter-spacing:.06em}
-.ls-py{color:var(--tx3);font-size:14.5px;margin-top:2px}
-.ls-m{font-size:17px;margin-top:15px}
-.ls-ex{color:var(--tx2);font-size:14px;margin-top:15px;line-height:1.9;border-top:1px dashed var(--line);padding-top:13px}
-.ls-ex span{color:var(--tx3)}
+/* カードの外(4択の問題文)でも使うので、中央寄せはここで持つ */
+.ls-zy{color:var(--ac);font-size:18px;margin-top:8px;letter-spacing:.06em;text-align:center}
+.ls-py{color:var(--tx3);font-size:14.5px;margin-top:2px;text-align:center}
+/* 覚える面。品詞・意味・例文＋その読み。音は語と例文でそれぞれ鳴らす */
+.ls-step{text-align:center;font-size:11.5px;letter-spacing:.08em;color:var(--tx3);margin-bottom:10px}
+.ls-mrow{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:16px;flex-wrap:wrap}
+.ls-pos{font-size:10.5px;font-weight:700;color:var(--ac);border:1px solid var(--ac);border-radius:5px;padding:1px 6px;flex:none}
+.ls-m{font-size:17px}
+/* 押す的は 44px 以上。小さい丸アイコンだけだと押しにくい */
+.ls-play{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;
+ margin:16px auto 0;padding:0 18px;border:1px solid var(--bd);border-radius:999px;
+ background:var(--bg3);color:var(--ac);font:inherit;font-size:13.5px;font-weight:600;cursor:pointer}
+.ls-play span{color:var(--tx2)}
+.ls-play:active{transform:scale(.97)}
+.ls-play svg{flex:none}
+.ls-play.sm{min-height:40px;margin-top:13px;font-size:12.5px;padding:0 15px}
+.ls-ex{margin-top:18px;border-top:1px dashed var(--line);padding-top:15px}
+.ls-ex-h{font-size:10.5px;letter-spacing:.1em;color:var(--tx3);margin-bottom:8px}
+.ls-ex-z{font-size:18px;line-height:1.75;color:var(--tx)}
+.ls-ex-r{margin-top:7px;line-height:1.5}
+.ls-ex-t{color:var(--tx3);font-size:13.5px;margin-top:8px;line-height:1.75}
+/* 文法の課。型と意味を先に見せて、例文でその形を目に焼きつける */
+.ls-gcard{text-align:left;padding:26px 20px}
+.ls-gcat{display:inline-block;font-size:10.5px;font-weight:700;color:var(--ac);
+ border:1px solid var(--ac);border-radius:5px;padding:1px 6px;margin-bottom:10px}
+.ls-gt{font-family:var(--serif);font-size:27px;font-weight:700;line-height:1.35}
+.ls-gm{font-size:16px;font-weight:600;color:var(--tx2);margin-top:6px}
+.ls-gp{display:inline-block;font-size:14px;color:var(--ac);background:var(--ac-soft);
+ border-radius:8px;padding:5px 11px;margin-top:11px;letter-spacing:.02em}
+.ls-gx{font-size:14px;color:var(--tx2);line-height:1.95;margin-top:13px}
+.ls-geg{margin-top:16px;border-top:1px dashed var(--line);padding-top:14px}
+.ls-geg-z{font-size:18px;line-height:1.75}
+.ls-geg-z em{font-style:normal;font-weight:700;color:var(--ac);border-bottom:2px solid var(--ac)}
+.ls-geg-p{color:var(--tx3);font-size:12.5px;margin-top:5px}
+.ls-geg-t{color:var(--tx3);font-size:13.5px;margin-top:6px;line-height:1.75}
+.ls-geg .ls-play{margin-left:0;margin-right:auto}
+.ls-gsub{text-align:center;color:var(--tx3);font-size:13px;margin-top:9px;line-height:1.7}
+.ls-gp2{color:var(--ac)}
+/* 並べかえ。選ぶだけにしないための問題なので、組み立てている途中が見えること */
+.ls-ordhint{text-align:center;color:var(--tx3);font-size:14px;line-height:1.7;margin-top:8px}
+.ls-slot{min-height:64px;margin:16px 0 4px;padding:12px 14px;border-radius:14px;
+ border:1px dashed var(--bd);background:var(--bg2);display:flex;flex-wrap:wrap;gap:8px;
+ align-items:center;justify-content:center;cursor:pointer}
+.ls-slot.empty{color:var(--tx3);font-size:13px;border-style:dashed}
+.ls-slot span{font-size:20px;line-height:1.4}
+.ls-slot.ok{border-style:solid;border-color:#3F7D53;background:rgba(63,125,83,.1)}
+.ls-slot.ng{border-style:solid;border-color:var(--ac);background:var(--ac-soft)}
+.ls-chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:16px 0 4px}
+.ls-chip{min-height:44px;padding:0 16px;border:1px solid var(--bd);border-radius:12px;
+ background:var(--bg2);color:var(--tx);font:inherit;font-size:18px;cursor:pointer}
+.ls-chip:active{transform:scale(.97)}
+.ls-chip.gone{opacity:.25;cursor:default}
+.ls-cta[disabled]{opacity:.4;cursor:default}
+/* 何声か。聞かれている字だけ色を変える */
+.ls-big em{font-style:normal;color:var(--ac);border-bottom:3px solid var(--ac)}
+/* 選んだ誤答が何だったか。ここが無いと「違う」で終わって学べない */
+.ls-picked{margin-top:16px;padding:12px 14px;border-radius:13px;background:var(--ac-soft);
+ color:var(--tx2);font-size:13.5px;line-height:1.75}
+.ls-picked b{color:var(--tx);font-size:16px;margin:0 3px}
+.ls-picked span{color:var(--ac);letter-spacing:.05em}
+/* 結果に「落としたもの」。丸だけ見せて終わらせない */
+.ls-miss{margin:22px 0 4px;text-align:left}
+.ls-miss.none{text-align:center;color:var(--tx3);font-size:13px;margin:18px 0 4px}
+.ls-miss-h{font-size:11.5px;letter-spacing:.08em;color:var(--tx3);margin-bottom:9px}
+.ls-miss ul{list-style:none;margin:0;padding:0}
+.ls-miss li{display:flex;align-items:baseline;gap:9px;padding:11px 2px;border-bottom:1px solid var(--line);cursor:pointer}
+.ls-miss li:last-child{border-bottom:0}
+.ls-miss li b{font-size:18px;flex:none}
+.ls-miss li i{font-style:normal;color:var(--ac);font-size:12.5px;letter-spacing:.05em;flex:none}
+.ls-miss li span{color:var(--tx3);font-size:13px;margin-left:auto;text-align:right}
+/* 口に出す問題。見て選ぶだけの道にしない ─ ここだけは自分の口から音が出ないと進まない */
+.ls-mic{display:block;margin:20px auto 0;width:96px;height:96px;border-radius:50%;
+ border:1px solid var(--bd);background:var(--bg2);color:var(--ac);cursor:pointer;
+ transition:transform .15s var(--ease),background .2s var(--ease),border-color .2s var(--ease)}
+.ls-mic:active{transform:scale(.96)}
+.ls-mic.rec{background:var(--ac);border-color:var(--ac);color:#fff;animation:lsPulse 1.2s infinite}
+@keyframes lsPulse{0%,100%{box-shadow:0 0 0 0 var(--ac-soft)}50%{box-shadow:0 0 0 14px transparent}}
+.ls-micst{text-align:center;color:var(--tx3);font-size:13px;margin-top:12px;min-height:20px}
+.ls-skiplink{display:block;margin:26px auto 0;background:none;border:0;color:var(--tx3);
+ font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;padding:8px 12px}
+.ls-spk-res{margin-top:20px;padding:16px 14px;border-radius:14px;background:var(--bg3);text-align:center}
+.ls-spk-res.ok{background:rgba(63,125,83,.1)}
+.ls-spk-res.ng{background:var(--ac-soft)}
+.ls-spk-marks{font-family:var(--serif);font-size:26px;line-height:1.6;letter-spacing:.06em}
+.ls-spk-marks .hit{color:var(--tx)}
+.ls-spk-marks .miss{color:var(--tx3);opacity:.45;text-decoration:underline;text-decoration-style:wavy}
+.ls-spk-bar{height:7px;border-radius:999px;background:var(--bd);overflow:hidden;margin:14px 0 10px}
+.ls-spk-bar i{display:block;height:100%;background:var(--ac);border-radius:999px;transition:width .5s var(--ease)}
+.ls-spk-res.ok .ls-spk-bar i{background:#3F7D53}
+.ls-spk-n{font-size:13.5px;color:var(--tx2)}
+.ls-spk-n span{color:var(--tx3);font-size:12.5px}
+/* 単元見出しの Premium 表示。鍵は行の中にしか無くて、畳んだ単元では何も伝わらなかった */
+.ls-ulock{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;letter-spacing:.04em;
+ color:var(--ac);background:var(--ac-soft);border-radius:999px;padding:3px 9px;flex:none}
+.ls-uh.locked b{color:var(--tx2)}
+/* 無料の範囲と続きの量。数字で見せる(「続きは Premium」だけでは何がいくつあるか分からない) */
+.ls-free{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:10px 0 14px;padding:10px 12px;
+ border-radius:12px;background:var(--bg3);color:var(--tx2);font-size:12.5px;line-height:1.6}
+.ls-free a{color:var(--ac);font-weight:700;text-decoration:none;white-space:nowrap;margin-left:auto}
+/* 結果ページの「ここから Premium」カード */
+.ls-offer{margin:18px 0 6px;padding:16px 16px 14px;border-radius:16px;border:1.5px solid var(--ac);
+ background:var(--ac-soft);text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.ls-offer b{display:flex;align-items:center;gap:6px;color:var(--ac);font-size:14px;letter-spacing:.03em}
+.ls-offer span{color:var(--tx);font-size:15px;font-weight:600;line-height:1.5}
+.ls-offer em{font-style:normal;color:var(--tx2);font-size:12.5px}
+.ls-offer .btn{margin-top:8px;width:100%}
+/* 闖關の付費牆:今日やったこと・次の課・残り */
+.pw-ls{margin:12px 0 14px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg2)}
+.pw-ls>div{padding:10px 14px;border-bottom:1px solid var(--line);font-size:13.5px}
+.pw-ls>div:last-child{border-bottom:0}
+.pw-ls-today{color:var(--ok,#2F7A5D);font-weight:700;display:flex;align-items:center;gap:6px}
+.pw-ls-next{display:flex;flex-direction:column;gap:2px}
+.pw-ls-next span{font-size:11.5px;color:var(--tx3);letter-spacing:.05em}
+.pw-ls-next b{font-size:16px}.pw-ls-next em{font-style:normal;color:var(--tx2);font-size:13px}
+.pw-ls-rest{color:var(--ac);font-weight:700}
 .ls-q{text-align:center;color:var(--tx3);font-size:12.5px;letter-spacing:.06em;margin-top:26px}
 .ls-big{font-family:var(--serif);font-size:50px;font-weight:700;text-align:center;margin:10px 0 2px;line-height:1.2;cursor:pointer}
+.ls-big.sm{font-size:32px;line-height:1.45}
 .ls-mid2{font-size:24px;font-weight:600;text-align:center;margin:12px 0 2px}
 .ls-cloze{font-size:23px;line-height:1.95;text-align:center;margin:14px 0 2px}
 .ls-cloze b{color:var(--ac);border-bottom:2px solid var(--ac);padding:0 12px}
@@ -848,7 +1203,7 @@ body.ls-open{overflow:hidden}
 .ls-unlock em{font-style:normal;color:var(--tx3);font-weight:400;font-size:13px}
 .ls-lockmsg{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--ac);font-size:12.5px;margin-top:12px}
 .ls-back{margin-top:14px}
-.ls-back a{color:var(--tx3);font-size:13px}
+.ls-back a{color:var(--tx2);font-size:15.5px;font-weight:600;display:inline-block;padding:10px 0}
 .pw-quota.pro{color:var(--ac);font-weight:700}
 .yts-load,.yts-empty{text-align:center;padding:38px 16px;color:var(--tx3);font-size:14px;line-height:1.7}
 .yts-empty .btn{margin-top:13px}
@@ -897,7 +1252,7 @@ body.ls-open{overflow:hidden}
 /* ===== 学習ハブ（面板トップ）===== */
 .hb{display:flex;flex-direction:column;gap:18px}
 .hb-hero{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 9%,var(--bg2)),var(--bg2));border:1px solid var(--line);border-radius:18px;padding:16px 18px}
-.hb-hero img{width:54px;height:62px;flex:none}
+.hb-hero img{width:54px;height:62px;flex:none;object-fit:contain}
 .hb-hi{flex:1;min-width:0}
 .hb-greet{font-family:var(--serif);font-size:21px;font-weight:700;line-height:1.2;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .hb-fire{font-size:11.5px;font-weight:700;color:var(--ac);background:var(--ac-soft);border-radius:999px;padding:3px 9px;letter-spacing:.02em}
@@ -951,7 +1306,11 @@ html[data-theme="dark"] .hb-fire.risk{color:#f0c674;background:#3a2f18;border-co
 .quiz-bg.show{display:flex}
 .quiz-box{background:var(--bg);border:1px solid var(--line);border-radius:18px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:18px 20px}
 .persona-opts{display:flex;flex-direction:column;gap:10px;text-align:left}
-.persona-opt{background:var(--bg2);border:1px solid var(--bd);border-radius:14px;padding:14px 16px;cursor:pointer;display:flex;flex-direction:column;gap:3px;transition:border-color .15s var(--ease),background .15s var(--ease);font-family:inherit}
+.persona-opt .il{grid-row:1/3;align-self:center}
+.persona-opt{display:grid !important;grid-template-columns:58px 1fr;column-gap:12px;align-items:center;text-align:left;background:var(--bg2);border:1px solid var(--bd);border-radius:14px;padding:14px 16px;cursor:pointer;display:flex;flex-direction:column;gap:3px;transition:border-color .15s var(--ease),background .15s var(--ease);font-family:inherit}
+.il-lead{display:flex;align-items:center;gap:14px}
+.il-lead .rd-lead{margin:0}
+.il-lead .il{flex:none}
 .persona-opt b{font-size:15.5px;color:var(--tx);font-weight:700}
 .persona-opt span{font-size:12.5px;color:var(--tx2);line-height:1.6}
 .persona-opt:active{background:var(--ac-soft)}
@@ -968,6 +1327,18 @@ html[data-theme="dark"] .hb-fire.risk{color:#f0c674;background:#3a2f18;border-co
 @media(hover:hover){.srs-ex:hover{background:var(--ac-soft)}}
 .srs-ex .py{display:block;font-size:12px;color:var(--tx3)}
 .srs-ex .tr{display:block;font-size:12.5px;color:var(--tx2)}
+/* 文法点の復習カード。表は文型だけ、裏で意味と例文 */
+.srs-gt{font-size:26px!important;line-height:1.35}
+.srs-gx{font-size:14px!important;font-weight:400!important;line-height:1.85;color:var(--tx2);
+ text-align:left;margin:14px 0 4px!important}
+.srs-gex{font-size:14px;line-height:1.75;text-align:left;border-top:1px dashed var(--line);
+ padding-top:10px;margin-top:10px;border-radius:8px;cursor:pointer}
+@media(hover:hover){.srs-gex:hover{background:var(--ac-soft)}}
+.srs-gex .z{display:block;font-size:17px;color:var(--tx)}
+.srs-gex .z em{font-style:normal;color:var(--ac);border-bottom:1.5px solid var(--ac)}
+.srs-gex .py{display:block;font-size:12px;color:var(--tx3)}
+.srs-gex .tr{display:block;font-size:12.5px;color:var(--tx2)}
+.g-srs{margin-top:14px}
 .srs-btns{display:flex;gap:8px;margin-top:18px}
 .srs-btn{flex:1;border:none;border-radius:12px;padding:11px 4px;font-size:14px;font-weight:700;cursor:pointer;color:#fff}
 .srs-ng{background:var(--ac)}
@@ -1011,6 +1382,50 @@ html[data-theme="dark"] .hb-fire.risk{color:#f0c674;background:#3a2f18;border-co
 .wn-l li{font-size:13px;color:var(--tx2);line-height:1.5;padding-left:15px;position:relative}
 .wn-l li::before{content:"";position:absolute;left:3px;top:.62em;width:4px;height:4px;border-radius:50%;background:var(--ac)}
 .wn-go{margin-top:12px;background:none;border:0;padding:0;color:var(--ac);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.mv-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px}
+.mv-qbtn{display:inline-flex;align-items:center;gap:6px}
+.mv-qbtn:disabled{opacity:.45;cursor:default}
+.mv-qneed{font-size:12px;color:var(--tx3)}
+.mv-sort{display:flex;gap:6px;margin:0 0 6px}
+.mv-sort button{border:1px solid var(--line);background:var(--bg2);color:var(--tx2);border-radius:999px;padding:5px 12px;font:inherit;font-size:12.5px;cursor:pointer}
+.mv-sort button.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.mv-stat{font-size:11px;font-weight:700;color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent);border-radius:999px;padding:1px 8px}
+.mv-stat.weak{color:var(--ac);background:var(--ac-soft)}
+.mv-confirm{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;padding:10px 12px;border-radius:12px;background:var(--ac-soft);font-size:13px;color:var(--tx)}
+.mv-confirm span{flex:1;min-width:150px}
+.mv-cyes{border:0;background:var(--ac);color:#fff;border-radius:999px;padding:7px 14px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.mv-cno{border:1px solid var(--line);background:var(--bg2);color:var(--tx2);border-radius:999px;padding:7px 14px;font:inherit;font-size:13px;cursor:pointer}
+.mvq-top{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--tx3)}
+.mvq-x{width:44px;height:44px;border:0;background:none;font-size:20px;color:var(--tx2);cursor:pointer;margin-left:-10px}
+.mvq-bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin:4px 0 22px}
+.mvq-bar i{display:block;height:100%;background:var(--ac)}
+.mvq-lab{text-align:center;font-size:13px;color:var(--tx3);margin-bottom:10px}
+.mvq-prompt{text-align:center;margin-bottom:20px;min-height:70px;display:flex;align-items:center;justify-content:center}
+.mvq-w{font-family:var(--serif);font-size:46px;font-weight:700}
+.mvq-m{font-size:19px;font-weight:700;line-height:1.5;max-width:90%}
+.mvq-play{display:flex;flex-direction:column;align-items:center;gap:6px;border:1px solid var(--line);background:var(--bg2);border-radius:20px;padding:16px 28px;color:var(--ac);font:inherit;font-size:13px;cursor:pointer}
+.mvq-opts{display:flex;flex-direction:column;gap:10px}
+.mvq-o{width:100%;text-align:left;border:1.5px solid var(--line);background:var(--bg2);border-radius:14px;padding:14px 16px;font:inherit;font-size:16px;color:var(--tx);cursor:pointer;min-height:52px}
+.mvq-o.sel{border-color:var(--ac);background:var(--ac-soft)}
+.mvq-o.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--bg2))}
+.mvq-o.ng{border-color:var(--ac);background:var(--ac-soft);text-decoration:line-through}
+.mvq-exp{margin-top:16px;border-radius:14px;padding:14px 16px;border:1px solid var(--line);background:var(--bg2)}
+.mvq-exp b{display:block;font-size:15px;margin-bottom:6px}
+.mvq-exp.ok b{color:var(--ok)}.mvq-exp.ng b{color:var(--ac)}
+.mvq-ans{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.mvq-ans .w{font-family:var(--serif);font-size:24px;font-weight:700;cursor:pointer}
+.mvq-ans .z{font-size:13px;color:var(--tx2);white-space:nowrap}.mvq-ans .p{font-size:13px;color:var(--tx3)}
+.mvq-am{font-size:14px;margin-top:4px}
+.mvq-go{width:100%;margin-top:18px;padding:14px}
+.mvq-go:disabled{opacity:.45}
+.mvq-end{text-align:center;padding:16px 0}
+.mvq-end img{width:110px;height:110px;display:block;margin:0 auto}
+.mvq-score{font-family:var(--serif);font-size:26px;font-weight:700;margin:8px 0 14px}
+.mvq-wh{font-size:12.5px;color:var(--tx3);font-weight:700;margin-bottom:8px}
+.mvq-wl{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:16px}
+.mvq-wl button{border:1px solid var(--line);background:var(--bg2);border-radius:999px;padding:7px 13px;font:inherit;font-size:15px;cursor:pointer}
+.mvq-btns{display:flex;flex-direction:column;gap:9px}
+.mvq-btns .btn{width:100%;padding:13px}
 .mv-lead{font-size:13px;color:var(--tx2);line-height:1.6;margin:0 0 14px}
 .mv-add{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .mv-add .search{flex:1;min-width:150px}
@@ -1089,9 +1504,9 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
   text-align:center;transform:rotate(-7deg);opacity:.85;letter-spacing:-.02em;padding:2px}
 .fo-rows{display:flex;flex-direction:column;gap:8px}
 .fo-row{display:flex;align-items:flex-start;gap:9px;font-size:14px;line-height:1.45}
-.fo-rt{min-width:0;display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
-.fo-zy{font-size:11.5px;color:var(--tx2);white-space:nowrap}
-.fo-row b{font-family:var(--serif);font-weight:700;color:var(--tx);white-space:nowrap}
+.fo-rt{flex:1;min-width:0;display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.fo-zy{font-size:11.5px;color:var(--tx2);white-space:normal;overflow-wrap:anywhere;min-width:0}
+.fo-row b{font-family:var(--serif);font-weight:700;color:var(--tx);overflow-wrap:anywhere}
 .fo-tag{flex:0 0 24px;width:24px;height:24px;border-radius:50%;font-family:var(--serif);font-size:13px;font-weight:700;
   display:inline-flex;align-items:center;justify-content:center;color:#fff}
 .fo-tag.yi{background:#6E8C4A}.fo-tag.ji{background:#9A5B5B}
@@ -1100,7 +1515,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
   border:0;border-top:1px dashed rgba(184,54,42,.28);background:none;cursor:pointer;font-family:inherit;text-align:left}
 .fo-wl{font-size:11px;color:var(--tx3);width:100%;line-height:1}
 .fo-word b{font-family:var(--serif);font-size:23px;font-weight:700;color:var(--tx)}
-.fo-wz{font-size:12.5px;color:var(--tx2)}
+.fo-wz{font-size:12.5px;color:var(--tx2);min-width:0;overflow-wrap:anywhere}
 .fo-wm{font-size:12.5px;color:var(--tx3)}
 .fo-wp{width:17px;height:17px;fill:none;stroke:var(--ac);stroke-width:1.8;margin-left:auto}
 @media(prefers-reduced-motion:reduce){.fo-shake.go,.fo-shake.go .fo-out,.fo-slip.in{animation:none}}
@@ -1201,7 +1616,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
   localStorage.setItem("stw-lang", pick||"en");   // ja/en/ko/vi/id 以外は英語を既定に
 }}catch(e){} })();
 // vi/id なら内容訳マップを同期ロード(init の正規化より前に間に合わせる)。他言語では読み込まない＝軽い。
-(function(){ try{ var l=localStorage.getItem("stw-lang"); if(l==="vi"||l==="id"){ document.write('<script src="content-'+l+'.js?v=4"><\/script>'); } }catch(e){} })();
+(function(){ try{ var l=localStorage.getItem("stw-lang"); if(l==="vi"||l==="id"){ document.write('<script src="content-'+l+'.js?v=5"><\/script>'); } }catch(e){} })();
 /* Google ログインボタンの言語をアプリ言語に合わせて読み込む（hl はスクリプト読込時に決まるため） */
 (function(){ var hl=({ja:"ja",en:"en",ko:"ko",vi:"vi",id:"id"})[localStorage.getItem("stw-lang")]||"ja";
   var s=document.createElement("script"); s.src="https://accounts.google.com/gsi/client?hl="+hl; s.async=true; s.defer=true; document.head.appendChild(s); })();
@@ -1251,6 +1666,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
     <button class="tool-btn" data-panel="articles"><span class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span data-i18n="toolArticles">記事</span></button>
     <button class="tool-btn" data-panel="ytshadow"><span class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="3.5"/><polygon points="10.5 9 15.5 12 10.5 15" fill="currentColor" stroke="none"/></svg></span><span data-i18n="toolYts">YouTube 跟讀</span></button>
     <button class="tool-btn" data-panel="quiz"><span class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span><span data-i18n="toolQuiz">クイズ</span></button>
+    <button class="tool-btn" onclick="location.href='speak-chat'"><span class="ti"><i data-ic=chat></i></span><span data-i18n="toolAiChat">AI 会話</span></button>
     <button class="tool-btn" data-panel="speak"><span class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></span><span data-i18n="toolSpeak">スピーキング</span></button>
     <button class="tool-btn" data-panel="write"><span class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg></span><span data-i18n="toolWrite">ライティング</span></button>
     <button class="tool-btn" data-panel="srs" id="srsTab"><span class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></span><span data-i18n="toolSrs">復習</span><span class="badge" id="srsBadge" style="display:none"></span></button>
@@ -1356,10 +1772,22 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
   <div id="lsPlay">
   <div class="ls-top">
     <button class="ls-x" onclick="LS.quit()" aria-label="close">✕</button>
+    <span class="ls-ti" id="lsTitle"></span>
+    <button class="ls-skip" onclick="LS.skip()" id="lsSkipBtn"></button>
+  </div>
+  <div class="ls-pgrow">
     <div class="ls-pg"><i id="lsBar"></i></div>
     <span class="ls-c" id="lsCount"></span>
   </div>
   <div id="lsStage"></div>
+  <div id="lsSkipSheet" class="ls-sheet">
+    <div class="ls-sheet-in">
+      <div class="ls-sheet-t" id="lsSkipQ"></div>
+      <div class="ls-sheet-b" id="lsSkipBody"></div>
+      <button class="btn primary" onclick="LS.skip(1)" id="lsSkipYes"></button>
+      <button class="btn ls-sheet-no" onclick="LS.skip(0,1)" id="lsSkipNo"></button>
+    </div>
+  </div>
 </div>
 <section class="panel" id="panel-srs"><div class="srs-home" id="srsHome"></div></section>
 
@@ -1378,7 +1806,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 <!-- ログインモーダル -->
 <div class="quiz-bg" id="loginBg"><div class="quiz-box" id="loginBox" style="max-width:380px;text-align:center">
   <button class="qclose" style="float:right" onclick="STW_WEB.closeModal()">✕</button>
-  <img src="images/bear.svg" alt="" style="width:64px;height:auto;margin:6px 0 4px">
+  <img class="il" src="images/il/15_login.webp" alt="" width="112" height="112" style="width:112px;height:112px;margin:0 auto 2px">
   <h3 style="font-family:var(--serif);font-size:20px;font-weight:700;margin:6px 0 6px" data-i18n="loginTitle">ログインして同期</h3>
   <p style="font-size:13.5px;color:var(--tx2);margin-bottom:20px;line-height:1.8" data-i18n="loginDesc">ログインすると、復習・模試・作文の進度がすべての端末で同期されます。</p>
   <div id="gLoginBtn" style="display:flex;justify-content:center"></div>
@@ -1408,11 +1836,11 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
   <h3 style="font-family:var(--serif);font-size:20px;font-weight:700;margin:4px 0 4px" data-i18n="obQ">台湾華語を学ぶ目的は？</h3>
   <p style="font-size:13px;color:var(--tx2);margin-bottom:16px" data-i18n="obQdesc">目的に合わせて、おすすめのレベルから始められます。あとで自由に変えられます。</p>
   <div class="persona-opts">
-    <button class="persona-opt" onclick="pickPersona('travel')">
+    <button class="persona-opt" onclick="pickPersona('travel')"><img class="il" src="images/il/11_goal_travel.webp" alt="" width="58" height="58" style="width:58px;height:58px">
       <b data-i18n="obTravel">旅行・短期滞在</b><span data-i18n="obTravelD">まず使える挨拶・注文・道案内から</span></button>
-    <button class="persona-opt" onclick="pickPersona('live')">
+    <button class="persona-opt" onclick="pickPersona('live')"><img class="il" src="images/il/12_goal_living.webp" alt="" width="58" height="58" style="width:58px;height:58px">
       <b data-i18n="obLive">台湾で暮らす・働く</b><span data-i18n="obLiveD">日常会話と生活の語彙をしっかり</span></button>
-    <button class="persona-opt" onclick="pickPersona('exam')">
+    <button class="persona-opt" onclick="pickPersona('exam')"><img class="il" src="images/il/13_goal_tocfl.webp" alt="" width="58" height="58" style="width:58px;height:58px">
       <b data-i18n="obExam">TOCFL・試験対策</b><span data-i18n="obExamD">語彙を広げて模試で実力チェック</span></button>
   </div>
   <button class="persona-skip" onclick="pickPersona('')" data-i18n="obSkip">スキップ</button>
@@ -1450,6 +1878,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
     <button class="sheet-item" data-panel="reading"><span class="bi"></span><span data-i18n="toolReading">読解</span></button>
     <button class="sheet-item" data-panel="articles"><span class="bi"></span><span data-i18n="toolArticles">記事</span></button>
     <button class="sheet-item" data-panel="exam"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><rect x="8" y="2" width="8" height="4" rx="1"/><line x1="8" y1="12" x2="14" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg></span><span data-i18n="toolExam">模試</span></button>
+    <button class="sheet-item" onclick="location.href='speak-chat'"><span class="bi"><i data-ic=chat></i></span><span data-i18n="toolAiChat">AI 会話</span></button>
     <button class="sheet-item" data-panel="speak"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></span><span data-i18n="toolSpeak">スピーキング</span></button>
     <button class="sheet-item" data-panel="ytshadow"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="3.5"/><polygon points="10.5 9 15.5 12 10.5 15" fill="currentColor" stroke="none"/></svg></span><span data-i18n="toolYts">YouTube 跟讀</span></button>
     <button class="sheet-item" data-panel="write"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg></span><span data-i18n="toolWrite">ライティング</span></button>
@@ -1473,6 +1902,28 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
       <button data-set-fs="xlarge" onclick="twSetFs('xlarge')"><span class="fss" style="font-size:20px">Aa</span><br><span data-i18n="setFsXlarge">特大</span></button>
       <button data-set-fs="xxlarge" onclick="twSetFs('xxlarge')"><span class="fss" style="font-size:23px">Aa</span><br><span data-i18n="setFsXxlarge">最大</span></button>
     </div>
+  </div>
+  <div class="set-sec">
+    <label data-i18n="setShowPy">ピンインも表示</label>
+    <div class="set-seg" id="setPy">
+      <button data-set-ph="zy" onclick="twSetPhMode('zy')" data-i18n="setPyOff">注音だけ</button>
+      <button data-set-ph="both" onclick="twSetPhMode('both')" data-i18n="setPyOn">注音＋ピンイン</button>
+      <button data-set-ph="py" onclick="twSetPhMode('py')" data-i18n="setPyOnly">ピンインだけ</button>
+    </div>
+  </div>
+  <div class="set-sec">
+    <label data-i18n="setSpeed">再生速度</label>
+    <div class="set-seg set-rate"><button data-set-rate="0.5" onclick="twSetRate(0.5)">0.5x</button><button data-set-rate="0.75" onclick="twSetRate(0.75)">0.75x</button><button data-set-rate="1" onclick="twSetRate(1)">1x</button><button data-set-rate="1.25" onclick="twSetRate(1.25)">1.25x</button><button data-set-rate="1.5" onclick="twSetRate(1.5)">1.5x</button></div>
+  </div>
+  <div class="set-sec">
+    <label data-i18n="setZhFont">中国語の字体</label>
+    <div class="set-seg" id="setZhFont">
+      <button data-set-zhfont="serif" onclick="twSetZhFont('serif')"><span style="font-family:'Hiragino Mincho ProN','Songti TC',serif;font-size:18px">學</span><br><span data-i18n="setZhSerif">明朝体</span></button>
+      <button data-set-zhfont="sans" onclick="twSetZhFont('sans')"><span style="font-family:'PingFang TC','Hiragino Sans',sans-serif;font-size:18px">學</span><br><span data-i18n="setZhSans">ゴシック体</span></button>
+    </div>
+  </div>
+  <div class="set-sec">
+    <button class="btn" style="width:100%" onclick="twCloseSettings();setTimeout(()=>TOUR.start(true),250)" data-i18n="tourAgain">使い方ガイドをもう一度見る</button>
   </div>
   <div class="set-sec">
     <label data-i18n="setTone">声調の色分け</label>
@@ -1533,73 +1984,81 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=130"></script>
-<script src="native-ui.js?v=1"></script>
-<script src="tts.js?v=64"></script>
-<script src="vocab-l1.js?v=52"></script>
-<script src="vocab-l2.js?v=53"></script>
-<script src="vocab-l3.js?v=52"></script>
-<script src="vocab-l4.js?v=53"></script>
-<script src="vocab-l5.js?v=53"></script>
-<script src="vocab-l1-b.js?v=53"></script>
-<script src="vocab-l2-b.js?v=53"></script>
-<script src="vocab-l3-b.js?v=54"></script>
-<script src="vocab-l4-b.js?v=54"></script>
-<script src="vocab-l5-b.js?v=56"></script>
-<script src="vocab-l1-c.js?v=57"></script>
+<script src="i18n.js?v=132"></script>
+<script src="native-ui.js?v=2"></script>
+<script src="tts.js?v=67"></script>
+<script src="tbcl.js?v=1"></script>
+<script src="vocab-l1.js?v=53"></script>
+<script src="vocab-l2.js?v=54"></script>
+<script src="vocab-l3.js?v=53"></script>
+<script src="vocab-l4.js?v=54"></script>
+<script src="vocab-l5.js?v=54"></script>
+<script src="vocab-l1-b.js?v=54"></script>
+<script src="vocab-l2-b.js?v=54"></script>
+<script src="vocab-l3-b.js?v=55"></script>
+<script src="vocab-l4-b.js?v=55"></script>
+<script src="vocab-l5-b.js?v=57"></script>
+<script src="vocab-l1-c.js?v=58"></script>
 <script src="vocab-l2-c.js?v=58"></script>
 <script src="vocab-l3-c.js?v=57"></script>
-<script src="vocab-l4-c.js?v=59"></script>
-<script src="vocab-l5-c.js?v=60"></script>
-<script src="vocab-l6.js?v=3"></script>
+<script src="vocab-l4-c.js?v=60"></script>
+<script src="vocab-l5-c.js?v=61"></script>
+<script src="vocab-l6.js?v=4"></script>
 <script src="vocab-l6-b.js?v=1"></script>
-<script src="grammar-l1.js?v=53"></script>
-<script src="grammar-l2.js?v=52"></script>
-<script src="grammar-l3.js?v=52"></script>
-<script src="grammar-l4.js?v=52"></script>
-<script src="grammar-l5.js?v=52"></script>
-<script src="grammar-l6.js?v=1"></script>
-<script src="phrases-l1.js?v=52"></script>
+<script src="vocab-l1-d.js?v=4"></script>
+<script src="vocab-l2-d.js?v=4"></script>
+<script src="vocab-l3-d.js?v=4"></script>
+<script src="vocab-l4-d.js?v=3"></script>
+<script src="vocab-l5-d.js?v=3"></script>
+<script src="vocab-l6-d.js?v=3"></script>
+<script src="grammar-l1.js?v=56"></script>
+<script src="grammar-l2.js?v=54"></script>
+<script src="grammar-l3.js?v=55"></script>
+<script src="grammar-l4.js?v=54"></script>
+<script src="grammar-l5.js?v=54"></script>
+<script src="grammar-l6.js?v=2"></script>
+<script src="phrases-l1.js?v=53"></script>
 <script src="zhuyin.js?v=5"></script>
-<script src="reading-l1.js?v=53"></script>
+<script src="reading-l1.js?v=54"></script>
 <script src="reading-l2.js?v=53"></script>
-<script src="reading-l3.js?v=53"></script>
-<script src="reading-l4.js?v=53"></script>
-<script src="reading-l5.js?v=53"></script>
+<script src="reading-l3.js?v=54"></script>
+<script src="reading-l4.js?v=54"></script>
+<script src="reading-l5.js?v=54"></script>
 <script src="reading-l6.js?v=53"></script>
-<script src="articles-1.js?v=52"></script>
-<script src="articles-2.js?v=52"></script>
-<script src="articles-3.js?v=52"></script>
-<script src="articles-4.js?v=52"></script>
-<script src="articles-5.js?v=52"></script>
-<script src="articles-6.js?v=52"></script>
-<script src="articles-7.js?v=52"></script>
-<script src="articles-8.js?v=52"></script>
-<script src="articles-9.js?v=52"></script>
-<script src="articles-10.js?v=52"></script>
-<script src="articles-11.js?v=52"></script>
-<script src="articles-12.js?v=52"></script>
-<script src="articles-13.js?v=52"></script>
-<script src="articles-14.js?v=52"></script>
-<script src="articles-15.js?v=52"></script>
-<script src="articles-16.js?v=52"></script>
-<script src="articles-17.js?v=52"></script>
-<script src="articles-18.js?v=56"></script>
-<script src="articles-19.js?v=1"></script>
-<script src="articles-20.js?v=1"></script>
+<script src="articles-1.js?v=53"></script>
+<script src="articles-2.js?v=53"></script>
+<script src="articles-3.js?v=53"></script>
+<script src="articles-4.js?v=53"></script>
+<script src="articles-5.js?v=53"></script>
+<script src="articles-6.js?v=53"></script>
+<script src="articles-7.js?v=53"></script>
+<script src="articles-8.js?v=53"></script>
+<script src="articles-9.js?v=53"></script>
+<script src="articles-10.js?v=53"></script>
+<script src="articles-11.js?v=53"></script>
+<script src="articles-12.js?v=53"></script>
+<script src="articles-13.js?v=53"></script>
+<script src="articles-14.js?v=53"></script>
+<script src="articles-15.js?v=53"></script>
+<script src="articles-16.js?v=53"></script>
+<script src="articles-17.js?v=53"></script>
+<script src="articles-18.js?v=57"></script>
+<script src="articles-19.js?v=2"></script>
+<script src="articles-20.js?v=2"></script>
 <script src="writing-data.js?v=52"></script>
-<script src="icons.js?v=1"></script>
-<script src="paywall.js?v=110"></script>
+<script src="icons.js?v=2"></script>
+<script src="paywall.js?v=115"></script>
 <script src="essentials.js?v=2"></script>
-<script src="essentials-ui.js?v=3"></script>
-<script src="fortune.js?v=4"></script>
-<script src="myvocab.js?v=2"></script>
+<script src="essentials-ui.js?v=4"></script>
+<script src="fortune.js?v=5"></script>
+<script src="myvocab.js?v=6"></script>
 <script src="whatsnew.js?v=3"></script>
-<script src="lessons.js?v=1"></script>
+<script src="lessons.js?v=32"></script>
+<script src="tour.js?v=2"></script>
 <script src="ytshadow.js?v=28"></script>
-<script src="listen.js?v=4"></script>
+<script src="listen.js?v=7"></script>
 <script src="websync.js?v=64"></script>
-<script src="srs.js?v=58"></script>
+<script src="srs.js?v=60"></script>
 <script src="mock-exam.js?v=59"></script>
 <script src="polyphone.js?v=4"></script>
 <script>
@@ -1625,8 +2084,19 @@ function toggleTheme(){ twSetTheme(document.documentElement.dataset.theme === "d
 try{ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ()=>{ if(twGetTheme()==="auto") twApplyTheme(); }); }catch(e){}
 
 function twGetFs(){ const v = localStorage.getItem("stw-fs"); return STW_FS[v] ? v : "normal"; }
-function twApplyFs(){ const el = document.querySelector("main.wrap"); if(!el) return; const z = STW_FS[twGetFs()]; el.style.zoom = (z===1) ? "" : z; }
+function twApplyFs(){
+  const z = STW_FS[twGetFs()];
+  // 闖關の全画面(#lsPlay)は main.wrap の外に出してあり、zoom はかからない。
+  // 代わりに中身(#lsStage の子)だけをこの倍率で拡大する(--fsz)。
+  // 全画面ごと zoom すると position:fixed の枠が画面より大きくなって、下のボタンが画面外に出ていた。
+  try { document.documentElement.style.setProperty("--fsz", String(z)); } catch(e){}
+  const el = document.querySelector("main.wrap"); if(!el) return; el.style.zoom = (z===1) ? "" : z;
+}
 function twSetFs(v){ localStorage.setItem("stw-fs", v); twApplyFs(); twRenderSettings(); }
+function twGetZhFont(){ try { return localStorage.getItem("stw-zhfont") === "sans" ? "sans" : "serif"; } catch(e){ return "serif"; } }
+function twApplyZhFont(){ document.documentElement.dataset.zhfont = twGetZhFont(); }
+function twSetZhFont(v){ try { localStorage.setItem("stw-zhfont", v); } catch(e){} twApplyZhFont(); twRenderSettings(); }
+try { twApplyZhFont(); } catch(e){}
 
 // 声調の色分け。CSS 側は html[data-tone="on"] のときだけ着色するので、
 // 属性を差し替えるだけで再描画なしに切り替わる。既定は ON。
@@ -1664,20 +2134,77 @@ function twRenderSettings(){
   document.querySelectorAll("#setSheet [data-set-accent]").forEach(b=>b.classList.toggle("on", b.dataset.setAccent===ac));
   document.querySelectorAll("#setSheet [data-set-lang]").forEach(b=>b.classList.toggle("on", b.dataset.setLang===lg));
   document.querySelectorAll("#setSheet [data-set-tone]").forEach(b=>b.classList.toggle("on", b.dataset.setTone===twGetTone()));
+  document.querySelectorAll("#setSheet [data-set-zhfont]").forEach(b=>b.classList.toggle("on", b.dataset.setZhfont===twGetZhFont()));
+  twMarkRate();
+  document.querySelectorAll("#setSheet [data-set-ph]").forEach(b=>b.classList.toggle("on", b.dataset.setPh===twPhMode()));
 }
+// 全站の読み上げ速度(TTS.setRate → localStorage stw_tts_rate)。設定シートと跟讀ページの両方に同じボタンがある
+// 注音の横にピンインも出すか(全站)。オンにすると文章・読解の読みも「注音＋拼音」にそろえる
+// 読み表示モード(全站):zy=注音だけ / both=注音＋拼音 / py=拼音だけ
+// py は 2026-10 英語圏ユーザー要望「TOCFL を受けない人は拼音で学ぶ」。注音そのものを教えるページ(注音表・注音クイズ)は対象外
+function twPhMode(){ try { const v = localStorage.getItem("stw_phon"); if (v === "zy" || v === "both" || v === "py") return v; return localStorage.getItem("stw_show_py") === "1" ? "both" : "zy"; } catch (e) { return "zy"; } }
+function twShowPy(){ return twPhMode() !== "zy"; }
+function twPyOnly(){ return twPhMode() === "py"; }
+function twSetPhMode(m){
+  try { localStorage.setItem("stw_phon", m); localStorage.setItem("stw_show_py", m === "zy" ? "0" : "1"); } catch (e) {}
+  // 本文ルビ・例文ルビも同じモードにそろえる(本文ルビを「隠す」にしている人はそのまま)
+  try { if (TW_RUBY_MODE !== "off") { TW_RUBY_MODE = m; localStorage.setItem("stw_ruby_mode", m); } RUBY = m; localStorage.setItem("stw_ruby", m); } catch (e) {}
+  document.documentElement.classList.toggle("ph-py", m === "py");
+  try { if (typeof refreshRubyLabels === "function") refreshRubyLabels(); } catch (e) {}
+  twRenderSettings(); try { if (typeof refreshActivePanel === "function") refreshActivePanel(); } catch (e) {}
+  // 開いていないパネルも作り置きが残るので、単語リスト・カードは作り直しておく
+  try { if (typeof renderList === "function") renderList(); } catch (e) {}
+  try { if (typeof renderCard === "function") renderCard(); } catch (e) {}
+}
+function twSetShowPy(on){ twSetPhMode(on ? "both" : "zy"); }   // 旧 API 互換
+// 注音だけ出している所:拼音モードなら拼音に差し替え
+function twPh(zy, py){ return twPyOnly() ? esc(py || zy || "") : twZy(zy); }
+// 注音と拼音を並べている所:拼音モードなら拼音だけ
+function twPhPair(zy, py, sep){ return twPyOnly() ? esc(py || zy || "") : twZy(zy) + (py ? sep + esc(py) : ""); }
+window.twShowPy = twShowPy; window.twSetShowPy = twSetShowPy; window.twPhMode = twPhMode; window.twPyOnly = twPyOnly; window.twSetPhMode = twSetPhMode; window.twPh = twPh; window.twPhPair = twPhPair;
+try { if (twPyOnly()) document.documentElement.classList.add("ph-py"); } catch (e) {}
+function twMarkRate(){ const r = (typeof TTS !== "undefined" && TTS.getRate) ? TTS.getRate() : 1; document.querySelectorAll("[data-set-rate]").forEach(b=>b.classList.toggle("on", +b.dataset.setRate===r)); }
+function twSetRate(r){ if (typeof TTS === "undefined" || !TTS.setRate) return; TTS.setRate(r); refreshSpeedLabels(); twMarkRate(); }
 twApplyTheme(); twApplyAccent(); twApplyTone();
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", twApplyFs); else twApplyFs();
 
 /* ===== レベルデータ ===== */
 const _cat = (...xs) => xs.filter(x => Array.isArray(x)).flat();
-const VOCAB_BY_LEVEL   = {
-  l1: _cat(VOCAB_L1, typeof VOCAB_L1_B!=="undefined"&&VOCAB_L1_B, typeof VOCAB_L1_C!=="undefined"&&VOCAB_L1_C),
-  l2: _cat(VOCAB_L2, typeof VOCAB_L2_B!=="undefined"&&VOCAB_L2_B, typeof VOCAB_L2_C!=="undefined"&&VOCAB_L2_C),
-  l3: _cat(VOCAB_L3, typeof VOCAB_L3_B!=="undefined"&&VOCAB_L3_B, typeof VOCAB_L3_C!=="undefined"&&VOCAB_L3_C),
-  l4: _cat(VOCAB_L4, typeof VOCAB_L4_B!=="undefined"&&VOCAB_L4_B, typeof VOCAB_L4_C!=="undefined"&&VOCAB_L4_C),
-  l5: _cat(VOCAB_L5, typeof VOCAB_L5_B!=="undefined"&&VOCAB_L5_B, typeof VOCAB_L5_C!=="undefined"&&VOCAB_L5_C),
-  l6: _cat(typeof VOCAB_L6!=="undefined"&&VOCAB_L6, typeof VOCAB_L6_B!=="undefined"&&VOCAB_L6_B, typeof VOCAB_L6_C!=="undefined"&&VOCAB_L6_C),
-};
+// 語の「級」は、手で振ったものではなく官方 TBCL 詞語表(tbcl.js)に従う。
+// TOCFL はこの基準で出題されるので、ここがずれていると
+// 「L1 を終えた」人が入門級で落ちる。読みも表にあればそちらを採る。
+// 表に無い語(小籠包・滷肉飯・台北 など在地語)は、今まで置いていた級のまま。
+const STW_LV_MOVED = Object.create(null);   // srs.js の移行が読む: 語 → [旧級, 新級]
+const VOCAB_BY_LEVEL = (() => {
+  const raw = {
+    l1: _cat(VOCAB_L1, typeof VOCAB_L1_B!=="undefined"&&VOCAB_L1_B, typeof VOCAB_L1_C!=="undefined"&&VOCAB_L1_C, typeof VOCAB_L1_D!=="undefined"&&VOCAB_L1_D),
+    l2: _cat(VOCAB_L2, typeof VOCAB_L2_B!=="undefined"&&VOCAB_L2_B, typeof VOCAB_L2_C!=="undefined"&&VOCAB_L2_C, typeof VOCAB_L2_D!=="undefined"&&VOCAB_L2_D),
+    l3: _cat(VOCAB_L3, typeof VOCAB_L3_B!=="undefined"&&VOCAB_L3_B, typeof VOCAB_L3_C!=="undefined"&&VOCAB_L3_C, typeof VOCAB_L3_D!=="undefined"&&VOCAB_L3_D),
+    l4: _cat(VOCAB_L4, typeof VOCAB_L4_B!=="undefined"&&VOCAB_L4_B, typeof VOCAB_L4_C!=="undefined"&&VOCAB_L4_C, typeof VOCAB_L4_D!=="undefined"&&VOCAB_L4_D),
+    l5: _cat(VOCAB_L5, typeof VOCAB_L5_B!=="undefined"&&VOCAB_L5_B, typeof VOCAB_L5_C!=="undefined"&&VOCAB_L5_C, typeof VOCAB_L5_D!=="undefined"&&VOCAB_L5_D),
+    l6: _cat(typeof VOCAB_L6!=="undefined"&&VOCAB_L6, typeof VOCAB_L6_B!=="undefined"&&VOCAB_L6_B, typeof VOCAB_L6_C!=="undefined"&&VOCAB_L6_C, typeof VOCAB_L6_D!=="undefined"&&VOCAB_L6_D),
+  };
+  const T = (typeof STW_TBCL !== "undefined") ? STW_TBCL : null;
+  if (!T) return raw;                       // tbcl.js が読めなければ今まで通り。落とさない
+  const out = { l1: [], l2: [], l3: [], l4: [], l5: [], l6: [] };
+  const seen = Object.create(null);
+  for (const lv of ["l1","l2","l3","l4","l5","l6"]) {
+    for (const v of raw[lv]) {
+      if (!v || !v.w || seen[v.w]) continue;
+      seen[v.w] = 1;
+      const t = T[v.w];
+      // 7 級は TOCFL 六級の上。行き場が無いので l6 に置く
+      const to = t ? ("l" + Math.min(6, t[0])) : lv;
+      const e = t ? Object.assign({}, v, { zy: t[1], py: t[2] || v.py }) : v;
+      if (to !== lv) STW_LV_MOVED[v.w] = [lv, to];
+      out[to].push(e);
+    }
+  }
+  return out;
+})();
+// const は window に乗らない。srs.js の移行がここを読むので明示的に出す
+if (typeof window !== "undefined") window.STW_LV_MOVED = STW_LV_MOVED;
+try { SRS.migrateLevels(); } catch (e) {}
 const GRAMMAR_BY_LEVEL = { l1: GRAMMAR_L1, l2: GRAMMAR_L2, l3: GRAMMAR_L3, l4: GRAMMAR_L4, l5: GRAMMAR_L5, l6: (typeof GRAMMAR_L6!=="undefined"?GRAMMAR_L6:[]) };
 function getVocabData(lv){ return VOCAB_BY_LEVEL[lv] || []; }
 // 練習(カード・クイズ・復習・模試・聞き取り)に回す語。
@@ -1860,7 +2387,7 @@ function switchPanel(p){
   window.addEventListener("scroll", upd, {passive:true});
   window.addEventListener("resize", upd, {passive:true});
 })();
-document.querySelectorAll(".tool-btn").forEach(b=>{ b.onclick = () => switchPanel(b.dataset.panel); });
+document.querySelectorAll(".tool-btn").forEach(b=>{ if(!b.dataset.panel) return; b.onclick = () => switchPanel(b.dataset.panel); });   // AI 会話など別ページへ飛ぶボタンは上書きしない
 function toggleMore(show){ document.body.classList.toggle("more-open", show); }
 document.querySelectorAll(".bn-item").forEach(b=>{
   b.onclick = () => { if (b.dataset.bn === "more") { toggleMore(true); return; } switchPanel(b.dataset.bn); };
@@ -1913,15 +2440,15 @@ function updateFavBtn(){ const b=document.getElementById("fcFav"); if(!b||!deck[
 
 /* ===== 例文の注音表示（拼音⇄注音の切替。ユーザー要望：拼音を知らない人向け）===== */
 let EX_ZY = null, EX_ZY_LOADING = false, EX_PY = null;
-let RUBY = (function(){ try { return localStorage.getItem("stw_ruby") || "both"; } catch(e){ return "both"; } })();
+let RUBY = (function(){ try { if (localStorage.getItem("stw_phon") === "py") return "py"; return localStorage.getItem("stw_ruby") || "both"; } catch(e){ return "both"; } })();
 function loadExZy(cb){
   if (EX_ZY) { if (cb) cb(); return; }
   if (EX_ZY_LOADING) return;
   EX_ZY_LOADING = true;
   // 注音＋(台灣読音に修正した)拼音オーバーレイを並行ロード。EX_PY にあれば ex.py より優先。
   Promise.all([
-    fetch("data/ex-zhuyin.json?v=10").then(r => r.ok ? r.json() : null),
-    fetch("data/ex-pinyin.json?v=1").then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch("data/ex-zhuyin.json?v=14").then(r => r.ok ? r.json() : null),
+    fetch("data/ex-pinyin.json?v=2").then(r => r.ok ? r.json() : null).catch(() => null),
     fetch("data/ex-locale.json?v=3").then(r => r.ok ? r.json() : null).catch(() => null)
   ]).then(([zy, py, loc]) => { EX_ZY = zy || {}; EX_PY = py || {}; EX_LOC = loc || null;
     applyExLocale(); EX_ZY_LOADING = false; if (cb) cb();
@@ -1945,7 +2472,7 @@ function applyExLocale(){
   const mk = (typeof twMKey === "function") ? twMKey() : "j";
   for (const lv of ["l1","l2","l3","l4","l5","l6"]) {
     for (const v of (VOCAB_BY_LEVEL[lv] || [])) {
-      if (!v || !v.ex) continue;
+      if (!v || !v.ex || !v.ex.z) continue;
       if (!v._ex0) { const hit = EX_LOC[v.ex.z]; if (!hit) continue; v._ex0 = v.ex; }
       const o = EX_LOC[v._ex0.z] && EX_LOC[v._ex0.z][lg];
       if (!o) { v.ex = v._ex0; continue; }
@@ -1984,12 +2511,12 @@ function exRuby(z, py){
 // data/reading-ruby.json = { "<原文>": {p:[逐字拼音], z:[逐字注音]} }（pypinyin で文脈込み・破音字も正しい）
 let RUBYMAP = null, RUBYMAP_LOADING = false;
 // ルビ表示モード：zy=注音 / py=拼音 / both=両方 / off=隠す。台湾華語なので既定は「注音」。
-let TW_RUBY_MODE = (function(){ try { const v = localStorage.getItem("stw_ruby_mode"); return ["zy","py","both","off"].includes(v) ? v : "zy"; } catch(e){ return "zy"; } })();
+let TW_RUBY_MODE = (function(){ try { const v = localStorage.getItem("stw_ruby_mode"); if (localStorage.getItem("stw_phon") === "py" && v !== "off") return "py"; return ["zy","py","both","off"].includes(v) ? v : "zy"; } catch(e){ return "zy"; } })();
 function loadRubyMap(cb){
   if (RUBYMAP) { if (cb) cb(); return; }
   if (RUBYMAP_LOADING) return;
   RUBYMAP_LOADING = true;
-  fetch("data/reading-ruby.json?v=8").then(r => r.ok ? r.json() : null).then(m => { RUBYMAP = m || {}; RUBYMAP_LOADING = false; if (cb) cb(); }).catch(() => { RUBYMAP_LOADING = false; });
+  fetch("data/reading-ruby.json?v=9").then(r => r.ok ? r.json() : null).then(m => { RUBYMAP = m || {}; RUBYMAP_LOADING = false; if (cb) cb(); }).catch(() => { RUBYMAP_LOADING = false; });
 }
 // その文字（通し番号 ci）のルビ HTML を返す。both は注音（上）＋拼音（下）の 2 行。
 // 注音の整形。入力は生テキスト、出力は HTML。
@@ -2059,7 +2586,7 @@ function renderCard(){
   const w = deck[fcIdx], mk = twMKey();
   document.getElementById("fc").classList.remove("flip");
   document.getElementById("fcWord").textContent = w.w;
-  document.getElementById("fcZy").innerHTML = twZy(w.zy);   // 声調を大きく見せるため HTML で入れる
+  document.getElementById("fcZy").innerHTML = twPyOnly() ? "" : twZy(w.zy);   // 声調を大きく見せるため HTML で入れる
   document.getElementById("fcPy").textContent = w.py;
   document.getElementById("fcZy").hidden = (RUBY === "py");   // ㄅ/拼/ㄅ拼 の切替をカード表面にも反映
   document.getElementById("fcPy").hidden = (RUBY === "zy");
@@ -2069,14 +2596,14 @@ function renderCard(){
   if (_mf) { document.getElementById("fcMfTx").textContent = w.m[mk] || w.m.e || w.m.j; _mf.classList.toggle("hide", !SHOW_MEAN_FRONT); }
   document.getElementById("fcMean").textContent = w.m[mk] || w.m.e || w.m.j;
   document.getElementById("fcEx").innerHTML =
-    `<span class="ex-z">${w.ex.z} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></span><span class="ex-r">${exRuby(w.ex.z, w.ex.py)}</span><span class="tr">${w.ex[mk] || w.ex.e || w.ex.j}</span>`;
-  document.getElementById("fcEx").onclick = e => { e.stopPropagation(); speakZh(w.ex.z); };
+    `<span class="ex-z">${(w.ex && w.ex.z) || ""} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></span><span class="ex-r">${exRuby(w.ex.z, w.ex.py)}</span><span class="tr">${w.ex[mk] || w.ex.e || w.ex.j}</span>`;
+  { const _fe = document.getElementById("fcEx"); if (_fe) _fe.onclick = e => { e.stopPropagation(); if (w.ex && w.ex.z) speakZh(w.ex.z); }; }
   document.getElementById("fcProg").textContent = `${fcIdx+1} / ${deck.length}`;
   updateFavBtn(); markSeen(); saveFcPos(); refreshSpeedLabels(); refreshRubyLabels();
 }
 /* ===== 再生速度（全音声共通・localStorage 永続） ===== */
-const TTS_SPEEDS = [1, 0.75, 1.25, 1.5];
-function refreshSpeedLabels(){ if (typeof TTS === "undefined" || !TTS.getRate) return; const r = TTS.getRate() + "x"; document.querySelectorAll(".js-spd").forEach(b => b.textContent = r); }
+const TTS_SPEEDS = [1, 0.75, 0.5, 1.25, 1.5];
+function refreshSpeedLabels(){ if (typeof TTS === "undefined" || !TTS.getRate) return; const r = TTS.getRate() + "x"; document.querySelectorAll(".js-spd").forEach(b => b.textContent = r); try { twMarkRate(); } catch (e) {} }
 function cycleTtsSpeed(){ if (typeof TTS === "undefined" || !TTS.getRate) return; let i = TTS_SPEEDS.indexOf(TTS.getRate()); if (i < 0) i = 0; TTS.setRate(TTS_SPEEDS[(i + 1) % TTS_SPEEDS.length]); refreshSpeedLabels(); }
 function flipCard(){
   const el = document.getElementById("fc");
@@ -2144,6 +2671,7 @@ function pickPersona(key){
   // 以前はここで「はじめての流れ」の帯を出していたが、ハブのステージ一覧が同じことを
   // 言っているので撤去した(同じ内容を 2 箇所で言うと、どちらも読まれない)。
   localStorage.setItem("stw-onboarded", "1");
+  try { setTimeout(() => TOUR.start(), 400); } catch (e) {}   // 4 ステップのガイド(飛ばせる・1 回だけ)
 }
 
 /* ===== レベル名（言語別） ===== */
@@ -2181,14 +2709,14 @@ function renderList(){
     <div class="vcard" data-i="${i}">
       <div class="vcard-top">
         <span class="vcard-w">${v.w}</span>
-        <span><span class="vcard-zy">${twZy(v.zy)}</span><br><span class="vcard-py">${v.py}</span></span>
+        <span>${twPyOnly() ? "" : `<span class="vcard-zy">${twZy(v.zy)}</span><br>`}<span class="vcard-py">${v.py}</span></span>
         <button class="vcard-fav" data-fav="${i}" aria-label="収藏" style="background:none;border:none;cursor:pointer;font-size:19px;padding:2px 6px;color:${isFav(currentLevel,v.w)?"var(--ac)":"var(--tx3)"}">${isFav(currentLevel,v.w)?"★":"♡"}</button>
         <span class="vcard-pos">${v.c}</span>
       </div>
       ${twVocabLocked(v)
         ? `<div class="vcard-lock" data-lock="1">${icon("lock",{size:15})} ${esc(twT("proLocked"))}</div>`
         : `<div class="vcard-m">${v.m[mk] || v.m.e || v.m.j}</div>
-      <div class="vcard-ex" data-ex="1"><b>${v.ex.z}</b> <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg><br>${exRuby(v.ex.z, v.ex.py)}<br>${v.ex[mk] || v.ex.e || v.ex.j}</div>`}
+      ${(v.ex && v.ex.z) ? `<div class="vcard-ex" data-ex="1"><b>${v.ex.z}</b> <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg><br>${exRuby(v.ex.z, v.ex.py)}<br>${v.ex[mk] || v.ex.e || v.ex.j}</div>` : ""}`}
     </div>`).join("");
   // 枠内タップで発音（例文部分は例文を読む）
   document.querySelectorAll("#vList .vcard").forEach(card=>{
@@ -2196,7 +2724,7 @@ function renderList(){
     card.onclick = e => {
       if (e.target.closest(".vcard-fav")) return;   // ♡ は別処理
       if (twVocabLocked(v)) { try { Paywall.show("provocab"); } catch (e2) {} return; }
-      speakZh(e.target.closest(".vcard-ex") ? v.ex.z : v.w);
+      speakZh(e.target.closest(".vcard-ex") && v.ex && v.ex.z ? v.ex.z : v.w);
     };
   });
   document.querySelectorAll("#vList .vcard-fav").forEach(btn=>{
@@ -2207,6 +2735,7 @@ function renderList(){
 
 /* ===== 文法（例文タップで発音）===== */
 function renderGrammar(){
+  loadExZy();          // 例文の注音(data/ex-zhuyin.json)。読み込み後に refreshActivePanel が描き直す
   const mk = twMKey();
   document.getElementById("gList").innerHTML = getGrammarData(currentLevel).map(g=>`
     <details class="gcard">
@@ -2216,10 +2745,23 @@ function renderGrammar(){
         <div class="g-ex">${g.ex[mk] || g.ex.e || g.ex.j}</div>
         <div class="g-eg">${g.eg.map(e=>`
           <span class="zh" onclick="speakZh(this.dataset.z)" data-z="${e.z.replace(/<[^>]+>/g,"")}">${e.z} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></span>
-          <span class="py">${e.py}</span><span class="tr">${e[mk] || e.e || e.j}</span>`).join("")}
+          <span class="py">${exRuby(e.z.replace(/<[^>]+>/g,""), e.py)}</span><span class="tr">${e[mk] || e.e || e.j}</span>`).join("")}
         </div>
+        ${(() => {
+          // 文法点も復習に載せられる。闖關で習った点はここに「追加済み」と出る
+          const has = !!(window.SRS && SRS.hasGrammar && SRS.hasGrammar(currentLevel, g.id));
+          return `<button class="ws-srs g-srs${has ? " added" : ""}" id="gsrs-${g.id}"${has ? " disabled" : ` onclick="twAddGrammarSrs('${g.id}')"`}>${twT(has ? "dictAdded" : "dictAddSrs")}</button>`;
+        })()}
       </div>
     </details>`).join("");
+}
+// 文法カードから「復習に追加」。語と同じ SRS に "l1:g#l1-1" の形で入る
+function twAddGrammarSrs(id){
+  if (!(window.SRS && SRS.addGrammar)) return;
+  SRS.addGrammar(currentLevel, id);
+  const btn = document.getElementById("gsrs-" + id);
+  if (btn){ btn.classList.add("added"); btn.disabled = true; btn.removeAttribute("onclick"); btn.textContent = twT("dictAdded"); }
+  if (typeof updateSrsBadges === "function") updateSrsBadges();
 }
 
 /* ===== フレーズ（枠内タップで発音・旅行/暮らしフィルタ）===== */
@@ -2242,7 +2784,7 @@ function renderPhrases(){
       <div class="ph-item" onclick="speakZh(this.dataset.z)" data-z="${it.z}">
         <div class="ph-main">
           <div class="ph-z">${it.z}</div>
-          <div class="ph-py">${it.py}</div>
+          <div class="ph-py">${exRuby(it.z, it.py)}</div>
           <div class="ph-m">${it.m[mk] || it.m.e || it.m.j}</div>
           ${it.note ? `<div class="ph-note">${icon("bulb",{size:15})} ${it.note[ck] || it.note.e || it.note.j}</div>` : ""}
         </div>
@@ -2262,7 +2804,7 @@ function qzReset(){
   quizStarted = false;
   renderQzModeRow();
   document.getElementById("qzBox").innerHTML =
-    `<p style="color:var(--tx2);margin:30px 0 8px">${qzMode==="type" ? twT("qzTypeHint") : twT("quizQ")}</p>
+    `<img class="il" src="images/il/10_quiz.webp" alt="" width="120" height="120" style="width:120px;height:120px;display:block;margin:22px auto 0"><p style="color:var(--tx2);margin:10px 0 8px">${qzMode==="type" ? twT("qzTypeHint") : twT("quizQ")}</p>
      ${Paywall.quotaBadge("quiz")}
      <div style="margin-top:12px"><button class="btn primary" onclick="qzStart()">${twT("quizStart")}</button></div>
      ${WrongBook.forLevel(currentLevel).length?`<div><button class="wb-link" onclick="openWrongBook()">${twT("wbReview")} (${WrongBook.forLevel(currentLevel).length})</button></div>`:""}`;
@@ -2313,7 +2855,7 @@ function qzNext(){
   document.getElementById("qzBox").innerHTML = `
     <div style="font-size:13px;color:var(--tx3)">${qzIdx+1} / ${qzOrder.length}　${twT("quizScore")}: ${qzScore}</div>
     <div class="qz-word" onclick="speakZh('${w.w}')">${w.w}</div>
-    <div class="qz-py">${twZy(w.zy)}　${w.py}　<button class="tts-btn" style="width:30px;height:30px;font-size:13px" onclick="speakZh('${w.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
+    <div class="qz-py">${twPhPair(w.zy, w.py, "　")}　<button class="tts-btn" style="width:30px;height:30px;font-size:13px" onclick="speakZh('${w.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
     <div class="qz-opts">${opts.map(o=>
       `<button class="qz-opt" data-ok="${o.w===w.w}" data-w="${o.w}" onclick="qzAnswer(this)">${o.m[mk] || o.m.e || o.m.j}</button>`).join("")}
     </div>`;
@@ -2341,7 +2883,7 @@ function qzTypeAnswer(){
   document.getElementById("qzTypeResult").innerHTML =
     `<div class="qz-fb ${ok?'ok':'ng'}">
       <div style="font-size:15px;font-weight:700">${(ok ? icon("check",{size:17}) : icon("x",{size:17}))} ${ok ? twT("qzRight") : twT("qzWrong")}</div>
-      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${twZy(w.zy)}｜${w.py}）</div>
+      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${twPhPair(w.zy, w.py, "｜")}）</div>
       <div style="font-size:14px;color:var(--tx2);margin-top:2px">${w.m[mk] || w.m.e || w.m.j}</div>${ex}
       <div style="margin-top:16px"><button class="btn primary" onclick="qzAdvance()">${twT("quizNext")} ›</button></div>
     </div>`;
@@ -2369,7 +2911,7 @@ function qzPickLine(pickWord){
   const mean = p.m[mk] || p.m.e || p.m.j || "";
   return `<div style="font-size:13px;color:var(--tx2);margin-top:8px;padding-top:8px;border-top:1px solid var(--ln)">`
     + `${twT("qzYourPick")}<b>${mean}</b>${twT("qzPickIs")}`
-    + `<b style="font-family:var(--serif);font-size:17px">${p.w}</b>（${twZy(p.zy)}｜${p.py}）`
+    + `<b style="font-family:var(--serif);font-size:17px">${p.w}</b>（${twPhPair(p.zy, p.py, "｜")}）`
     + `<button class="tts-btn" style="width:26px;height:26px;font-size:12px;vertical-align:middle;margin-left:4px" onclick="speakZh('${p.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>`;
 }
 function qzShowFeedback(w, ok, pickWord){
@@ -2378,7 +2920,7 @@ function qzShowFeedback(w, ok, pickWord){
   document.getElementById("qzBox").insertAdjacentHTML("beforeend",
     `<div class="qz-fb ${ok?'ok':'ng'}">
       <div style="font-weight:700;font-size:15px">${(ok ? icon("check",{size:17}) : icon("x",{size:17}))} ${ok ? twT("qzRight") : twT("qzWrong")}</div>
-      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${twZy(w.zy)}｜${w.py}）</div>
+      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${twPhPair(w.zy, w.py, "｜")}）</div>
       <div style="font-size:14px;color:var(--tx2);margin-top:2px">${w.m[mk] || w.m.e || w.m.j}</div>${ex}${qzPickLine(pickWord)}
       <div style="margin-top:16px"><button class="btn primary" onclick="qzAdvance()">${twT("quizNext")} ›</button></div>
     </div>`);
@@ -2409,7 +2951,7 @@ const SPK = (() => {
     if (src === "phrase") {
       items = PHRASES_L1.flatMap(s => s.items.map(it => ({ z: it.z, py: it.py, tr: it.m[mk] || it.m.e || it.m.j })));
     } else {
-      items = twOpenVocab(currentLevel).map(v => ({ z: v.ex.z, py: v.ex.py, tr: v.ex[mk] || v.ex.e || v.ex.j }));
+      items = twOpenVocab(currentLevel).filter(v => v.ex && v.ex.z).map(v => ({ z: v.ex.z, py: v.ex.py, tr: v.ex[mk] || v.ex.e || v.ex.j }));
     }
     items.sort(() => Math.random() - .5);
     idx = 0;
@@ -2460,6 +3002,7 @@ const SPK = (() => {
     loadPyMap();   // 発音採点用の音マップを先読み（録音までに間に合う）
     const it = items[idx];
     document.getElementById("spkBox").innerHTML = `
+      <img class="il" src="images/il/07_speaking.webp" alt="" width="104" height="104" style="width:104px;height:104px;display:block;margin:4px auto 0">
       <p style="font-size:14px;color:var(--tx2);line-height:1.9;text-align:left">${twT("spkIntro")}</p>
       ${(SRCls || IS_NATIVE()) ? "" : `<p style="font-size:12.5px;color:var(--ac);background:var(--ac-soft);border-radius:8px;padding:8px 12px">${twT("spkNoSupport")}</p>`}
       ${SRCls && /Edg\//.test(navigator.userAgent) ? `<p style="font-size:12.5px;color:var(--ac);background:var(--ac-soft);border-radius:8px;padding:8px 12px">${twT("spkEdgeNote")}</p>` : ""}
@@ -2469,7 +3012,7 @@ const SPK = (() => {
       </div>
       <div class="spk-card">
         <div class="spk-z" onclick="speakZh(this.dataset.z)" data-z="${it.z}">${it.z} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></div>
-        <div class="spk-py">${it.py}</div>
+        <div class="spk-py">${exRuby(it.z, it.py)}</div>
         <div class="spk-tr">${it.tr}</div>
         ${IS_NATIVE() ? `<button class="spk-mic" id="spkMic" onclick="SPK.toggle()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
         <div class="spk-status" id="spkStatus">${twT("spkRecord")}</div>` : ""}
@@ -2479,6 +3022,7 @@ const SPK = (() => {
         <button class="btn" onclick="speakZh('${it.z}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg> ${twT("spkListen")}</button>
         <button class="btn primary" onclick="SPK.next()">${twT("spkNext")}</button>
       </div>
+      <div class="spk-rate"><span>${twT("setSpeed")}</span>${[0.5,0.75,1,1.25].map(r => `<button data-set-rate="${r}" class="${(typeof TTS!=="undefined"&&TTS.getRate&&TTS.getRate()===r)?"on":""}" onclick="twSetRate(${r})">${r}x</button>`).join("")}</div>
       <div style="font-size:13px;color:var(--tx3);margin-top:10px">${idx+1} / ${items.length}</div>`;
   }
 
@@ -2507,10 +3051,12 @@ const SPK = (() => {
   //   web  = メモリ上の Blob。次の録音・次の問題で即 revoke
   //   App  = 原生側が 1 本だけ持ち、次の録音/離脱で削除(base64 も渡さない)
   let mediaRec = null, mediaStream = null, myUrl = "";
-  let nativeHasVoice = false;
+  let nativeHasVoice = false, nativeData = "";
+  // App 1.0.10+:録音を data URL でもらい、お手本と同じ WebView の audio で鳴らす(原生 player は無音になることがあった)
+  if (typeof window !== "undefined") window.stwSpeechAudioData = (d) => { nativeData = String(d || ""); prepLoud(nativeData); };
   if (typeof window !== "undefined") window.stwSpeechAudio = (ok) => {
     nativeHasVoice = !!ok;
-    if (!ok) return;
+    if (!ok) { nativeData = ""; return; }
     try {   // audioend が end より遅いことがある → 後から来たらボタンを足す
       const box = document.querySelector("#spkResult .spk-result");
       if (!box || box.querySelector(".spk-cmp")) return;
@@ -2545,11 +3091,50 @@ const SPK = (() => {
     } catch (e) { mediaRec = null; }   // 権限が無くても認識側は動く
   }
   function stopCapture(){ try { mediaRec && mediaRec.state !== "inactive" && mediaRec.stop(); } catch (e) {} }
+  // 自分の声は小さく録れる(端末のマイク・音声認識の入力処理)ので、一番大きい所が 0.9 になるまで持ち上げてから鳴らす(最大 8 倍)。
+  // 2026-10 AudioContext で鳴らしたら「録音直後の 1 回目が無音、お手本を鳴らした後なら鳴る」になった
+  // (録音直後の音声セッションに AudioContext が縛られる)。お手本と同じ <audio> 要素で鳴らすため、
+  // WAV(App は 16bit PCM)の数値を直接持ち上げて WAV を作り直す。WAV 以外(web の webm)はそのまま鳴らす。
+  async function loudWavUrl(url){
+    const ab = await (await fetch(url)).arrayBuffer(), dv = new DataView(ab);
+    if (ab.byteLength < 44 || dv.getUint32(0, false) !== 0x52494646) return url;   // "RIFF" でなければそのまま
+    let o = 12, fmtBits = 16, dataOff = -1, dataLen = 0;
+    while (o + 8 <= ab.byteLength) {
+      const id = dv.getUint32(o, false), len = dv.getUint32(o + 4, true);
+      if (id === 0x666d7420) fmtBits = dv.getUint16(o + 22, true);            // "fmt "
+      if (id === 0x64617461) { dataOff = o + 8; dataLen = Math.min(len, ab.byteLength - o - 8); break; }   // "data"
+      o += 8 + len + (len & 1);
+    }
+    if (dataOff < 0 || fmtBits !== 16) return url;
+    const n = dataLen >> 1; let peak = 0;
+    for (let k = 0; k < n; k++) { const v = Math.abs(dv.getInt16(dataOff + k * 2, true)); if (v > peak) peak = v; }
+    if (peak < 30) return url;
+    const g = Math.min(8, (0.9 * 32767) / peak);
+    if (g <= 1.05) return url;
+    const out = ab.slice(0), ov = new DataView(out);
+    for (let k = 0; k < n; k++) { const v = Math.round(dv.getInt16(dataOff + k * 2, true) * g); ov.setInt16(dataOff + k * 2, Math.max(-32768, Math.min(32767, v)), true); }
+    return URL.createObjectURL(new Blob([out], { type: "audio/wav" }));
+  }
+  // 録音が届いた時点で大きくしておく(押した瞬間に鳴らさないと iOS が再生を止めるので、押してから加工しない)
+  let _loudUrl = "", _loudSrc = "";
+  function prepLoud(url){
+    if (!url || _loudSrc === url) return;
+    if (_loudUrl && _loudUrl !== _loudSrc) { try { URL.revokeObjectURL(_loudUrl); } catch (e) {} }
+    _loudSrc = url; _loudUrl = "";
+    loudWavUrl(url).then((u) => { if (_loudSrc === url) _loudUrl = u; }).catch(() => {});
+  }
+  function playLoud(url, onFail){
+    const u = (_loudSrc === url && _loudUrl) ? _loudUrl : url;   // 加工が間に合っていなければ元のまま
+    new Audio(u).play().catch(() => { onFail && onFail(); });
+  }
   function playMine(){
     try { TTS.stop(); } catch (e) {}
-    if (IS_NATIVE()) { spkPost({ type: "PLAY_MY_VOICE" }); return; }
+    if (IS_NATIVE()) {
+      if (nativeData) { playLoud(nativeData, () => spkPost({ type: "PLAY_MY_VOICE" })); return; }
+      spkPost({ type: "PLAY_MY_VOICE" }); return;   // 旧 App(データを渡さない版)は原生で鳴らす
+    }
     if (!myUrl) return;
-    new Audio(myUrl).play().catch(() => {});
+    playLoud(myUrl);
   }
   function toggle(){
     if (recording) {
@@ -2945,8 +3530,13 @@ function renderProfile(){
       <div class="srs-stat"><b>${best ? best + "%" : "—"}</b><span>${twT("pfExamBest")}</span></div>
     </div>
     <h3 class="pf-h">${twT("pfByLevel")}</h3>
-    <div class="pf-levels">${["l1","l2","l3","l4","l5","l6"].map(lv =>
-      `<div class="pf-lv"><span class="pf-lvn">${lvName[lv]}</span><div class="pf-bar"><i style="width:${per[lv].t ? Math.min(100, per[lv].m / per[lv].t * 100) : 0}%"></i></div><span class="pf-lvc">${per[lv].m} / ${per[lv].t}</span></div>`).join("")}</div>
+    <div class="pf-levels">${["l1","l2","l3","l4","l5","l6"].map(lv => {
+      // 2026-10:前は「定着(間隔 21 日以上)/ 学んだ数」だけで、何週間も 0 のまま=更新されていないように見えた。
+      // 分母をそのレベルの全語に、学習中(薄)+定着(濃)の 2 色で。語彙未読込のレベルは学んだ数を分母に
+      const tot = Math.max(getVocabData(lv).length, per[lv].t) || 0;
+      const pm = tot ? per[lv].m / tot * 100 : 0, pl = tot ? (per[lv].t - per[lv].m) / tot * 100 : 0;
+      return `<div class="pf-lv"><span class="pf-lvn">${lvName[lv]}</span><div class="pf-bar pf-bar2"><i class="m" style="width:${pm}%"></i><i class="l" style="width:${pl}%"></i></div><span class="pf-lvc">${per[lv].t} / ${tot || "—"}</span></div>`; }).join("")}
+      <div class="pf-lvkey"><span><i class="m"></i>${twT("srsMastered")}</span><span><i class="l"></i>${twT("srsLearning")}</span></div></div>
     ${exam.length ? `<h3 class="pf-h">${twT("exHistory")}</h3><div class="ex-hist">${exam.slice(-8).reverse().map(h =>
       `<div class="ex-hist-item"><span>${new Date(h.ts).toLocaleDateString()}</span><b>${h.score} / ${h.total}</b><span>${Math.round(h.score / h.total * 100)}%</span></div>`).join("")}</div>` : ""}`;
   try { renderRefBlock(); } catch (e) {}
@@ -3410,23 +4000,39 @@ const PA = (() => {
       : streak.cur > 0 ? twT("hbMottoKeep").replace("{n}", streak.cur)
       : twT("hbMottoStart");
 
+    // 今週(月〜日):学んだ日=火、今日=枠。StayJP の面板と同じく「続けている」が一目で分かるように
+    const weekRow = (() => { try {
+      let days = []; try { days = JSON.parse(localStorage.getItem("stw_streak") || "[]"); } catch (e) {}
+      const set = new Set(days), now = new Date(), mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+      const lc = { ja:"ja", en:"en", ko:"ko", vi:"vi", id:"id" }[(typeof twGetLang === "function") ? twGetLang() : "ja"] || "ja";
+      const fmt = new Intl.DateTimeFormat(lc, { weekday: "narrow" });
+      return `<div class="hb-week">${[0,1,2,3,4,5,6].map((k) => { const d = new Date(mon); d.setDate(mon.getDate() + k);
+        const key = dayStr(d), isT = key === dayStr(now), on = set.has(key), fut = d > now && !isT;
+        return `<div class="hb-wd${on ? " on" : ""}${isT ? " today" : ""}${fut ? " fut" : ""}"><span class="hb-wd-c">${on ? icon("fire",{size:15}) : ""}</span><span class="hb-wd-l">${esc(fmt.format(d))}</span></div>`; }).join("")}</div>`;
+    } catch (e) { return ""; } })();
     const hero = `<div class="hb-hero">
-      <img src="images/bear.svg" alt="">
-      <div class="hb-hi">
-        <div class="hb-greet">${esc(greet())}${fireChip(streak)}</div>
-        <div class="hb-motto">${esc(motto)}</div>
-        <div class="hb-goal${daily.done ? " ok" : ""}">
-          <div class="hb-goal-top">
-            <button class="hb-goal-btn" onclick="PA.toggleGoal(event)">${esc(twT("pfDaily"))} <span class="hb-goal-pen">${esc(twT("paGoalEdit"))}</span></button>
-            <span>${daily.n} / ${daily.goal}</span>
-          </div>
-          <div class="hb-goal-bar"><i style="width:${daily.pct}%"></i></div>
-          <div class="hb-goal-set" id="hbGoalSet" hidden>
-            <span>${esc(twT("pfDailyGoal"))}</span>
-            ${[10, 20, 30, 50].map((x) => `<button class="hb-goal-n${daily.goal === x ? " on" : ""}" onclick="PA.setGoal(${x})">${x}</button>`).join("")}
-          </div>
+      <div class="hb-hero-top">
+        <img src="${daily.goal && daily.n >= daily.goal ? "images/il/02_goal_done.webp" : "images/bear.svg"}" alt="" onclick="this.classList.remove('jump');void this.offsetWidth;this.classList.add('jump')">
+        <div class="hb-hi">
+          <div class="hb-greet">${esc(greet())}</div>
+          ${fireChip(streak)}
+          <div class="hb-motto">${esc(motto)}</div>
         </div>
+        <button class="hb-ring${daily.done ? " ok" : ""}" style="--p:${daily.pct}" onclick="PA.toggleGoal(event)" aria-label="${esc(twT("pfDaily"))}">
+          <b>${daily.n}</b><span>/ ${daily.goal}</span><small>${esc(twT("pfDaily"))}</small>
+        </button>
       </div>
+      <div class="hb-goal-set" id="hbGoalSet" hidden>
+        <span>${esc(twT("pfDailyGoal"))}</span>
+        ${[10, 20, 30, 50].map((x) => `<button class="hb-goal-n${daily.goal === x ? " on" : ""}" onclick="PA.setGoal(${x})">${x}</button>`).join("")}
+      </div>
+      ${weekRow}
+      <div class="hb-mini">
+        <span><b>${pl.nw}</b>${esc(twT("hbPlanNew"))}</span>
+        <span class="due"><b>${pl.due}</b>${esc(twT("hbPlanDue"))}</span>
+        <span><b>${pl.min}</b>${esc(twT("hbPlanMin"))}</span>
+      </div>
+      ${pl.due > 0 ? `<button class="hb-go hb-go-rv" onclick="SRS.start('${currentLevel}')">▶ ${esc(twT("hbPlanGoReview"))}（${pl.due}）</button>` : ""}
     </div>`;
 
     const planCard = `<div class="hb-plan">
@@ -3454,11 +4060,26 @@ const PA = (() => {
       <div class="hb-wod-m">
         <div class="hb-wod-l">${esc(twT("hbWod"))}</div>
         <div class="hb-wod-w">${esc(wod.w)}</div>
-        <div class="hb-wod-r">${twZy(wod.zy || "")}${wod.py ? " · " + esc(wod.py) : ""}</div>
+        <div class="hb-wod-r">${twPhPair(wod.zy || "", wod.py, " · ")}</div>
         <div class="hb-wod-s">${esc((wod.m && (wod.m[mk] || wod.m.e || wod.m.j)) || "")}</div>
       </div>
       <button class="hb-wod-b" onclick="speakZh('${esc(wod.w).replace(/'/g, "\\'")}')" aria-label="play">${icon("volume",{size:18})}</button>
     </div>` : "";
+
+    // 文章の横スクロール帯(StayJP の面板と同じ形)。未読を先に、新しい順に 6 本
+    const artStrip = (() => { try {
+      const items = twArticles(); if (!items.length) return "";
+      let rd = []; try { rd = JSON.parse(localStorage.getItem("stw_art_read") || "[]"); } catch (e) {}
+      const prem = !!(window.Paywall && Paywall.isPremium && Paywall.isPremium());
+      const idx = items.map((a, i) => i).reverse();
+      const pick = [...idx.filter((i) => !rd.includes(items[i].id)), ...idx.filter((i) => rd.includes(items[i].id))].slice(0, 6);
+      return `<div class="hb-sech"><span class="hb-sec">${esc(twT("toolArticles"))}</span><button onclick="switchPanel('articles')">${esc(twT("hbArtAll"))} ›</button></div>
+      <div class="hb-art">${pick.map((i) => { const a = items[i], lk = i !== 0 && !prem, done = rd.includes(a.id);
+        return `<button class="hb-art-c" onclick="switchPanel('articles');setTimeout(function(){AR.open(${i})},0)">
+          <span class="hb-art-im"><img src="images/articles/${a.id}.jpg" alt="" width="600" height="600" loading="lazy" decoding="async" onerror="this.remove()">${lk ? `<span class="hb-art-lk">${icon("lock",{size:13})}</span>` : (done ? `<span class="hb-art-ok">✓</span>` : "")}</span>
+          <span class="hb-art-t">${esc(String(a.zhTitle).split("：")[0])}</span>
+          <span class="hb-art-s">${esc(a.title[mk] || a.title.e || "")}</span></button>`; }).join("")}</div>`;
+    } catch (e) { return ""; } })();
 
     const quick = `<div class="hb-sec">${esc(twT("hbQuick"))}</div>
     <div class="hb-quick">
@@ -3508,15 +4129,21 @@ const PA = (() => {
 
     document.getElementById("paBody").innerHTML = `<div class="hb">
       ${hero}
-      ${planCard}
       ${resume}
       ${(typeof WhatsNew !== "undefined") ? WhatsNew.card() : ""}
-      ${(typeof Fortune !== "undefined") ? Fortune.card() : ""}
       <div>
         <div class="pa-found-h">${twT("paLevelH").replace("{lv}", lvName)}</div>
         <div class="pa-level-sub">${twT("lsLevelSub")}</div>
         ${(typeof LS !== "undefined") ? LS.section(currentLevel) : ""}
       </div>
+      ${artStrip}
+      ${quick}
+      <button class="hb-mvcard" onclick="switchPanel('myvocab')">
+        <img src="images/il/04_empty_notebook.webp" alt="" width="64" height="64">
+        <span><b>${esc(twT("toolMyVocab"))}</b><span>${esc(twT("hbMvD"))}</span></span>
+        <em>${(window.MyVocab ? MyVocab.count() : 0)}</em>
+      </button>
+      ${wodCard}
       <div>
         <div class="pa-found-h">${twT("paFoundH")}</div>
         <button class="pa-found" onclick="switchPanel('zhuyin')">
@@ -3530,9 +4157,9 @@ const PA = (() => {
           <svg viewBox="0 0 24 24" class="pa-found-ch"><path d="M9 6l6 6-6 6"/></svg>
         </button>
       </div>
-      ${wodCard}
-      ${quick}
+      ${(typeof Fortune !== "undefined") ? Fortune.card() : ""}
       ${upBanner}
+      <div class="hb-foot"><img src="images/il/15_login.webp" alt="" width="120" height="120"><p>${esc(twT("hbFoot"))}</p></div>
     </div>`;
   }
   // 鍵つきの関を押したとき。閉じ込めない:案内を出しつつ開けるようにしておく。
@@ -3677,17 +4304,28 @@ function twShowWordCard(v, opts){
     if (!gloss && !v.d) meanHtml = `<div class="ws-m" style="color:var(--tx3)">${twT("dictNoDef")}</div>`;
   } else {
     meanHtml = `<div class="ws-m">${v.m ? (v.m[mk] || v.m.e || v.m.j || "") : ""}</div>`;
-    if (v.ex && v.ex.z) exHtml = `<div class="ws-ex" onclick="event.stopPropagation();speakZh('${String(v.ex.z).replace(/'/g,"\\'")}')">${v.ex.z}<span class="py">${v.ex.py||""}</span><span class="tr">${v.ex[mk] || v.ex.e || v.ex.j||""}</span></div>`;
+    if (v.ex && v.ex.z) exHtml = `<div class="ws-ex" onclick="event.stopPropagation();speakZh('${String(v.ex.z).replace(/'/g,"\\'")}')">${v.ex.z}<span class="py">${exRuby(v.ex.z, v.ex.py||"")}</span><span class="tr">${v.ex[mk] || v.ex.e || v.ex.j||""}</span></div>`;
   }
+  const inMv = !!(window.MyVocab && MyVocab.has(v.w));
+  const mvBtn = window.MyVocab ? `<button class="ws-srs ws-mv${inMv?" added":""}" id="wsMvBtn"${inMv?" disabled":` onclick="twSaveMyVocab('${String(v.w).replace(/'/g,"\\'")}')"`}>${icon("star",{size:15})} ${twT(inMv?"mvInList":"mvSaveBtn")}</button>` : "";
   const srsBtn = `<button class="ws-srs${inSrs?" added":""}" id="wsSrsBtn"${inSrs?" disabled":` onclick="twAddWordSrs('${v.w}','${lv}')"`}>${twT(inSrs?"dictAdded":"dictAddSrs")}</button>`;
   document.getElementById("wsBox").innerHTML = `
     <div class="ws-top"><div class="ws-w">${v.w}</div><button class="ws-play" onclick="speakZh('${v.w}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
-    <div class="ws-p">${twZy(zy)}　${py}</div>
-    ${meanHtml}${exHtml}${srsBtn}`;
+    <div class="ws-p">${twPhPair(zy, py, "　")}</div>
+    ${meanHtml}${exHtml}${srsBtn}${mvBtn}`;
   document.getElementById("wsBg").classList.add("show");
   document.getElementById("wsBox").classList.add("show");
   if (!(opts && opts.silent)) speakZh(v.w);   // 言語切替の再描画では発音し直さない
 }
+// 辞書カードから「My単語帳に保存」
+function twSaveMyVocab(w){
+  if (!window.MyVocab) return;
+  const r = MyVocab.saveFromDict(w);
+  const btn = document.getElementById("wsMvBtn");
+  if ((r === "ok" || r === "dup") && btn){ btn.classList.add("added"); btn.disabled = true; btn.removeAttribute("onclick"); btn.innerHTML = icon("star",{size:15}) + " " + twT("mvInList"); }
+  if (r === "ok") { try { showToast("✓ " + w); } catch (e) {} }
+}
+window.twSaveMyVocab = twSaveMyVocab;
 // 辞書カードから「復習に追加」：SRS に今すぐ復習期限で登録。拡張語は内容を custom store に保存して復習画面から引けるようにする。
 function twAddWordSrs(w, lv){
   if (!(window.SRS && SRS.addWord)) return;
@@ -3699,6 +4337,25 @@ function twAddWordSrs(w, lv){
   try { if (window.showToast) showToast(twT(added ? "dictAddedToast" : "dictAlready")); } catch(e){}
 }
 function twCloseWord(){ if(window.TTS&&TTS.stop)TTS.stop(); const bg=document.getElementById("wsBg"), bx=document.getElementById("wsBox"); if(bg)bg.classList.remove("show"); if(bx)bx.classList.remove("show"); }
+// Android の戻るキー(原生 web.tsx が呼ぶ)。開いているものを手前から 1 つ閉じて "handled"。
+// 何も開いていなくて、パス以外のタブにいればパスへ戻して "handled"。パスなら "exit"(原生が終了確認を出す)。
+window.stwBack = function(){
+  const on = (id, cls) => { const e = document.getElementById(id); return !!(e && e.classList.contains(cls || "show")); };
+  try {
+    if (document.querySelector(".tour-box")) { TOUR.close(); return "handled"; }
+    if (on("lsSkipSheet", "on")) { LS.skip(false, true); return "handled"; }
+    if (on("lsPlay", "on")) { LS.quit(); return "handled"; }
+    if (on("pwBg")) { Paywall.close(); return "handled"; }
+    if (on("quizBg")) { SRS.close(); return "handled"; }
+    const wm = document.getElementById("wrongModal"); if (wm && wm.style.display && wm.style.display !== "none") { closeWrongBook(); return "handled"; }
+    if (on("wsBg")) { twCloseWord(); return "handled"; }
+    if (document.body.classList.contains("set-open")) { twCloseSettings(); return "handled"; }
+    if (document.body.classList.contains("more-open")) { toggleMore(false); return "handled"; }
+    const cur = document.querySelector(".bnav .bn-item.on");
+    if (cur && cur.dataset.bn !== "path") { const p = document.querySelector('.bnav [data-bn="path"]'); if (p) { p.click(); window.scrollTo(0, 0); return "handled"; } }
+  } catch (e) {}
+  return "exit";
+};
 
 /* ===== 分級閲読（読解）：台湾のリアルな短文＋逐句音声＋生詞＋理解チェック ===== */
 const RD = (() => {
@@ -3860,7 +4517,25 @@ function twArticles(){
     (typeof ARTICLES_18 !== "undefined" ? ARTICLES_18 : []),
     (typeof ARTICLES_19 !== "undefined" ? ARTICLES_19 : []),
     (typeof ARTICLES_20 !== "undefined" ? ARTICLES_20 : []),
-  ].flat();
+  ].flat().map((a) => { const g = twArtGroup(a.cat && a.cat.e); return g ? Object.assign({}, a, { cat: g }) : a; });
+}
+// 記事の分類は書いた時期ごとに名前がばらけて 22 個(「自然・旅」と「自然・生態」など)になっていた。表示は 6 つの大分類にまとめる
+function twArtGroup(e){   // function 宣言=巻き上げで、twArticles がどこで先に呼ばれても使える
+  if (twArtGroup.m) return twArtGroup.m[e];
+  const G = {
+    food:  { j:"食べもの", e:"Food & Drink", k:"음식", vi:"Ẩm thực", id:"Makanan" },
+    fest:  { j:"祭り・信仰", e:"Festivals & Belief", k:"명절·신앙", vi:"Lễ hội & Tín ngưỡng", id:"Festival & Kepercayaan" },
+    life:  { j:"暮らし・遊び", e:"Daily Life & Fun", k:"생활·여가", vi:"Đời sống & Giải trí", id:"Kehidupan & Hiburan" },
+    soc:   { j:"社会", e:"Society", k:"사회", vi:"Xã hội", id:"Masyarakat" },
+    hist:  { j:"歴史・文化", e:"History & Culture", k:"역사·문화", vi:"Lịch sử & Văn hóa", id:"Sejarah & Budaya" },
+    nat:   { j:"自然・旅", e:"Nature & Travel", k:"자연·여행", vi:"Thiên nhiên & Du lịch", id:"Alam & Wisata" },
+  };
+  const M = { "Food":"food", "Food & Drink":"food", "Festivals & Belief":"fest",
+    "Life & Culture":"life", "Modern Life":"life", "Work & Living":"life", "Practical Living":"life", "Entertainment & Sports":"life",
+    "Society & Systems":"soc", "Education & Society":"soc", "Society Today":"soc", "Society & Current Affairs":"soc",
+    "History & People":"hist", "History & Society":"hist", "Culture":"hist", "History":"hist", "Language & Expressions":"hist",
+    "Nature & Travel":"nat", "Nature & Ecology":"nat", "Cities & Regions":"nat" };
+  const out = {}; Object.keys(M).forEach((k) => { out[k] = G[M[k]]; }); twArtGroup.m = out; return out[e];
 }
 const AR = (() => {
   let showPy = false, showTr = false, cur = null;
@@ -3885,16 +4560,20 @@ const AR = (() => {
       const lk = locked(i);
       const tag = lk ? `<span class="ar-lock"><svg viewBox="0 0 24 24" class="ic" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg> ${twT("arLocked")}</span>` : (i===0 ? `<span class="ar-freetag">${twT("arFree")}</span>` : "");
       const prev = (a.paras && a.paras[0] ? a.paras[0].z : "").slice(0, 46);
+      // 封面(CC0、images/articles/CREDITS.md)。無い時は img を消して色だけ残す
       return `<button class="ar-card ${lk?"locked":""}" onclick="AR.open(${i})">
+        <span class="ar-card-im"><img src="images/articles/${a.id}.jpg" alt="" width="600" height="600" loading="lazy" decoding="async" onerror="this.remove()"></span>
+        <span class="ar-card-b">
         <div class="ar-card-cat">${a.cat[mk] || a.cat.e || a.cat.j}${readDone(a.id) ? ` ・ <span class="rd-ok">${twT("rdRead")}</span>` : ""} ${tag}</div>
         <div class="ar-card-zh">${a.zhTitle}</div>
         <div class="ar-card-t">${a.title[mk] || a.title.e || a.title.j}</div>
         <div class="ar-card-prev">${prev}…</div>
+        </span>
       </button>`;
     }).join("");
     const nFav = artFavList().length;
     const favBtn = `<div style="text-align:center;margin:2px 0 10px"><button class="wb-link" onclick="AR.openFav()">★ ${twT("arFavTitle")}${nFav?` (${nFav})`:""}</button></div>`;
-    box().innerHTML = `<p class="rd-lead">${twT("arLead")}</p>` + favBtn + chips + cards;
+    box().innerHTML = `<div class="il-lead"><img class="il" src="images/il/09_reading.webp" alt="" width="84" height="84" style="width:84px;height:84px"><p class="rd-lead">${twT("arLead")}</p></div>` + favBtn + chips + cards;
   }
   function filter(ci){ arFilter = ci < 0 ? "all" : arCats[ci]; renderList(); }
   function open(i){
@@ -3925,6 +4604,7 @@ const AR = (() => {
         <button class="ar-back" onclick="AR.render()"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button>
         <div class="ar-fontctl"><button onclick="AR.font(-1)">A<small>−</small></button><button onclick="AR.font(1)">A<small>＋</small></button></div>
       </div>
+      <div class="ar-hero"><img src="images/articles/${a.id}.jpg" alt="" width="600" height="600" decoding="async" onerror="this.parentNode.remove()"></div>
       <div class="ar-cat">${a.cat[mk] || a.cat.e || a.cat.j}</div>
       <h3 class="ar-zhtitle">${a.zhTitle}</h3>
       <div class="ar-title">${a.title[mk] || a.title.e || a.title.j}</div>
@@ -3947,7 +4627,7 @@ const AR = (() => {
     let bar = document.getElementById("arBar");
     if (!bar) { bar = document.createElement("div"); bar.id = "arBar"; bar.className = "ar-bar"; document.body.appendChild(bar); }
     bar.innerHTML = `
-      <button class="ar-bt ${TW_RUBY_MODE!=="off"?"on":""}" onclick="AR.rubyBtn()">${twReadingRubyLabel()}</button>
+      <button class="ar-bt ${TW_RUBY_MODE!=="off"?"on":""}" onclick="AR.rubyBtn()">${TW_RUBY_MODE==="both" ? "ㄅ＋pīn" : twReadingRubyLabel()}</button>
       <button class="ar-bt ${showTr?"on":""}" onclick="AR.toggleTr()">${twT("rdTrans")}</button>
       <button class="ar-bt play" onclick="AR.playAll()">${playing ? "⏸" : "▶"}</button>
       <button class="ar-bt ${arRepeat?"on":""}" onclick="AR.toggleRepeat()" title="${twT("arRepeat")}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
@@ -4070,7 +4750,7 @@ const AR = (() => {
     else { document.querySelectorAll("#aqOpts .qz-opt")[i].classList.add("ng"); if (typeof WrongBook !== "undefined") WrongBook.add({ type:"article", word:w.w, q:(w.m[mk] || w.m.e || w.m.j), correct:w.w, detail:w.zy+"｜"+w.py }); }
     document.getElementById("aqFb").innerHTML = `<div class="qz-fb ${ok?"ok":"ng"}">
       <div style="font-weight:700;font-size:15px">${(ok ? icon("check",{size:17}) : icon("x",{size:17}))} ${ok ? twT("qzRight") : twT("qzWrong")}</div>
-      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${twZy(w.zy)}｜${w.py}）</div>
+      <div style="margin-top:8px">${twT("qzCorrectIs")}<b style="font-family:var(--serif);font-size:22px">${w.w}</b>（${twPhPair(w.zy, w.py, "｜")}）</div>
       <div style="font-size:14px;color:var(--tx2);margin-top:2px">${w.m[mk] || w.m.e || w.m.j}</div>
       <div style="margin-top:16px"><button class="btn primary" onclick="AR.aqNext()">${twT("quizNext")} ›</button></div></div>`;
   }
@@ -4185,6 +4865,14 @@ function twNormalizeContent(){
   if (!localStorage.getItem("stw_persona")) document.getElementById("personaBg").classList.add("show");
   if ("speechSynthesis" in window) speechSynthesis.onvoiceschanged = () => { TTS.refresh(); fillVoiceSel(); };
 })();
+</script>
+<script>
+// AI 會話(speak-chat)で今日の場数を使い切った時の行き先。付費牆とログインはこのページにしか無い
+(function(){ try{
+  var q=new URLSearchParams(location.search);
+  if(q.get("pw")==="aichat") setTimeout(function(){ try{ Paywall.show("aichat"); }catch(e){} }, 800);
+  if(q.get("login")==="1") setTimeout(function(){ try{ STW_WEB.login(); }catch(e){} }, 800);
+}catch(e){} })();
 </script>
 <script>try{fetch("/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname+(function(){try{var u=new URLSearchParams(location.search).get("utm_source");return u?"?utm_source="+u.replace(/[^\w-]/g,"").slice(0,40):""}catch(e){return ""}})(),ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
 <script>

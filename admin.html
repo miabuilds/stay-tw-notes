@@ -41,6 +41,15 @@ a{color:#2F5D7A}
 .fb-bot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .fb-btn{background:var(--ac);color:#fff;border:none;border-radius:8px;padding:8px 15px;font-size:13px;font-weight:600;cursor:pointer}
 .fb-btn.done{background:transparent;color:var(--ok);border:1px solid var(--line)}
+@media(max-width:640px){
+  .tbl{border:0;overflow:visible}
+  .tbl table,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%}
+  .tbl thead{display:none}
+  .tbl tr{border:1px solid var(--line);border-radius:12px;margin-bottom:8px;padding:8px 12px;background:var(--bg2)}
+  .tbl td{border:0;padding:3px 0;display:flex;gap:10px;word-break:break-all}
+  .tbl td::before{content:attr(data-l);flex:0 0 76px;color:var(--tx3);font-size:12px}
+  .fin-hero{grid-template-columns:1fr 1fr}
+}
 @media(max-width:640px){.wrap{padding:22px 13px 90px}.traf-grid{grid-template-columns:1fr!important}h1{font-size:21px}}
 .fb-chip{font-size:11px;font-weight:700;border-radius:999px;padding:2px 9px;margin-left:8px}
 .fb-chip.ok{background:rgba(63,125,83,.14);color:#3F7D53}
@@ -49,6 +58,24 @@ a{color:#2F5D7A}
 .fb-mini{font:inherit;font-size:12px;padding:5px 11px;border-radius:999px;border:1px solid rgba(0,0,0,.14);
  background:transparent;color:inherit;cursor:pointer;opacity:.8}
 .fb-mini:hover{opacity:1;border-color:currentColor}
+/* ── 財務分析 ── */
+.fin-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 14px}
+.fin-bar input[type=date],.fin-set input{border:1px solid var(--bd);background:var(--bg2);color:var(--tx);border-radius:8px;padding:6px 8px;font-size:13px}
+.fin-set{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--tx2);margin:0 0 14px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg2)}
+.fin-set input{width:64px;margin-left:4px}
+.fin-hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:14px}
+.fcard{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.fcard span{font-size:12px;color:var(--tx2)}.fcard b{font-family:var(--serif);font-size:24px;line-height:1.3}.fcard i{font-style:normal;font-size:11.5px;color:var(--tx3)}
+.fcard.hero{border-color:var(--ac);background:linear-gradient(0deg,rgba(184,54,42,.06),rgba(184,54,42,.06)),var(--bg2)}.fcard.hero b{color:var(--ac)}
+td.n,th.n{text-align:right;white-space:nowrap}td.bad,.bad{color:var(--ac)}td.muted{color:var(--tx3)}
+tr.tot td{font-weight:700;background:rgba(0,0,0,.03)}
+table.waterfall{max-width:420px;margin:14px 0 0 auto;border:1px solid var(--line)}
+.pad{padding:14px}
+.bar{display:block;height:8px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--ac)}
+.fin-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:720px){.fin-2{grid-template-columns:1fr}}
+.pill{display:inline-block;border:1px solid var(--line);background:var(--bg2);border-radius:999px;padding:3px 11px;font-size:12.5px;margin:0 6px 6px 0}
+.st{font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.st-0,.st-4{color:#fff;background:var(--ok)}.st-1{color:#fff;background:#B07A1F}.st-2{color:var(--ok);border:1px solid var(--ok)}.st-3{color:#B07A1F;border:1px solid #B07A1F}.st-5{color:var(--tx3);background:rgba(0,0,0,.05)}.st-6{color:#fff;background:var(--ac)}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -58,13 +85,47 @@ a{color:#2F5D7A}
     
     <h1>StayTW 後台</h1>
     <p class="muted">用 Google 帳號登入（僅限管理員）</p>
+    <p class="muted" style="font-size:13px;margin:0 0 14px">手機上 Google 按鈕沒反應的話：先到 <a href="/?app=1">StayTW</a> 用管理員帳號登入（Apple 或 Google 都可以），再回來這頁就會自動進後台。</p>
     <div id="gbtn" style="display:flex;justify-content:center;margin:18px 0"></div>
     <p class="muted" id="loginErr"></p>
   </div>
 
   <div id="dash" style="display:none">
-    <h1>StayTW 後台 <span class="muted" style="font-weight:400">iOS 收益（RevenueCat）＋使用者回饋</span></h1>
+    <h1>StayTW 後台 <span class="muted" style="font-weight:400">財務・使用者回饋・流量</span></h1>
     <div class="cards" id="cards"></div>
+
+    <h2>財務分析</h2>
+    <div id="finBox">
+      <div class="fin-bar">
+        <button class="fb-fbtn" data-finr="month" onclick="FIN.setRange('month')">本月</button>
+        <button class="fb-fbtn" data-finr="last" onclick="FIN.setRange('last')">上月</button>
+        <button class="fb-fbtn" data-finr="30" onclick="FIN.setRange('30')">近 30 天</button>
+        <button class="fb-fbtn" data-finr="year" onclick="FIN.setRange('year')">今年</button>
+        <button class="fb-fbtn" data-finr="all" onclick="FIN.setRange('all')">全部</button>
+        <input type="date" id="finFrom" onchange="FIN.custom()"> ～ <input type="date" id="finTo" onchange="FIN.custom()">
+      </div>
+      <div class="fin-set">
+        <label>匯率 USD→TWD<input type="number" id="finFx" value="31.6" step="0.1" oninput="FIN.render()"></label>
+        <label>Apple 抽成 %<input type="number" id="finApple" value="15" step="1" oninput="FIN.render()"></label>
+        <label>Google 抽成 %<input type="number" id="finGoogle" value="15" step="1" oninput="FIN.render()"></label>
+        <label>RevenueCat %<input type="number" id="finRc" value="1" step="0.5" oninput="FIN.render()"></label>
+        <label>綜所稅估算 %<input type="number" id="finTax" value="10" step="1" oninput="FIN.render()"></label>
+      </div>
+      <div class="fin-hero" id="finHero"></div>
+      <h3 style="font-size:14px;margin:6px 0">本期對帳</h3>
+      <div class="tbl" id="finRecon"></div>
+      <p class="muted" style="margin-top:6px">消費稅用 RevenueCat 給的稅率（日本內含 10% → 售價的 9.09%）；抽成算在扣稅後的金額上。實際撥款以 App Store Connect／Play Console 財報為準。</p>
+      <h3 style="font-size:14px;margin:18px 0 6px">每月趨勢（全期間）</h3>
+      <div class="tbl" id="finMonthly"></div>
+      <div class="fin-2" style="margin-top:16px">
+        <div><h3 style="font-size:14px;margin:0 0 6px">本期各方案</h3><div class="tbl" id="finByPlan"></div></div>
+        <div><h3 style="font-size:14px;margin:0 0 6px">本期各國家</h3><div class="tbl" id="finByCountry"></div></div>
+      </div>
+      <h3 style="font-size:14px;margin:18px 0 8px">訂閱狀態（即時）</h3>
+      <div id="finStatus"></div>
+      <input type="search" id="finSearch" placeholder="搜尋 方案 / 狀態 / 國家 / ID…" oninput="FIN.render()" style="width:100%;border:1px solid var(--bd);background:var(--bg2);color:var(--tx);border-radius:10px;padding:9px 12px;font-size:14px;margin:6px 0 10px">
+      <div class="tbl" id="finMembers"></div>
+    </div>
     <h2>使用者回饋 <span class="muted" id="fbUnreplied"></span></h2>
     <div class="fb-filter">
       <button class="fb-fbtn on" data-fbf="all" onclick="fbFilter('all')">全部</button>
@@ -79,10 +140,6 @@ a{color:#2F5D7A}
     </div>
     <div id="fbList"></div>
 
-    <h2>近 30 天收益（美金計）</h2>
-    <div class="tbl"><table id="daily"><thead><tr><th>日期</th><th>筆數</th><th>USD</th></tr></thead><tbody></tbody></table></div>
-    <h2>各商品累計</h2>
-    <div class="tbl"><table id="byproduct"><thead><tr><th>商品</th><th>筆數</th><th>USD</th></tr></thead><tbody></tbody></table></div>
     <h2>最近交易事件 <span class="muted">（灰色＝沙盒測試）</span></h2>
     <div class="tbl"><table id="events"><thead><tr><th>時間(UTC)</th><th>類型</th><th>商品</th><th>金額</th><th>幣別</th><th>國家</th></tr></thead><tbody></tbody></table></div>
     <h2>流量（Page Views）</h2>
@@ -107,6 +164,7 @@ a{color:#2F5D7A}
     <button class="btn" style="margin-top:14px" onclick="localStorage.removeItem('stw_admin_tok');location.reload()">登出</button>
   </div>
 </div>
+<script src="admin-finance.js?v=1"></script>
 <script>
 // 同源代理（pages.dev/api/* → Service Binding → Worker）。某些網路連不到 workers.dev、但 pages.dev 通。
 const API="";
@@ -141,7 +199,7 @@ function fbReply(id){
   fbMark(id,false);   // 開いたら「返信済み」に
 }
 async function fbMark(id,undo){
-  try{ await fetch(API+"/api/admin/feedback-reply",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+localStorage.getItem("stw_admin_tok")},body:JSON.stringify({id,undo})});
+  try{ await fetch(API+"/api/admin/feedback-reply",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+(localStorage.getItem("stw_admin_tok")||localStorage.getItem("stw_session")||"")},body:JSON.stringify({id,undo})});
     const f=FB_DATA.find(x=>x.id===id); if(f)f.replied_at=undo?null:new Date().toISOString().slice(0,19).replace("T"," "); renderFb();
   }catch(e){ alert("標記失敗:"+e.message); }
 }
@@ -153,7 +211,7 @@ function fbStatus(f){ return f.status || (f.replied_at ? "replied" : "new"); }
 async function fbSet(id, st){
   try{
     await fetch(API+"/api/admin/feedback-status",{method:"POST",
-      headers:{"Content-Type":"application/json",Authorization:"Bearer "+localStorage.getItem("stw_admin_tok")},
+      headers:{"Content-Type":"application/json",Authorization:"Bearer "+(localStorage.getItem("stw_admin_tok")||localStorage.getItem("stw_session")||"")},
       body:JSON.stringify({id,status:st})});
     const f=FB_DATA.find(x=>x.id===id);
     if(f){ f.status=st; f.replied_at = st==="replied" ? new Date().toISOString().slice(0,19).replace("T"," ") : null; }
@@ -208,12 +266,12 @@ function initGoogle(){
   google.accounts.id.renderButton(document.getElementById("gbtn"),{theme:"filled_black",size:"large",text:"signin_with",shape:"pill"});
 }
 async function api(path){
-  const r=await fetch(API+path,{headers:{Authorization:"Bearer "+localStorage.getItem("stw_admin_tok")}});
+  const r=await fetch(API+path,{headers:{Authorization:"Bearer "+(localStorage.getItem("stw_admin_tok")||localStorage.getItem("stw_session")||"")}});
   if(r.status===401) throw new Error("unauthorized");
   return r.json();
 }
 async function load(){
-  const tok=localStorage.getItem("stw_admin_tok");
+  const tok=(localStorage.getItem("stw_admin_tok")||localStorage.getItem("stw_session")||"");
   if(!tok) return;
   try{
     const [sum, events, fb, traf, subs, users]=await Promise.all([api("/api/admin/summary"),api("/api/admin/events"),api("/api/admin/feedback"),api("/api/admin/traffic"),api("/api/admin/subscribers"),api("/api/admin/users")]);
@@ -223,8 +281,7 @@ async function load(){
       <div class="card"><b>$${sum.revenue.usd??0}</b><span>累計收益（USD・正式）</span></div>
       <div class="card"><b>${sum.revenue.n??0}</b><span>累計交易筆數</span></div>
       <div class="card"><b>${sum.feedbackCount??0}</b><span>使用者回饋</span></div>`;
-    document.querySelector("#daily tbody").innerHTML=(sum.last30||[]).map(r=>`<tr><td>${esc(r.d)}</td><td>${r.n}</td><td>$${r.usd??0}</td></tr>`).join("")||"<tr><td colspan=3 class=muted>還沒有正式交易</td></tr>";
-    document.querySelector("#byproduct tbody").innerHTML=(sum.byProduct||[]).map(r=>`<tr><td>${esc(r.product_id)}</td><td>${r.n}</td><td>$${r.usd??0}</td></tr>`).join("")||"<tr><td colspan=3 class=muted>還沒有正式交易</td></tr>";
+    try { FIN.load(await api("/api/admin/finance")); } catch(e) { document.getElementById("finBox").innerHTML='<p class="muted">財務資料載入失敗：'+esc(e.message)+'</p>'; }
     document.querySelector("#events tbody").innerHTML=(events||[]).map(r=>`<tr class="${r.environment!=='PRODUCTION'?'sandbox':''}"><td>${esc(r.ts)}</td><td>${esc(r.event_type)}</td><td>${esc(r.product_id)}</td><td>${r.price_in_purchased_currency??r.price??""}</td><td>${esc(r.currency)}</td><td>${esc(r.country)}</td></tr>`).join("")||"<tr><td colspan=6 class=muted>還沒有事件（webhook 接上後會出現）</td></tr>";
     FB_DATA = fb || []; renderFb();
     const src=Object.fromEntries((traf.bySource||[]).map(r=>[r.source,r.n]));
@@ -243,12 +300,17 @@ async function load(){
   }catch(e){
     document.getElementById("loginErr").textContent = e.message==="unauthorized" ? "セッション切れ。もう一度ログインしてください。" : "載入失敗："+e.message;
     localStorage.removeItem("stw_admin_tok");
+    if(localStorage.getItem("stw_session")) document.getElementById("loginErr").textContent += "（目前登入的不是管理員帳號）";
     document.getElementById("login").style.display=""; document.getElementById("dash").style.display="none";
     initGoogle();
   }
 }
 (function(){const s=localStorage.getItem("stw-theme");if(s==="dark"||(!s&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.dataset.theme="dark";})();
-if(localStorage.getItem("stw_admin_tok")) load(); else initGoogle();
+// 手機卡片版：把表頭文字塞進每格的 data-l
+function labelTables(){document.querySelectorAll(".tbl table").forEach(t=>{const hs=[...t.querySelectorAll("thead th")].map(x=>x.textContent);t.querySelectorAll("tbody tr").forEach(tr=>[...tr.children].forEach((td,i)=>{if(hs[i]&&!td.hasAttribute("colspan"))td.setAttribute("data-l",hs[i])}))})}
+new MutationObserver(()=>labelTables()).observe(document.body,{childList:true,subtree:true});
+// 手機：主站（staytw.pages.dev）已用管理員帳號登入（Apple／Google 都行）就直接進，不用再按 Google 登入
+if((localStorage.getItem("stw_admin_tok")||localStorage.getItem("stw_session")||"")) load(); else initGoogle();
 </script>
 </body>
 </html>

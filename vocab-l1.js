@@ -169,8 +169,8 @@ const VOCAB_L1 = [
 {w:"手",py:"shǒu",zy:"ㄕㄡˇ",c:"名",m:{j:"手",e:"hand",k:"손"},ex:{z:"他的手很大。",py:"Tā de shǒu hěn dà.",j:"彼の手はとても大きいです。",e:"His hands are very big.",k:"그의 손은 아주 큽니다."}},
 {w:"腳",py:"jiǎo",zy:"ㄐㄧㄠˇ",c:"名",m:{j:"足・脚",e:"foot; leg",k:"발, 다리"},ex:{z:"走了一天，我的腳很痛。",py:"Zǒu le yì tiān, wǒ de jiǎo hěn tòng.",j:"一日中歩いて、足がとても痛いです。",e:"After walking all day, my feet really hurt.",k:"하루 종일 걸어서 발이 많이 아픕니다."}},
 {w:"眼睛",py:"yǎnjīng",zy:"ㄧㄢˇ ㄐㄧㄥ",c:"名",m:{j:"目",e:"eye",k:"눈"},ex:{z:"她的眼睛很漂亮。",py:"Tā de yǎnjīng hěn piàoliang.",j:"彼女の目はとてもきれいです。",e:"Her eyes are very pretty.",k:"그녀의 눈은 아주 예쁩니다."}},
-{w:"耳朵",py:"ěrduo",zy:"ㄦˇ ˙ㄉㄨㄛ",c:"名",m:{j:"耳",e:"ear",k:"귀"},ex:{z:"我的耳朵不太舒服。",py:"Wǒ de ěrduo bú tài shūfú.",j:"耳の調子があまり良くありません。",e:"My ear does not feel very well.",k:"귀가 좀 불편합니다."}},
-{w:"嘴巴",py:"zuǐbā",zy:"ㄗㄨㄟˇ ㄅㄚ",c:"名",m:{j:"口",e:"mouth",k:"입"},ex:{z:"醫生說：請打開嘴巴。",py:"Yīshēng shuō: qǐng dǎkāi zuǐbā.",j:"医者は「口を開けてください」と言いました。",e:"The doctor said: please open your mouth.",k:"의사가 말했습니다: 입을 벌려 주세요."}},
+{w:"耳朵",py:"ěrduo",zy:"ㄦˇ ˙ㄉㄨㄛ",c:"名",m:{j:"耳",e:"ear",k:"귀"},ex:{z:"我的耳朵不太舒服。",py:"Wǒ de ěrduo bú tài shūfu.",j:"耳の調子があまり良くありません。",e:"My ear does not feel very well.",k:"귀가 좀 불편합니다."}},
+{w:"嘴巴",py:"zuǐba",zy:"ㄗㄨㄟˇ ˙ㄅㄚ",c:"名",m:{j:"口",e:"mouth",k:"입"},ex:{z:"醫生說：請打開嘴巴。",py:"Yīshēng shuō: qǐng dǎkāi zuǐba.",j:"医者は「口を開けてください」と言いました。",e:"The doctor said: please open your mouth.",k:"의사가 말했습니다: 입을 벌려 주세요."}},
 // ── 動物 ──
 {w:"狗",py:"gǒu",zy:"ㄍㄡˇ",c:"名",m:{j:"犬",e:"dog",k:"개"},ex:{z:"我每天帶狗去公園。",py:"Wǒ měitiān dài gǒu qù gōngyuán.",j:"私は毎日犬を公園に連れて行きます。",e:"I take my dog to the park every day.",k:"저는 매일 개를 데리고 공원에 갑니다."}},
 {w:"貓",py:"māo",zy:"ㄇㄠ",c:"名",m:{j:"猫",e:"cat",k:"고양이"},ex:{z:"我家的貓很喜歡睡覺。",py:"Wǒ jiā de māo hěn xǐhuān shuìjiào.",j:"うちの猫は寝るのが大好きです。",e:"My cat loves sleeping.",k:"우리 집 고양이는 자는 것을 아주 좋아합니다."}},
@@ -198,7 +198,7 @@ const VOCAB_L1 = [
 {w:"大學",py:"dàxué",zy:"ㄉㄚˋ ㄒㄩㄝˊ",c:"名",m:{j:"大学",e:"university",k:"대학교"},ex:{z:"他在大學學中文。",py:"Tā zài dàxué xué Zhōngwén.",j:"彼は大学で中国語を勉強しています。",e:"He studies Chinese at university.",k:"그는 대학에서 중국어를 공부합니다."}},
 // ── 日常の物 ──
 {w:"桌子",py:"zhuōzi",zy:"ㄓㄨㄛ ˙ㄗ",c:"名",m:{j:"机・テーブル",e:"table; desk",k:"책상, 테이블"},ex:{z:"桌子上有一杯茶。",py:"Zhuōzi shàng yǒu yì bēi chá.",j:"テーブルの上にお茶が一杯あります。",e:"There is a cup of tea on the table.",k:"테이블 위에 차가 한 잔 있습니다."}},
-{w:"椅子",py:"yǐzi",zy:"ㄧˇ ˙ㄗ",c:"名",m:{j:"椅子",e:"chair",k:"의자"},ex:{z:"這張椅子很舒服。",py:"Zhè zhāng yǐzi hěn shūfú.",j:"この椅子はとても座り心地がいいです。",e:"This chair is very comfortable.",k:"이 의자는 아주 편합니다."}},
+{w:"椅子",py:"yǐzi",zy:"ㄧˇ ˙ㄗ",c:"名",m:{j:"椅子",e:"chair",k:"의자"},ex:{z:"這張椅子很舒服。",py:"Zhè zhāng yǐzi hěn shūfu.",j:"この椅子はとても座り心地がいいです。",e:"This chair is very comfortable.",k:"이 의자는 아주 편합니다."}},
 {w:"床",py:"chuáng",zy:"ㄔㄨㄤˊ",c:"名",m:{j:"ベッド",e:"bed",k:"침대"},ex:{z:"我的房間有一張床。",py:"Wǒ de fángjiān yǒu yì zhāng chuáng.",j:"私の部屋にはベッドが一つあります。",e:"There is a bed in my room.",k:"제 방에는 침대가 하나 있습니다."}},
 {w:"門",py:"mén",zy:"ㄇㄣˊ",c:"名",m:{j:"ドア・門",e:"door; gate",k:"문"},ex:{z:"請關門，謝謝。",py:"Qǐng guān mén, xièxie.",j:"ドアを閉めてください。",e:"Please close the door, thank you.",k:"문을 닫아 주세요, 감사합니다."}},
 {w:"窗戶",py:"chuānghù",zy:"ㄔㄨㄤ ㄏㄨˋ",c:"名",m:{j:"窓",e:"window",k:"창문"},ex:{z:"房間的窗戶很大。",py:"Fángjiān de chuānghù hěn dà.",j:"部屋の窓はとても大きいです。",e:"The window in the room is very big.",k:"방의 창문이 아주 큽니다."}},
@@ -280,7 +280,7 @@ const VOCAB_L1 = [
 {w:"分鐘",py:"fēnzhōng",zy:"ㄈㄣ ㄓㄨㄥ",c:"量",m:{j:"〜分間",e:"minute",k:"~분"},ex:{z:"從我家到車站要十分鐘。",py:"Cóng wǒ jiā dào chēzhàn yào shí fēnzhōng.",j:"家から駅まで10分かかります。",e:"It takes ten minutes from my home to the station.",k:"우리 집에서 역까지 10분 걸립니다."}},
 {w:"臉",py:"liǎn",zy:"ㄌㄧㄢˇ",c:"名",m:{j:"顔",e:"face",k:"얼굴"},ex:{z:"我每天早上洗臉。",py:"Wǒ měitiān zǎoshang xǐ liǎn.",j:"私は毎朝顔を洗います。",e:"I wash my face every morning.",k:"저는 매일 아침 세수를 합니다."}},
 {w:"裙子",py:"qúnzi",zy:"ㄑㄩㄣˊ ˙ㄗ",c:"名",m:{j:"スカート",e:"skirt",k:"치마"},ex:{z:"她今天穿白色的裙子。",py:"Tā jīntiān chuān báisè de qúnzi.",j:"彼女は今日、白いスカートをはいています。",e:"She is wearing a white skirt today.",k:"그녀는 오늘 흰색 치마를 입고 있습니다."}},
-{w:"鼻子",py:"bízi",zy:"ㄅㄧˊ ˙ㄗ",c:"名",m:{j:"鼻",e:"nose",k:"코"},ex:{z:"感冒了，鼻子不舒服。",py:"Gǎnmào le, bízi bù shūfú.",j:"風邪をひいて、鼻の調子が悪いです。",e:"I have a cold and my nose feels uncomfortable.",k:"감기에 걸려서 코가 불편합니다."}},
+{w:"鼻子",py:"bízi",zy:"ㄅㄧˊ ˙ㄗ",c:"名",m:{j:"鼻",e:"nose",k:"코"},ex:{z:"感冒了，鼻子不舒服。",py:"Gǎnmào le, bízi bù shūfu.",j:"風邪をひいて、鼻の調子が悪いです。",e:"I have a cold and my nose feels uncomfortable.",k:"감기에 걸려서 코가 불편합니다."}},
 {w:"頭髮",py:"tóufǎ",zy:"ㄊㄡˊ ㄈㄚˇ",c:"名",m:{j:"髪の毛",e:"hair",k:"머리카락"},ex:{z:"她的頭髮很長。",py:"Tā de tóufǎ hěn cháng.",j:"彼女の髪はとても長いです。",e:"Her hair is very long.",k:"그녀의 머리카락은 아주 깁니다."}},
 // ── 自然（第二輪追加） ──
 {w:"太陽",py:"tàiyáng",zy:"ㄊㄞˋ ㄧㄤˊ",c:"名",m:{j:"太陽",e:"sun",k:"태양, 해"},ex:{z:"太陽出來了。",py:"Tàiyáng chūlái le.",j:"太陽が出てきました。",e:"The sun has come out.",k:"해가 나왔습니다."}},

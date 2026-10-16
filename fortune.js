@@ -174,7 +174,7 @@ const Fortune = (() => {
       ? `<button class="fo-word" onclick="Fortune.speak()">
            <span class="fo-wl">${esc(T("foLucky", "今日の幸運字"))}</span>
            <b>${esc(f.word.w)}</b>
-           <span class="fo-wz">${zy(f.word.zy)}　${esc(f.word.py)}</span>
+           <span class="fo-wz">${typeof twPhPair === "function" ? twPhPair(f.word.zy, f.word.py, "　") : zy(f.word.zy) + "　" + esc(f.word.py)}</span>
            <span class="fo-wm">${esc((f.word.m && (f.word.m[mk()] || f.word.m.e || f.word.m.j)) || "")}</span>
            <svg viewBox="0 0 24 24" class="ic fo-wp"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg>
          </button>` : "";
@@ -189,8 +189,8 @@ const Fortune = (() => {
         <div class="fo-seal">平安</div>
       </div>
       <div class="fo-rows">
-        <div class="fo-row"><span class="fo-tag yi">宜</span><div class="fo-rt"><b>${esc(f.yi.z)}</b><span class="fo-zy">${zy(f.yi.zy)}</span><span class="fo-m">${esc(tr(f.yi))}</span></div></div>
-        <div class="fo-row"><span class="fo-tag ji">忌</span><div class="fo-rt"><b>${esc(f.ji.z)}</b><span class="fo-zy">${zy(f.ji.zy)}</span><span class="fo-m">${esc(tr(f.ji))}</span></div></div>
+        <div class="fo-row"><span class="fo-tag yi">宜</span><div class="fo-rt"><b>${esc(f.yi.z)}</b><span class="fo-zy">${typeof twPh === "function" ? twPh(f.yi.zy, f.yi.py) : zy(f.yi.zy)}</span><span class="fo-m">${esc(tr(f.yi))}</span></div></div>
+        <div class="fo-row"><span class="fo-tag ji">忌</span><div class="fo-rt"><b>${esc(f.ji.z)}</b><span class="fo-zy">${typeof twPh === "function" ? twPh(f.ji.zy, f.ji.py) : zy(f.ji.zy)}</span><span class="fo-m">${esc(tr(f.ji))}</span></div></div>
       </div>
       ${w}
     </div>`;

@@ -58,7 +58,7 @@
       ".ls-wrap{max-width:560px;margin:0 auto;padding:14px 16px calc(28px + env(safe-area-inset-bottom,0px))}",
       ".ls-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}",
       ".ls-top .tt{font-weight:800;font-size:17px;flex:1}",
-      ".ls-x{border:none;background:none;font-size:24px;color:var(--tx2);cursor:pointer;line-height:1;padding:4px 6px}",
+      ".ls-x{border:none;background:none;font-size:34px;color:var(--tx2);cursor:pointer;line-height:1;padding:4px 6px}",
       ".ls-lead{font-size:13px;color:var(--tx2);line-height:1.65}",
       ".ls-sec{font-size:12px;font-weight:800;color:var(--tx2);letter-spacing:.06em;margin:16px 0 7px}",
       ".ls-seg{display:flex;flex-wrap:wrap;gap:6px}",
@@ -147,7 +147,7 @@
       + '<div class="ls-card">'
         + '<div class="ls-lv">' + esc("L" + v.level.slice(1) + " " + lvName) + "</div>"
         + '<div class="ls-w">' + esc(v.w) + "</div>"
-        + (v.zy ? '<div class="ls-zy">' + esc(v.zy) + "</div>" : "")
+        + (v.zy ? '<div class="ls-zy">' + esc(typeof twPyOnly === "function" && twPyOnly() ? (v.py || v.zy) : v.zy) + "</div>" : "")
         + (v.py ? '<div class="ls-py">' + esc(v.py) + "</div>" : "")
         + '<div class="ls-m' + (opts.meaning ? "" : " hid") + '" id="lsM">' + esc(mean(v)) + "</div>"
         + (opts.ex && v.ex && v.ex.z ? '<div class="ls-ex' + (exOn ? " on" : "") + '" id="lsEx"><div class="z">' + esc(v.ex.z) + '</div><div class="t">' + esc(exMean(v)) + "</div></div>" : "")
@@ -248,7 +248,7 @@
     stop(); releaseWake();
     const m = mask(); if (!m) return;
     m.innerHTML = '<div class="ls-wrap"><div class="ls-top"><span class="tt">' + icon("headphones",{size:17}) + ' ' + esc(T("lsTitle")) + '</span><button class="ls-x" onclick="Listen.close()">×</button></div>'
-      + '<div class="ls-done"><img src="images/bear.svg" alt=""><h3>' + esc(T("lsDone")) + "</h3><p>" + esc(T("lsDoneSub").replace("{n}", list.length)) + "</p></div>"
+      + '<div class="ls-done"><img src="images/il/08_listening.webp" alt=""><h3>' + esc(T("lsDone")) + "</h3><p>" + esc(T("lsDoneSub").replace("{n}", list.length)) + "</p></div>"
       + '<button class="ls-start" onclick="Listen.start()">▶ ' + esc(T("lsAgain")) + "</button>"
       + '<button class="ls-start ls-ghost" onclick="Listen.back()">' + esc(T("lsSettings")) + "</button></div>";
   }

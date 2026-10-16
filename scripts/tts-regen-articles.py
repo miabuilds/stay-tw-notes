@@ -136,7 +136,8 @@ def main():
     def work(z, parts):
         fn = hashlib.md5(z.encode()).hexdigest()[:12] + "gp.mp3"; path = os.path.join(OUT, fn)
         if not FORCE and os.path.exists(path) and os.path.getsize(path) > 500:
-            with lock: res[z] = fn; skip[0] += 1
+            # manifest の ?v=N(キャッシュ破り)は残す
+            with lock: res[z] = manifest[z] if str(manifest.get(z, "")).split("?")[0] == fn else fn; skip[0] += 1
             return
         # Google は input.ssml 5000 bytes 上限(逐字 <phoneme> だと 1 字 ≒ 45 bytes → 段落は軽く超える)
         # → 句読点で 4,300 bytes 以下のチャンクに割って合成し、ffmpeg で連結(同一エンコード設定なので -c copy)

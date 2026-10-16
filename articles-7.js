@@ -23,7 +23,7 @@ const ARTICLES_7 = [
     },
     {
       z:"到了十七世紀，台灣開始出現在世界地圖上。荷蘭人與西班牙人先後來到南部與北部，建立據點、做貿易，這段被稱為「荷西時期」。荷蘭人在今天的台南一帶蓋了城堡，引進甘蔗、稻米的種植，也招募了不少來自對岸的漢人移民來開墾。雖然這段外來政權的統治時間不算長，卻讓台灣正式進入了海洋貿易的大時代。",
-      py:"Dàole shíqī shìjì, Táiwān kāishǐ chūxiàn zài shìjiè dìtú shàng. Hélánrén yǔ Xībānyárén xiānhòu láidào nánbù yǔ běibù, jiànlì jùdiǎn, zuò màoyì, zhè duàn bèi chēngwéi “Hé-Xī shíqī”. Hélánrén zài jīntiān de Táinán yídài gàile chéngbǎo, yǐnjìn gānzhè, dàomǐ de zhòngzhí, yě zhāomùle bùshǎo láizì duì'àn de Hànrén yímín lái kāikěn. Suīrán zhè duàn wàilái zhèngquán de tǒngzhì shíjiān bú suàn cháng, què ràng Táiwān zhèngshì jìnrùle hǎiyáng màoyì de dà shídài.",
+      py:"Dàole shíqī shìjì, Táiwān kāishǐ chūxiàn zài shìjiè dìtú shàng. Hélánrén yǔ Xībānyárén xiānhòu láidào nánbù yǔ běibù, jiànlì jùdiǎn, zuò màoyì, zhè duàn bèi chēngwéi “Hé-Xī shíqí”. Hélánrén zài jīntiān de Táinán yídài gàile chéngbǎo, yǐnjìn gānzhè, dàomǐ de zhòngzhí, yě zhāomùle bùshǎo láizì duì'àn de Hànrén yímín lái kāikěn. Suīrán zhè duàn wàilái zhèngquán de tǒngzhì shíjiān bú suàn cháng, què ràng Táiwān zhèngshì jìnrùle hǎiyáng màoyì de dà shídài.",
       m:{
         j:"十七世紀になると、台湾は世界地図に現れ始めます。オランダ人とスペイン人が相前後して南部と北部にやってきて拠点を築き、交易を行いました。この時代は「オランダ・スペイン期（荷西時期）」と呼ばれます。オランダ人は今日の台南あたりに城塞を築き、サトウキビや稲の栽培を持ち込み、対岸から多くの漢人移民を募って開墾させました。この外来政権の統治期間はさほど長くありませんでしたが、台湾を正式に海洋貿易の大時代へと導いたのです。",
         e:"By the seventeenth century, Taiwan began to appear on world maps. The Dutch and the Spanish arrived, in the south and north respectively, setting up outposts and trading—a period known as the Dutch–Spanish era. The Dutch built a fort around present-day Tainan, introduced sugarcane and rice cultivation, and recruited many Han migrants from across the strait to open up farmland. Though this foreign rule didn't last very long, it formally ushered Taiwan into the great age of maritime trade.",
@@ -70,13 +70,13 @@ const ARTICLES_7 = [
   vocab:[
     { w:"原住民族", zy:"ㄩㄢˊ ㄓㄨˋ ㄇㄧㄣˊ ㄗㄨˊ", py:"yuánzhùmínzú", m:{ j:"原住民族（先住民）", e:"Indigenous peoples", k:"원주민족" } },
     { w:"南島語系", zy:"ㄋㄢˊ ㄉㄠˇ ㄩˇ ㄒㄧˋ", py:"Nándǎo yǔxì", m:{ j:"オーストロネシア（南島）語族", e:"Austronesian language family", k:"오스트로네시아(남도)어족" } },
-    { w:"荷西時期", zy:"ㄏㄜˊ ㄒㄧ ㄕˊ ㄑㄧ", py:"Hé-Xī shíqī", m:{ j:"オランダ・スペイン統治期", e:"the Dutch–Spanish period", k:"네덜란드·스페인 시기" } },
+    { w:"荷西時期", zy:"ㄏㄜˊ ㄒㄧ ㄕˊ ㄑㄧˊ", py:"Hé-Xī shíqí", m:{ j:"オランダ・スペイン統治期", e:"the Dutch–Spanish period", k:"네덜란드·스페인 시기" } },
     { w:"貿易", zy:"ㄇㄠˋ ㄧˋ", py:"màoyì", m:{ j:"貿易・交易", e:"trade", k:"무역" } },
     { w:"移民", zy:"ㄧˊ ㄇㄧㄣˊ", py:"yímín", m:{ j:"移民", e:"immigrant, migration", k:"이민(자)" } },
     { w:"開墾", zy:"ㄎㄞ ㄎㄣˇ", py:"kāikěn", m:{ j:"開墾・土地を切り開く", e:"to reclaim/cultivate land", k:"개간" } },
     { w:"閩南語", zy:"ㄇㄧㄣˇ ㄋㄢˊ ㄩˇ", py:"Mǐnnányǔ", m:{ j:"閩南語（台湾語のもとになった言語）", e:"Hokkien (Southern Min)", k:"민남어" } },
     { w:"客家語", zy:"ㄎㄜˋ ㄐㄧㄚ ㄩˇ", py:"Kèjiāyǔ", m:{ j:"客家語", e:"Hakka language", k:"객가어" } },
-    { w:"日治時期", zy:"ㄖˋ ㄓˋ ㄕˊ ㄑㄧ", py:"Rìzhì shíqī", m:{ j:"日本統治時代", e:"Japanese colonial period", k:"일본 통치 시대" } },
+    { w:"日治時期", zy:"ㄖˋ ㄓˋ ㄕˊ ㄑㄧˊ", py:"Rìzhì shíqí", m:{ j:"日本統治時代", e:"Japanese colonial period", k:"일본 통치 시대" } },
     { w:"基礎建設", zy:"ㄐㄧ ㄔㄨˇ ㄐㄧㄢˋ ㄕㄜˋ", py:"jīchǔ jiànshè", m:{ j:"インフラ・基盤整備", e:"infrastructure", k:"기반 시설" } },
     { w:"民主化", zy:"ㄇㄧㄣˊ ㄓㄨˇ ㄏㄨㄚˋ", py:"mínzhǔhuà", m:{ j:"民主化", e:"democratization", k:"민주화" } },
     { w:"多元", zy:"ㄉㄨㄛ ㄩㄢˊ", py:"duōyuán", m:{ j:"多元的・多様", e:"diverse, pluralistic", k:"다원·다양" } }
@@ -100,7 +100,7 @@ const ARTICLES_7 = [
   paras:[
     {
       z:"說到台北的老街，很多人第一個想到的是「大稻埕」。這裡從十九世紀就是重要的商業中心，靠著淡水河的碼頭，做起茶葉、南北貨和布料的生意。走進「迪化街」，兩旁一整排的老屋，有的是閩南式的紅磚店面，有的是帶著巴洛克花紋的洋樓。今天這裡除了老字號的中藥行、乾貨店，也進駐了不少文創小店和咖啡館，新舊交錯，特別有味道。",
-      py:"Shuōdào Táiběi de lǎojiē, hěnduō rén dì yī ge xiǎngdào de shì “Dàdàochéng”. Zhèlǐ cóng shíjiǔ shìjì jiùshì zhòngyào de shāngyè zhōngxīn, kàozhe Dànshuǐ Hé de mǎtóu, zuòqǐ cháyè, nánběihuò hé bùliào de shēngyì. Zǒujìn “Díhuà Jiē”, liǎngpáng yìzhěngpái de lǎo wū, yǒude shì Mǐnnán shì de hóngzhuān diànmiàn, yǒude shì dàizhe Bāluòkè huāwén de yánglóu. Jīntiān zhèlǐ chúle lǎozìhào de zhōngyào háng, gānhuò diàn, yě jìnzhùle bùshǎo wénchuàng xiǎodiàn hé kāfēiguǎn, xīnjiù jiāocuò, tèbié yǒu wèidào.",
+      py:"Shuōdào Táiběi de lǎojiē, hěnduō rén dì yī ge xiǎngdào de shì “Dàdàochéng”. Zhèlǐ cóng shíjiǔ shìjì jiùshì zhòngyào de shāngyè zhōngxīn, kàozhe Dànshuǐ Hé de mǎtou, zuòqǐ cháyè, nánběihuò hé bùliào de shēngyì. Zǒujìn “Díhuà Jiē”, liǎngpáng yìzhěngpái de lǎo wū, yǒude shì Mǐnnán shì de hóngzhuān diànmiàn, yǒude shì dàizhe Bāluòkè huāwén de yánglóu. Jīntiān zhèlǐ chúle lǎozìhào de zhōngyào háng, gānhuò diàn, yě jìnzhùle bùshǎo wénchuàng xiǎodiàn hé kāfēiguǎn, xīnjiù jiāocuò, tèbié yǒu wèidào.",
       m:{
         j:"台北の老街といえば、多くの人がまず思い浮かべるのが「大稻埕（ダーダオチェン）」です。ここは十九世紀から重要な商業の中心地で、淡水河の埠頭を頼りに、茶葉や乾物、布地の商いで栄えました。「迪化街」に入ると、両側にずらりと並ぶ古い店構えは、閩南式の赤レンガの店もあれば、バロック風の装飾をまとった洋館もあります。今日ここには、老舗の漢方薬屋や乾物屋のほか、多くのクリエイティブな小さな店やカフェも入り、新旧が入り交じって独特の趣があります。",
         e:"When it comes to old streets in Taipei, the first one many people think of is Dadaocheng. This has been an important commercial hub since the nineteenth century, thriving on trade in tea, dry goods, and fabric thanks to the wharves along the Tamsui River. Step into Dihua Street and the rows of old buildings on both sides include Hokkien-style red-brick shopfronts and Western-style houses decorated with Baroque flourishes. Today, alongside long-established herbal-medicine and dry-goods shops, many creative boutiques and cafés have moved in—old and new interlacing with a special charm.",
@@ -118,7 +118,7 @@ const ARTICLES_7 = [
     },
     {
       z:"北部山區的「九份」，則是另一種截然不同的風情。九份原本是採金礦的山城，隨著礦業沒落一度沉寂，後來因為電影和旅遊重新熱鬧起來。沿著石階往上走，兩旁是層層疊疊、依山而建的老房子，紅燈籠一路掛到山頂。傍晚時分，海霧從山下漫上來，燈火在霧裡透著暖光，那種山海交界的氣氛，讓九份成了許多人心中最難忘的台灣風景。",
-      py:"Běibù shānqū de “Jiǔfèn”, zé shì lìng yì zhǒng jiérán bùtóng de fēngqíng. Jiǔfèn yuánběn shì cǎi jīnkuàng de shānchéng, suízhe kuàngyè mòluò yídù chénjì, hòulái yīnwèi diànyǐng hé lǚyóu chóngxīn rènào qǐlái. Yánzhe shíjiē wǎngshàng zǒu, liǎngpáng shì céngcéng diédié, yīshān ér jiàn de lǎo fángzi, hóng dēnglóng yílù guà dào shāndǐng. Bàngwǎn shífēn, hǎiwù cóng shānxià màn shànglái, dēnghuǒ zài wù lǐ tòuzhe nuǎnguāng, nà zhǒng shānhǎi jiāojiè de qìfēn, ràng Jiǔfèn chéngle xǔduō rén xīnzhōng zuì nánwàng de Táiwān fēngjǐng.",
+      py:"Běibù shānqū de “Jiǔfèn”, zé shì lìng yì zhǒng jiérán bùtóng de fēngqíng. Jiǔfèn yuánběn shì cǎi jīnkuàng de shānchéng, suízhe kuàngyè mòluò yídù chénjí, hòulái yīnwèi diànyǐng hé lǚyóu chóngxīn rènào qǐlái. Yánzhe shíjiē wǎngshàng zǒu, liǎngpáng shì céngcéng diédié, yīshān ér jiàn de lǎo fángzi, hóng dēnglóng yílù guà dào shāndǐng. Bāngwǎn shífèn, hǎiwù cóng shānxià màn shànglái, dēnghuǒ zài wù lǐ tòuzhe nuǎnguāng, nà zhǒng shānhǎi jiāojiè de qìfēn, ràng Jiǔfèn chéngle xǔduō rén xīnzhōng zuì nánwàng de Táiwān fēngjǐng.",
       m:{
         j:"北部の山あいにある「九份（ジォウフェン）」は、まったく違った趣です。九份はもともと金鉱を採掘する山の町で、鉱業の衰退とともに一時は静まり返りましたが、後に映画や観光をきっかけに再びにぎわいを取り戻しました。石段を上へ登っていくと、両側には山肌に沿って幾重にも積み重なる古い家々があり、赤い提灯が山頂まで連なります。夕暮れどき、海霧が麓から立ちのぼり、灯りが霧の中で暖かく透けて見える——その山と海が出会う雰囲気が、九份を多くの人の心に残る台湾の風景にしています。",
         e:"Jiufen, in the mountains of the north, has a completely different feel. Originally a gold-mining mountain town, Jiufen fell quiet for a time as mining declined, then came alive again thanks to film and tourism. Climb the stone steps and on both sides are old houses stacked layer upon layer against the hillside, with red lanterns strung all the way to the top. At dusk, sea mist drifts up from below and the lights glow warmly through the fog—that atmosphere where mountain meets sea has made Jiufen one of the most unforgettable Taiwanese scenes in many people's hearts.",
@@ -156,7 +156,7 @@ const ARTICLES_7 = [
   vocab:[
     { w:"老街", zy:"ㄌㄠˇ ㄐㄧㄝ", py:"lǎojiē", m:{ j:"古い商店街・オールドストリート", e:"old street", k:"옛 거리" } },
     { w:"古蹟", zy:"ㄍㄨˇ ㄐㄧ", py:"gǔjī", m:{ j:"古跡・史跡", e:"historic site, heritage site", k:"고적·유적" } },
-    { w:"碼頭", zy:"ㄇㄚˇ ㄊㄡˊ", py:"mǎtóu", m:{ j:"埠頭・波止場", e:"wharf, dock", k:"부두·선착장" } },
+    { w:"碼頭", zy:"ㄇㄚˇ ˙ㄊㄡ", py:"mǎtou", m:{ j:"埠頭・波止場", e:"wharf, dock", k:"부두·선착장" } },
     { w:"紅磚", zy:"ㄏㄨㄥˊ ㄓㄨㄢ", py:"hóngzhuān", m:{ j:"赤レンガ", e:"red brick", k:"붉은 벽돌" } },
     { w:"洋樓", zy:"ㄧㄤˊ ㄌㄡˊ", py:"yánglóu", m:{ j:"洋館・西洋風の建物", e:"Western-style building", k:"양옥·서양식 건물" } },
     { w:"文創", zy:"ㄨㄣˊ ㄔㄨㄤˋ", py:"wénchuàng", m:{ j:"文化クリエイティブ（文化創意の略）", e:"cultural-creative (industry)", k:"문화창작" } },
@@ -222,7 +222,7 @@ const ARTICLES_7 = [
     },
     {
       z:"為什麼一個不算大的地方，能出這麼多「台灣之光」？其中一個原因，或許是台灣人身上那股「不服輸」和「肯拚」的精神。資源有限，市場也不大，很多人只好把眼光放到全世界，用更用功、更靈活的方式去闖。無論是拍電影、做麵包、打球，還是做晶片，背後往往都有一段長時間默默努力、跌倒又爬起來的故事。",
-      py:"Wèishénme yí ge bú suàn dà de dìfāng, néng chū zhème duō “Táiwān zhī guāng”? Qízhōng yí ge yuányīn, huòxǔ shì Táiwānrén shēnshàng nà gǔ “bù fúshū” hé “kěn pīn” de jīngshén. Zīyuán yǒuxiàn, shìchǎng yě bú dà, hěnduō rén zhǐhǎo bǎ yǎnguāng fàngdào quán shìjiè, yòng gèng yònggōng, gèng línghuó de fāngshì qù chuǎng. Wúlùn shì pāi diànyǐng, zuò miànbāo, dǎqiú, háishì zuò jīngpiàn, bèihòu wǎngwǎng dōu yǒu yí duàn cháng shíjiān mòmò nǔlì, diēdǎo yòu páqǐlái de gùshì.",
+      py:"Wèishénme yí ge bú suàn dà de dìfāng, néng chū zhème duō “Táiwān zhī guāng”? Qízhōng yí ge yuányīn, huòxǔ shì Táiwānrén shēnshàng nà gǔ “bù fúshū” hé “kěn pīn” de jīngshén. Zīyuán yǒuxiàn, shìchǎng yě bú dà, hěnduō rén zhǐhǎo bǎ yǎnguāng fàngdào quán shìjiè, yòng gèng yònggōng, gèng línghuó de fāngshì qù chuǎng. Wúlùn shì pāi diànyǐng, zuò miànbāo, dǎqiú, háishì zuò jīngpiàn, bèihòu wǎngwǎng dōu yǒu yí duàn cháng shíjiān mòmò nǔlì, diédǎo yòu páqǐlái de gùshì.",
       m:{
         j:"なぜ、それほど大きくない土地から、これほど多くの「台湾の光」が生まれるのでしょう。理由の一つはおそらく、台湾の人が持つあの「負けず嫌い」で「頑張り屋」な精神です。資源は限られ、市場も大きくないからこそ、多くの人は視線を世界全体に向け、より勤勉に、より柔軟なやり方で挑んでいきます。映画を撮るのも、パンを作るのも、球を打つのも、チップを作るのも、その裏にはたいてい、長い時間をかけて黙々と努力し、転んでもまた立ち上がってきた物語があるのです。",
         e:"Why can a place that isn't very big produce so many 'prides of Taiwan'? One reason may be that spirit of 'refusing to lose' and 'willing to grind' that runs through the Taiwanese. With limited resources and a market that isn't large, many people have no choice but to set their sights on the whole world and strike out with harder work and greater flexibility. Whether making films, baking bread, playing ball, or making chips, behind it there is usually a long story of quiet effort—of falling down and getting back up again.",
@@ -231,7 +231,7 @@ const ARTICLES_7 = [
     },
     {
       z:"「台灣之光」這個詞，其實不只屬於那些站在鎂光燈下的人。在世界各地默默打拚的留學生、廚師、工程師、運動員，還有在自己崗位上認真過生活的每一個台灣人，某種程度上都是這道光的一部分。它代表的，是一種即使身處小小的島嶼，也願意抬起頭、努力發光、讓世界看見自己的心意。這份心意，或許正是台灣最動人的力量。",
-      py:"“Táiwān zhī guāng” zhège cí, qíshí bùzhǐ shǔyú nàxiē zhànzài méiguāngdēng xià de rén. Zài shìjiè gèdì mòmò dǎpīn de liúxuéshēng, chúshī, gōngchéngshī, yùndòngyuán, háiyǒu zài zìjǐ gǎngwèi shàng rènzhēn guò shēnghuó de měi yí ge Táiwānrén, mǒuzhǒng chéngdù shàng dōu shì zhè dào guāng de yíbùfèn. Tā dàibiǎo de, shì yì zhǒng jíshǐ shēnchǔ xiǎoxiǎo de dǎoyǔ, yě yuànyì táiqǐ tóu, nǔlì fāguāng, ràng shìjiè kànjiàn zìjǐ de xīnyì. Zhè fèn xīnyì, huòxǔ zhèngshì Táiwān zuì dòngrén de lìliàng.",
+      py:"“Táiwān zhī guāng” zhège cí, qíshí bùzhǐ shǔyú nàxiē zhànzài méiguāngdēng xià de rén. Zài shìjiè gèdì mòmò dǎpàn de liúxuéshēng, chúshī, gōngchéngshī, yùndòngyuán, háiyǒu zài zìjǐ gǎngwèi shàng rènzhēn guò shēnghuó de měi yí ge Táiwānrén, mǒuzhǒng chéngdù shàng dōu shì zhè dào guāng de yíbùfèn. Tā dàibiǎo de, shì yì zhǒng jíshǐ shēnchǔ xiǎoxiǎo de dǎoyǔ, yě yuànyì táiqǐ tóu, nǔlì fāguāng, ràng shìjiè kànjiàn zìjǐ de xīnyì. Zhè fèn xīnyì, huòxǔ zhèngshì Táiwān zuì dòngrén de lìliàng.",
       m:{
         j:"「台湾の光」という言葉は、実はスポットライトの下に立つ人だけのものではありません。世界各地で黙々と奮闘する留学生、料理人、エンジニア、スポーツ選手、そして自分の持ち場でまじめに生きる一人ひとりの台湾人も、ある意味この光の一部です。それが表しているのは、小さな島に身を置いていても、顔を上げ、努力して輝き、世界に自分を見てもらおうとする心——その思いです。この思いこそ、もしかすると台湾のもっとも人を打つ力なのかもしれません。",
         e:"The phrase 'the pride of Taiwan' actually doesn't belong only to those standing in the spotlight. The students, chefs, engineers, and athletes quietly striving all over the world, and every Taiwanese who lives earnestly at their own post, are in a sense part of this light too. What it represents is a spirit that, even on a small island, is willing to lift its head, work to shine, and let the world see who it is. That spirit may be the most moving strength Taiwan has.",
@@ -243,7 +243,7 @@ const ARTICLES_7 = [
     { w:"台灣之光", zy:"ㄊㄞˊ ㄨㄢ ㄓ ㄍㄨㄤ", py:"Táiwān zhī guāng", m:{ j:"台湾の光（台湾の誇りとなる人・こと）", e:"'the pride of Taiwan'", k:"대만의 빛(대만의 자랑)" } },
     { w:"導演", zy:"ㄉㄠˇ ㄧㄢˇ", py:"dǎoyǎn", m:{ j:"（映画などの）監督", e:"(film) director", k:"감독" } },
     { w:"享譽國際", zy:"ㄒㄧㄤˇ ㄩˋ ㄍㄨㄛˊ ㄐㄧˋ", py:"xiǎngyù guójì", m:{ j:"国際的に名声を得る", e:"to be internationally renowned", k:"국제적으로 명성을 얻다" } },
-    { w:"麵包師傅", zy:"ㄇㄧㄢˋ ㄅㄠ ㄕ ㄈㄨ˙", py:"miànbāo shīfù", m:{ j:"パン職人", e:"baker", k:"제빵사" } },
+    { w:"麵包師傅", zy:"ㄇㄧㄢˋ ㄅㄠ ㄕ ㄈㄨˋ", py:"miànbāo shīfù", m:{ j:"パン職人", e:"baker", k:"제빵사" } },
     { w:"學徒", zy:"ㄒㄩㄝˊ ㄊㄨˊ", py:"xuétú", m:{ j:"見習い・弟子", e:"apprentice", k:"견습생·도제" } },
     { w:"羽球", zy:"ㄩˇ ㄑㄧㄡˊ", py:"yǔqiú", m:{ j:"バドミントン", e:"badminton", k:"배드민턴" } },
     { w:"選手", zy:"ㄒㄩㄢˇ ㄕㄡˇ", py:"xuǎnshǒu", m:{ j:"選手", e:"athlete, player", k:"선수" } },
@@ -251,7 +251,7 @@ const ARTICLES_7 = [
     { w:"晶片", zy:"ㄐㄧㄥ ㄆㄧㄢˋ", py:"jīngpiàn", m:{ j:"（半導体）チップ", e:"chip (semiconductor)", k:"칩·반도체 칩" } },
     { w:"供應鏈", zy:"ㄍㄨㄥ ㄧㄥˋ ㄌㄧㄢˋ", py:"gōngyìngliàn", m:{ j:"サプライチェーン・供給網", e:"supply chain", k:"공급망" } },
     { w:"不服輸", zy:"ㄅㄨˋ ㄈㄨˊ ㄕㄨ", py:"bù fúshū", m:{ j:"負けず嫌い", e:"unwilling to admit defeat", k:"지기 싫어함" } },
-    { w:"打拚", zy:"ㄉㄚˇ ㄆㄧㄣˋ", py:"dǎpīn", m:{ j:"懸命に頑張る・奮闘する（台湾でよく使う語）", e:"to work/strive hard (common Taiwan term)", k:"열심히 분투하다(대만식 표현)" } }
+    { w:"打拚", zy:"ㄉㄚˇ ㄆㄢˋ", py:"dǎpàn", m:{ j:"懸命に頑張る・奮闘する（台湾でよく使う語）", e:"to work/strive hard (common Taiwan term)", k:"열심히 분투하다(대만식 표현)" } }
   ],
   note:{
     j:"「台灣之光」は、台湾のメディアや日常会話でとてもよく使われる言葉で、国際的な賞を取った人、世界大会で活躍した選手、海外で認められた企業などをたたえるときに登場します。台積電（TSMC）は世界最大級の半導体受託製造企業で、その動向は世界中の経済ニュースで注目されています。ちなみに、台湾は野球も盛んで、大リーグで活躍した選手も『台灣之光』と呼ばれてきました。誰が『光』かは時代とともに変わりますが、『小さな島から世界へ』という物語は、いつも台湾の人々を励ましています。",

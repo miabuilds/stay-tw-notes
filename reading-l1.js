@@ -6,7 +6,7 @@ const READING_L1 = [
   id:"conbini-breakfast", level:"l1",
   title:{ j:"コンビニで朝ごはん", e:"Breakfast at the Convenience Store", k:"편의점에서 아침" },
   lines:[
-    { z:"早上七點，小明走進便利商店。", zy:"ㄗㄠˇ ㄕㄤˋ ㄑㄧ ㄉㄧㄢˇ", py:"Zǎoshàng qī diǎn, Xiǎomíng zǒujìn biànlì shāngdiàn.", m:{ j:"朝7時、シャオミンはコンビニに入ります。", e:"At 7 a.m., Xiaoming walks into a convenience store.", k:"아침 7시, 샤오밍이 편의점에 들어갑니다." } },
+    { z:"早上七點，小明走進便利商店。", zy:"ㄗㄠˇ ㄕㄤˋ ㄑㄧ ㄉㄧㄢˇ", py:"Zǎoshang qī diǎn, Xiǎomíng zǒujìn biànlì shāngdiàn.", m:{ j:"朝7時、シャオミンはコンビニに入ります。", e:"At 7 a.m., Xiaoming walks into a convenience store.", k:"아침 7시, 샤오밍이 편의점에 들어갑니다." } },
     { z:"他想買一個飯糰和一杯咖啡。", py:"Tā xiǎng mǎi yí ge fàntuán hé yì bēi kāfēi.", m:{ j:"彼はおにぎりを一つとコーヒーを一杯買いたいです。", e:"He wants to buy a rice ball and a cup of coffee.", k:"그는 삼각김밥 하나와 커피 한 잔을 사고 싶어요." } },
     { z:"「這個飯糰可以幫我加熱嗎？」", py:"“Zhège fàntuán kěyǐ bāng wǒ jiārè ma?”", m:{ j:"「このおにぎり、温めてもらえますか？」", e:"\"Can you heat up this rice ball for me?\"", k:"\"이 삼각김밥 데워 주실 수 있어요?\"" } },
     { z:"店員說：「好，要不要袋子？」", py:"Diànyuán shuō: “Hǎo, yào bú yào dàizi?”", m:{ j:"店員は言います。「はい、袋はいりますか？」", e:"The clerk says: \"Sure, do you want a bag?\"", k:"점원이 말합니다. \"네, 봉투 필요하세요?\"" } },

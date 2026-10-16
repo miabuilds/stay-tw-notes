@@ -77,6 +77,33 @@ async function verifySession(token, secret) {
   return payload.uid || null;
 }
 
+// サーバー側の Premium 判定(AI 會話の場数用)。クライアントの「stw_premium」は信用しない。
+//   ・推薦で付いた entitlements
+//   ・RevenueCat の正式取引:この uid(または aliases にこの uid を含む)の、まだ期限内の購入/更新、または買い切り。返金されていれば無効
+async function serverPremium(env, uid) {
+  if (!uid) return false;
+  try {
+    // 白名單(管理者)。App の paywall.js の WHITELIST_HASHES と同じ人。購入記録が無いので ここで先に認める
+    const au = await env.DB.prepare("SELECT email FROM auth_users WHERE uid=?1").bind(uid).first();
+    if (au && au.email && ADMIN_EMAILS.includes(String(au.email).toLowerCase())) return true;
+    const ent = await env.DB.prepare("SELECT status, expires_at FROM entitlements WHERE uid=?1").bind(uid).first();
+    if (ent && ent.status === "active" && (ent.expires_at || 0) > nowMs()) return true;
+    const rows = (await env.DB.prepare(
+      `SELECT event_type t, COALESCE(json_extract(raw,'$.event.expiration_at_ms'),json_extract(raw,'$.expiration_at_ms')) ems,
+              COALESCE(json_extract(raw,'$.event.cancel_reason'),json_extract(raw,'$.cancel_reason')) cr
+       FROM rc_events WHERE environment='PRODUCTION' AND (app_user_id=?1 OR raw LIKE ?2) ORDER BY id`)
+      .bind(uid, '%"' + uid + '"%').all()).results || [];
+    let exp = 0, life = false, refunded = false;
+    for (const r of rows) {
+      if (r.t === "NON_RENEWING_PURCHASE") life = true;
+      if (["INITIAL_PURCHASE", "RENEWAL", "UNCANCELLATION", "PRODUCT_CHANGE"].includes(r.t) && r.ems) { exp = Math.max(exp, Number(r.ems)); refunded = false; }
+      if (r.t === "CANCELLATION" && r.cr === "CUSTOMER_SUPPORT") refunded = true;
+    }
+    return !refunded && (life || exp > nowMs());
+  } catch (e) { return false; }
+}
+const CHAT_LIMIT = { free: 1, premium: 5 };   // 1 日の AI 會話の場数(StayJP と同じ)。AI の挨拶は数えず、自分が 1 句送った時点で 1 場
+
 // Google 網頁ログイン用（後台・Web）。iOS は env.GOOGLE_IOS_CLIENT_ID、Web はこの公開 client id。
 const YT_KEY = "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w";   // youtube.com 前端寫死的公開 key(非機密)
 // 字幕軌回應:帶了 fmt=json3 也常回 XML(timedtext format=3),兩種都解。
@@ -142,57 +169,134 @@ export default {
     }
 
     // ---------- 流量計數（公開ビーコン。JS を実行する実ブラウザのみ＝bot 除外）----------
+    // ---------- AI 會話:今日の残り場数 ----------
+    if (url.pathname === "/api/chat-quota") {
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      const ip = req.headers.get("CF-Connecting-IP") || "unknown";
+      const who = uid ? "u:" + uid : "ip:" + ip, day = new Date().toISOString().slice(0, 10);
+      const premium = await serverPremium(env, uid);
+      const row = await env.DB.prepare("SELECT count FROM chat_quota WHERE key=?1").bind("ses:" + who + ":" + day).first();
+      const limit = premium ? CHAT_LIMIT.premium : CHAT_LIMIT.free, used = (row && row.count) || 0;
+      return json({ premium, loggedIn: !!uid, limit, used, left: Math.max(0, limit - used) }, 200, h);
+    }
+
     // ---------- AI 情境対話（台湾華語）Claude Haiku ----------
     if (url.pathname === "/api/speak-chat" && req.method === "POST") {
       const ip = req.headers.get("CF-Connecting-IP") || "unknown";
       const day = new Date().toISOString().slice(0, 10);
-      const qkey = ip + ":" + day, DAILY = 40;   // 濫用防止：1 IP 1 日
+      const qkey = ip + ":" + day, DAILY = 150;   // 濫用防止：1 IP 1 日。本当の上限は場数(CHAT_LIMIT)。Premium 5 場×(開場+10 輪+講評)≒60 なので 40 だと足りない
       const row = await env.DB.prepare("SELECT count FROM chat_quota WHERE key=?1").bind(qkey).first();
       if (row && row.count >= DAILY) return json({ error: "quota", message: "本日の無料枠を使い切りました" }, 429, h);
       await env.DB.prepare("INSERT INTO chat_quota (key,count,day) VALUES (?1,1,?2) ON CONFLICT(key) DO UPDATE SET count=count+1, day=?2").bind(qkey, day).run();
 
       let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
       if (!env.ANTHROPIC_API_KEY) return json({ error: "ai_not_configured" }, 501, h);
-      const lang = ["ja", "en", "ko"].includes(b.lang) ? b.lang : "ja";
-      const langName = { ja: "Japanese", en: "English", ko: "Korean" }[lang];
-      const scene = String(b.scene || "a casual chat").slice(0, 300);
+      const LANGS = { ja: "Japanese", en: "English", ko: "Korean", vi: "Vietnamese", id: "Indonesian" };
+      const lang = LANGS[b.lang] ? b.lang : "ja";
+      const langName = LANGS[lang];
+      // 母語で書いた一文 → 台湾華語に(会話で詰まった時の助け舟。StayJP の toJa と同じ考え)
+      if (b.mode === "toZh") {
+        const text = String(b.text || "").trim().slice(0, 200);
+        if (!text) return json({ error: "empty" }, 400, h);
+        const sysZ = `Convert the learner's sentence (written in ${langName} or mixed) into ONE natural spoken Taiwan Mandarin line, Traditional characters, Taiwan usage. LANGUAGE RULE: Taiwan Mandarin (台灣華語) ONLY. NOT Taiwanese Hokkien (台語/閩南語: no 呷、嘸、毋、袂、佇、恁、攏、哩賀、今日有呷飯沒). NOT Mainland China Mandarin (no simplified characters, no 儿化, no mainland words: 地鐵→捷運, 出租車/打車→計程車/叫車, 視頻→影片, 質量→品質, 信息→訊息, 軟件→軟體, 土豆→馬鈴薯, 網絡→網路, 打印→列印, 早上好/上午好→早安, 下午好→午安/你好, 晚上好→晚安/你好, 搞定→弄好, 靠譜→可靠). It is what the learner wants to say next in this role-play: ${String(b.scene || "").slice(0, 200)}. Output ONLY the Chinese line, nothing else.`;
+        let rz;
+        try {
+          rz = await fetch("https://api.anthropic.com/v1/messages", { method: "POST",
+            headers: { "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01", "content-type": "application/json" },
+            body: JSON.stringify({ model: "claude-haiku-4-5-20251001", max_tokens: 120, system: sysZ, messages: [{ role: "user", content: text }] }) });
+        } catch (e) { return json({ error: "ai_error" }, 502, h); }
+        if (!rz.ok) return json({ error: "ai_error" }, 502, h);
+        const dz = await rz.json();
+        const zh = String((dz.content && dz.content[0] && dz.content[0].text) || "").trim().replace(/^["「]|["」]$/g, "").split("\n")[0];
+        return json({ zh }, 200, h);
+      }
+      const scene = String(b.scene || "a casual chat").slice(0, 400);
       const userRole = String(b.userRole || "").slice(0, 120);
-      const level = String(b.level || "L2").slice(0, 8);
-      const history = Array.isArray(b.history) ? b.history.slice(-14) : [];
+      const level = /^L[1-6]$/.test(String(b.level)) ? String(b.level) : "L2";
+      // 級ごとの話し方。TOCFL の級に合わせて、文の長さと語彙を変える
+      const LV_GUIDE = {
+        L1: "Absolute beginner: very short sentences (under 10 characters), only the most basic words, slow and simple.",
+        L2: "Beginner: short simple sentences, everyday basic vocabulary.",
+        L3: "Lower intermediate: natural everyday sentences, common phrases, avoid rare words.",
+        L4: "Intermediate: natural speed and phrasing, some common idioms and connectors.",
+        L5: "Upper intermediate: fluent natural speech, richer vocabulary, occasional 成語 where natural.",
+        L6: "Advanced: speak like a native Taiwan Mandarin speaker, natural Mandarin colloquialisms and nuance (still Mandarin only, no Hokkien).",
+      };
+      const history = Array.isArray(b.history) ? b.history.slice(-24) : [];
 
-      const sys = `You are a warm, friendly Taiwanese person role-playing to help someone practice Taiwan Mandarin.
+      // 場数:自分の発言が 1 つ以上ある会話(sid)を、その日の最初の 1 回だけ数える
+      const uidC = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      const who = uidC ? "u:" + uidC : "ip:" + ip;
+      const sid = String(b.sid || "").replace(/[^a-z0-9]/gi, "").slice(0, 32);
+      const userTurns = history.filter(m => m && m.role !== "ai").length;
+      if (userTurns > 10) return json({ error: "turns" }, 429, h);
+      if (userTurns >= 1) {
+        const mark = "sid:" + who + ":" + sid;
+        const seen = sid && await env.DB.prepare("SELECT count FROM chat_quota WHERE key=?1").bind(mark).first();
+        if (!seen) {
+          const premium = await serverPremium(env, uidC);
+          const limit = premium ? CHAT_LIMIT.premium : CHAT_LIMIT.free;
+          const skey = "ses:" + who + ":" + day;
+          const srow = await env.DB.prepare("SELECT count FROM chat_quota WHERE key=?1").bind(skey).first();
+          if (srow && srow.count >= limit) return json({ error: "sessions", premium, loggedIn: !!uidC, limit }, 429, h);
+          await env.DB.prepare("INSERT INTO chat_quota (key,count,day) VALUES (?1,1,?2) ON CONFLICT(key) DO UPDATE SET count=count+1, day=?2").bind(skey, day).run();
+          if (sid) await env.DB.prepare("INSERT OR IGNORE INTO chat_quota (key,count,day) VALUES (?1,1,?2)").bind(mark, day).run();
+        }
+      }
+
+      const sys = `You are a warm, friendly person in Taiwan role-playing IN MANDARIN to help someone practice Taiwan Mandarin (華語/國語, the language of the TOCFL exam).
 Scene: ${scene}. ${userRole ? "The learner plays: " + userRole + ". You play the other person." : "You are the learner's conversation partner."}
 Rules:
 - Speak ONLY in Taiwan Mandarin, TRADITIONAL characters, natural Taiwan usage (捷運 not 地鐵, 悠遊卡, no 儿化, 台灣讀法).
-- Each reply SHORT: 1-2 sentences, warm, around TOCFL ${level} level.
+- LANGUAGE RULE: Taiwan Mandarin (台灣華語) ONLY. NOT Taiwanese Hokkien (台語/閩南語: no 呷、嘸、毋、袂、佇、恁、攏、哩賀、今日有呷飯沒). NOT Mainland China Mandarin (no simplified characters, no 儿化, no mainland words: 地鐵→捷運, 出租車/打車→計程車/叫車, 視頻→影片, 質量→品質, 信息→訊息, 軟件→軟體, 土豆→馬鈴薯, 網絡→網路, 打印→列印, 早上好/上午好→早安, 下午好→午安/你好, 晚上好→晚安/你好, 搞定→弄好, 靠譜→可靠).
+- This is a MANDARIN app, NOT a Taiwanese Hokkien (台語/閩南語) app. NEVER use Hokkien words, Hokkien characters or Hokkien romanization — not even as local flavour, at any level. Wrong: 呷飽沒、今日有呷過飯沒、嘸、毋、袂、佇、恁、攏、歹勢啦、哩賀. Right: 吃飽了嗎？、今天吃過飯了嗎？、沒有、不、在、你們、都、不好意思. Use 今天 not 今日 in speech.${b.strict ? "\n- IMPORTANT: your previous attempt used Taiwanese Hokkien. Use ONLY standard Mandarin words this time." : ""}
+- Each reply SHORT: 1-2 sentences, warm. Learner level TOCFL ${level} — ${LV_GUIDE[level]}
+- Address the learner as 你 (never 妳 — you don't know their gender).
 - STAY STRICTLY IN CHARACTER — respond exactly the way YOUR role really would in real life. A shop clerk STATES the price and confirms the order (e.g. 「總共三十五元」); a clerk NEVER asks the customer how much something costs. Play only your own side.
 - Do NOT force a question into every reply. Only ask something when your role naturally would (a clerk may ask 甜度冰塊/內用外帶; otherwise just respond). It's fine to end without a question.
-- Respond with a SINGLE valid JSON object only (no markdown fences), keys:
-  "reply": your line (Traditional Chinese),
-  "zhuyin": 注音 reading of your reply,
-  "translation": a ${langName} translation of your reply,
-  "hints": array of exactly 2 short natural sentences the LEARNER (playing ${userRole || "the learner"}) could actually SAY next — Traditional Chinese ONLY, real spoken lines. NEVER stage directions, narration, or ${langName}/other languages. If the conversation is wrapping up, offer polite closing lines (e.g. 「謝謝，再見！」),
-  "correction": if the learner's LAST message has a clear mistake, one short gentle note IN ${langName} on how to fix it; otherwise "".`;
+- Output EXACTLY these lines, in this order, nothing else (no markdown, no JSON):
+REPLY: your line (Traditional Chinese)
+PINYIN: Hanyu Pinyin of your reply with tone marks, exactly ONE syllable per Chinese character, separated by single spaces, no punctuation (e.g. 歡迎光臨！→ huān yíng guāng lín). Taiwan readings (和 hàn when it means "and", 垃圾 lè sè); neutral tone without a mark (謝謝 xiè xie)
+TR: a ${langName} translation of your reply
+HINT: a short natural sentence the LEARNER (playing ${userRole || "the learner"}) could actually SAY next — Traditional Chinese ONLY, a real spoken line, never stage directions or another language
+HINT: a second, different option (if the conversation is wrapping up, a polite closing line such as 謝謝，再見！)
+CORR: if the learner's LAST message has a clear mistake, one short gentle note IN ${langName} on how to fix it; otherwise leave it empty`;
 
-      const messages = history.map(m => ({ role: m.role === "ai" ? "assistant" : "user", content: String((m.role === "ai" ? (m.reply || m.text) : m.text) || "") })).filter(m => m.content);
+      // 2026-10:過去の AI 発言を素の文で渡すと、数往復で AI がそれを真似て REPLY: などの行を落とす(画面は「通信エラー」)。
+      // 過去の AI 発言にも REPLY: を付け、今回の返事は "REPLY:" から書かせる(prefill。Haiku 対応)
+      const messages = history.map(m => ({ role: m.role === "ai" ? "assistant" : "user", content: m.role === "ai" ? ("REPLY: " + String(m.reply || m.text || "")) : String(m.text || "") })).filter(m => m.content && m.content !== "REPLY: ");
       if (!messages.length || messages[messages.length - 1].role !== "user") messages.push({ role: "user", content: "（在角色中用台灣華語跟我打招呼，開始這個情境）" });
+      messages.push({ role: "assistant", content: "REPLY:" });
 
+      // ストリーミング:Anthropic の SSE から文字だけ取り出して、そのまま流す。画面は REPLY 行から順に描ける
       let rc;
       try {
         rc = await fetch("https://api.anthropic.com/v1/messages", {
           method: "POST",
           headers: { "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01", "content-type": "application/json" },
-          body: JSON.stringify({ model: "claude-haiku-4-5-20251001", max_tokens: 500, system: sys, messages }),
+          body: JSON.stringify({ model: "claude-haiku-4-5-20251001", max_tokens: 600, stream: true, system: [{ type: "text", text: sys, cache_control: { type: "ephemeral" } }], messages }),
         });
       } catch (e) { return json({ error: "ai_error" }, 502, h); }
-      if (!rc.ok) { const t = await rc.text().catch(() => ""); return json({ error: "ai_error", detail: t.slice(0, 160) }, 502, h); }
-      const data = await rc.json();
-      const text = (data.content && data.content[0] && data.content[0].text) || "";
-      let out;
-      try { const a = text.indexOf("{"), z = text.lastIndexOf("}"); out = JSON.parse(text.slice(a, z + 1)); }
-      catch (e) { out = { reply: text, zhuyin: "", translation: "", hints: [], correction: "" }; }
-      if (!Array.isArray(out.hints)) out.hints = [];
-      return json(out, 200, h);
+      if (!rc.ok || !rc.body) { const t = await rc.text().catch(() => ""); return json({ error: "ai_error", detail: t.slice(0, 160) }, 502, h); }
+      const { readable, writable } = new TransformStream();
+      (async () => {
+        const w = writable.getWriter(), rd = rc.body.getReader(), dec = new TextDecoder();
+        let buf = "";
+        try {
+          await w.write(TE.encode("REPLY:"));   // prefill した分は返ってこないので自分で頭に付ける
+          for (;;) {
+            const { value, done } = await rd.read(); if (done) break;
+            buf += dec.decode(value, { stream: true });
+            let i;
+            while ((i = buf.indexOf("\n")) >= 0) {
+              const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1);
+              if (!line.startsWith("data:")) continue;
+              try { const ev = JSON.parse(line.slice(5)); if (ev.type === "content_block_delta" && ev.delta && ev.delta.text) await w.write(TE.encode(ev.delta.text)); } catch (e) {}
+            }
+          }
+        } catch (e) {} finally { try { await w.close(); } catch (e) {} }
+      })();
+      return new Response(readable, { status: 200, headers: { ...h, "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" } });
     }
 
     // 「我的單字本」で辞書に無い語を引く。注音はあくまで補助:
@@ -244,16 +348,17 @@ If the input is not a real Chinese word, set "w" to "" and leave the rest empty.
       // 對話結束點評:評學習者的台灣華語表現，回 {score,good,improve,tip,encourage}
       const ip = req.headers.get("CF-Connecting-IP") || "unknown";
       const day = new Date().toISOString().slice(0, 10);
-      const qkey = ip + ":" + day, DAILY = 40;
+      const qkey = ip + ":" + day, DAILY = 150;
       const row = await env.DB.prepare("SELECT count FROM chat_quota WHERE key=?1").bind(qkey).first();
       if (row && row.count >= DAILY) return json({ error: "quota" }, 429, h);
       await env.DB.prepare("INSERT INTO chat_quota (key,count,day) VALUES (?1,1,?2) ON CONFLICT(key) DO UPDATE SET count=count+1, day=?2").bind(qkey, day).run();
 
       let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
       if (!env.ANTHROPIC_API_KEY) return json({ error: "ai_not_configured" }, 501, h);
-      const lang = ["ja", "en", "ko"].includes(b.lang) ? b.lang : "ja";
-      const langName = { ja: "Japanese", en: "English", ko: "Korean" }[lang];
-      const scene = String(b.scene || "").slice(0, 300);
+      const RLANGS = { ja: "Japanese", en: "English", ko: "Korean", vi: "Vietnamese", id: "Indonesian" };
+      const lang = RLANGS[b.lang] ? b.lang : "ja";
+      const langName = RLANGS[lang];
+      const scene = String(b.scene || "").slice(0, 400);
       const history = Array.isArray(b.history) ? b.history.slice(-24) : [];
       const convo = history.map(m => (m.role === "me" ? "LEARNER: " : "PARTNER: ") + String(m.text || "").slice(0, 300)).join("\n");
 
@@ -347,22 +452,71 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       // 破音字強制読み：呼び出し側が [{c:字, py:"dei3"}] を渡すと、その字を SSML phoneme で必ず正しく読む。
       // phoneme は Google の pinyin alphabet が確実なので、force があるときは Azure を飛ばして Google を使う。
       const wantForce = hasGoogle && Array.isArray(b.force) && b.force.some(f => f && f.c && f.py);
+      // ElevenLabs 試用(2026-10 Mia):管理者だけ。AI 會話の声を Chihiro Yoko(台湾腔)で聞き比べる。
+      // ElevenLabs は字音が大陸寄り(垃圾 lā・綜合 zōng)なので一般公開はまだ。失敗したら下の Azure に落ちる
+      if (b.el && env.ELEVENLABS_API_KEY) {
+        const euid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+        const eau = euid ? await env.DB.prepare("SELECT email FROM auth_users WHERE uid=?1").bind(euid).first() : null;
+        if (eau && eau.email && ADMIN_EMAILS.includes(String(eau.email).toLowerCase())) {
+          try {
+            const er = await fetch("https://api.elevenlabs.io/v1/text-to-speech/NIqnuIdrAT3LLSSxN05L?output_format=mp3_44100_64", {
+              method: "POST",
+              headers: { "xi-api-key": env.ELEVENLABS_API_KEY, "Content-Type": "application/json" },
+              body: JSON.stringify({ text, model_id: "eleven_v3", language_code: "zh" }),
+            });
+            if (er.ok) {
+              const buf = new Uint8Array(await er.arrayBuffer());
+              let bin = ""; for (let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode.apply(null, buf.subarray(i, i + 0x8000));
+              return json({ audio: btoa(bin), engine: "elevenlabs" }, 200, h);
+            }
+          } catch (e) {}
+        }
+      }
       try {
-        if (hasAzure && !wantForce) {
+        // AI 會話は Google(cmn-TW-Wavenet、単語・例文の録音と同じ声)を使う。ユーザーがこちらの声を好んだ(2026-10)
+        // 1 字ずつの読み指定(b.ph)は Azure でも Google でも使う。Azure が無い/失敗した時は Google で同じ指定を当てる
+        let azureFailed = false;
+        const SANDHI_CH = new Set(["一", "不"]);
+        if (hasAzure && !wantForce && b.engine !== "google") {
           const region = env.AZURE_SPEECH_REGION || "japaneast";
           const AZ = { f: "zh-TW-HsiaoChenNeural", m: "zh-TW-YunJheNeural", f2: "zh-TW-HsiaoYuNeural" };
           const voice = AZ[b.voice] || AZ.f;
           const xesc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-          const ssml = `<speak version='1.0' xml:lang='zh-TW'><voice name='${voice}'>${xesc(text)}</voice></speak>`;
+          // 話し方の調子(AI 會話用)。台湾華語の Azure 音声は 3 人だけで「スタイル」が無いので、速さと高さで調整する。
+          // 決まった組み合わせしか受けない(任意の値を SSML に入れない)
+          const TONES = { std: null, casual: { rate: "+8%", pitch: "+4%" }, lively: { rate: "+12%", pitch: "+7%" } };
+          const tone = TONES[b.tone] || null;
+          // 1 字ずつ読みを指定(b.ph = [{c:"好", ph:"hao 3"}] を文の頭から順に当てる)。alphabet は b.alpha(sapi / ups など)
+          let body = xesc(text);
+          if (Array.isArray(b.ph) && b.ph.length && /^(sapi|ups|x-microsoft-sapi)$/.test(String(b.alpha || "sapi"))) {
+            const al = String(b.alpha || "sapi"); let out = "", k = 0;
+            // 一/不 は変調(一起 yì・不對 bú・第一 yī)を Azure に任せる。一/不 本体だけでなく前後の字に phoneme があっても
+            // Azure の変調が崩れる(第一課→yì、一個→yī、不對→bù。2026-10 ピッチで確認)ので、前後 1 字も指定しない
+            // 軽声(˙ㄇㄜ)は指定しない。Azure 式「ㄇㄜ˙」でも句末が上がって不自然(什麼の麼、ユーザー指摘)。軽声は Azure 任せの方が正しい
+            const chars = [...text];
+            const near = i => SANDHI_CH.has(chars[i]) || SANDHI_CH.has(chars[i - 1]) || SANDHI_CH.has(chars[i + 1]);
+            for (let i = 0; i < chars.length; i++) {
+              const ch = chars[i], f = b.ph[k];
+              if (f && f.c === ch && f.ph && !near(i) && !String(f.ph).includes("˙")) { const p = String(f.ph).slice(0, 20); out += `<phoneme alphabet='${al}' ph='${xesc(p)}'>${xesc(ch)}</phoneme>`; k++; }
+              else { out += xesc(ch); if (f && f.c === ch) k++; }
+            }
+            body = out;
+          }
+          const inner = tone ? `<prosody rate='${tone.rate}' pitch='${tone.pitch}'>${body}</prosody>` : body;
+          const ssml = `<speak version='1.0' xml:lang='zh-TW'><voice name='${voice}'>${inner}</voice></speak>`;
           const ar = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
             method: "POST",
             headers: { "Ocp-Apim-Subscription-Key": env.AZURE_SPEECH_KEY, "Content-Type": "application/ssml+xml", "X-Microsoft-OutputFormat": "audio-24khz-48kbitrate-mono-mp3", "User-Agent": "staytw-tts" },
             body: ssml,
           });
-          if (!ar.ok) { const t = await ar.text().catch(() => ""); return json({ error: "tts_error", detail: ("azure " + ar.status + " " + t).slice(0, 200) }, 502, h); }
-          const buf = new Uint8Array(await ar.arrayBuffer());
-          let bin = ""; for (let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode.apply(null, buf.subarray(i, i + 0x8000));
-          return json({ audio: btoa(bin) }, 200, h);
+          if (ar.ok) {
+            const buf = new Uint8Array(await ar.arrayBuffer());
+            let bin = ""; for (let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode.apply(null, buf.subarray(i, i + 0x8000));
+            return json({ audio: btoa(bin), engine: "azure" }, 200, h);
+          }
+          // F0(無料)の回数制限や読み指定の書式エラーでも、声が出ないよりは Google で出す
+          if (!hasGoogle) { const t = await ar.text().catch(() => ""); return json({ error: "tts_error", detail: ("azure " + ar.status + " " + t).slice(0, 200) }, 502, h); }
+          azureFailed = true;
         }
         // Google fallback
         const VOICES = { f: "cmn-TW-Wavenet-A", m: "cmn-TW-Wavenet-C", f2: "cmn-TW-Wavenet-A" };
@@ -371,7 +525,18 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
         const gesc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         const ph = (py) => (ch) => `<phoneme alphabet='pinyin' ph='${py}'>${ch}</phoneme>`;
         let ssmlText;
-        if (wantForce) {
+        const wantGoogleSeq = Array.isArray(b.ph) && b.ph.some(f => f && f.py);   // ここに来た=Google で読む。指定があれば当てる
+        if (wantGoogleSeq) {
+          // 文の頭から順に 1 字ずつ当てる(同じ字でも位置で読みが違う:一下 yi2 / 一起 yi4)
+          let out = "", k = 0;
+          for (const ch of text) {
+            const f = b.ph[k];
+            const py = f && f.c === ch && !SANDHI_CH.has(ch) ? String(f.py || "").replace(/[^a-z0-9]/gi, "") : "";
+            if (f && f.c === ch) k++;
+            out += py ? ph(py)(gesc(ch)) : gesc(ch);
+          }
+          ssmlText = out;
+        } else if (wantForce) {
           // 呼び出し側が指定した読みを最優先（破音字練習：POLYPHONE の検証済み読音をそのまま強制）。
           ssmlText = gesc(text);
           for (const f of b.force) {
@@ -409,7 +574,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
         });
         const jd = await tr.json().catch(() => ({}));
         if (!tr.ok || !jd.audioContent) return json({ error: "tts_error", detail: JSON.stringify(jd).slice(0, 200) }, 502, h);
-        return json({ audio: jd.audioContent }, 200, h);
+        return json({ engine: "google", audio: jd.audioContent }, 200, h);
       } catch (e) { return json({ error: "tts_error" }, 502, h); }
     }
 
@@ -690,6 +855,11 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       if (!ok) {
         const uid = await verifySession(bearer, env.SESSION_SECRET);   // Google 管理 session
         ok = uid && uid.startsWith("admin:") && ADMIN_EMAILS.includes(uid.slice(6));
+        // 手機上 Google 登入彈窗常被擋（Safari 防追蹤、LINE/Threads 內建瀏覽器）→ 主站已登入的管理員帳號（Apple 或 Google）也可以直接用
+        if (!ok && uid && !uid.startsWith("admin:")) {
+          const au = await env.DB.prepare("SELECT email FROM auth_users WHERE uid=?1").bind(uid).first();
+          ok = !!(au && au.email && ADMIN_EMAILS.includes(String(au.email).toLowerCase()));
+        }
       }
       if (!ok) return json({ error: "unauthorized" }, 401, h);
 
@@ -707,6 +877,22 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
           env.DB.prepare(`SELECT COUNT(*) n FROM feedback`).first(),
         ]);
         return json({ revenue: rev, byProduct: byProduct.results, last30: last30.results, feedbackCount: fbCount.n }, 200, h);
+      }
+      // 財務分析用:正式環境の全イベントを、raw から必要な欄だけ取り出して返す。
+      // 集計(期間・手数料・税・試用転換・継続)は後台の画面側でやる。raw は {event:{...}} の形と
+      // event そのものの形が混ざっているので両方見る。
+      if (url.pathname === "/api/admin/finance") {
+        const J = (k) => `COALESCE(json_extract(raw,'$.event.${k}'), json_extract(raw,'$.${k}'))`;
+        const r = await env.DB.prepare(
+          `SELECT id, ts, event_type t, product_id p, price usd, price_in_purchased_currency lp, currency cur,
+                  COALESCE(country, ${J("country_code")}) c, app_user_id u,
+                  ${J("store")} st, ${J("period_type")} pt, ${J("takehome_percentage")} take,
+                  ${J("tax_percentage")} tax, ${J("commission_percentage")} com,
+                  ${J("purchased_at_ms")} pms, ${J("expiration_at_ms")} ems, ${J("cancel_reason")} cr,
+                  ${J("is_trial_conversion")} conv, ${J("renewal_number")} rn, ${J("offer_code")} oc,
+                  ${J("original_transaction_id")} otx
+           FROM rc_events WHERE environment='PRODUCTION' ORDER BY id`).all();
+        return json(r.results, 200, h);
       }
       if (url.pathname === "/api/admin/events") {
         const r = await env.DB.prepare(

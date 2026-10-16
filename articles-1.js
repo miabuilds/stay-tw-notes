@@ -32,7 +32,7 @@ const ARTICLES_1 = [
     },
     {
       z:"讓很多人驚訝的是價格。在台灣看一次門診，自己要付的「掛號費」和「部分負擔」加起來，通常只要一百多到三、四百塊台幣，領藥往往也只是幾十塊。就算是感冒、看牙齒、拿慢性病的藥，負擔都很輕。因為大部分的費用早就由健保先付掉了，民眾只需要付一小部分，這也是為什麼很多台灣人有點不舒服就會去看醫生。",
-      py:"Ràng hěnduō rén jīngyà de shì jiàgé. Zài Táiwān kàn yí cì ménzhěn, zìjǐ yào fù de “guàhàofèi” hé “bùfèn fùdān” jiā qǐlái, tōngcháng zhǐyào yìbǎi duō dào sān, sì bǎi kuài Táibì, lǐngyào wǎngwǎng yě zhǐshì jǐshí kuài. Jiùsuàn shì gǎnmào, kàn yáchǐ, ná mànxìngbìng de yào, fùdān dōu hěn qīng. Yīnwèi dàbùfèn de fèiyòng zǎo jiù yóu jiànbǎo xiān fù diào le, mínzhòng zhǐ xūyào fù yì xiǎo bùfèn, zhè yěshì wèishénme hěnduō Táiwānrén yǒudiǎn bù shūfú jiù huì qù kàn yīshēng.",
+      py:"Ràng hěnduō rén jīngyà de shì jiàgé. Zài Táiwān kàn yí cì ménzhěn, zìjǐ yào fù de “guàhàofèi” hé “bùfèn fùdān” jiā qǐlái, tōngcháng zhǐyào yìbǎi duō dào sān, sì bǎi kuài Táibì, lǐngyào wǎngwǎng yě zhǐshì jǐshí kuài. Jiùsuàn shì gǎnmào, kàn yáchǐ, ná mànxìngbìng de yào, fùdān dōu hěn qīng. Yīnwèi dàbùfèn de fèiyòng zǎo jiù yóu jiànbǎo xiān fù diào le, mínzhòng zhǐ xūyào fù yì xiǎo bùfèn, zhè yěshì wèishénme hěnduō Táiwānrén yǒudiǎn bù shūfu jiù huì qù kàn yīshēng.",
       m:{
         j:"多くの人を驚かせるのは値段です。台湾で外来を一度受診すると、自分で払う「登録料」と「一部負担金」を合わせても、たいてい百数十元から三、四百元台湾ドルほど。薬をもらうのも数十元で済むことが多いです。風邪でも、歯医者でも、慢性病の薬をもらうときでも、負担はとても軽い。費用の大部分は健保が先に払ってくれていて、市民はほんの一部を払うだけ。だからこそ、台湾の人は少し体調が悪いとすぐ医者に行くのです。",
         e:"What surprises many people is the price. For a single outpatient visit in Taiwan, the \"registration fee\" and \"co-payment\" you pay yourself usually add up to just a hundred-something to three or four hundred NT dollars, and picking up medicine is often only tens of dollars. Whether it's a cold, a dental visit, or refilling chronic-illness medication, the burden is light. Most of the cost has already been paid by NHI, and citizens pay only a small share—which is why many Taiwanese go see a doctor at the first sign of feeling unwell.",
@@ -41,7 +41,7 @@ const ARTICLES_1 = [
     },
     {
       z:"這套制度之所以在國際上有名，除了便宜，還因為「方便」和「公平」。你可以自己決定要看哪一家診所、哪一位醫生，不用像有些國家那樣先預約好幾個星期。大醫院、小診所、中醫、牙醫幾乎都有加入健保。就連在偏遠的鄉下或離島，政府也努力讓大家看得到醫生。世界衛生組織和許多國家都曾經來台灣「取經」，研究這套系統。",
-      py:"Zhè tào zhìdù zhīsuǒyǐ zài guójì shàng yǒumíng, chúle piányí, hái yīnwèi “fāngbiàn” hé “gōngpíng”. Nǐ kěyǐ zìjǐ juédìng yào kàn nǎ yì jiā zhěnsuǒ, nǎ yí wèi yīshēng, búyòng xiàng yǒuxiē guójiā nàyàng xiān yùyuē hǎojǐ ge xīngqí. Dà yīyuàn, xiǎo zhěnsuǒ, zhōngyī, yáyī jīhū dōu yǒu jiārù jiànbǎo. Jiù lián zài piānyuǎn de xiāngxià huò lídǎo, zhèngfǔ yě nǔlì ràng dàjiā kàndedào yīshēng. Shìjiè Wèishēng Zǔzhī hé xǔduō guójiā dōu céngjīng lái Táiwān “qǔjīng”, yánjiū zhè tào xìtǒng.",
+      py:"Zhè tào zhìdù zhīsuǒyǐ zài guójì shàng yǒumíng, chúle piányí, hái yīnwèi “fāngbiàn” hé “gōngpíng”. Nǐ kěyǐ zìjǐ juédìng yào kàn nǎ yì jiā zhěnsuǒ, nǎ yí wèi yīshēng, búyòng xiàng yǒuxiē guójiā nàyàng xiān yùyuē hǎojǐ ge xīngqí. Dà yīyuàn, xiǎo zhěnsuǒ, zhōngyī, yáyī jīhū dōu yǒu jiārù jiànbǎo. Jiù lián zài piānyuǎn de xiāngxià huò lídǎo, zhèngfǔ yě nǔlì ràng dàjiā kàndedào yīshēng. Shìjiè Wèishēng Zǔzhī hé xǔduō guójiā dōu céngjīng lái Táiwān “qǔjīng”, yánjiù zhè tào xìtǒng.",
       m:{
         j:"この制度が国際的に有名なのは、安さだけでなく「便利さ」と「公平さ」ゆえでもあります。どの診療所に行くか、どの医師にかかるか自分で決められ、国によっては何週間も前から予約が必要というようなこともありません。大病院も、小さな診療所も、漢方（中医）も、歯科も、ほとんどが健保に加入しています。辺鄙な田舎や離島でさえ、政府はみんなが医者にかかれるよう努力しています。WHOや多くの国が、この仕組みを研究しに台湾へ「学びに来た」ほどです。",
         e:"This system is internationally famous not only for being cheap but also for being convenient and fair. You can decide for yourself which clinic and which doctor to see, without needing to book weeks in advance as in some countries. Large hospitals, small clinics, traditional Chinese medicine, and dentists are almost all part of NHI. Even in remote countryside and outlying islands, the government works to make sure everyone has access to a doctor. The WHO and many countries have come to Taiwan to \"learn the ropes\" and study the system.",
@@ -59,7 +59,7 @@ const ARTICLES_1 = [
     },
     {
       z:"對於在台灣生活的外國人，好消息是：只要在台灣工作、就學，或以居留身分住滿一定時間，通常就能加入健保，享受和本地人幾乎一樣的待遇。很多在台灣住過的外國人回國後，最懷念的往往不是美食，而是那張「隨時可以放心去看醫生」的健保卡。這張小小的卡片，其實裝著整個社會互相照顧的溫度。",
-      py:"Duìyú zài Táiwān shēnghuó de wàiguórén, hǎo xiāoxi shì: zhǐyào zài Táiwān gōngzuò, jiùxué, huò yǐ jūliú shēnfèn zhù mǎn yídìng shíjiān, tōngcháng jiù néng jiārù jiànbǎo, xiǎngshòu hé běndìrén jīhū yíyàng de dàiyù. Hěnduō zài Táiwān zhùguò de wàiguórén huíguó hòu, zuì huáiniàn de wǎngwǎng búshì měishí, érshì nà zhāng “suíshí kěyǐ fàngxīn qù kàn yīshēng” de jiànbǎokǎ. Zhè zhāng xiǎoxiǎo de kǎpiàn, qíshí zhuāngzhe zhěnggè shèhuì hùxiāng zhàogù de wēndù.",
+      py:"Duìyú zài Táiwān shēnghuó de wàiguórén, hǎo xiāoxí shì: zhǐyào zài Táiwān gōngzuò, jiùxué, huò yǐ jūliú shēnfèn zhù mǎn yídìng shíjiān, tōngcháng jiù néng jiārù jiànbǎo, xiǎngshòu hé běndìrén jīhū yíyàng de dàiyù. Hěnduō zài Táiwān zhùguò de wàiguórén huíguó hòu, zuì huáiniàn de wǎngwǎng búshì měishí, érshì nà zhāng “suíshí kěyǐ fàngxīn qù kàn yīshēng” de jiànbǎokǎ. Zhè zhāng xiǎoxiǎo de kǎpiàn, qíshí zhuāngzhe zhěnggè shèhuì hùxiāng zhàogù de wēndù.",
       m:{
         j:"台湾で暮らす外国人にとって朗報なのは、台湾で働く・学ぶ、あるいは居留資格で一定期間住めば、たいてい健保に加入でき、地元の人とほぼ同じ待遇を受けられることです。台湾に住んだことのある外国人が帰国後に一番恋しがるのは、グルメではなく、あの「いつでも安心して医者にかかれる」健保カードだったりします。この小さなカードには、実は社会全体で互いを支え合う温かさが詰まっているのです。",
         e:"For foreigners living in Taiwan, the good news is: as long as you work or study here, or have lived here on a residency permit for a set period, you can usually join NHI and receive almost the same treatment as locals. Many foreigners who have lived in Taiwan find that after going home, what they miss most isn't the food but that NHI card that lets you \"see a doctor anytime without worry.\" That little card actually holds the warmth of a whole society looking after one another.",
@@ -127,7 +127,7 @@ const ARTICLES_1 = [
     },
     {
       z:"對台灣人來說，追垃圾車幾乎是一種全民運動。到了傍晚，你會看到有人穿著拖鞋、提著大包小包從公寓衝下樓，也有人為了不錯過，乾脆站在巷口邊滑手機邊等。如果那天剛好加班、約會或睡過頭，錯過了垃圾車，就得把垃圾放到隔天，或是拜託鄰居、家人幫忙丟。這種「和垃圾車賽跑」的緊張感，是很多台灣人共同的生活記憶。",
-      py:"Duì Táiwānrén lái shuō, zhuī lèsè chē jīhū shì yì zhǒng quánmín yùndòng. Dàole bàngwǎn, nǐ huì kàndào yǒurén chuānzhe tuōxié, tízhe dà bāo xiǎo bāo cóng gōngyù chōng xià lóu, yě yǒurén wèile bú cuòguò, gāncuì zhàn zài xiàngkǒu biān huá shǒujī biān děng. Rúguǒ nàtiān gānghǎo jiābān, yuēhuì huò shuìguòtóu, cuòguò le lèsè chē, jiù děi bǎ lèsè fàngdào gétiān, huòshì bàituō línjū, jiārén bāngmáng diū. Zhè zhǒng “hé lèsè chē sàipǎo” de jǐnzhānggǎn, shì hěnduō Táiwānrén gòngtóng de shēnghuó jìyì.",
+      py:"Duì Táiwānrén lái shuō, zhuī lèsè chē jīhū shì yì zhǒng quánmín yùndòng. Dàole bāngwǎn, nǐ huì kàndào yǒurén chuānzhe tuōxié, tízhe dà bāo xiǎo bāo cóng gōngyù chōng xià lóu, yě yǒurén wèile bú cuòguò, gāncuì zhàn zài xiàngkǒu biān huá shǒujī biān děng. Rúguǒ nàtiān gānghǎo jiābān, yuēhuì huò shuìguòtóu, cuòguò le lèsè chē, jiù děi bǎ lèsè fàngdào gétiān, huòshì bàituō línjū, jiārén bāngmáng diū. Zhè zhǒng “hé lèsè chē sàipǎo” de jǐnzhānggǎn, shì hěnduō Táiwānrén gòngtóng de shēnghuó jìyì.",
       m:{
         j:"台湾人にとって、ゴミ収集車を追いかけるのはほとんど国民的スポーツです。夕方になると、サンダル履きで大きな袋小さな袋を提げ、マンションから駆け下りてくる人が見えますし、逃さないために路地の入口でスマホをいじりながら待つ人もいます。もしその日、残業やデート、寝坊で収集車を逃すと、ゴミを翌日まで持ち越すか、近所の人や家族に頼んで出してもらうしかありません。この「収集車との徒競走」の緊張感は、多くの台湾人に共通する生活の記憶です。",
         e:"For Taiwanese, chasing the garbage truck is almost a national sport. Come evening, you'll see people in flip-flops dashing down from their apartments with bags big and small, and others who, to avoid missing it, just stand at the mouth of the alley scrolling on their phones while they wait. If that day you happen to work overtime, go on a date, or oversleep and miss the truck, you have to keep your trash until the next day—or ask a neighbor or family member to take it out for you. That tense feeling of 'racing the garbage truck' is a shared life memory for many Taiwanese.",
@@ -164,7 +164,7 @@ const ARTICLES_1 = [
     { w:"專用垃圾袋", zy:"ㄓㄨㄢ ㄩㄥˋ ㄌㄜˋ ㄙㄜˋ ㄉㄞˋ", py:"zhuānyòng lèsèdài", m:{ j:"（政府指定の）専用ゴミ袋", e:"designated garbage bag", k:"전용 쓰레기봉투" } },
     { w:"堆肥", zy:"ㄉㄨㄟ ㄈㄟˊ", py:"duīféi", m:{ j:"堆肥（コンポスト）", e:"compost", k:"퇴비" } },
     { w:"巷弄", zy:"ㄒㄧㄤˋ ㄌㄨㄥˋ", py:"xiànglòng", m:{ j:"路地・小道", e:"alleys and lanes", k:"골목" } },
-    { w:"傍晚", zy:"ㄅㄤ ㄨㄢˇ", py:"bàngwǎn", m:{ j:"夕方", e:"dusk, early evening", k:"해질 무렵" } },
+    { w:"傍晚", zy:"ㄅㄤ ㄨㄢˇ", py:"bāngwǎn", m:{ j:"夕方", e:"dusk, early evening", k:"해질 무렵" } },
     { w:"融入", zy:"ㄖㄨㄥˊ ㄖㄨˋ", py:"róngrù", m:{ j:"溶け込む・馴染む", e:"to blend in, integrate", k:"녹아들다·적응하다" } }
   ],
   note:{
@@ -204,7 +204,7 @@ const ARTICLES_1 = [
     },
     {
       z:"除了大型晚會，還有一種更貼近日常的拜票方式，叫「掃街」。候選人和團隊會走進傳統市場、夜市、廟口，沿街和民眾握手、鞠躬、發文宣，一句「拜託拜託，多多支持」說上千百遍。你可能正在買菜，就被候選人熱情地握了手。這種面對面的接觸，讓政治不再是遙遠的名字，而是活生生站在你面前的人。",
-      py:"Chúle dàxíng wǎnhuì, hái yǒu yì zhǒng gèng tiējìn rìcháng de bàipiào fāngshì, jiào “sǎojiē”. Hòuxuǎnrén hé tuánduì huì zǒujìn chuántǒng shìchǎng, yèshì, miàokǒu, yánjiē hé mínzhòng wòshǒu, jūgōng, fā wénxuān, yí jù “bàituō bàituō, duōduō zhīchí” shuō shàng qiānbǎi biàn. Nǐ kěnéng zhèngzài mǎicài, jiù bèi hòuxuǎnrén rèqíng de wò le shǒu. Zhè zhǒng miànduìmiàn de jiēchù, ràng zhèngzhì búzài shì yáoyuǎn de míngzì, érshì huóshēngshēng zhàn zài nǐ miànqián de rén.",
+      py:"Chúle dàxíng wǎnhuì, hái yǒu yì zhǒng gèng tiējìn rìcháng de bàipiào fāngshì, jiào “sǎojiē”. Hòuxuǎnrén hé tuánduì huì zǒujìn chuántǒng shìchǎng, yèshì, miàokǒu, yánjiē hé mínzhòng wòshǒu, júgōng, fā wénxuān, yí jù “bàituō bàituō, duōduō zhīchí” shuō shàng qiānbǎi biàn. Nǐ kěnéng zhèngzài mǎicài, jiù bèi hòuxuǎnrén rèqíng de wò le shǒu. Zhè zhǒng miànduìmiàn de jiēchù, ràng zhèngzhì búzài shì yáoyuǎn de míngzì, érshì huóshēngshēng zhàn zài nǐ miànqián de rén.",
       m:{
         j:"大型集会のほかに、もっと日常に近い票のお願いの仕方があり、「掃街（街頭練り歩き）」と呼ばれます。候補者とチームは伝統市場、夜市、廟の前などに入り込み、通り沿いで市民と握手し、お辞儀をし、チラシを配り、「よろしくお願いします、ぜひご支持を」と何百回も繰り返します。買い物中に、いきなり候補者から熱心に握手される、なんてことも。この面と向かった触れ合いが、政治を遠い名前ではなく、目の前に立つ生身の人間にしてくれるのです。",
         e:"Beyond big rallies, there's a more everyday way of canvassing called 'sweeping the streets' (sǎojiē). Candidates and their teams walk into traditional markets, night markets, and temple squares, shaking hands with people along the way, bowing, handing out flyers, and repeating 'please, please, your support means a lot' hundreds of times. You might be buying groceries when a candidate warmly shakes your hand. This face-to-face contact turns politics from a distant name into a living person standing right in front of you.",
@@ -213,7 +213,7 @@ const ARTICLES_1 = [
     },
     {
       z:"投票日當天，台灣的投票所大多設在學校或活動中心。台灣採用的是「圈選」和「人工開票」：選民拿到選票後，在候選人旁邊蓋章，投進票匭。等投票時間一結束，開票人員當場把一張張票拿出來、大聲唱名、正字計票，過程完全公開，任何人都可以在旁邊看。這種「開箱見光」的透明方式，是台灣人對選舉結果有信心的重要原因。",
-      py:"Tóupiào rì dàngtiān, Táiwān de tóupiàosuǒ dàduō shè zài xuéxiào huò huódòng zhōngxīn. Táiwān cǎiyòng de shì “quānxuǎn” hé “réngōng kāipiào”: xuǎnmín nádào xuǎnpiào hòu, zài hòuxuǎnrén pángbiān gàizhāng, tóu jìn piàoguī. Děng tóupiào shíjiān yì jiéshù, kāipiào rényuán dāngchǎng bǎ yì zhāng zhāng piào ná chūlái, dàshēng chàngmíng, zhèngzì jìpiào, guòchéng wánquán gōngkāi, rènhé rén dōu kěyǐ zài pángbiān kàn. Zhè zhǒng “kāixiāng jiànguāng” de tòumíng fāngshì, shì Táiwānrén duì xuǎnjǔ jiéguǒ yǒu xìnxīn de zhòngyào yuányīn.",
+      py:"Tóupiào rì dàngtiān, Táiwān de tóupiàosuǒ dàduō shè zài xuéxiào huò huódòng zhōngxīn. Táiwān cǎiyòng de shì “quānxuǎn” hé “réngōng kāipiào”: xuǎnmín nádào xuǎnpiào hòu, zài hòuxuǎnrén pángbiān gàizhāng, tóu jìn piàoguī. Děng tóupiào shíjiān yì jiéshù, kāipiào rényuán dāngcháng bǎ yì zhāng zhāng piào ná chūlái, dàshēng chàngmíng, zhèngzì jìpiào, guòchéng wánquán gōngkāi, rènhé rén dōu kěyǐ zài pángbiān kàn. Zhè zhǒng “kāixiāng jiànguāng” de tòumíng fāngshì, shì Táiwānrén duì xuǎnjǔ jiéguǒ yǒu xìnxīn de zhòngyào yuányīn.",
       m:{
         j:"投票日当日、台湾の投票所はたいてい学校や地域センターに設けられます。台湾が採用しているのは「印を押す方式」と「手作業の開票」です。有権者は投票用紙を受け取り、候補者の横に印を押して投票箱に入れます。投票時間が終わると、開票係がその場で一枚ずつ票を取り出し、大声で名前を読み上げ、「正」の字で数える——過程は完全に公開され、誰でもそばで見学できます。この「箱を開けて明るみに出す」透明なやり方が、台湾人が選挙結果を信頼できる大きな理由です。",
         e:"On election day, Taiwan's polling stations are usually set up in schools or community centers. Taiwan uses paper marking and hand-counting: voters receive a ballot, stamp a mark next to their chosen candidate, and drop it in the box. When voting closes, counting staff pull out each ballot on the spot, call out the name aloud, and tally with tick marks—the whole process fully public, with anyone free to watch from the side. This 'open the box in the light' transparency is a key reason Taiwanese trust their election results.",

@@ -186,7 +186,8 @@ def main():
     def work(z,parts):
         fn=hashlib.md5(z.encode()).hexdigest()[:12]+"gp.mp3";path=os.path.join(OUT,fn)
         if not FORCE and os.path.exists(path) and os.path.getsize(path)>500:
-            with lock:res[z]=fn;skip[0]+=1;return
+            # manifest に ?v=N(読み修正で作り直した印=キャッシュ破り)が付いていれば残す
+            with lock:res[z]=manifest[z] if str(manifest.get(z,"")).split("?")[0]==fn else fn;skip[0]+=1;return
         body=json.dumps({"input":{"ssml":ssml(parts)},"voice":{"languageCode":"cmn-TW","name":"cmn-TW-Wavenet-A"},"audioConfig":{"audioEncoding":"MP3","speakingRate":1.0}}).encode()
         for att in range(4):
             try:

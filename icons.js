@@ -17,9 +17,9 @@
   try {
     if (!document.getElementById('backbtnCss')) {
       var bst = document.createElement('style'); bst.id = 'backbtnCss';
-      bst.textContent = '.backbtn{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:8px 14px 8px 10px;border-radius:12px;background:var(--panel,var(--bg2,#fff));border:1px solid var(--line,var(--bd,#e5e0d8));color:var(--ink2,var(--tx2,#666));text-decoration:none;font-size:14.5px;font-weight:600;line-height:1;cursor:pointer;font-family:inherit}'
+      bst.textContent = '.backbtn{display:inline-flex;align-items:center;gap:6px;min-height:46px;padding:10px 16px 10px 12px;border-radius:12px;background:var(--panel,var(--bg2,#fff));border:1px solid var(--line,var(--bd,#e5e0d8));color:var(--ink2,var(--tx2,#666));text-decoration:none;font-size:16px;font-weight:600;line-height:1;cursor:pointer;font-family:inherit}'
         + '.backbtn:active{transform:scale(.96)}'
-        + '.backbtn svg{width:16px;height:16px;flex-shrink:0}';
+        + '.backbtn svg{width:20px;height:20px;flex-shrink:0}';
       (document.head || document.documentElement).appendChild(bst);
     }
   } catch (e) {}

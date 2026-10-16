@@ -95,9 +95,14 @@ def synth(text, path):
     ssml = f"<speak version='1.0' xml:lang='zh-TW'><voice name='{VOICE}'>{inner}</voice></speak>"
     return post_ssml(ssml, path, text[:20])
 
-# 注音：拼音音標(SAPI)は zh-CN の声で有効。呼読音を一声=平音で統一。ph が拒否されたら代表字の素読みへ自動フォールバック。
-ZY_VOICE = "zh-CN-XiaoxiaoNeural"
+# 注音符號の音声は教育部「國語注音符號手冊-開放部件」の公式録音(CREDITS.md)に差し替え済み。
+# 以前ここは zh-CN-XiaoxiaoNeural(大陸音声)で合成していたが、StayTW は大陸の声・発音を一切使わない(Mia 2026-10-16)。
+# 再生成すると公式録音を上書きしてしまうので、呼ばれたら止める。
 def synth_zy(rep, ph, path):
+    print(f"  skip 注音 {rep}: 教育部の公式録音を使う(TTS で再生成しない・大陸音声禁止)", flush=True)
+    return True
+def _old_synth_zy_disabled(rep, ph, path):
+    ZY_VOICE = "zh-CN-XiaoxiaoNeural"
     if ph:
         ph = re.sub(r"\s*(\d+)$", r" \1", ph)   # Azure SAPI は「音節<空白>声調」を要求（bo1 → bo 1）
         inner = f"<phoneme alphabet='sapi' ph='{ph}'>{esc_xml(rep)}</phoneme>"

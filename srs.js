@@ -17,6 +17,37 @@ const SRS = (() => {
   }
   function today() { return new Date().toISOString().split("T")[0]; }
   function k(lv, w) { return lv + ":" + w; }
+
+  // 2026-09: 文法点も復習に入れる。闖關で一度習って終わり、では身に付かない。
+  //   キーは語と同じ "l1:g#l1-1" の形にして、頭の "g#" で語と見分ける。
+  //   こうすると保存・同期・期限計算は語とまったく同じ道を通るので、増やすのはカードの見た目だけ。
+  const GP = "g#";
+  const isG = (w) => String(w || "").indexOf(GP) === 0;
+  const gKey = (id) => GP + id;
+  function gFind(level, id) {
+    try { return (getGrammarData(level) || []).find((g) => g && g.id === id) || null; } catch (e) { return null; }
+  }
+
+  // 2026-09: 語の級を官方 TBCL 詞語表に合わせ直した(index.html の VOCAB_BY_LEVEL)。
+  // 記録のキーは "l1:公司" のように級を含むので、級が動いた語の記録は迷子になる。
+  // 一度だけ、旧キーの記録を新キーへ移す。新キーに既に記録があればそちらを残す
+  // (両方の級で解いていた人がいる)。旧キーは消さない — 戻したくなった時のため。
+  function migrateLevels() {
+    try {
+      if (localStorage.getItem(KEY + "_lvmig") === "1") return;
+      const moved = (typeof window !== "undefined") && window.STW_LV_MOVED;
+      if (!moved) return;                      // まだ読み込まれていない。次の機会に
+      const d = getData();
+      let n = 0;
+      for (const w in moved) {
+        const from = k(moved[w][0], w), to = k(moved[w][1], w);
+        if (d[from] && !d[to]) { d[to] = d[from]; n++; }
+      }
+      if (n) save(d);
+      localStorage.setItem(KEY + "_lvmig", "1");
+      if (n) console.info("[srs] 級の付け替えに伴い " + n + " 語の記録を移しました");
+    } catch (e) { /* storage が使えなくても学習は続く */ }
+  }
   function isDue(e, now) {
     if (!e) return false;
     return typeof e.nextReviewTs === "number" && e.nextReviewTs <= (now || Date.now());
@@ -75,6 +106,12 @@ const SRS = (() => {
     return true;
   }
 
+  // 文法一覧から「復習に追加」。語の addWord と同じ扱い
+  function addGrammar(level, gid) { return addWord(level, gKey(gid)); }
+  // 闖關が呼ぶ。正解/不正解をそのまま三段評価に流す
+  function recordGrammar(level, gid, grade) { return recordGrade(level, gKey(gid), grade); }
+  function hasGrammar(level, gid) { const d = getData(); return !!d[k(level, gKey(gid))]; }
+
   // 全レベル横断で復習期限が来た単語
   function getAllDue() {
     const d = getData(), now = Date.now(), out = [];
@@ -98,12 +135,18 @@ const SRS = (() => {
 
   function getStats(level) {
     const d = getData(), pf = level + ":", now = Date.now();
-    const entries = Object.entries(d).filter(([x]) => x.startsWith(pf));
+    // 語の進度は「語彙数」を分母に出している。文法点を混ぜると 100% を超えるので分けて数える
+    const all = Object.entries(d).filter(([x]) => x.startsWith(pf));
+    const entries = all.filter(([x]) => !isG(x.slice(pf.length)));
+    const gs = all.filter(([x]) => isG(x.slice(pf.length)));
     return {
       total: entries.length,
       due: entries.filter(([, v]) => isDue(v, now)).length,
       mastered: entries.filter(([, v]) => v.interval >= 21).length,
-      learning: entries.filter(([, v]) => v.interval > 0 && v.interval < 21).length
+      learning: entries.filter(([, v]) => v.interval > 0 && v.interval < 21).length,
+      gTotal: gs.length,
+      gDue: gs.filter(([, v]) => isDue(v, now)).length,
+      gMastered: gs.filter(([, v]) => v.interval >= 21).length
     };
   }
 
@@ -116,6 +159,11 @@ const SRS = (() => {
     const nw = getNew(lvl, 10);
     queue = [];
     allDue.forEach(x => {
+      if (isG(x.word)) {                                   // 文法点
+        const g = gFind(x.level, x.word.slice(GP.length));
+        if (g) queue.push({ isG: true, g: g, w: x.word, level: x.level, isNew: false });
+        return;
+      }
       let v = (getVocabData(x.level) || []).find(w => w.w === x.word);
       // 語彙表に無い語（辞書から手動追加した拡張語）は custom store から内容を引く
       if (!v && typeof window !== "undefined" && window.STW_CUSTOM) v = window.STW_CUSTOM[x.word];
@@ -134,8 +182,44 @@ const SRS = (() => {
     document.getElementById("quizBg").classList.add("show");
   }
 
+  const gTx = (o, mk) => (o && (o[mk] || o.e || o.j)) || "";
+  const gEsc = (x) => String(x == null ? "" : x).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+  // 文法点の復習カード。表=文型だけ、裏=意味・解説・例文。語のカードと同じ三段評価で閉じる
+  function renderGrammar(item, mk) {
+    const g = item.g;
+    const eg = (g.eg || []).slice(0, 2).map(e => {
+      const z = String(e.z || "");
+      return `<div class="srs-gex" onclick="event.stopPropagation();speakZh('${z.replace(/<[^>]*>/g, "").replace(/'/g, "\\'")}')">
+        <span class="z">${z}</span><span class="py">${typeof exRuby === "function" ? exRuby(z.replace(/<[^>]*>/g, ""), e.py || "") : gEsc(e.py || "")}</span><span class="tr">${gEsc(gTx(e, mk))}</span></div>`;
+    }).join("");
+    document.getElementById("quizBox").innerHTML = `
+      <div class="qhd"><span>${twT("srsReviewTitle")} ${cur + 1} / ${queue.length}</span>
+        <span>${item.level.toUpperCase()}・${twT("lsGrammar")}</span>
+        <button class="qclose" onclick="SRS.close()">✕</button></div>
+      <div class="srs-card" id="srsCard" onclick="SRS.flip()">
+        <div id="srsFront">
+          <div class="qmain srs-gt">${gEsc(g.t)}</div>
+          <div class="qsub">${gEsc(gTx(g.p, mk))}</div>
+          <div class="srs-hint">${twT("cardHint")}</div>
+        </div>
+        <div id="srsBack" style="display:none">
+          <div class="qmain srs-gt">${gEsc(g.t)}</div>
+          <div class="qsub">${gEsc(gTx(g.g, mk))}</div>
+          <div class="srs-meaning srs-gx">${gEsc(gTx(g.ex, mk))}</div>
+          ${eg}
+          <div class="srs-btns">
+            <button class="srs-btn srs-ng" onclick="event.stopPropagation();SRS.rate('unknown')">${twT("srsG3")}</button>
+            <button class="srs-btn srs-mid" onclick="event.stopPropagation();SRS.rate('soso')">${twT("srsG2")}</button>
+            <button class="srs-btn srs-ok" onclick="event.stopPropagation();SRS.rate('known')">${twT("srsG1")}</button>
+          </div>
+        </div>
+      </div>`;
+  }
+
   function renderCard() {
     const item = queue[cur], mk = twMKey();
+    if (item.isG) { renderGrammar(item, mk); return; }      // 文法点は読み上げる語が無い
     document.getElementById("quizBox").innerHTML = `
       <div class="qhd"><span>${twT("srsReviewTitle")} ${cur + 1} / ${queue.length}</span>
         <span>${item.level.toUpperCase()}・${item.isNew ? twT("srsNew") : twT("srsAgain")}</span>
@@ -167,7 +251,7 @@ const SRS = (() => {
     const f = document.getElementById("srsFront"), b = document.getElementById("srsBack");
     if (!f || !b) return;
     if (f.style.display !== "none") { f.style.display = "none"; b.style.display = ""; }
-    else speakZh(queue[cur].w); // 裏面表示中にカードを再タップ → もう一度発音
+    else if (!queue[cur].isG) speakZh(queue[cur].w); // 裏面表示中にカードを再タップ → もう一度発音
   }
 
   function rate(grade) {
@@ -183,7 +267,7 @@ const SRS = (() => {
     document.getElementById("quizBox").innerHTML = `
       <div class="qhd"><span>${twT("srsDone")}</span><button class="qclose" onclick="SRS.close()">✕</button></div>
       <div style="text-align:center;padding:26px 10px">
-        <div style="color:var(--ac)">${icon("sparkle",{size:40})}</div>
+        <img class="il" src="images/il/03_review_clear.webp" alt="" width="130" height="130" style="width:130px;height:130px;display:block;margin:0 auto">
         <p style="margin:12px 0;color:var(--tx2)">${twT("srsToday")}: ${queue.length}</p>
         ${capped ? `<p style="margin:0 0 12px;font-size:13px;color:var(--ac);cursor:pointer" onclick="Paywall.show('srs')">${twT("srsFreeCap").replace("{n}", String((typeof Paywall !== "undefined" && Paywall.SRS_FREE_CARDS) || 10))}</p>` : ""}
         <p style="font-size:13px;color:var(--tx3)">${twT("srsLearned")} ${st.total}・${twT("srsMastered")} ${st.mastered}</p>
@@ -198,7 +282,9 @@ const SRS = (() => {
   }
 
   return { start, record, recordGrade, addWord, flip, rate, close, getDueCount, getAllDue, getStats, isDue, getData, GRADES,
-           _import(d) { localStorage.setItem(KEY, JSON.stringify(d)); } };
+           addGrammar, recordGrammar, hasGrammar, isGrammarKey: isG, gKey,
+           _import(d) { localStorage.setItem(KEY, JSON.stringify(d)); },
+           migrateLevels };
 })();
 // ★重要：SRS は const 宣言なので window に自動では乗らない（TTS / STW_WEB / Paywall と同じ罠）。
 //   index.html は `window.SRS && …` で参照しているため、掛けないと辞書の「復習に追加」や

@@ -20,7 +20,7 @@
 <meta name="twitter:image" content="https://staytw.pages.dev/images/og.png">
 <link rel="canonical" href="https://staytw.pages.dev/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<script src="icons.js?v=1"></script>
+<script src="icons.js?v=2"></script>
 <script src="analytics.js?v=51"></script>
 <script>
 /* ネイティブアプリ（RN WebView）がこのランディングに来てしまったらツールへ。
@@ -124,6 +124,12 @@ a:hover{text-decoration:underline}
 .hero-cta-store svg{transition:none}
 .hero-cta-store:hover svg{transform:none}
 .hero-sub{font-size:13px;color:var(--tx-s)}
+.store-badge{display:inline-flex;line-height:0;border-radius:8px;transition:transform .2s var(--ease)}
+.store-badge:hover{transform:translateY(-1px)}
+.store-badge img{height:48px;display:block}
+.cta-dl,.badge-row{display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap}
+.badge-row{justify-content:center}
+.hero-dl{display:none}
 .hero-mascot{flex-shrink:0;width:clamp(220px,26vw,340px);position:relative}
 .hero-mascot img{width:100%;height:auto;display:block;filter:drop-shadow(0 12px 32px rgba(0,0,0,.12))}
 .hero-mascot .mascot-name{text-align:center;font-size:12px;color:var(--tx3);letter-spacing:.15em;margin-top:10px}
@@ -140,6 +146,10 @@ a:hover{text-decoration:underline}
   .hero-desc{order:2;margin-bottom:0}
   .hero-cta,.hero-cta-store{flex:1 1 auto;justify-content:center}
   .hero-sub{order:3;margin-top:14px}
+  /* 下載鈕：手機放在熊正下方，一進來就看到（同 StayJP） */
+  .hero-dl{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;order:-1;margin:4px 0 20px}
+  .hero-dl .store-badge img{height:44px}
+  .cta-dl{display:none}
 }
 
 /* == Marquee == */
@@ -272,6 +282,7 @@ a:hover{text-decoration:underline}
 <!-- Hero -->
 <section class="hero">
   <div class="hero-inner">
+    <div class="hero-dl"><a href="https://apps.apple.com/app/id6794272037" target="_blank" rel="noopener" class="store-badge" aria-label="Download on the App Store"><img src="app-store-badge.svg" alt="Download on the App Store"></a><a href="https://play.google.com/store/apps/details?id=com.staytw.app" target="_blank" rel="noopener" class="store-badge" aria-label="Get it on Google Play"><img src="google-play-badge.svg" alt="Get it on Google Play"></a></div>
     <div class="hero-eyebrow reveal" data-i18n="heroEyebrow">STAYTW · STUDY</div>
     <h2 class="hero-kana reveal reveal-d1" data-i18n="heroKana">毎日、少しずつ。</h2>
     <h1 class="hero-title reveal reveal-d2"><span data-i18n="heroTitle1">ゼロから、</span><br><em data-i18n="heroTitleEm">台湾華語。</em></h1>
@@ -280,10 +291,7 @@ a:hover{text-decoration:underline}
       <a href="/?app=1" class="hero-cta"><span data-i18n="heroCta">無料で始める</span>
         <svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <a href="https://apps.apple.com/app/id6794272037" target="_blank" rel="noopener" class="hero-cta hero-cta-store">
-        <svg style="width:18px;height:18px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.365 1.43c0 1.14-.42 2.2-1.12 2.99-.75.85-1.98 1.5-3.02 1.42-.12-1.1.42-2.26 1.09-3 .74-.83 2.06-1.46 3.05-1.41zM20.5 17.02c-.55 1.27-.82 1.84-1.53 2.96-.98 1.56-2.37 3.5-4.08 3.51-1.52.02-1.91-.99-3.98-.98-2.07.01-2.5.99-4.02.97-1.71-.02-3.02-1.77-4-3.33C-.02 15.9-.3 10.5 2.37 7.9c1.14-1.13 2.62-1.79 4.02-1.79 1.42 0 2.31.98 3.98.98 1.62 0 2.6-.98 4.02-.98 1.24 0 2.55.6 3.5 1.65-3.07 1.68-2.57 6.06.61 7.26z"/></svg>
-        <span data-i18n="heroDownload">App Store で入手</span>
-      </a>
+      <span class="cta-dl"><a href="https://apps.apple.com/app/id6794272037" target="_blank" rel="noopener" class="store-badge" aria-label="Download on the App Store"><img src="app-store-badge.svg" alt="Download on the App Store"></a><a href="https://play.google.com/store/apps/details?id=com.staytw.app" target="_blank" rel="noopener" class="store-badge" aria-label="Get it on Google Play"><img src="google-play-badge.svg" alt="Get it on Google Play"></a></span>
       <span class="hero-sub" data-i18n="heroSub">無料・登録不要・ブラウザですぐ使える</span>
     </div>
   </div>
@@ -521,10 +529,7 @@ a:hover{text-decoration:underline}
 </svg>
     <h2 class="section-title reveal" data-i18n="notifyTitle">App Store で公開中。</h2>
     <p class="reveal reveal-d1" style="color:var(--tx2);margin:10px 0 22px" data-i18n="notifyDesc">iPhone / iPad で StayTW。単語・文法・読解・発音チェック・毎日リマインダー、無料で始められます。</p>
-    <a id="dlBtn" class="hero-cta reveal reveal-d2" href="https://apps.apple.com/app/id6794272037" target="_blank" rel="noopener"
-       style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer">
-      <span data-i18n="notifyBtn">App Store でダウンロード</span>
-    </a>
+    <div id="dlBtn" class="badge-row reveal reveal-d2"><a href="https://apps.apple.com/app/id6794272037" target="_blank" rel="noopener" class="store-badge" aria-label="Download on the App Store"><img src="app-store-badge.svg" alt="Download on the App Store"></a><a href="https://play.google.com/store/apps/details?id=com.staytw.app" target="_blank" rel="noopener" class="store-badge" aria-label="Get it on Google Play"><img src="google-play-badge.svg" alt="Get it on Google Play"></a></div>
   </div>
 </section>
 
@@ -550,7 +555,7 @@ a:hover{text-decoration:underline}
         </div>
         <div class="pt-desc" data-i18n="prPremDesc">クイズ・SRS復習・模試・スピーキング・記事、すべて無制限。学習履歴のクラウド同期つき。</div>
         <p class="pr-trial trial-only" hidden data-i18n="prTrial">月額プランは 7 日間無料トライアル。期間内に解約すれば料金はかかりません。</p>
-        <a href="https://apps.apple.com/app/id6794272037" target="_blank" rel="noopener" class="pr-btn" data-i18n="heroDownload">App Store で入手</a>
+        <div class="badge-row" style="margin-top:4px"><a href="https://apps.apple.com/app/id6794272037" target="_blank" rel="noopener" class="store-badge" aria-label="Download on the App Store"><img src="app-store-badge.svg" alt="Download on the App Store"></a><a href="https://play.google.com/store/apps/details?id=com.staytw.app" target="_blank" rel="noopener" class="store-badge" aria-label="Get it on Google Play"><img src="google-play-badge.svg" alt="Get it on Google Play"></a></div>
       </div>
     </div>
     <p class="pr-note"><span data-i18n="prNote">価格は iOS アプリ内課金。お住まいの国・地域では App Store の現地価格が表示されます。</span> <a href="pricing" data-i18n="prCta">料金の詳細を見る</a></p>
@@ -649,7 +654,7 @@ document.addEventListener("DOMContentLoaded", function(){
   </div>
 </footer>
 
-<script src="i18n.js?v=130"></script>
+<script src="i18n.js?v=132"></script>
 <script>
 function toggleTheme(){
   const d = document.documentElement.dataset.theme === "dark";

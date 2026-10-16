@@ -23,7 +23,7 @@ const ESS = (() => {
       <div class="ess-grid">${cur.items.map((it, i) =>
         `<button class="ess-card" onclick="ESS.say(${i})">
            <div class="ess-w">${esc(it.w)}</div>
-           <div class="ess-zy">${zy(it.zy)}</div>
+           ${typeof twPyOnly === "function" && twPyOnly() ? "" : `<div class="ess-zy">${zy(it.zy)}</div>`}
            <div class="ess-py">${esc(it.py)}</div>
            <div class="ess-m">${esc(mean(it))}</div>
          </button>`).join("")}</div>
@@ -62,7 +62,7 @@ const ESS = (() => {
   // 読み札:正解の語＋注音＋拼音＋意味＋音。詳解で使い回す。
   function cardLine(it) {
     return `<b style="font-family:var(--serif);font-size:21px">${esc(it.w)}</b>`
-      + `（${zy(it.zy)}｜${esc(it.py)}）`
+      + `（${typeof twPhPair === "function" ? twPhPair(it.zy, it.py, "｜") : zy(it.zy) + "｜" + esc(it.py)}）`
       + `<button class="tts-btn" style="width:26px;height:26px;vertical-align:middle;margin-left:5px" onclick="ESS.sayW('${esc(it.w)}')">`
       + `<svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>`
       + `<div style="font-size:14px;color:var(--tx2);margin-top:3px">${esc(mean(it))}</div>`;

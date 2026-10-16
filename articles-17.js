@@ -49,7 +49,7 @@ const ARTICLES_17 = [
       },
       {
         "z": "端午節正好在夏天的開始，天氣開始變熱，古人認為這是容易生病、蟲蛇出沒的「毒月」。所以端午還有很多驅邪避毒的習俗：門口會掛上艾草和菖蒲，小孩身上會戴香包，有些地方還會喝雄黃酒。這些習俗的背後，其實是古人希望全家在炎熱的季節裡平安健康的心意。",
-        "py": "Duān wǔ jié zhèng hǎo zài xià tiān de kāi shǐ, tiān qì kāi shǐ biàn rè, gǔ rén rèn wèi zhè shì róng yì shēng bìng, chóng shé chū méi de\"dú yuè\". Suǒ yǐ duān wǔ hái yǒu hěn duō qū xié bì dú de xí sú: mén kǒu huì guà shàng ài cǎo hé chāng pú, xiǎo hái shēn shàng huì dài xiāng bāo, yǒu xiē dì fāng hái huì hē xióng huáng jiǔ. Zhè xiē xí sú de bèi hòu, qí shí shì gǔ rén xī wàng quán jiā zài yán rè de jì jié lǐ píng ān jiàn kāng de xīn yì.",
+        "py": "Duān wǔ jié zhèng hǎo zài xià tiān de kāi shǐ, tiān qì kāi shǐ biàn rè, gǔ rén rèn wéi zhè shì róng yì shēng bìng, chóng shé chū mò de\"dú yuè\". Suǒ yǐ duān wǔ hái yǒu hěn duō qū xié bì dú de xí sú: mén kǒu huì guà shàng ài cǎo hé chāng pú, xiǎo hái shēn shàng huì dài xiāng bāo, yǒu xiē dì fāng hái huì hē xióng huáng jiǔ. Zhè xiē xí sú de bèi hòu, qí shí shì gǔ rén xī wàng quán jiā zài yán rè de jì jié lǐ píng ān jiàn kāng de xīn yì.",
         "m": {
           "j": "端午節はちょうど夏の初め、暑くなり始める頃。昔の人はこの時期を、病気になりやすく、虫や蛇が出る「毒月」と考えました。そのため端午には、邪気や毒を払う習わしも多くあります。玄関にヨモギやショウブを掛け、子どもは香り袋を身につけ、地域によっては雄黄酒を飲むことも。これらの習わしの奥には、暑い季節に家族みんなが無事で健康であってほしいという、昔の人の願いが込められています。",
           "e": "The festival falls right at the start of summer, as the heat sets in—a time the ancients saw as a \"poison month\" when illness spreads and insects and snakes appear. So the festival is also full of customs to ward off evil and poison: mugwort and calamus hung by the door, children wearing scented sachets, and in some places drinking realgar wine. Behind these customs lies the old wish for the whole family to stay safe and healthy through the hot season.",
@@ -58,7 +58,7 @@ const ARTICLES_17 = [
       },
       {
         "z": "對外國人來說，端午節是認識台灣傳統文化很好的機會。你可以去河邊看一場龍舟賽，感受那種全場一起吶喊的氣氛；也可以買幾顆不同口味的粽子來比較看看，從南部粽到北部粽，甚至還有沾糖吃的甜鹼粽。中午別忘了試試立蛋，說不定你就是今年運氣最好的那一個。",
-        "py": "Duì wài guó rén lái shuō, duān wǔ jié shì rèn shí tái wān chuán tǒng wén huà hěn hǎo de jī huì. Nǐ kě yǐ qù hé biān kàn yī chǎng lóng zhōu sài, gǎn shòu nà zhǒng quán chǎng yì qǐ nà hǎn de qì fēn; yě kě yǐ mǎi jǐ kē bù tóng kǒu wèi de zòng zi lái bǐ jiào kàn kàn, cóng nán bù zòng dào běi bù zòng, shèn zhì hái yǒu zhān táng chī de tián jiǎn zòng. Zhōng wǔ bié wàng le shì shì lì dàn, shuō bù dìng nǐ jiù shì jīn nián yùn qì zuì hǎo de nà yī gè.",
+        "py": "Duì wài guó rén lái shuō, duān wǔ jié shì rèn shì tái wān chuán tǒng wén huà hěn hǎo de jī huì. Nǐ kě yǐ qù hé biān kàn yī chǎng lóng zhōu sài, gǎn shòu nà zhǒng quán chǎng yì qǐ nà hǎn de qì fēn; yě kě yǐ mǎi jǐ kē bù tóng kǒu wèi de zòng zi lái bǐ jiào kàn kàn, cóng nán bù zòng dào běi bù zòng, shèn zhì hái yǒu zhān táng chī de tián jiǎn zòng. Zhōng wǔ bié wàng le shì shì lì dàn, shuō bù dìng nǐ jiù shì jīn nián yùn qì zuì hǎo de nà yī gè.",
         "m": {
           "j": "外国人にとって端午節は、台湾の伝統文化を知るとてもよい機会です。川辺でドラゴンボート競争を観て、会場全体が一緒に叫ぶあの雰囲気を味わうのもいいでしょう。味の違うちまきをいくつか買って食べ比べるのも楽しい——南部ちまき、北部ちまき、さらには砂糖をつけて食べる甘いアルカリちまき（鹼粽）まであります。お昼には卵立てもお忘れなく。もしかすると、あなたが今年いちばん運のいい人かもしれません。",
           "e": "For foreigners, the festival is a great chance to get to know Taiwan's traditional culture. You can watch a dragon boat race by the river and feel the whole crowd shouting together, or buy a few zongzi of different styles to compare—southern-style, northern-style, even the sweet alkaline zongzi eaten dipped in sugar. And at noon, don't forget to try standing an egg—you just might be this year's luckiest person.",
@@ -165,7 +165,7 @@ const ARTICLES_17 = [
     "paras": [
       {
         "z": "在台灣，除了超市和便利商店，還有一個充滿生命力的地方，叫菜市場。清晨的傳統市場裡，人聲鼎沸：賣菜的、賣魚的、賣肉的攤販一個接一個，蔬菜水果堆得像小山，老闆大聲吆喝著今天的價格。這裡的東西不但新鮮，價格通常也比超市便宜，是很多台灣家庭每天採買的地方。",
-        "py": "Zài tái wān, chú le chāo shì hé biàn lì shāng diàn, hái yǒu yī gè chōng mǎn shēng mìng lì de dì fāng, jiào cài shì chǎng. Qīng chén de chuán tǒng shì chǎng lǐ, rén shēng dǐng fèi: mài cài de, mài yú de, mài ròu de tān fàn yī gè jiē yī gè, shū cài shuǐ guǒ duī dé xiàng xiǎo shān, lǎo bǎn dà shēng yāo hē zhù jīn tiān de jià gé. Zhè lǐ de dōng xī bù dàn xīn xiān, jià gé tōng cháng yě bǐ chāo shì pián yi, shì hěn duō tái wān jiā tíng měi tiān cǎi mǎi de dì fāng.",
+        "py": "Zài tái wān, chú le chāo shì hé biàn lì shāng diàn, hái yǒu yī gè chōng mǎn shēng mìng lì de dì fāng, jiào cài shì chǎng. Qīng chén de chuán tǒng shì chǎng lǐ, rén shēng dǐng fèi: mài cài de, mài yú de, mài ròu de tān fàn yī gè jiē yī gè, shū cài shuǐ guǒ duī dé xiàng xiǎo shān, lǎo bǎn dà shēng yāo hè zhù jīn tiān de jià gé. Zhè lǐ de dōng xī bù dàn xīn xiān, jià gé tōng cháng yě bǐ chāo shì pián yi, shì hěn duō tái wān jiā tíng měi tiān cǎi mǎi de dì fāng.",
         "m": {
           "j": "台湾には、スーパーやコンビニのほかに、生命力あふれる場所があります。「菜市場（伝統市場）」です。早朝の市場は、人の声でにぎやか。野菜売り、魚売り、肉売りの屋台が次々と並び、野菜や果物は小山のように積まれ、店主は今日の値段を大声で呼びかけます。ここの品はどれも新鮮で、値段もたいていスーパーより安く、多くの台湾の家庭が毎日買い出しに来る場所です。",
           "e": "In Taiwan, beyond supermarkets and convenience stores, there's a place bursting with life: the traditional market. In the early morning it hums with voices—vegetable sellers, fishmongers, butchers one after another, produce piled like little hills, vendors calling out today's prices. The goods are fresh and usually cheaper than at the supermarket, making it where many Taiwanese families shop every day.",
@@ -174,7 +174,7 @@ const ARTICLES_17 = [
       },
       {
         "z": "逛菜市場，最有趣的是那份人情味。在傳統市場買東西，常常可以殺價，或是和老闆聊上幾句。買菜的阿姨、賣魚的大哥，很多都認識彼此，甚至知道你家愛吃什麼。老闆有時候還會多送你一把蔥、一點薑，說一句「這個送你，回去煮！」。這種人與人之間的溫暖，是冷冰冰的超市給不了的。",
-        "py": "Guàng cài shì chǎng, zuì yǒu qù de shì nà fèn rén qíng wèi. Zài chuán tǒng shì chǎng mǎi dōng xī, cháng cháng kě yǐ shā jià, huò shì hé lǎo bǎn liáo shàng jǐ jù. Mǎi cài de ā yí, mài yú de dà gē, hěn duō dōu rèn shí bǐ cǐ, shèn zhì zhī dào nǐ jiā ài chī shén me. Lǎo bǎn yǒu shí hòu hái huì duō sòng nǐ yī bǎ cōng, yī diǎn jiāng, shuō yī jù\"zhè gè sòng nǐ, huí qù zhǔ! \". Zhè zhǒng rén yǔ rén zhī jiān de wēn nuǎn, shì lěng bīng bīng de chāo shì gěi bù liǎo de.",
+        "py": "Guàng cài shì chǎng, zuì yǒu qù de shì nà fèn rén qíng wèi. Zài chuán tǒng shì chǎng mǎi dōng xī, cháng cháng kě yǐ shā jià, huò shì hé lǎo bǎn liáo shàng jǐ jù. Mǎi cài de ā yí, mài yú de dà gē, hěn duō dōu rèn shì bǐ cǐ, shèn zhì zhī dào nǐ jiā ài chī shén me. Lǎo bǎn yǒu shí hòu hái huì duō sòng nǐ yī bǎ cōng, yī diǎn jiāng, shuō yī jù\"zhè gè sòng nǐ, huí qù zhǔ! \". Zhè zhǒng rén yǔ rén zhī jiān de wēn nuǎn, shì lěng bīng bīng de chāo shì gěi bù liǎo de.",
         "m": {
           "j": "市場歩きでいちばん面白いのは、あの「人情味」。伝統市場では、よく値切りができ、店主とひと言ふた言おしゃべりもできます。買い物に来るおばさん、魚屋のお兄さん——多くが互いに顔なじみで、あなたの家が何を好きかまで知っていることも。店主は時々、ねぎを一束、しょうがを少し、「これはおまけ、帰って料理しな！」と言って持たせてくれます。この人と人との温かさは、冷たいスーパーには出せないものです。",
           "e": "The best part of wandering the market is the human warmth. At a traditional market you can often haggle or chat a few words with the vendor. The aunties buying vegetables and the fishmonger big brother often all know one another—some even know what your family likes to eat. Sometimes the vendor tosses in an extra bunch of scallions or a bit of ginger, saying, \"This one's on me—go home and cook!\" That warmth between people is something a cold supermarket just can't give.",
@@ -192,7 +192,7 @@ const ARTICLES_17 = [
       },
       {
         "z": "除了早上的市場，台灣還有黃昏市場和夜市。黃昏市場開在傍晚，方便下班的人採買；夜市則更偏向小吃和娛樂。不同時段的市場，服務著不同作息的人，也讓買菜這件事變得很有彈性。想吃什麼、什麼時候去，都有地方可以逛。",
-        "py": "Chú le zǎo shàng de shì chǎng, tái wān hái yǒu huáng hūn shì chǎng hé yè shì. Huáng hūn shì chǎng kāi zài bàng wǎn, fāng biàn xià bān de rén cǎi mǎi; yè shì zé gèng piān xiàng xiǎo chī hé yú lè. Bù tóng shí duàn de shì chǎng, fú wù zhù bù tóng zuò xī de rén, yě ràng mǎi cài zhè jiàn shì biàn dé hěn yǒu dàn xìng. Xiǎng chī shén me, shén me shí hòu qù, dōu yǒu dì fāng kě yǐ guàng.",
+        "py": "Chú le zǎo shang de shì chǎng, tái wān hái yǒu huáng hūn shì chǎng hé yè shì. Huáng hūn shì chǎng kāi zài bāng wǎn, fāng biàn xià bān de rén cǎi mǎi; yè shì zé gèng piān xiàng xiǎo chī hé yú lè. Bù tóng shí duàn de shì chǎng, fú wù zhù bù tóng zuò xí de rén, yě ràng mǎi cài zhè jiàn shì biàn dé hěn yǒu tán xìng. Xiǎng chī shén me, shén me shí hòu qù, dōu yǒu dì fāng kě yǐ guàng.",
         "m": {
           "j": "朝の市場のほかに、台湾には「夕暮れ市場（黄昏市場）」と「夜市」もあります。黄昏市場は夕方に開き、仕事帰りの買い物に便利。夜市はより屋台グルメと娯楽寄りです。時間帯の違う市場が、生活リズムの違う人々に応え、「買い物」をとても融通のきくものにしています。何を食べたいか、いつ行くか——どんな時でも、ぶらつける場所があるのです。",
           "e": "Beyond the morning market, Taiwan also has evening markets and night markets. The evening market opens at dusk, convenient for people shopping after work, while the night market leans more toward street food and fun. Markets at different times serve people on different schedules, making \"buying groceries\" wonderfully flexible. Whatever you crave, whenever you go, there's always somewhere to browse.",
@@ -201,7 +201,7 @@ const ARTICLES_17 = [
       },
       {
         "z": "對剛到台灣的外國人來說，菜市場可能有點吵、有點擠，但它其實是認識台灣生活最快的方式。學會幾句簡單的中文，像「這個怎麼賣？」「算便宜一點啦！」，你就能像在地人一樣，在攤販之間穿梭。當老闆對你笑著多送一把蔥的時候，你就真正嚐到了台灣的人情味。",
-        "py": "Duì gāng dào tái wān de wài guó rén lái shuō, cài shì chǎng kě néng yǒu diǎn chǎo, yǒu diǎn jǐ, dàn tā qí shí shì rèn shí tái wān shēng huó zuì kuài de fāng shì. Xué huì jǐ jù jiǎn dān de zhōng wén, xiàng\"zhè gè zěn me mài? \" \"suàn pián yi yī diǎn la! \", nǐ jiù néng xiàng zài dì rén yī yàng, zài tān fàn zhī jiān chuān suō. Dāng lǎo bǎn duì nǐ xiào zhù duō sòng yī bǎ cōng de shí hòu, nǐ jiù zhēn zhèng cháng dào le tái wān de rén qíng wèi.",
+        "py": "Duì gāng dào tái wān de wài guó rén lái shuō, cài shì chǎng kě néng yǒu diǎn chǎo, yǒu diǎn jǐ, dàn tā qí shí shì rèn shì tái wān shēng huó zuì kuài de fāng shì. Xué huì jǐ jù jiǎn dān de zhōng wén, xiàng\"zhè gè zěn me mài? \" \"suàn pián yi yī diǎn la! \", nǐ jiù néng xiàng zài dì rén yī yàng, zài tān fàn zhī jiān chuān suō. Dāng lǎo bǎn duì nǐ xiào zhù duō sòng yī bǎ cōng de shí hòu, nǐ jiù zhēn zhèng cháng dào le tái wān de rén qíng wèi.",
         "m": {
           "j": "台湾に来たばかりの外国人にとって、菜市場は少しうるさく、少し混んでいるかもしれません。でも実は、台湾の暮らしを知るいちばんの近道です。「これいくら？」「もう少し安くして！」といった簡単な中国語を覚えれば、地元の人のように屋台の間を行き来できます。店主が笑顔でねぎを一束おまけしてくれたとき、あなたは本当の意味で台湾の人情味を味わったことになるのです。",
           "e": "For newcomers to Taiwan, the market may feel a little loud and crowded, but it's actually the fastest way to get to know Taiwanese life. Learn a few simple phrases like \"How much is this?\" and \"Give me a better price!\" and you can weave among the stalls like a local. And when a vendor smiles and slips you an extra bunch of scallions, you'll have truly tasted Taiwan's human warmth.",
@@ -262,8 +262,8 @@ const ARTICLES_17 = [
       },
       {
         "w": "吆喝",
-        "zy": "ㄧㄠ ㄏㄜ",
-        "py": "yāohē",
+        "zy": "ㄧㄠ ㄏㄜˋ",
+        "py": "yāohè",
         "m": {
           "j": "（客寄せに）大声で呼びかける",
           "e": "to hawk; call out",
@@ -308,7 +308,7 @@ const ARTICLES_17 = [
     "paras": [
       {
         "z": "台灣位在板塊交界的地方，是一個地震很多的島嶼。住在台灣，你遲早會遇到地震：可能是輕輕的一下搖晃，也可能是讓整棟樓都搖起來的大地震。對台灣人來說，小地震幾乎是生活的一部分，很多人搖一搖就繼續做自己的事，還會淡定地說一句：「喔，地震。」",
-        "py": "Tái wān wèi zài bǎn kuài jiāo jiè de dì fāng, shì yī gè dì zhèn hěn duō de dǎo yǔ. Zhù zài tái wān, nǐ chí zǎo huì yù dào dì zhèn: kě néng shì qīng qīng de yī xià yáo huǎng, yě kě néng shì ràng zhěng dòng lóu dōu yáo qǐ lái de dà dì zhèn. Duì tái wān rén lái shuō, xiǎo dì zhèn jǐ hū shì shēng huó de yī bù fèn, hěn duō rén yáo yī yáo jiù jì xù zuò zì jǐ de shì, hái huì dàn dìng dì shuō yī jù: \"ō, dì zhèn. \"",
+        "py": "Tái wān wèi zài bǎn kuài jiāo jiè de dì fāng, shì yī gè dì zhèn hěn duō de dǎo yǔ. Zhù zài tái wān, nǐ chí zǎo huì yù dào dì zhèn: kě néng shì qīng qīng de yī xià yáo huàng, yě kě néng shì ràng zhěng dòng lóu dōu yáo qǐ lái de dà dì zhèn. Duì tái wān rén lái shuō, xiǎo dì zhèn jī hū shì shēng huó de yī bù fèn, hěn duō rén yáo yī yáo jiù jì xù zuò zì jǐ de shì, hái huì dàn dìng dì shuō yī jù: \"ō, dì zhèn. \"",
         "m": {
           "j": "台湾はプレートの境目に位置する、地震の多い島です。台湾に住めば、遅かれ早かれ地震に出会います。ほんの軽い揺れのこともあれば、建物全体が揺れる大地震のことも。台湾人にとって、小さな地震はほとんど生活の一部。多くの人は少し揺れても平然と自分のことを続け、「あ、地震だ」とひと言つぶやくだけです。",
           "e": "Taiwan sits at the boundary of tectonic plates, an island with many earthquakes. Live here and sooner or later you'll feel one—maybe a gentle sway, maybe a big quake that rocks the whole building. For Taiwanese, small quakes are almost part of daily life; many just keep doing what they're doing after a shake, calmly remarking, \"Oh, earthquake.\"",
@@ -317,7 +317,7 @@ const ARTICLES_17 = [
       },
       {
         "z": "雖然台灣人看起來很冷靜，但這份冷靜其實來自「準備」。台灣的建築物有嚴格的耐震規定，學校每年都會有地震演習，手機也會在強震來臨前幾秒發出「國家級警報」，用很大的聲音提醒大家。這幾秒鐘雖然短，卻可能讓你有時間躲到安全的地方。",
-        "py": "Suī rán tái wān rén kàn qǐ lái hěn lěng jìng, dàn zhè fèn lěng jìng qí shí lái zì\"zhǔn bèi\". Tái wān de jiàn zhù wù yǒu yán gé de nài zhèn guī dìng, xué xiào měi nián dōu huì yǒu dì zhèn yǎn xí, shǒu jī yě huì zài qiáng zhèn lái lín qián jǐ miǎo fā chū\"guó jiā jí jǐng bào\", yòng hěn dà de shēng yīn tí xǐng dà jiā. Zhè jǐ miǎo zhōng suī rán duǎn, què kě néng ràng nǐ yǒu shí jiān duǒ dào ān quán de dì fāng.",
+        "py": "Suī rán tái wān rén kàn qǐ lái hěn lěng jìng, dàn zhè fèn lěng jìng qí shí lái zì\"zhǔn bèi\". Tái wān de jiàn zhú wù yǒu yán gé de nài zhèn guī dìng, xué xiào měi nián dōu huì yǒu dì zhèn yǎn xí, shǒu jī yě huì zài qiáng zhèn lái lín qián jǐ miǎo fā chū\"guó jiā jí jǐng bào\", yòng hěn dà de shēng yīn tí xǐng dà jiā. Zhè jǐ miǎo zhōng suī rán duǎn, què kě néng ràng nǐ yǒu shí jiān duǒ dào ān quán de dì fāng.",
         "m": {
           "j": "台湾人は落ち着いて見えますが、その冷静さは実は「備え」から来ています。台湾の建物には厳しい耐震基準があり、学校では毎年地震訓練が行われ、スマホは強い揺れが来る数秒前に「国家級警報」を大音量で鳴らして知らせます。このわずか数秒でも、安全な場所に隠れる時間を与えてくれるかもしれません。",
           "e": "Taiwanese may look calm, but that calm comes from preparation. Buildings follow strict earthquake-resistance codes, schools run earthquake drills every year, and phones blast a \"national alert\" a few seconds before strong shaking arrives. Those few seconds are short, but they may give you just enough time to get somewhere safe.",
@@ -326,7 +326,7 @@ const ARTICLES_17 = [
       },
       {
         "z": "地震發生的時候，最重要的口訣是「趴下、掩護、穩住」。趴到地上，躲在堅固的桌子底下，用手護住頭和脖子，抓住桌腳穩住身體，等搖晃停止。不要急著往外跑，也不要站在窗戶或大型家具旁邊。搖完之後，再冷靜地檢查瓦斯、關好電源，必要時往空曠的地方避難。",
-        "py": "Dì zhèn fā shēng de shí hòu, zuì zhòng yào de kǒu jué shì\"pā xià, yǎn hù, wěn zhù\". Pā dào dì shàng, duǒ zài jiān gù de zhuō zi dǐ xià, yòng shǒu hù zhù tóu hé bó zi, zhuā zhù zhuō jiǎo wěn zhù shēn tǐ, děng yáo huǎng tíng zhǐ. Bú yào jí zhù wǎng wài pǎo, yě bú yào zhàn zài chuāng hù huò dà xíng jiā jù páng biān. Yáo wán zhī hòu, zài lěng jìng dì jiǎn chá wǎ sī, guān hǎo diàn yuán, bì yào shí wǎng kōng kuàng de dì fāng bì nán.",
+        "py": "Dì zhèn fā shēng de shí hòu, zuì zhòng yào de kǒu jué shì\"pā xià, yǎn hù, wěn zhù\". Pā dào dì shàng, duǒ zài jiān gù de zhuō zi dǐ xià, yòng shǒu hù zhù tóu hé bó zi, zhuā zhù zhuō jiǎo wěn zhù shēn tǐ, děng yáo huàng tíng zhǐ. Bú yào jí zhù wǎng wài pǎo, yě bú yào zhàn zài chuāng hù huò dà xíng jiā jù páng biān. Yáo wán zhī hòu, zài lěng jìng dì jiǎn chá wǎ sī, guān hǎo diàn yuán, bì yào shí wǎng kōng kuàng de dì fāng bì nàn.",
         "m": {
           "j": "地震が起きたとき、いちばん大切な合言葉は「伏せる・隠れる・動かない（趴下・掩護・穩住）」です。床に伏せ、丈夫な机の下に隠れ、手で頭と首を守り、机の脚をつかんで体を安定させ、揺れが収まるのを待ちます。あわてて外に飛び出したり、窓や大きな家具のそばに立ったりしてはいけません。揺れが収まったら、落ち着いてガスを確認し、電源を切り、必要なら広い場所へ避難します。",
           "e": "When an earthquake hits, the key mantra is \"Drop, Cover, Hold On.\" Drop to the floor, take cover under a sturdy table, protect your head and neck with your hands, grip a table leg to steady yourself, and wait for the shaking to stop. Don't rush outside, and don't stand near windows or large furniture. Once it's over, calmly check the gas, switch off the power, and if needed evacuate to an open area.",
@@ -335,7 +335,7 @@ const ARTICLES_17 = [
       },
       {
         "z": "平常的準備也很重要。很多台灣家庭會準備一個「地震包」，裡面放著手電筒、水、乾糧、行動電源、常用藥品和一點現金。家具最好固定在牆上，重的東西不要放在高處。這些準備平常用不到，但真正遇到大地震的時候，可能就是保護自己和家人的關鍵。",
-        "py": "Píng cháng de zhǔn bèi yě hěn zhòng yào. Hěn duō tái wān jiā tíng huì zhǔn bèi yī gè\"dì zhèn bāo\", lǐ miàn fàng zhù shǒu diàn tǒng, shuǐ, qián liáng, xíng dòng diàn yuán, cháng yòng yào pǐn hé yī diǎn xiàn jīn. Jiā jù zuì hǎo gù dìng zài qiáng shàng, zhòng de dōng xī bú yào fàng zài gāo chù. Zhè xiē zhǔn bèi píng cháng yòng bú dào, dàn zhēn zhèng yù dào dà dì zhèn de shí hòu, kě néng jiù shì bǎo hù zì jǐ hé jiā rén de guān jiàn.",
+        "py": "Píng cháng de zhǔn bèi yě hěn zhòng yào. Hěn duō tái wān jiā tíng huì zhǔn bèi yī gè\"dì zhèn bāo\", lǐ miàn fàng zhe shǒu diàn tǒng, shuǐ, gān liáng, xíng dòng diàn yuán, cháng yòng yào pǐn hé yī diǎn xiàn jīn. Jiā jù zuì hǎo gù dìng zài qiáng shàng, zhòng de dōng xī bú yào fàng zài gāo chù. Zhè xiē zhǔn bèi píng cháng yòng bú dào, dàn zhēn zhèng yù dào dà dì zhèn de shí hòu, kě néng jiù shì bǎo hù zì jǐ hé jiā rén de guān jiàn.",
         "m": {
           "j": "日ごろの備えも大切です。多くの台湾の家庭は「防災バッグ（地震包）」を用意していて、中には懐中電灯、水、非常食、モバイルバッテリー、常備薬、そして少しの現金を入れています。家具はできるだけ壁に固定し、重いものは高い場所に置かないように。こうした備えは普段は使いませんが、いざ大地震に遭ったとき、自分と家族を守る鍵になるかもしれません。",
           "e": "Everyday preparation matters too. Many Taiwanese families keep an \"earthquake bag\" with a flashlight, water, dry food, a power bank, everyday medicine, and a little cash. Secure furniture to the wall, and don't put heavy things up high. You won't use this preparation most of the time, but in a real major quake it could be the key to protecting yourself and your family.",
@@ -344,7 +344,7 @@ const ARTICLES_17 = [
       },
       {
         "z": "對外國人來說，第一次在台灣遇到地震可能會很緊張，這很正常。可以先把手機的地震警報打開，記住「趴下、掩護、穩住」的口訣，並且知道住處附近的避難地點。地震雖然無法預測，但只要有準備、不慌張，就能大大降低危險。住在這座會搖的島上，學會和地震共處，也是認識台灣的一部分。",
-        "py": "Duì wài guó rén lái shuō, dì yī cì zài tái wān yù dào dì zhèn kě néng huì hěn jǐn zhāng, zhè hěn zhèng cháng. Kě yǐ xiān bǎ shǒu jī de dì zhèn jǐng bào dǎ kāi, jì zhù\"pā xià, yǎn hù, wěn zhù\" De kǒu jué, bìng qiě zhī dào zhù chù fù jìn de bì nán dì diǎn. Dì zhèn suī rán wú fǎ yù cè, dàn zhǐ yào yǒu zhǔn bèi, bù huāng zhāng, jiù néng dà dà jiàng dī wēi xiǎn. Zhù zài zhè zuò huì yáo de dǎo shàng, xué huì hé dì zhèn gòng chù, yě shì rèn shí tái wān de yī bù fèn.",
+        "py": "Duì wài guó rén lái shuō, dì yī cì zài tái wān yù dào dì zhèn kě néng huì hěn jǐn zhāng, zhè hěn zhèng cháng. Kě yǐ xiān bǎ shǒu jī de dì zhèn jǐng bào dǎ kāi, jì zhù\"pā xià, yǎn hù, wěn zhù\" De kǒu jué, bìng qiě zhī dào zhù chù fù jìn de bì nàn dì diǎn. Dì zhèn suī rán wú fǎ yù cè, dàn zhǐ yào yǒu zhǔn bèi, bù huāng zhāng, jiù néng dà dà jiàng dī wéi xiǎn. Zhù zài zhè zuò huì yáo de dǎo shàng, xué huì hé dì zhèn gòng chù, yě shì rèn shì tái wān de yī bù fèn.",
         "m": {
           "j": "外国人にとって、台湾で初めて地震に遭うと、とても緊張するかもしれません。それは当たり前のことです。まずはスマホの地震警報をオンにし、「伏せる・隠れる・動かない」の合言葉を覚え、住まいの近くの避難場所を知っておきましょう。地震は予測できませんが、備えがあって、慌てなければ、危険は大きく減らせます。この揺れる島に暮らし、地震とうまく付き合っていくことも、台湾を知ることの一部なのです。",
           "e": "For foreigners, feeling your first earthquake in Taiwan can be very nerve-wracking—and that's completely normal. Start by turning on your phone's earthquake alert, memorize \"Drop, Cover, Hold On,\" and know the shelter points near your home. Earthquakes can't be predicted, but with preparation and a cool head, you can greatly reduce the danger. Living on this trembling island and learning to coexist with earthquakes is part of getting to know Taiwan too.",
@@ -365,8 +365,8 @@ const ARTICLES_17 = [
       },
       {
         "w": "搖晃",
-        "zy": "ㄧㄠˊ ㄏㄨㄤˇ",
-        "py": "yáohuǎng",
+        "zy": "ㄧㄠˊ ㄏㄨㄤˋ",
+        "py": "yáohuàng",
         "m": {
           "j": "揺れる・ぐらぐらする",
           "e": "to shake; sway",

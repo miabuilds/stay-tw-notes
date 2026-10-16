@@ -22,7 +22,7 @@ const ARTICLES_16 = [
     "paras": [
       {
         "z": "中秋節本來是賞月、吃月餅和柚子的節日，但在台灣，一到中秋，家家戶戶最重要的活動其實是「烤肉」。到了農曆八月十五那天晚上，走在住宅區的巷子裡，四處都飄著炭火和烤肉醬的香味。陽台、頂樓、公園、河邊，到處都是圍著烤肉架的人。這個景象，讓很多第一次在台灣過中秋的外國人都覺得很不可思議。",
-        "py": "Zhōng qiū jié běn lái shì shǎng yuè, chī yuè bǐng hé yòu zi de jié rì, dàn zài tái wān, yī dào zhōng qiū, jiā jiā hù hù zuì zhòng yào de huó dòng qí shí shì\"kǎo ròu\". Dào le nóng lì bā yuè shí wǔ nà tiān wǎn shàng, zǒu zài zhù zhái qū de xiàng zi lǐ, sì chù dōu piāo zhù tàn huǒ hé kǎo ròu jiàng de xiāng wèi. Yáng tái, dǐng lóu, gōng yuán, hé biān, dào chù dōu shì wéi zhù kǎo ròu jià de rén. Zhè gè jǐng xiàng, ràng hěn duō dì yī cì zài tái wān guò zhōng qiū de wài guó rén dōu jué dé hěn bù kě sī yì.",
+        "py": "Zhōng qiū jié běn lái shì shǎng yuè, chī yuè bǐng hé yòu zi de jié rì, dàn zài tái wān, yī dào zhōng qiū, jiā jiā hù hù zuì zhòng yào de huó dòng qí shí shì\"kǎo ròu\". Dào le nóng lì bā yuè shí wǔ nà tiān wǎn shang, zǒu zài zhù zhái qū de xiàng zi lǐ, sì chù dōu piāo zhù tàn huǒ hé kǎo ròu jiàng de xiāng wèi. Yáng tái, dǐng lóu, gōng yuán, hé biān, dào chù dōu shì wéi zhù kǎo ròu jià de rén. Zhè gè jǐng xiàng, ràng hěn duō dì yī cì zài tái wān guò zhōng qiū de wài guó rén dōu jué de hěn bù kě sī yì.",
         "m": {
           "j": "中秋節はもともと、月を眺め、月餅やザボンを食べる祝日です。ところが台湾では、中秋になると各家庭のいちばん大事な行事が実は「バーベキュー」なのです。旧暦8月15日の夜、住宅街の路地を歩くと、あちこちから炭火と焼肉ダレの香りが漂ってきます。ベランダ、屋上、公園、川べり——どこもかしこもグリルを囲む人だらけ。この光景は、初めて台湾で中秋を過ごす外国人の多くを驚かせます。",
           "e": "The Mid-Autumn Festival was originally a holiday for admiring the moon and eating mooncakes and pomelos. In Taiwan, though, when Mid-Autumn arrives, the most important activity for every household is actually barbecuing. On the night of the 15th of the 8th lunar month, walk through the alleys of a residential neighborhood and the smell of charcoal and barbecue sauce drifts from every direction. Balconies, rooftops, parks, riverbanks—everywhere you look, people are gathered around a grill. The scene amazes many foreigners spending their first Mid-Autumn in Taiwan.",
@@ -58,7 +58,7 @@ const ARTICLES_16 = [
       },
       {
         "z": "對住在台灣的外國人來說，中秋節是一個很容易被邀請、也很容易交到朋友的節日。如果同事或鄰居問你「中秋要不要一起烤肉？」，那幾乎等於是把你當自己人了。帶一手啤酒或一些食材過去，坐在烤肉架旁邊，你會發現：台灣人的熱情，就藏在這一片煙霧和香味裡。",
-        "py": "Duì zhù zài tái wān de wài guó rén lái shuō, zhōng qiū jié shì yī gè hěn róng yì bèi yāo qǐng, yě hěn róng yì jiāo dào péng yǒu de jié rì. Rú guǒ tóng shì huò lín jū wèn nǐ\"zhōng qiū yào bù yào yì qǐ kǎo ròu? \", nà jǐ hū děng yú shì bǎ nǐ dāng zì jǐ rén le. Dài yī shǒu pí jiǔ huò yī xiē shí cái guò qù, zuò zài kǎo ròu jià páng biān, nǐ huì fā xiàn: tái wān rén de rè qíng, jiù cáng zài zhè yī piàn yān wù hé xiāng wèi lǐ.",
+        "py": "Duì zhù zài tái wān de wài guó rén lái shuō, zhōng qiū jié shì yī gè hěn róng yì bèi yāo qǐng, yě hěn róng yì jiāo dào péng yǒu de jié rì. Rú guǒ tóng shì huò lín jū wèn nǐ\"zhōng qiū yào bù yào yì qǐ kǎo ròu? \", nà jī hū děng yú shì bǎ nǐ dāng zì jǐ rén le. Dài yī shǒu pí jiǔ huò yī xiē shí cái guò qù, zuò zài kǎo ròu jià páng biān, nǐ huì fā xiàn: tái wān rén de rè qíng, jiù cáng zài zhè yī piàn yān wù hé xiāng wèi lǐ.",
         "m": {
           "j": "台湾に住む外国人にとって、中秋節はとても誘われやすく、友だちもできやすい祝日です。もし同僚や近所の人に「中秋、一緒に焼肉しない？」と聞かれたら、それはほぼ「あなたを仲間だと思っている」という意味。ビールを一箱か、食材を少し持って行き、グリルのそばに腰かけてみてください。台湾人の温かさが、この煙と香りの中に隠れていることに気づくはずです。",
           "e": "For foreigners living in Taiwan, Mid-Autumn is a festival where you're easily invited and easily make friends. If a coworker or neighbor asks, \"Want to barbecue together for Mid-Autumn?\"—that's practically them treating you as one of their own. Bring a pack of beer or some food, take a seat by the grill, and you'll discover that Taiwanese warmth is hidden right there in the smoke and the aroma.",
@@ -165,7 +165,7 @@ const ARTICLES_16 = [
     "paras": [
       {
         "z": "在台灣，只要天氣一冷，火鍋店就會大排長龍。火鍋是台灣人最愛的聚餐方式之一：一鍋熱湯放在桌子中間，大家把肉片、蔬菜、丸子、豆腐一樣一樣放進去煮，邊煮邊吃、邊吃邊聊，一頓飯可以吃上兩三個小時。天氣越冷，火鍋越香，那種熱氣騰騰的畫面，就是台灣冬天的味道。",
-        "py": "Zài tái wān, zhǐ yào tiān qì yī lěng, huǒ guō diàn jiù huì dà pái zhǎng lóng. Huǒ guō shì tái wān rén zuì ài de jù cān fāng shì zhī yī: yī guō rè tāng fàng zài zhuō zi zhōng jiān, dà jiā bǎ ròu piàn, shū cài, wán zi, dòu fǔ yī yàng yī yàng fàng jìn qù zhǔ, biān zhǔ biān chī, biān chī biān liáo, yī dùn fàn kě yǐ chī shàng liǎng sān gè xiǎo shí. Tiān qì yuè lěng, huǒ guō yuè xiāng, nà zhǒng rè qì téng téng de huà miàn, jiù shì tái wān dōng tiān de wèi dào.",
+        "py": "Zài tái wān, zhǐ yào tiān qì yī lěng, huǒ guō diàn jiù huì dà pái cháng lóng. Huǒ guō shì tái wān rén zuì ài de jù cān fāng shì zhī yī: yī guō rè tāng fàng zài zhuō zi zhōng jiān, dà jiā bǎ ròu piàn, shū cài, wán zi, dòu fu yī yàng yī yàng fàng jìn qù zhǔ, biān zhǔ biān chī, biān chī biān liáo, yī dùn fàn kě yǐ chī shàng liǎng sān gè xiǎo shí. Tiān qì yuè lěng, huǒ guō yuè xiāng, nà zhǒng rè qì téng téng de huà miàn, jiù shì tái wān dōng tiān de wèi dào.",
         "m": {
           "j": "台湾では、少し寒くなっただけで火鍋店に長い行列ができます。火鍋は台湾人が最も好きな会食スタイルの一つ。熱いスープの鍋をテーブルの真ん中に置き、薄切り肉、野菜、つみれ、豆腐を一つずつ入れて煮て、煮ながら食べ、食べながらしゃべる。一食に2〜3時間かけることもあります。寒ければ寒いほど火鍋はおいしく、あの湯気の立ちのぼる光景こそ、台湾の冬の味です。",
           "e": "In Taiwan, the moment it gets a little cold, hot pot restaurants form long lines. Hot pot is one of Taiwanese people's favorite ways to eat together: a pot of hot broth sits in the middle of the table, and everyone adds sliced meat, vegetables, meatballs, and tofu piece by piece to cook—cooking while eating, eating while chatting, with one meal often stretching two or three hours. The colder it is, the better hot pot tastes, and that steaming scene is the very flavor of a Taiwanese winter.",
@@ -174,7 +174,7 @@ const ARTICLES_16 = [
       },
       {
         "z": "台灣的火鍋種類多到讓人眼花撩亂。最常見的有清淡的昆布鍋、養生的藥膳鍋，還有讓人又愛又怕的麻辣鍋。麻辣鍋通常是「鴛鴦鍋」，一半麻辣、一半清湯，不敢吃辣的人也能一起加入。除此之外，還有酸酸辣辣的泡菜鍋、香濃的起司牛奶鍋，每一家店都有自己的招牌湯頭。",
-        "py": "Tái wān de huǒ guō zhǒng lèi duō dào ràng rén yǎn huā liāo luàn. Zuì cháng jiàn de yǒu qīng dàn de kūn bù guō, yǎng shēng de yào shàn guō, hái yǒu ràng rén yòu ài yòu pà de má là guō. Má là guō tōng cháng shì\"yuān yāng guō\", yí bàn má là, yí bàn qīng tāng, bù gǎn chī là de rén yě néng yì qǐ jiā rù. Chú cǐ zhī wài, hái yǒu suān suān là là de pào cài guō, xiāng nóng de qǐ sī niú nǎi guō, měi yī jiā diàn dōu yǒu zì jǐ de zhāo pái tāng tóu.",
+        "py": "Tái wān de huǒ guō zhǒng lèi duō dào ràng rén yǎn huā liáo luàn. Zuì cháng jiàn de yǒu qīng dàn de kūn bù guō, yǎng shēng de yào shàn guō, hái yǒu ràng rén yòu ài yòu pà de má là guō. Má là guō tōng cháng shì\"yuān yāng guō\", yí bàn má là, yí bàn qīng tāng, bù gǎn chī là de rén yě néng yì qǐ jiā rù. Chú cǐ zhī wài, hái yǒu suān suān là là de pào cài guō, xiāng nóng de qǐ sī niú nǎi guō, měi yī jiā diàn dōu yǒu zì jǐ de zhāo pái tāng tóu.",
         "m": {
           "j": "台湾の火鍋は、目移りするほど種類が豊富です。よくあるのは、あっさりした昆布鍋、体にやさしい薬膳鍋、そして病みつきになるけれど手強い麻辣鍋。麻辣鍋はたいてい「鴛鴦鍋（おしどり鍋）」で、半分は麻辣、半分は澄んだスープ。辛いのが苦手な人も一緒に楽しめます。ほかにも、酸っぱ辛いキムチ鍋、濃厚なチーズミルク鍋などがあり、どの店にも看板のスープがあります。",
           "e": "Taiwan's hot pots come in a dizzying variety. Common ones include the light kombu (kelp) pot, the health-boosting herbal pot, and the love-it-and-fear-it mala pot. The mala pot is usually a \"mandarin-duck pot\"—half spicy mala, half clear broth—so even people who can't take heat can join in. There's also tangy-spicy kimchi pot and rich cheese-milk pot, and every restaurant has its own signature broth.",
@@ -308,7 +308,7 @@ const ARTICLES_16 = [
     "paras": [
       {
         "z": "每年夏天到秋天，是台灣的颱風季。當一個強烈颱風接近，全台灣最關心的一件事，就是「明天到底放不放颱風假？」。這一天，大家會緊盯著新聞和手機，等各縣市政府宣布：明天到底要不要上班、上課。這種等放假通知，既緊張又期待的心情，是很多台灣人共同的記憶。",
-        "py": "Měi nián xià tiān dào qiū tiān, shì tái wān de tái fēng jì. Dāng yī gè qiáng liè tái fēng jiē jìn, quán tái wān zuì guān xīn de yī jiàn shì, jiù shì\"míng tiān dào dǐ fàng bù fàng tái fēng jiǎ? \". Zhè yī tiān, dà jiā huì jǐn dīng zhù xīn wén hé shǒu jī, děng gè xiàn shì zhèng fǔ xuān bù: míng tiān dào dǐ yào bù yào shàng bān, shàng kè. Zhè zhǒng děng fàng jià tōng zhī, jì jǐn zhāng yòu qī dài de xīn qíng, shì hěn duō tái wān rén gòng tóng de jì yì.",
+        "py": "Měi nián xià tiān dào qiū tiān, shì tái wān de tái fēng jì. Dāng yī gè qiáng liè tái fēng jiē jìn, quán tái wān zuì guān xīn de yī jiàn shì, jiù shì\"míng tiān dào dǐ fàng bù fàng tái fēng jiǎ? \". Zhè yī tiān, dà jiā huì jǐn dīng zhù xīn wén hé shǒu jī, děng gè xiàn shì zhèng fǔ xuān bù: míng tiān dào dǐ yào bù yào shàng bān, shàng kè. Zhè zhǒng děng fàng jià tōng zhī, jì jǐn zhāng yòu qí dài de xīn qíng, shì hěn duō tái wān rén gòng tóng de jì yì.",
         "m": {
           "j": "毎年夏から秋にかけては、台湾の台風シーズンです。強い台風が近づくと、台湾じゅうが最も気にすることが一つあります。「明日、いったい台風休みになるの？」。この日、人々はニュースとスマホを食い入るように見つめ、各県市政府の発表を待ちます——明日は仕事や学校が休みになるのかどうか。この「休みの知らせを待つ」、緊張と期待の入り混じった気持ちは、多くの台湾人に共通する記憶です。",
           "e": "Every year from summer to autumn is Taiwan's typhoon season. When a strong typhoon approaches, all of Taiwan cares about one thing: \"Will there really be a typhoon day off tomorrow?\" On that day, people stare intently at the news and their phones, waiting for each city and county government to announce whether work and school are canceled tomorrow. That anxious-yet-hopeful feeling of waiting for the day-off announcement is a shared memory for many Taiwanese.",
@@ -326,7 +326,7 @@ const ARTICLES_16 = [
       },
       {
         "z": "颱風假雖然是「假」，但它並不是拿來玩的。颱風天風大雨大，出門很危險，政府希望大家待在家裡避難。理想的颱風假，是把該買的食物、泡麵、水先準備好，關好門窗，在家追劇、睡覺、和家人待在一起。真正的老手都知道：颱風天最不該做的事，就是跑去海邊看浪，或去山上溪邊玩水。",
-        "py": "Tái fēng jiǎ suī rán shì\"jiǎ\", dàn tā bìng bú shì ná lái wán de. Tái fēng tiān fēng dà yǔ dà, chū mén hěn wēi xiǎn, zhèng fǔ xī wàng dà jiā dài zài jiā lǐ bì nán. Lǐ xiǎng de tái fēng jiǎ, shì bǎ gāi mǎi de shí wù, pào miàn, shuǐ xiān zhǔn bèi hǎo, guān hǎo mén chuāng, zài jiā zhuī jù, shuì jué, hé jiā rén dài zài yì qǐ. Zhēn zhèng de lǎo shǒu dōu zhī dào: tái fēng tiān zuì bù gāi zuò de shì, jiù shì pǎo qù hǎi biān kàn làng, huò qù shān shàng xī biān wán shuǐ.",
+        "py": "Tái fēng jiǎ suī rán shì\"jiǎ\", dàn tā bìng bú shì ná lái wán de. Tái fēng tiān fēng dà yǔ dà, chū mén hěn wéi xiǎn, zhèng fǔ xī wàng dà jiā dài zài jiā lǐ bì nàn. Lǐ xiǎng de tái fēng jiǎ, shì bǎ gāi mǎi de shí wù, pào miàn, shuǐ xiān zhǔn bèi hǎo, guān hǎo mén chuāng, zài jiā zhuī jù, shuì jué, hé jiā rén dài zài yì qǐ. Zhēn zhèng de lǎo shǒu dōu zhī dào: tái fēng tiān zuì bù gāi zuò de shì, jiù shì pǎo qù hǎi biān kàn làng, huò qù shān shàng xī biān wán shuǐ.",
         "m": {
           "j": "台風休みは「休み」とはいえ、遊ぶためのものではありません。台風の日は風雨が激しく、外出はとても危険。政府は皆に、家の中で避難していてほしいのです。理想的な台風休みとは、必要な食料・カップ麺・水を先に用意し、窓や戸をしっかり閉め、家でドラマを見たり、寝たり、家族と過ごしたりすること。本物のベテランは知っています——台風の日に最もしてはいけないのは、海へ波を見に行くことや、山の渓流で水遊びをすることだと。",
           "e": "Although a typhoon day is a \"day off,\" it isn't for playing. On typhoon days the wind and rain are fierce and going out is dangerous; the government wants everyone to shelter at home. The ideal typhoon day means stocking up on food, instant noodles, and water in advance, shutting doors and windows tight, and staying home to binge shows, sleep, and be with family. The real veterans know: the worst thing to do on a typhoon day is head to the coast to watch the waves, or play in a mountain stream.",
@@ -335,7 +335,7 @@ const ARTICLES_16 = [
       },
       {
         "z": "對上班族和學生來說，颱風假就像天上掉下來的禮物：本來要上班上課的一天，突然變成可以在家休息。社群媒體上會立刻出現各種颱風假的貼文，有人開心慶祝，也有人因為颱風轉彎、假沒了而哀號。這種全民一起等一則新聞、一起開心或失望的感覺，是台灣獨有的集體體驗。",
-        "py": "Duì shàng bān zú hé xué shēng lái shuō, tái fēng jiǎ jiù xiàng tiān shàng diào xià lái de lǐ wù: běn lái yào shàng bān shàng kè de yī tiān, tū rán biàn chéng kě yǐ zài jiā xiū xī. Shè qún méi tǐ shàng huì lì kè chū xiàn gè zhǒng tái fēng jiǎ de tiē wén, yǒu rén kāi xīn qìng zhù, yě yǒu rén yīn wèi tái fēng zhuǎn wān, jiǎ méi le ér āi hào. Zhè zhǒng quán mín yì qǐ děng yī zé xīn wén, yì qǐ kāi xīn huò shī wàng de gǎn jué, shì tái wān dú yǒu de jí tǐ tǐ yàn.",
+        "py": "Duì shàng bān zú hé xué shēng lái shuō, tái fēng jiǎ jiù xiàng tiān shàng diào xià lái de lǐ wù: běn lái yào shàng bān shàng kè de yī tiān, tú rán biàn chéng kě yǐ zài jiā xiū xí. Shè qún méi tǐ shàng huì lì kè chū xiàn gè zhǒng tái fēng jiǎ de tiē wén, yǒu rén kāi xīn qìng zhù, yě yǒu rén yīn wèi tái fēng zhuǎn wān, jiǎ méi le ér āi háo. Zhè zhǒng quán mín yì qǐ děng yī zé xīn wén, yì qǐ kāi xīn huò shī wàng de gǎn jué, shì tái wān dú yǒu de jí tǐ tǐ yàn.",
         "m": {
           "j": "会社員や学生にとって、台風休みは天から降ってきたプレゼントのよう。本来は出勤・登校のはずの一日が、突然、家で休める日に変わるのですから。SNSにはすぐに台風休みの投稿があふれ、喜んで祝う人もいれば、「台風が進路を変えて休みが消えた」と嘆く人もいます。全国民がそろって一つのニュースを待ち、一緒に喜んだり落ち込んだりする——これは台湾ならではの集団体験です。",
           "e": "For office workers and students, a typhoon day is like a gift dropped from the sky: a day that was supposed to mean work or school suddenly becomes a day to rest at home. Social media instantly fills with typhoon-day posts—some celebrating, others wailing because \"the typhoon veered off and the day off vanished.\" This feeling of the whole nation waiting together for one news update, rejoicing or despairing together, is a collective experience unique to Taiwan.",
@@ -344,7 +344,7 @@ const ARTICLES_16 = [
       },
       {
         "z": "對剛來台灣的外國人來說，第一次遇到颱風假可能會有點手忙腳亂。這裡有幾個小提醒：颱風來之前先去超市補貨，因為架上常常會被搶購一空；手機記得充電；隨時注意各縣市政府的公告。只要準備好，颱風假其實是一個難得能好好休息、感受台灣「同島一命」氣氛的日子。",
-        "py": "Duì gāng lái tái wān de wài guó rén lái shuō, dì yī cì yù dào tái fēng jiǎ kě néng huì yǒu diǎn shǒu máng jiǎo luàn. Zhè lǐ yǒu jǐ gè xiǎo tí xǐng: tái fēng lái zhī qián xiān qù chāo shì bǔ huò, yīn wèi jià shàng cháng cháng huì bèi qiǎng gòu yī kōng; shǒu jī jì dé chōng diàn; suí shí zhù yì gè xiàn shì zhèng fǔ de gōng gào. Zhǐ yào zhǔn bèi hǎo, tái fēng jiǎ qí shí shì yī gè nán dé néng hǎo hǎo xiū xī, gǎn shòu tái wān\"tóng dǎo yī mìng\" Qì fēn de rì zi.",
+        "py": "Duì gāng lái tái wān de wài guó rén lái shuō, dì yī cì yù dào tái fēng jiǎ kě néng huì yǒu diǎn shǒu máng jiǎo luàn. Zhè lǐ yǒu jǐ gè xiǎo tí xǐng: tái fēng lái zhī qián xiān qù chāo shì bǔ huò, yīn wèi jià shàng cháng cháng huì bèi qiǎng gòu yī kōng; shǒu jī jì de chōng diàn; suí shí zhù yì gè xiàn shì zhèng fǔ de gōng gào. Zhǐ yào zhǔn bèi hǎo, tái fēng jiǎ qí shí shì yī gè nán dé néng hǎo hǎo xiū xí, gǎn shòu tái wān\"tóng dǎo yī mìng\" Qì fēn de rì zi.",
         "m": {
           "j": "台湾に来たばかりの外国人にとって、初めての台風休みは少し慌ただしいかもしれません。ちょっとした心得をいくつか。台風が来る前にスーパーで買い出しを（棚はしばしば買い占められて空になります）。スマホの充電を忘れずに。各県市政府の告知を随時チェック。備えさえしておけば、台風休みは実は、ゆっくり休み、台湾の「同じ島で運命を共にする」空気を感じられる、貴重な一日なのです。",
           "e": "For newcomers to Taiwan, your first typhoon day can be a bit hectic. A few small tips: stock up at the supermarket before the typhoon arrives (shelves are often bought bare); remember to charge your phone; and keep an eye on each city and county government's announcements. As long as you're prepared, a typhoon day is actually a rare chance to rest well and feel Taiwan's \"we're all in this together on one island\" spirit.",
@@ -395,8 +395,8 @@ const ARTICLES_16 = [
       },
       {
         "w": "避難",
-        "zy": "ㄅㄧˋ ㄋㄢˊ",
-        "py": "bìnán",
+        "zy": "ㄅㄧˋ ㄋㄢˋ",
+        "py": "bìnàn",
         "m": {
           "j": "避難する",
           "e": "to take shelter",

@@ -7,7 +7,7 @@
 (function () {
   var STORE = {
     ios: 'https://apps.apple.com/app/id6794272037',
-    android: 'https://play.google.com/store/apps/details?id=com.staytw.app'   // まだ未公開。将来用
+    android: 'https://play.google.com/store/apps/details?id=com.staytw.app'   // 2026-10-09 公開
   };
   function T(k, d) { try { var v = (typeof twT === 'function') ? twT(k) : null; return (v && v !== k) ? v : d; } catch (e) { return d; } }
   function native() { var n = window.STAYTW_NATIVE; return (n && n.isNativeApp) ? n : null; }

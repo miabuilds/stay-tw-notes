@@ -56,7 +56,7 @@ const ARTICLES_13 = [
     { w:"凸槌", zy:"ㄊㄨˊ ㄔㄨㄟˊ", py:"túchuí", m:{ j:"ミスする・しくじる・失敗する", e:"to slip up, mess up", k:"실수하다, 망치다" } },
     { w:"揪團", zy:"ㄐㄧㄡ ㄊㄨㄢˊ", py:"jiūtuán", m:{ j:"仲間を募って一緒に参加・購入する", e:"to organize a group (order/activity)", k:"함께할 사람을 모으다" } },
     { w:"精打細算", zy:"ㄐㄧㄥ ㄉㄚˇ ㄒㄧˋ ㄙㄨㄢˋ", py:"jīngdǎxìsuàn", m:{ j:"細かく計算する・抜け目がない", e:"to calculate carefully, be thrifty", k:"꼼꼼히 계산하다, 알뜰하다" } },
-    { w:"挑剔", zy:"ㄊㄧㄠ ㄊㄧˋ", py:"tiāotì", m:{ j:"えり好みする・あら探しする", e:"picky, fault-finding", k:"까탈스럽다, 트집 잡다" } },
+    { w:"挑剔", zy:"ㄊㄧㄠ ㄊㄧ", py:"tiāotī", m:{ j:"えり好みする・あら探しする", e:"picky, fault-finding", k:"까탈스럽다, 트집 잡다" } },
     { w:"插隊", zy:"ㄔㄚ ㄉㄨㄟˋ", py:"chāduì", m:{ j:"列に割り込む", e:"to cut in line", k:"새치기하다" } },
     { w:"吐槽", zy:"ㄊㄨˇ ㄘㄠˊ", py:"tǔcáo", m:{ j:"ツッコむ・突っ込みを入れる", e:"to poke fun at, call out", k:"태클 걸다, 지적하다" } },
     { w:"呼朋引伴", zy:"ㄏㄨ ㄆㄥˊ ㄧㄣˇ ㄅㄢˋ", py:"hūpéngyǐnbàn", m:{ j:"友を呼び仲間を集める", e:"to gather friends and companions", k:"친구를 불러 무리를 모으다" } }
@@ -80,7 +80,7 @@ const ARTICLES_13 = [
   paras:[
     {
       z:"先從最讓人揪心的「已讀不回」說起。現在的通訊軟體會顯示訊息「已讀」，所以當你看到對方明明已經讀了你的訊息，卻遲遲不回覆，那種焦慮和小小的受傷，就叫「已讀不回」。它已經是台灣人形容感情、友情、工作互動的關鍵詞。例如：「我昨天傳訊息給他，結果被已讀不回，是不是討厭我？」短短四個字，把現代人的社交焦慮講得淋漓盡致。",
-      py:"Xiān cóng zuì ràng rén jiūxīn de “yǐdú bù huí” shuōqǐ. Xiànzài de tōngxùn ruǎntǐ huì xiǎnshì xùnxī “yǐdú”, suǒyǐ dāng nǐ kàndào duìfāng míngmíng yǐjīng dú le nǐ de xùnxī, què chíchí bù huífù, nà zhǒng jiāolǜ hé xiǎoxiǎo de shòushāng, jiù jiào “yǐdú bù huí”. Tā yǐjīng shì Táiwānrén xíngróng gǎnqíng, yǒuqíng, gōngzuò hùdòng de guānjiàncí. Lìrú: “Wǒ zuótiān chuán xùnxī gěi tā, jiéguǒ bèi yǐdú bù huí, shì bùshì tǎoyàn wǒ?” Duǎnduǎn sì ge zì, bǎ xiàndàirén de shèjiāo jiāolǜ jiǎng de línlíjìnzhì.",
+      py:"Xiān cóng zuì ràng rén jiūxīn de “yǐdú bù huí” shuōqǐ. Xiànzài de tōngxùn ruǎntǐ huì xiǎnshì xùnxí “yǐdú”, suǒyǐ dāng nǐ kàndào duìfāng míngmíng yǐjīng dú le nǐ de xùnxí, què chíchí bù huífù, nà zhǒng jiāolǜ hé xiǎoxiǎo de shòushāng, jiù jiào “yǐdú bù huí”. Tā yǐjīng shì Táiwānrén xíngróng gǎnqíng, yǒuqíng, gōngzuò hùdòng de guānjiàncí. Lìrú: “Wǒ zuótiān chuán xùnxí gěi tā, jiéguǒ bèi yǐdú bù huí, shì bùshì tǎoyàn wǒ?” Duǎnduǎn sì ge zì, bǎ xiàndàirén de shèjiāo jiāolǜ jiǎng de línlíjìnzhì.",
       m:{
         j:"まずは一番胸をざわつかせる「已讀不回（イードゥー・ブーホイ）」から。今のメッセージアプリはメッセージが「既読」になったと表示するので、相手が明らかに読んだのになかなか返信しないとき、あの焦りとちょっとした傷つき——それを「已讀不回（既読スルー）」と言います。恋愛、友情、仕事のやりとりを語るキーワードになっています。たとえば「昨日メッセージ送ったのに既読スルーされた、私のこと嫌いなのかな？」。たった四文字で、現代人の社交不安を余すところなく表現しています。",
         e:"Let's start with the most heart-wrenching: '已讀不回' (yǐdú bù huí). Today's messaging apps show when a message is 'read,' so when you see the other person has clearly read yours yet keeps not replying, that anxiety and small hurt is called '已讀不回' (read-and-no-reply). It's become a keyword for describing romance, friendship, and work interactions. For example: 'I texted him yesterday and got read-and-no-replied—does he not like me?' Just four characters capture modern social anxiety perfectly.",

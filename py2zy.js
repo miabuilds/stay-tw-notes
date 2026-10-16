@@ -17,6 +17,17 @@
     if(tone===5) return "\u02d9"+zy;
     return zy;
   }
+  // 注音 1 音節 → Google TTS の pinyin phoneme("ni3" / "lv4" / "ma5")。AI 會話の読み指定に使う
+  var R=null;
+  window.zy2py=function(zy){
+    if(!zy) return "";
+    if(!R){ R={}; for(var k in M){ if(!R[M[k]] || k.length<R[M[k]].length) R[M[k]]=k; } }
+    var t=String(zy), tone=1;
+    if(t.indexOf("\u02d9")>=0) tone=5; else if(t.indexOf("\u02ca")>=0) tone=2; else if(t.indexOf("\u02c7")>=0) tone=3; else if(t.indexOf("\u02cb")>=0) tone=4;
+    var base=t.replace(/[\u02ca\u02c7\u02cb\u02d9]/g,"");
+    var p=R[base]; if(!p) return "";
+    return p.replace(/ü/g,"v")+tone;
+  };
   window.py2zy=function(py){
     if(!py) return py;
     var s=String(py).normalize("NFD");

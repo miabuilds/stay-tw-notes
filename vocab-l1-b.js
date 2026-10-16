@@ -10,7 +10,7 @@ const VOCAB_L1_B = [
 {w:"女生",py:"nǚshēng",zy:"ㄋㄩˇ ㄕㄥ",c:"名",m:{j:"女子・女の子",e:"girl",k:"여자, 여학생"},ex:{z:"我們班有十個女生。",py:"Wǒmen bān yǒu shí ge nǚshēng.",j:"うちのクラスには女子が10人います。",e:"There are ten girls in our class.",k:"우리 반에는 여학생이 열 명 있습니다."}},
 {w:"同事",py:"tóngshì",zy:"ㄊㄨㄥˊ ㄕˋ",c:"名",m:{j:"同僚",e:"colleague; coworker",k:"동료"},ex:{z:"他是我的同事。",py:"Tā shì wǒ de tóngshì.",j:"彼は私の同僚です。",e:"He is my colleague.",k:"그는 제 동료입니다."}},
 // ── 体 ──
-{w:"身體",py:"shēntǐ",zy:"ㄕㄣ ㄊㄧˇ",c:"名",m:{j:"体・体調",e:"body; health",k:"몸, 건강"},ex:{z:"我今天身體不舒服。",py:"Wǒ jīntiān shēntǐ bù shūfú.",j:"今日は体調が悪いです。",e:"I'm not feeling well today.",k:"오늘 몸이 안 좋아요."}},
+{w:"身體",py:"shēntǐ",zy:"ㄕㄣ ㄊㄧˇ",c:"名",m:{j:"体・体調",e:"body; health",k:"몸, 건강"},ex:{z:"我今天身體不舒服。",py:"Wǒ jīntiān shēntǐ bù shūfu.",j:"今日は体調が悪いです。",e:"I'm not feeling well today.",k:"오늘 몸이 안 좋아요."}},
 {w:"肚子",py:"dùzi",zy:"ㄉㄨˋ ˙ㄗ",c:"名",m:{j:"お腹",e:"belly; stomach",k:"배"},ex:{z:"我肚子餓了。",py:"Wǒ dùzi è le.",j:"お腹がすきました。",e:"I'm hungry.",k:"배가 고파요."}},
 {w:"牙齒",py:"yáchǐ",zy:"ㄧㄚˊ ㄔˇ",c:"名",m:{j:"歯",e:"teeth",k:"이, 치아"},ex:{z:"吃完飯要刷牙齒。",py:"Chī wán fàn yào shuā yáchǐ.",j:"食後は歯を磨きましょう。",e:"Brush your teeth after eating.",k:"밥 먹고 나서 이를 닦아야 해요."}},
 // ── 色 ──
@@ -38,7 +38,7 @@ const VOCAB_L1_B = [
 {w:"容易",py:"róngyì",zy:"ㄖㄨㄥˊ ㄧˋ",c:"形",m:{j:"簡単・〜しやすい",e:"easy",k:"쉽다"},ex:{z:"這個問題很容易。",py:"Zhège wèntí hěn róngyì.",j:"この問題は簡単です。",e:"This question is easy.",k:"이 문제는 쉬워요."}},
 {w:"乾淨",py:"gānjìng",zy:"ㄍㄢ ㄐㄧㄥˋ",c:"形",m:{j:"清潔・きれい",e:"clean",k:"깨끗하다"},ex:{z:"這家餐廳很乾淨。",py:"Zhè jiā cāntīng hěn gānjìng.",j:"このレストランはとても清潔です。",e:"This restaurant is very clean.",k:"이 식당은 아주 깨끗해요."}},
 {w:"髒",py:"zāng",zy:"ㄗㄤ",c:"形",m:{j:"汚い",e:"dirty",k:"더럽다"},ex:{z:"你的鞋子好髒。",py:"Nǐ de xiézi hǎo zāng.",j:"靴がすごく汚いよ。",e:"Your shoes are so dirty.",k:"네 신발 정말 더럽다."}},
-{w:"舒服",py:"shūfú",zy:"ㄕㄨ ㄈㄨˊ",c:"形",m:{j:"快適・気持ちいい",e:"comfortable",k:"편안하다"},ex:{z:"這張床很舒服。",py:"Zhè zhāng chuáng hěn shūfú.",j:"このベッドはとても快適です。",e:"This bed is very comfortable.",k:"이 침대는 아주 편안해요."}},
+{w:"舒服",py:"shūfu",zy:"ㄕㄨ ˙ㄈㄨ",c:"形",m:{j:"快適・気持ちいい",e:"comfortable",k:"편안하다"},ex:{z:"這張床很舒服。",py:"Zhè zhāng chuáng hěn shūfu.",j:"このベッドはとても快適です。",e:"This bed is very comfortable.",k:"이 침대는 아주 편안해요."}},
 {w:"可愛",py:"kě'ài",zy:"ㄎㄜˇ ㄞˋ",c:"形",m:{j:"かわいい",e:"cute",k:"귀엽다"},ex:{z:"你家的貓好可愛！",py:"Nǐ jiā de māo hǎo kě'ài!",j:"おうちの猫、すごくかわいい！",e:"Your cat is so cute!",k:"너희 집 고양이 정말 귀엽다!"}},
 // ── 時間・季節 ──
 {w:"夏天",py:"xiàtiān",zy:"ㄒㄧㄚˋ ㄊㄧㄢ",c:"名",m:{j:"夏",e:"summer",k:"여름"},ex:{z:"台灣的夏天又熱又濕。",py:"Táiwān de xiàtiān yòu rè yòu shī.",j:"台湾の夏は暑くて湿気が多いです。",e:"Summer in Taiwan is hot and humid.",k:"대만의 여름은 덥고 습해요."}},

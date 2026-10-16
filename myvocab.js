@@ -94,8 +94,20 @@ const MyVocab = (() => {
     try {
       stwSaveCustomCard({ w: e.w, zy: e.zy, py: e.py, e: e.m, j: e.m, k: e.m, d: "" });
     } catch (err) {}
+    // 2026-10 まで「複習にまわせます」と書きながら SRS に入れていなかった。入れた時点で復習の列に載せる
+    try { if (window.SRS && SRS.addWord) SRS.addWord(lvOf(e.w), e.w); } catch (err) {}
   }
+  function lvOf(w) { let e = null; try { e = stwLookup(w); } catch (err) {} return (e && e._lv && !e._ext) ? e._lv : "ext"; }
+  function stat(w, ok) {   // 自分の単語帳テストの成績を語ごとに持つ(並べ替え・表示用)
+    const a = raw(); const i = a.findIndex((x) => x && x.w === w && !x.del); if (i < 0) return;
+    const q = a[i].qs || { ok: 0, ng: 0 }; if (ok) q.ok++; else q.ng++; q.last = Date.now();
+    a[i] = Object.assign({}, a[i], { qs: q, upd: Date.now() }); writeAll(a);
+  }
+  let pendingDel = "";
+  function askDel(w) { pendingDel = w; render(); }
+  function cancelDel() { pendingDel = ""; render(); }
   function remove(w) {
+    pendingDel = "";
     const a = raw();
     for (let i = 0; i < a.length; i++) if (a[i] && a[i].w === w) a[i] = { w, del: 1, upd: Date.now() };
     writeAll(a);
@@ -117,10 +129,14 @@ const MyVocab = (() => {
     if (src === "ai-zy") return `<span class="mv-b mv-b-a">AI</span>`;
     return "";
   }
+  let sortMode = "new", quiz = null, lastWrong = [];
+  function setSort(m) { sortMode = m; render(); }
   function render() {
     const box = document.getElementById("mvBody");
     if (!box) return;
-    const items = list();
+    if (quiz) { renderQuiz(box); return; }
+    let items = list();
+    if (sortMode === "weak") items = items.slice().sort((a, b) => ((b.qs && b.qs.ng) || 0) - ((a.qs && a.qs.ng) || 0) || (((a.qs && a.qs.ok) || 0) - ((b.qs && b.qs.ok) || 0)));
     const n = items.length;
     const lim = isPremium() ? "" : `<span class="mv-lim${n >= FREE_MAX ? " full" : ""}">${n} / ${FREE_MAX}</span>`;
     box.innerHTML = `
@@ -130,8 +146,13 @@ const MyVocab = (() => {
         <button class="btn primary" id="mvBtn" onclick="MyVocab.submit()">${esc(T("mvAdd", "調べて追加"))}</button>
       </div>
       <div id="mvMsg" class="mv-msg"></div>
+      ${n ? `<div class="mv-tools">
+        <button class="btn primary mv-qbtn" onclick="MyVocab.startQuiz()" ${n < 4 ? "disabled" : ""}>${icon("edit", { size: 16 })} ${esc(T("mvQuizBtn", "この単語帳でテスト"))}</button>
+        ${n < 4 ? `<span class="mv-qneed">${esc(T("mvQuizNeed", "4 語以上入れるとテストできます"))}</span>` : ""}
+      </div>` : ""}
       <div class="mv-head"><span>${esc(T("mvList", "自分の語"))}</span>${lim}</div>
-      ${n === 0 ? `<p class="mv-empty">${esc(T("mvEmpty", "まだ 1 語もありません。"))}</p>` : ""}
+      ${n > 1 ? `<div class="mv-sort"><button class="${sortMode === "new" ? "on" : ""}" onclick="MyVocab.setSort('new')">${esc(T("mvSortNew", "新しい順"))}</button><button class="${sortMode === "weak" ? "on" : ""}" onclick="MyVocab.setSort('weak')">${esc(T("mvSortWeak", "よく間違える順"))}</button></div>` : ""}
+      ${n === 0 ? `<img class="il" src="images/il/04_empty_notebook.webp" alt="" width="110" height="110" style="width:110px;height:110px;display:block;margin:14px auto 0"><p class="mv-empty" style="text-align:center">${esc(T("mvEmpty", "まだ 1 語もありません。"))}</p>` : ""}
       <div class="mv-items">${items.map(cardHtml).join("")}</div>`;
     const inp = document.getElementById("mvIn");
     if (inp) inp.onkeydown = (e) => { if (e.key === "Enter") { e.stopPropagation(); submit(); } };
@@ -141,10 +162,12 @@ const MyVocab = (() => {
     return `<div class="mv-it">
       <div class="mv-top">
         <b class="mv-w" onclick="speakZh('${esc(it.w)}')">${esc(it.w)}</b>
-        <span class="mv-zy">${zy(it.zy)}</span><span class="mv-py">${esc(it.py)}</span>
+        ${typeof twPyOnly === "function" && twPyOnly() ? "" : `<span class="mv-zy">${zy(it.zy)}</span>`}<span class="mv-py">${esc(it.py)}</span>
         ${srcBadge(it.src)}
-        <button class="mv-del" onclick="MyVocab.remove('${esc(it.w)}')" title="${esc(T("mvDel", "削除"))}">✕</button>
+        ${it.qs && (it.qs.ok + it.qs.ng) ? `<span class="mv-stat${it.qs.ng > it.qs.ok ? " weak" : ""}">${esc(T("mvStat", "正解 {a}/{b}").replace("{a}", it.qs.ok).replace("{b}", it.qs.ok + it.qs.ng))}</span>` : ""}
+        <button class="mv-del" onclick="MyVocab.askDel('${esc(it.w)}')" title="${esc(T("mvDel", "削除"))}">✕</button>
       </div>
+      ${pendingDel === it.w ? `<div class="mv-confirm"><span>${esc(T("mvDelQ", "「{w}」を単語帳から消しますか？").replace("{w}", it.w))}</span><button class="mv-cyes" onclick="MyVocab.remove('${esc(it.w)}')">${esc(T("mvDelYes", "削除する"))}</button><button class="mv-cno" onclick="MyVocab.cancelDel()">${esc(T("mvCancel", "やめる"))}</button></div>` : ""}
       ${it.m ? `<div class="mv-m">${esc(it.m)}</div>` : ""}
       ${it.ex ? `<div class="mv-ex" onclick="speakZh('${esc(it.ex.z)}')">${esc(it.ex.z)}<span>${esc(it.ex.t || "")}</span></div>` : ""}
     </div>`;
@@ -174,6 +197,100 @@ const MyVocab = (() => {
     }
   }
 
-  return { render, submit, remove, list, count, has, add, FREE_MAX };
+  // 辞書カード(文章・読解で語をタップ)から直接保存。打ち直さなくていいように(StayJP と同じ流れ)
+  function saveFromDict(w) {
+    if (!w) return "none";
+    if (has(w)) return "dup";
+    if (!canAdd()) { try { Paywall.show("myvocab"); } catch (e) {} return "limit"; }
+    const it = fromDict(w) || fromChars(w);
+    if (!it) return "none";
+    add(it);
+    return "ok";
+  }
+
+  // ── 単語帳テスト ───────────────────────────────────────
+  // 選ぶ → 送出 → 解説 → 自分で次へ(自動で進めない)。結果は SRS と語ごとの成績に返す
+  const shuffle = (a) => a.map((x) => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map((p) => p[1]);
+  function pool() {   // 選択肢の混ぜ物:自分の語 → 足りなければ今のレベルの語彙
+    let extra = [];
+    try { extra = (twOpenVocab(currentLevel) || []).map((v) => ({ w: v.w, zy: v.zy, py: v.py, m: (v.m && (v.m[mk()] || v.m.e || v.m.j)) || "" })); } catch (e) {}
+    return extra;
+  }
+  function startQuiz(onlyWrong) {
+    const mine = list(); if (!mine.length) return;
+    const src = onlyWrong && lastWrong.length ? mine.filter((x) => lastWrong.includes(x.w)) : mine;
+    const picks = shuffle(src).slice(0, 10), others = pool();
+    const qs = picks.map((it) => {
+      const types = it.m ? ["w2m", "a2w", "m2w"] : ["a2w"];
+      const type = types[Math.floor(Math.random() * types.length)];
+      const cand = shuffle(mine.filter((x) => x.w !== it.w).concat(shuffle(others).slice(0, 30)).filter((x) => x.w !== it.w && (type !== "w2m" || (x.m && x.m !== it.m))));
+      const seen = new Set([type === "w2m" ? it.m : it.w]); const dis = [];
+      for (const c of cand) { const k = type === "w2m" ? c.m : c.w; if (k && !seen.has(k)) { seen.add(k); dis.push(c); } if (dis.length === 3) break; }
+      return { it, type, opts: shuffle([it].concat(dis)) };
+    });
+    quiz = { qs, i: 0, pick: -1, done: false, ok: 0, wrong: [] };
+    render(); try { window.scrollTo(0, 0); } catch (e) {}
+    if (qs[0] && qs[0].type === "a2w") setTimeout(() => speakZh(qs[0].it.w), 300);
+  }
+  function qPick(i) { if (!quiz || quiz.done) return; quiz.pick = i; render(); }
+  function qSubmit() {
+    if (!quiz || quiz.pick < 0 || quiz.done) return;
+    const q = quiz.qs[quiz.i], ok = q.opts[quiz.pick].w === q.it.w;
+    quiz.done = true; if (ok) quiz.ok++; else quiz.wrong.push(q.it.w);
+    stat(q.it.w, ok);
+    try { if (window.SRS && SRS.recordGrade) SRS.recordGrade(lvOf(q.it.w), q.it.w, ok ? "known" : "unknown"); } catch (e) {}
+    try { window.STAYTW_studyDone && window.STAYTW_studyDone(); } catch (e) {}
+    render(); speakZh(q.it.w);
+  }
+  function qNext() {
+    if (!quiz) return; quiz.i++; quiz.pick = -1; quiz.done = false;
+    if (quiz.i >= quiz.qs.length) { lastWrong = quiz.wrong.slice(); }
+    render(); try { window.scrollTo(0, 0); } catch (e) {}
+    const q = quiz.qs[quiz.i]; if (q && q.type === "a2w") setTimeout(() => speakZh(q.it.w), 300);
+  }
+  function qQuit() { quiz = null; render(); }
+  function renderQuiz(box) {
+    const zy = (s) => (typeof twZy === "function" ? twZy(s || "") : esc(s));
+    if (quiz.i >= quiz.qs.length) {
+      const n = quiz.qs.length;
+      box.innerHTML = `<div class="mvq-end">
+        <img src="images/il/${quiz.ok === n ? "02_goal_done" : "10_quiz"}.webp" alt="" width="110" height="110">
+        <div class="mvq-score">${esc(T("mvQScore", "{a} / {b} 問正解").replace("{a}", quiz.ok).replace("{b}", n))}</div>
+        ${quiz.wrong.length ? `<div class="mvq-wh">${esc(T("mvQWrongH", "まちがえた語"))}</div><div class="mvq-wl">${quiz.wrong.map((w) => `<button onclick="speakZh('${esc(w)}')">${esc(w)}</button>`).join("")}</div>` : ""}
+        <div class="mvq-btns">
+          ${quiz.wrong.length ? `<button class="btn primary" onclick="MyVocab.startQuiz(true)">${esc(T("mvQRetryWrong", "まちがえた語だけもう一度"))}</button>` : ""}
+          <button class="btn ${quiz.wrong.length ? "" : "primary"}" onclick="MyVocab.startQuiz()">${esc(T("mvQRetry", "もう一度テスト"))}</button>
+          <button class="btn" onclick="MyVocab.qQuit()">${esc(T("mvQBack", "単語帳にもどる"))}</button>
+        </div></div>`;
+      return;
+    }
+    const q = quiz.qs[quiz.i], it = q.it;
+    const prompt = q.type === "w2m" ? `<div class="mvq-w">${esc(it.w)}</div>`
+      : q.type === "a2w" ? `<button class="mvq-play" onclick="speakZh('${esc(it.w)}')">${icon("volume", { size: 28 })}<span>${esc(T("mvQPlay", "もう一度聞く"))}</span></button>`
+      : `<div class="mvq-m">${esc(it.m)}</div>`;
+    const lab = { w2m: T("mvQW2M", "この語の意味は？"), a2w: T("mvQA2W", "聞こえた語は？"), m2w: T("mvQM2W", "この意味の語は？") }[q.type];
+    const opts = q.opts.map((o, k) => {
+      let cls = "mvq-o"; if (quiz.pick === k) cls += " sel";
+      if (quiz.done) { if (o.w === it.w) cls += " ok"; else if (quiz.pick === k) cls += " ng"; }
+      return `<button class="${cls}" onclick="MyVocab.qPick(${k})" ${quiz.done ? "disabled" : ""}>${esc(q.type === "w2m" ? o.m : o.w)}</button>`;
+    }).join("");
+    const okNow = quiz.done && q.opts[quiz.pick].w === it.w;
+    box.innerHTML = `<div class="mvq">
+      <div class="mvq-top"><button class="mvq-x" onclick="MyVocab.qQuit()" aria-label="close">✕</button><span>${quiz.i + 1} / ${quiz.qs.length}</span></div>
+      <div class="mvq-bar"><i style="width:${Math.round(quiz.i / quiz.qs.length * 100)}%"></i></div>
+      <div class="mvq-lab">${esc(lab)}</div>
+      <div class="mvq-prompt">${prompt}</div>
+      <div class="mvq-opts">${opts}</div>
+      ${quiz.done ? `<div class="mvq-exp ${okNow ? "ok" : "ng"}">
+          <b>${esc(okNow ? T("mvQCorrect", "正解！") : T("mvQWrong", "ざんねん"))}</b>
+          <div class="mvq-ans"><span class="w" onclick="speakZh('${esc(it.w)}')">${esc(it.w)}</span>${typeof twPyOnly === "function" && twPyOnly() ? "" : `<span class="z">${zy(it.zy)}</span>`}<span class="p">${esc(it.py)}</span></div>
+          ${it.m ? `<div class="mvq-am">${esc(it.m)}</div>` : ""}
+        </div>
+        <button class="btn primary mvq-go" onclick="MyVocab.qNext()">${esc(quiz.i + 1 < quiz.qs.length ? T("mvQNext", "次へ") : T("mvQFinish", "結果を見る"))}</button>`
+        : `<button class="btn primary mvq-go" onclick="MyVocab.qSubmit()" ${quiz.pick < 0 ? "disabled" : ""}>${esc(T("mvQSubmit", "答え合わせ"))}</button>`}
+    </div>`;
+  }
+
+  return { render, submit, remove, askDel, cancelDel, setSort, startQuiz, qPick, qSubmit, qNext, qQuit, list, count, has, add, saveFromDict, FREE_MAX };
 })();
 if (typeof window !== "undefined") window.MyVocab = MyVocab;   // const は window に乗らない

@@ -1,132 +1,141 @@
 {
  "level": "l4",
  "per": 8,
- "by": "pos",
+ "by": "theme",
  "units": [
   {
    "id": "u1",
    "no": 1,
    "lead": {
-    "ja": "名詞",
-    "en": "Nouns",
-    "ko": "명사",
-    "vi": "Danh từ",
-    "id": "Kata benda"
+    "g": "self",
+    "ja": "自分と相手",
+    "en": "You and me",
+    "ko": "나와 상대",
+    "vi": "Tôi và bạn",
+    "id": "Aku dan kamu"
    },
    "lessons": [
     {
      "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
+      "g": "self",
+      "ja": "自分と相手",
+      "en": "You and me",
+      "ko": "나와 상대",
+      "vi": "Tôi và bạn",
+      "id": "Aku dan kamu"
      },
      "words": [
-      "政策",
-      "報導",
-      "事件",
-      "調查",
-      "趨勢",
-      "輿論",
-      "媒體",
-      "現象"
+      "工程師",
+      "嬰兒",
+      "阿公",
+      "阿嬤",
+      "阿媽",
+      "人民",
+      "夫婦",
+      "叔父"
      ],
      "idx": 1
     },
     {
      "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
+      "g": "self",
+      "ja": "自分と相手",
+      "en": "You and me",
+      "ko": "나와 상대",
+      "vi": "Tôi và bạn",
+      "id": "Aku dan kamu"
      },
      "words": [
-      "危機",
-      "議題",
-      "民眾",
-      "宣布",
-      "人口",
-      "老化",
-      "差距",
-      "族群"
+      "男性",
+      "年齡",
+      "農曆",
+      "猴子",
+      "猴",
+      "羊",
+      "兔子",
+      "兔"
      ],
      "idx": 2
     },
     {
      "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
+      "g": "self",
+      "ja": "自分と相手",
+      "en": "You and me",
+      "ko": "나와 상대",
+      "vi": "Tôi và bạn",
+      "id": "Aku dan kamu"
      },
      "words": [
-      "福利",
-      "少子化",
-      "失業",
-      "歧視",
-      "平等",
-      "制度"
+      "外表",
+      "個人",
+      "老鼠",
+      "鼠",
+      "初中",
+      "少年",
+      "少女",
+      "故鄉"
      ],
      "idx": 3
     },
     {
-     "name": {
-      "ja": "動詞",
-      "en": "Verbs",
-      "ko": "동사",
-      "vi": "Động từ",
-      "id": "Kata kerja"
-     },
-     "words": [
-      "移民",
-      "世代",
-      "投資",
-      "成本",
-      "利潤",
-      "市場"
+     "kind": "grammar",
+     "gids": [
+      "g4-242",
+      "g4-243",
+      "g4-244"
      ],
-     "idx": 1
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 1,
+     "cats": [
+      "助動詞"
+     ]
     },
     {
      "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
+      "g": "self",
+      "ja": "自分と相手",
+      "en": "You and me",
+      "ko": "나와 상대",
+      "vi": "Tôi và bạn",
+      "id": "Aku dan kamu"
      },
      "words": [
-      "品牌",
-      "競爭",
-      "企業",
-      "經營",
-      "消費",
-      "產業",
-      "營收",
-      "物價"
+      "親人",
+      "親戚",
+      "舅舅",
+      "舅",
+      "舅媽",
+      "女性",
+      "表哥",
+      "表妹"
      ],
      "idx": 4
     },
     {
      "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
+      "g": "self",
+      "ja": "自分と相手",
+      "en": "You and me",
+      "ko": "나와 상대",
+      "vi": "Tôi và bạn",
+      "id": "Aku dan kamu"
      },
      "words": [
-      "薪資",
-      "景氣",
-      "污染",
-      "氣候",
-      "能源",
-      "回收",
-      "環保",
-      "資源"
+      "姨媽",
+      "丈夫",
+      "全家",
+      "理想",
+      "童年",
+      "龍",
+      "自信"
      ],
      "idx": 5
     }
@@ -136,125 +145,136 @@
    "id": "u2",
    "no": 2,
    "lead": {
-    "ja": "名詞",
-    "en": "Nouns",
-    "ko": "명사",
-    "vi": "Danh từ",
-    "id": "Kata benda"
+    "g": "self",
+    "ja": "自分と相手",
+    "en": "You and me",
+    "ko": "나와 상대",
+    "vi": "Tôi và bạn",
+    "id": "Aku dan kamu"
    },
    "lessons": [
     {
      "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
+      "g": "self",
+      "ja": "自分と相手",
+      "en": "You and me",
+      "ko": "나와 상대",
+      "vi": "Tôi và bạn",
+      "id": "Aku dan kamu"
      },
      "words": [
-      "生態",
-      "排放",
-      "節能",
-      "災害",
-      "逐漸",
-      "顯然"
+      "祖父",
+      "祖母",
+      "性格",
+      "教堂",
+      "外語",
+      "國內",
+      "國外"
      ],
      "idx": 6
     },
     {
-     "name": {
-      "ja": "副詞",
-      "en": "Adverbs",
-      "ko": "부사",
-      "vi": "Trạng từ",
-      "id": "Kata keterangan"
-     },
-     "words": [
-      "大幅",
-      "相對",
-      "整體",
-      "普遍",
-      "明顯",
-      "持續",
-      "大致",
-      "甚至"
+     "kind": "grammar",
+     "gids": [
+      "g4-245",
+      "g4-246",
+      "g4-247"
      ],
-     "idx": 1
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 2,
+     "cats": [
+      "助動詞",
+      "補語"
+     ]
     },
     {
      "name": {
-      "ja": "副詞",
-      "en": "Adverbs",
-      "ko": "부사",
-      "vi": "Trạng từ",
-      "id": "Kata keterangan"
+      "g": "self",
+      "ja": "自分と相手",
+      "en": "You and me",
+      "ko": "나와 상대",
+      "vi": "Tôi và bạn",
+      "id": "Aku dan kamu"
      },
      "words": [
-      "畢竟",
-      "難免",
-      "反映",
-      "亂七八糟",
-      "一模一樣",
-      "不可思議"
-     ],
-     "idx": 2
-    },
-    {
-     "name": {
-      "ja": "四字熟語",
-      "en": "Idioms",
-      "ko": "사자성어",
-      "vi": "Thành ngữ",
-      "id": "Idiom"
-     },
-     "words": [
-      "莫名其妙",
-      "理所當然",
-      "半途而廢",
-      "供不應求",
-      "日新月異",
-      "迫不及待"
-     ],
-     "idx": 1
-    },
-    {
-     "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
-     },
-     "words": [
-      "選舉",
-      "投票",
-      "法律",
-      "權利",
-      "義務",
-      "規範",
-      "罰款",
-      "學位"
+      "國中",
+      "婆婆",
+      "妻子",
+      "妻",
+      "婚姻",
+      "活力",
+      "嫁"
      ],
      "idx": 7
     },
     {
      "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
+      "g": "self",
+      "ja": "自分と相手",
+      "en": "You and me",
+      "ko": "나와 상대",
+      "vi": "Tôi và bạn",
+      "id": "Aku dan kamu"
      },
      "words": [
-      "學歷",
-      "專業",
-      "培訓",
-      "素養",
-      "文憑",
-      "疫苗",
-      "防疫"
+      "生",
+      "拜拜",
+      "離婚",
+      "名叫",
+      "成年",
+      "活潑",
+      "好動"
      ],
      "idx": 8
+    },
+    {
+     "name": {
+      "g": "place",
+      "ja": "場所と移動",
+      "en": "Places & getting around",
+      "ko": "장소와 이동",
+      "vi": "Nơi chốn & đi lại",
+      "id": "Tempat & perjalanan"
+     },
+     "words": [
+      "高鐵",
+      "迷路",
+      "一旁",
+      "人數",
+      "人行道",
+      "森林",
+      "島",
+      "工具"
+     ],
+     "idx": 1
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-248",
+      "g4-249",
+      "g4-250"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 3,
+     "cats": [
+      "副詞",
+      "補語"
+     ]
     }
    ]
   },
@@ -262,124 +282,136 @@
    "id": "u3",
    "no": 3,
    "lead": {
-    "ja": "動詞",
-    "en": "Verbs",
-    "ko": "동사",
-    "vi": "Động từ",
-    "id": "Kata kerja"
+    "g": "place",
+    "ja": "場所と移動",
+    "en": "Places & getting around",
+    "ko": "장소와 이동",
+    "vi": "Nơi chốn & đi lại",
+    "id": "Tempat & perjalanan"
    },
    "lessons": [
     {
      "name": {
-      "ja": "動詞",
-      "en": "Verbs",
-      "ko": "동사",
-      "vi": "Động từ",
-      "id": "Kata kerja"
+      "g": "place",
+      "ja": "場所と移動",
+      "en": "Places & getting around",
+      "ko": "장소와 이동",
+      "vi": "Nơi chốn & đi lại",
+      "id": "Tempat & perjalanan"
      },
      "words": [
-      "照護",
-      "長照",
-      "醫療",
-      "心理",
-      "通膨",
-      "匯率"
+      "地區",
+      "石頭",
+      "石",
+      "客運",
+      "街道",
+      "預報",
+      "氣象",
+      "橋"
      ],
      "idx": 2
     },
     {
      "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
+      "g": "place",
+      "ja": "場所と移動",
+      "en": "Places & getting around",
+      "ko": "장소와 이동",
+      "vi": "Nơi chốn & đi lại",
+      "id": "Tempat & perjalanan"
      },
      "words": [
-      "股票",
-      "貸款",
-      "預算",
-      "稅",
-      "補助",
-      "津貼",
-      "人工智慧",
-      "演算法"
-     ],
-     "idx": 9
-    },
-    {
-     "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
-     },
-     "words": [
-      "隱私",
-      "詐騙",
-      "假訊息",
-      "數位",
-      "提升",
-      "促進"
-     ],
-     "idx": 10
-    },
-    {
-     "name": {
-      "ja": "動詞",
-      "en": "Verbs",
-      "ko": "동사",
-      "vi": "Động từ",
-      "id": "Kata kerja"
-     },
-     "words": [
-      "導致",
-      "造成",
-      "避免",
-      "維持",
-      "擴大",
-      "縮小",
-      "改善",
-      "惡化"
+      "景色",
+      "居民",
+      "目的地",
+      "湖",
+      "動物園",
+      "海洋",
+      "鐵路",
+      "乘客"
      ],
      "idx": 3
     },
     {
      "name": {
-      "ja": "動詞",
-      "en": "Verbs",
-      "ko": "동사",
-      "vi": "Động từ",
-      "id": "Kata kerja"
+      "g": "place",
+      "ja": "場所と移動",
+      "en": "Places & getting around",
+      "ko": "장소와 이동",
+      "vi": "Nơi chốn & đi lại",
+      "id": "Tempat & perjalanan"
      },
      "words": [
-      "忽略",
-      "重視",
-      "面臨",
-      "克服",
-      "嚴重",
-      "重大"
+      "線",
+      "卡車",
+      "道路",
+      "岸",
+      "民宿",
+      "觀光客",
+      "超過",
+      "進入"
      ],
      "idx": 4
     },
     {
+     "kind": "grammar",
+     "gids": [
+      "g4-251",
+      "g4-252",
+      "g4-253"
+     ],
      "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 4,
+     "cats": [
+      "比較"
+     ]
+    },
+    {
+     "name": {
+      "g": "place",
+      "ja": "場所と移動",
+      "en": "Places & getting around",
+      "ko": "장소와 이동",
+      "vi": "Nơi chốn & đi lại",
+      "id": "Tempat & perjalanan"
      },
      "words": [
-      "關鍵",
-      "迫切",
-      "樂觀",
-      "悲觀",
-      "穩定",
-      "劇烈"
+      "入境",
+      "起飛",
+      "旅遊",
+      "達到",
+      "度過",
+      "度假",
+      "觀光"
      ],
-     "idx": 11
+     "idx": 5
+    },
+    {
+     "name": {
+      "g": "place",
+      "ja": "場所と移動",
+      "en": "Places & getting around",
+      "ko": "장소와 이동",
+      "vi": "Nơi chốn & đi lại",
+      "id": "Tempat & perjalanan"
+     },
+     "words": [
+      "潮溼",
+      "潮濕",
+      "悶熱",
+      "暖和",
+      "溫暖",
+      "高速",
+      "趟"
+     ],
+     "idx": 6
     }
    ]
   },
@@ -387,120 +419,137 @@
    "id": "u4",
    "no": 4,
    "lead": {
-    "ja": "四字熟語",
-    "en": "Idioms",
-    "ko": "사자성어",
-    "vi": "Thành ngữ",
-    "id": "Idiom"
+    "g": "food",
+    "ja": "食べる・飲む",
+    "en": "Eating & drinking",
+    "ko": "먹고 마시기",
+    "vi": "Ăn và uống",
+    "id": "Makan & minum"
    },
    "lessons": [
     {
      "name": {
-      "ja": "四字熟語",
-      "en": "Idioms",
-      "ko": "사자성어",
-      "vi": "Thành ngữ",
-      "id": "Idiom"
+      "g": "food",
+      "ja": "食べる・飲む",
+      "en": "Eating & drinking",
+      "ko": "먹고 마시기",
+      "vi": "Ăn và uống",
+      "id": "Makan & minum"
      },
      "words": [
-      "與時俱進",
-      "供過於求",
-      "層出不窮",
-      "息息相關",
-      "名副其實",
-      "由於"
-     ],
-     "idx": 2
-    },
-    {
-     "name": {
-      "ja": "連",
-      "en": "連"
-     },
-     "words": [
-      "儘管",
-      "因此",
-      "然而",
-      "此外",
-      "總而言之",
-      "換句話說",
-      "進而",
-      "否則"
+      "醬油",
+      "材料",
+      "茶葉",
+      "年糕",
+      "檸檬",
+      "粉",
+      "奶油",
+      "蓋子"
      ],
      "idx": 1
     },
     {
+     "kind": "grammar",
+     "gids": [
+      "g4-254",
+      "g4-255",
+      "g4-256"
+     ],
      "name": {
-      "ja": "連",
-      "en": "連"
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 5,
+     "cats": [
+      "特殊構文",
+      "副詞"
+     ]
+    },
+    {
+     "name": {
+      "g": "food",
+      "ja": "食べる・飲む",
+      "en": "Eating & drinking",
+      "ko": "먹고 마시기",
+      "vi": "Ăn và uống",
+      "id": "Makan & minum"
      },
      "words": [
-      "即使",
-      "一舉兩得",
-      "精益求精",
-      "循序漸進",
-      "全力以赴",
-      "事半功倍"
+      "高麗菜",
+      "鴨子",
+      "鴨",
+      "醋",
+      "辣椒",
+      "原味",
+      "美食",
+      "蔬菜"
      ],
      "idx": 2
     },
     {
      "name": {
-      "ja": "四字熟語",
-      "en": "Idioms",
-      "ko": "사자성어",
-      "vi": "Thành ngữ",
-      "id": "Idiom"
+      "g": "food",
+      "ja": "食べる・飲む",
+      "en": "Eating & drinking",
+      "ko": "먹고 마시기",
+      "vi": "Ăn và uống",
+      "id": "Makan & minum"
      },
      "words": [
-      "不知所措",
-      "舉足輕重",
-      "家喻戶曉",
-      "名列前茅",
-      "腳踏實地",
-      "深思熟慮",
-      "適得其反"
+      "餐點",
+      "肉類",
+      "酒吧",
+      "熱量",
+      "湯圓",
+      "羊肉",
+      "胡椒"
      ],
      "idx": 3
     },
     {
      "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
+      "g": "food",
+      "ja": "食べる・飲む",
+      "en": "Eating & drinking",
+      "ko": "먹고 마시기",
+      "vi": "Ăn và uống",
+      "id": "Makan & minum"
      },
      "words": [
-      "效率",
-      "績效",
-      "履歷",
-      "面試",
-      "談判",
-      "合約",
-      "客戶",
-      "部門"
+      "皮",
+      "蝦子",
+      "粽子",
+      "蒜",
+      "飲食",
+      "素食",
+      "開水"
      ],
-     "idx": 12
+     "idx": 4
     },
     {
-     "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
-     },
-     "words": [
-      "升遷",
-      "離職",
-      "應徵",
-      "錄取",
-      "出差",
-      "業績",
-      "決策"
+     "kind": "grammar",
+     "gids": [
+      "g4-257",
+      "g4-258",
+      "g4-259"
      ],
-     "idx": 13
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 6,
+     "cats": [
+      "特殊構文",
+      "接続"
+     ]
     }
    ]
   },
@@ -508,127 +557,135 @@
    "id": "u5",
    "no": 5,
    "lead": {
-    "ja": "動詞",
-    "en": "Verbs",
-    "ko": "동사",
-    "vi": "Động từ",
-    "id": "Kata kerja"
+    "g": "food",
+    "ja": "食べる・飲む",
+    "en": "Eating & drinking",
+    "ko": "먹고 마시기",
+    "vi": "Ăn và uống",
+    "id": "Makan & minum"
    },
    "lessons": [
     {
      "name": {
-      "ja": "動詞",
-      "en": "Verbs",
-      "ko": "동사",
-      "vi": "Động từ",
-      "id": "Kata kerja"
+      "g": "food",
+      "ja": "食べる・飲む",
+      "en": "Eating & drinking",
+      "ko": "먹고 마시기",
+      "vi": "Ăn và uống",
+      "id": "Makan & minum"
      },
      "words": [
-      "協調",
-      "效益",
-      "主管",
-      "政黨",
-      "民主",
-      "自由"
+      "玉米",
+      "月餅",
+      "鍋子",
+      "米飯",
+      "米粉",
+      "麵粉",
+      "零食"
      ],
      "idx": 5
     },
     {
      "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
+      "g": "food",
+      "ja": "食べる・飲む",
+      "en": "Eating & drinking",
+      "ko": "먹고 마시기",
+      "vi": "Ăn và uống",
+      "id": "Makan & minum"
      },
      "words": [
-      "憲法",
-      "官員",
-      "抗議",
-      "罷工",
-      "協議",
-      "外交",
-      "貿易"
-     ],
-     "idx": 14
-    },
-    {
-     "name": {
-      "ja": "動詞",
-      "en": "Verbs",
-      "ko": "동사",
-      "vi": "Động từ",
-      "id": "Kata kerja"
-     },
-     "words": [
-      "出口",
-      "進口",
-      "供應鏈",
-      "財政",
-      "主權",
-      "全球化"
+      "麥",
+      "花生",
+      "煎",
+      "加熱",
+      "吸",
+      "蓋",
+      "出產"
      ],
      "idx": 6
     },
     {
      "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
+      "g": "food",
+      "ja": "食べる・飲む",
+      "en": "Eating & drinking",
+      "ko": "먹고 마시기",
+      "vi": "Ăn và uống",
+      "id": "Makan & minum"
      },
      "words": [
-      "內需",
-      "議員",
-      "觀念",
-      "價值觀",
-      "立場",
-      "觀點",
-      "因素",
-      "前提"
-     ],
-     "idx": 15
-    },
-    {
-     "name": {
-      "ja": "名詞",
-      "en": "Nouns",
-      "ko": "명사",
-      "vi": "Danh từ",
-      "id": "Kata benda"
-     },
-     "words": [
-      "依據",
-      "原則",
-      "領域",
-      "層面",
-      "機制",
-      "模式",
-      "結構",
-      "共識"
-     ],
-     "idx": 16
-    },
-    {
-     "name": {
-      "ja": "動詞",
-      "en": "Verbs",
-      "ko": "동사",
-      "vi": "Động từ",
-      "id": "Kata kerja"
-     },
-     "words": [
-      "探討",
-      "評估",
-      "落實",
-      "推廣",
-      "實施",
-      "掌握",
-      "呈現",
-      "制定"
+      "切",
+      "煮",
+      "搖",
+      "開動",
+      "膩",
+      "燙",
+      "美味"
      ],
      "idx": 7
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-260",
+      "g4-261",
+      "g4-262"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 7,
+     "cats": [
+      "接続",
+      "副詞"
+     ]
+    },
+    {
+     "name": {
+      "g": "body",
+      "ja": "体・色・自然",
+      "en": "Body, colours, nature",
+      "ko": "몸·색·자연",
+      "vi": "Cơ thể, màu sắc, thiên nhiên",
+      "id": "Tubuh, warna, alam"
+     },
+     "words": [
+      "天空",
+      "農藥",
+      "溼度",
+      "濕度",
+      "空中",
+      "大自然",
+      "熊",
+      "月光"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "body",
+      "ja": "体・色・自然",
+      "en": "Body, colours, nature",
+      "ko": "몸·색·자연",
+      "vi": "Cơ thể, màu sắc, thiên nhiên",
+      "id": "Tubuh, warna, alam"
+     },
+     "words": [
+      "老虎",
+      "虎",
+      "沙子",
+      "陽光",
+      "生長",
+      "砍",
+      "黑暗"
+     ],
+     "idx": 2
     }
    ]
   },
@@ -636,46 +693,63 @@
    "id": "u6",
    "no": 6,
    "lead": {
-    "ja": "動詞",
-    "en": "Verbs",
-    "ko": "동사",
-    "vi": "Động từ",
-    "id": "Kata kerja"
+    "g": "adj",
+    "ja": "様子をいう",
+    "en": "Describing things",
+    "ko": "상태 말하기",
+    "vi": "Miêu tả",
+    "id": "Menggambarkan"
    },
    "lessons": [
     {
      "name": {
-      "ja": "動詞",
-      "en": "Verbs",
-      "ko": "동사",
-      "vi": "Động từ",
-      "id": "Kata kerja"
+      "g": "adj",
+      "ja": "様子をいう",
+      "en": "Describing things",
+      "ko": "상태 말하기",
+      "vi": "Miêu tả",
+      "id": "Menggambarkan"
      },
      "words": [
-      "呼籲",
-      "質疑",
-      "因應",
-      "緩解",
-      "顯著",
-      "龐大"
+      "亮",
+      "暗",
+      "厚",
+      "安靜"
      ],
-     "idx": 8
+     "idx": 0
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-263",
+      "g4-264",
+      "g4-265"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 8,
+     "cats": [
+      "特殊構文",
+      "接続"
+     ]
     },
     {
      "name": {
-      "ja": "形容詞",
-      "en": "Adjectives",
-      "ko": "형용사",
-      "vi": "Tính từ",
-      "id": "Kata sifat"
+      "ja": "職場・辦公",
+      "en": "職場・辦公"
      },
      "words": [
-      "完善",
-      "多元",
-      "客觀",
-      "充分",
-      "融資",
-      "資金"
+      "同事",
+      "請假",
+      "會議",
+      "準時",
+      "訓練"
      ],
      "idx": 0
     },
@@ -688,16 +762,16 @@
       "id": "Kata benda"
      },
      "words": [
-      "資產",
-      "負債",
-      "破產",
-      "壟斷",
-      "併購",
-      "創業",
-      "行銷",
-      "庫存"
+      "手指",
+      "皮膚",
+      "蝦",
+      "鏡子",
+      "電燈",
+      "班機",
+      "來回",
+      "平日"
      ],
-     "idx": 17
+     "idx": 1
     },
     {
      "name": {
@@ -708,32 +782,243 @@
       "id": "Kata benda"
      },
      "words": [
-      "需求",
-      "利率",
-      "報酬",
-      "收益",
-      "通路",
-      "執政",
-      "政權",
-      "內閣"
+      "學費",
+      "分數",
+      "職業",
+      "展覽",
+      "表演",
+      "睡眠",
+      "口味",
+      "地震"
      ],
-     "idx": 18
+     "idx": 2
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-266",
+      "g4-267",
+      "g4-268"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 9,
+     "cats": [
+      "介詞",
+      "特殊構文"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u7",
+   "no": 7,
+   "lead": {
+    "ja": "名詞",
+    "en": "Nouns",
+    "ko": "명사",
+    "vi": "Danh từ",
+    "id": "Kata benda"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "急診",
+      "手術",
+      "團隊",
+      "記者",
+      "廣告",
+      "節目",
+      "觀眾",
+      "脾氣"
+     ],
+     "idx": 3
     },
     {
      "name": {
-      "ja": "動詞",
-      "en": "Verbs",
-      "ko": "동사",
-      "vi": "Động từ",
-      "id": "Kata kerja"
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
      },
      "words": [
-      "立法",
-      "表決",
-      "公投",
-      "民調",
-      "制裁",
-      "局勢"
+      "政策",
+      "媒體",
+      "現象",
+      "危機",
+      "民眾",
+      "少子化",
+      "制度",
+      "品牌"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "企業",
+      "營收",
+      "氣候",
+      "資源",
+      "整體",
+      "權利",
+      "學位",
+      "專業"
+     ],
+     "idx": 5
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-269",
+      "g4-270",
+      "g4-271"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 10,
+     "cats": [
+      "介詞",
+      "特殊構文"
+     ]
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "防疫",
+      "長照",
+      "通膨",
+      "匯率",
+      "人工智慧",
+      "演算法",
+      "假訊息",
+      "民主"
+     ],
+     "idx": 6
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "官員",
+      "貿易",
+      "供應鏈",
+      "主權",
+      "全球化",
+      "內需",
+      "因素",
+      "原則"
+     ],
+     "idx": 7
+    }
+   ]
+  },
+  {
+   "id": "u8",
+   "no": 8,
+   "lead": {
+    "ja": "名詞",
+    "en": "Nouns",
+    "ko": "명사",
+    "vi": "Danh từ",
+    "id": "Kata benda"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "融資",
+      "利率",
+      "政權",
+      "峰會",
+      "證據",
+      "創新",
+      "愛好",
+      "愛心"
+     ],
+     "idx": 8
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-272",
+      "g4-273",
+      "g4-274"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 11,
+     "cats": [
+      "介詞",
+      "特殊構文"
+     ]
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "一生",
+      "銀",
+      "週年",
+      "周圍",
+      "主意",
+      "紫",
+      "之前",
+      "之中"
      ],
      "idx": 9
     },
@@ -746,43 +1031,14 @@
       "id": "Kata benda"
      },
      "words": [
-      "聯盟",
-      "動盪",
-      "峰會",
-      "訴訟",
-      "判決",
-      "賠償"
-     ],
-     "idx": 19
-    }
-   ]
-  },
-  {
-   "id": "u7",
-   "no": 7,
-   "lead": {
-    "ja": "動詞",
-    "en": "Verbs",
-    "ko": "동사",
-    "vi": "Động từ",
-    "id": "Kata kerja"
-   },
-   "lessons": [
-    {
-     "name": {
-      "ja": "動詞",
-      "en": "Verbs",
-      "ko": "동사",
-      "vi": "Động từ",
-      "id": "Kata kerja"
-     },
-     "words": [
-      "違法",
-      "起訴",
-      "保障",
-      "授權",
-      "證據",
-      "法規"
+      "種類",
+      "竹子",
+      "竹",
+      "血",
+      "日期",
+      "肉鬆",
+      "人類",
+      "人們"
      ],
      "idx": 10
     },
@@ -795,91 +1051,575 @@
       "id": "Kata benda"
      },
      "words": [
-      "理念",
-      "指標",
-      "核心",
-      "途徑",
-      "特徵",
-      "意義"
-     ],
-     "idx": 20
-    },
-    {
-     "name": {
-      "ja": "動詞",
-      "en": "Verbs",
-      "ko": "동사",
-      "vi": "Động từ",
-      "id": "Kata kerja"
-     },
-     "words": [
-      "探索",
-      "釐清",
-      "界定",
-      "涵蓋",
-      "兼顧",
-      "賦予",
-      "規劃",
-      "強化"
+      "人生",
+      "任務",
+      "代",
+      "江",
+      "土",
+      "少數",
+      "內心",
+      "年代"
      ],
      "idx": 11
     },
     {
+     "kind": "grammar",
+     "gids": [
+      "g4-275",
+      "g4-276",
+      "g4-277"
+     ],
      "name": {
-      "ja": "動詞",
-      "en": "Verbs",
-      "ko": "동사",
-      "vi": "Động từ",
-      "id": "Kata kerja"
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 12,
+     "cats": [
+      "副詞",
+      "数量"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u9",
+   "no": 9,
+   "lead": {
+    "ja": "名詞",
+    "en": "Nouns",
+    "ko": "명사",
+    "vi": "Danh từ",
+    "id": "Kata benda"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
      },
      "words": [
-      "推動",
-      "涉及",
-      "衡量",
-      "何況",
-      "反之",
-      "藉此"
+      "世紀",
+      "事實",
+      "家事",
+      "價錢",
+      "機器",
+      "帥哥",
+      "絲",
+      "四周"
      ],
      "idx": 12
     },
     {
      "name": {
-      "ja": "連",
-      "en": "連"
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
      },
      "words": [
-      "倘若",
-      "唯有",
-      "一旦",
-      "諸如",
-      "千方百計",
-      "前所未有"
+      "款式",
+      "目前",
+      "歐洲",
+      "西元",
+      "現實",
+      "團",
+      "娃娃",
+      "夢想"
      ],
-     "idx": 3
+     "idx": 13
     },
     {
      "name": {
-      "ja": "四字熟語",
-      "en": "Idioms",
-      "ko": "사자성어",
-      "vi": "Thành ngữ",
-      "id": "Idiom"
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
      },
      "words": [
-      "眾所周知",
-      "大同小異",
-      "千載難逢",
-      "一目了然",
-      "研發",
-      "創新"
+      "面前",
+      "大洋洲",
+      "婦女",
+      "腳步",
+      "階段",
+      "對話",
+      "對象",
+      "多數"
      ],
-     "idx": 4
+     "idx": 14
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-278",
+      "g4-279",
+      "g4-280"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 13,
+     "cats": [
+      "特殊構文",
+      "接続"
+     ]
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "兒童",
+      "決心",
+      "車庫",
+      "兄",
+      "用處",
+      "語法",
+      "錯誤",
+      "變化"
+     ],
+     "idx": 15
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "表情",
+      "想像力",
+      "笑話",
+      "笑容",
+      "半天",
+      "笨蛋",
+      "美洲",
+      "理由"
+     ],
+     "idx": 16
     }
    ]
   },
   {
-   "id": "u8",
-   "no": 8,
+   "id": "u10",
+   "no": 10,
+   "lead": {
+    "ja": "名詞",
+    "en": "Nouns",
+    "ko": "명사",
+    "vi": "Danh từ",
+    "id": "Kata benda"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "之後",
+      "之間",
+      "樹木",
+      "來源",
+      "樂趣",
+      "類型",
+      "色彩",
+      "沙"
+     ],
+     "idx": 17
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-281",
+      "g4-282",
+      "g4-283"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 14,
+     "cats": [
+      "アスペクト",
+      "補語"
+     ]
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "差別",
+      "差異",
+      "距離",
+      "非洲",
+      "亞洲",
+      "煙火",
+      "日出",
+      "三角形"
+     ],
+     "idx": 18
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "嫂嫂",
+      "首都",
+      "女士",
+      "女子",
+      "最初",
+      "男士",
+      "男子",
+      "表格"
+     ],
+     "idx": 19
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "表面",
+      "一帶",
+      "一陣子",
+      "以來",
+      "早晨",
+      "章",
+      "名稱",
+      "命運"
+     ],
+     "idx": 20
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-284",
+      "g4-285",
+      "g4-286"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 15,
+     "cats": [
+      "接続"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u11",
+   "no": 11,
+   "lead": {
+    "ja": "名詞",
+    "en": "Nouns",
+    "ko": "명사",
+    "vi": "Danh từ",
+    "id": "Kata benda"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "末",
+      "木",
+      "好運",
+      "後果",
+      "洞",
+      "動作",
+      "對方",
+      "清早"
+     ],
+     "idx": 21
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "特點",
+      "特性",
+      "主角",
+      "子女",
+      "特色",
+      "煙",
+      "眼光",
+      "眼前"
+     ],
+     "idx": 22
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "全球",
+      "例外",
+      "林",
+      "生命",
+      "生肖",
+      "時代",
+      "時期",
+      "長短"
+     ],
+     "idx": 23
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-287",
+      "g4-288",
+      "g4-289"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 16,
+     "cats": [
+      "特殊構文",
+      "接続"
+     ]
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "田",
+      "鐵",
+      "圖畫",
+      "平時",
+      "今後",
+      "今日",
+      "量"
+     ],
+     "idx": 24
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "宗教",
+      "蔥",
+      "處",
+      "葉子",
+      "葉",
+      "將來",
+      "深夜"
+     ],
+     "idx": 25
+    }
+   ]
+  },
+  {
+   "id": "u12",
+   "no": 12,
+   "lead": {
+    "ja": "名詞",
+    "en": "Nouns",
+    "ko": "명사",
+    "vi": "Danh từ",
+    "id": "Kata benda"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "說法",
+      "初",
+      "寶",
+      "背後",
+      "背景",
+      "玩具",
+      "網"
+     ],
+     "idx": 26
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-290",
+      "g4-291",
+      "g4-292"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 17,
+     "cats": [
+      "特殊構文",
+      "介詞"
+     ]
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "未來",
+      "溫度",
+      "願望",
+      "運氣",
+      "道理",
+      "弟妹",
+      "作者"
+     ],
+     "idx": 27
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "過去",
+      "海外",
+      "貴姓",
+      "期間",
+      "歌詞",
+      "方形",
+      "衝突"
+     ],
+     "idx": 28
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "恭喜",
+      "賺錢",
+      "來得及",
+      "感謝",
+      "放鬆",
+      "及格",
+      "影印",
+      "露營"
+     ],
+     "idx": 1
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-293",
+      "g4-294",
+      "g4-295"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 18,
+     "cats": [
+      "特殊構文",
+      "否定"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u13",
+   "no": 13,
    "lead": {
     "ja": "動詞",
     "en": "Verbs",
@@ -897,14 +1637,3903 @@
       "id": "Kata kerja"
      },
      "words": [
-      "突破",
-      "晶片",
-      "數據",
-      "雲端",
-      "專利",
-      "衛星"
+      "收集",
+      "住院",
+      "打包",
+      "留言",
+      "恢復",
+      "調查",
+      "宣布",
+      "老化"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "移民",
+      "投資",
+      "競爭",
+      "回收",
+      "持續",
+      "造成",
+      "改善",
+      "重視"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "進口",
+      "併購",
+      "推動",
+      "應當",
+      "不如",
+      "不行",
+      "猜",
+      "追求"
+     ],
+     "idx": 4
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-296",
+      "g4-297",
+      "g4-298"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 19,
+     "cats": [
+      "特殊構文",
+      "数量"
+     ]
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "值得",
+      "指",
+      "想像",
+      "忍",
+      "認得",
+      "扔",
+      "自助",
+      "代表"
+     ],
+     "idx": 5
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "當成",
+      "當作",
+      "倒",
+      "到期",
+      "假裝",
+      "通過",
+      "通知",
+      "投"
+     ],
+     "idx": 6
+    }
+   ]
+  },
+  {
+   "id": "u14",
+   "no": 14,
+   "lead": {
+    "ja": "動詞",
+    "en": "Verbs",
+    "ko": "동사",
+    "vi": "Động từ",
+    "id": "Kata kerja"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "商量",
+      "燒",
+      "申請",
+      "省",
+      "弄錯",
+      "分別",
+      "付出",
+      "趕"
+     ],
+     "idx": 7
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-299",
+      "g4-300",
+      "g4-301"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 20,
+     "cats": [
+      "特殊構文"
+     ]
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "懂得",
+      "剩",
+      "剩下",
+      "使用",
+      "加入",
+      "剪",
+      "減少",
+      "思考"
+     ],
+     "idx": 8
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "肯",
+      "摸",
+      "拿出",
+      "排",
+      "碰",
+      "碰到",
+      "握",
+      "喊"
+     ],
+     "idx": 9
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "限制",
+      "限",
+      "相關",
+      "咬",
+      "吐",
+      "挖",
+      "點頭",
+      "明白"
+     ],
+     "idx": 10
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-302",
+      "g4-303",
+      "g4-304"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 21,
+     "cats": [
+      "特殊構文",
+      "副詞"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u15",
+   "no": 15,
+   "lead": {
+    "ja": "動詞",
+    "en": "Verbs",
+    "ko": "동사",
+    "vi": "Động từ",
+    "id": "Kata kerja"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "當做",
+      "感到",
+      "微笑",
+      "降低",
+      "接近",
+      "躲",
+      "舉例",
+      "據說"
+     ],
+     "idx": 11
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "抽菸",
+      "抽煙",
+      "學會",
+      "壓",
+      "擠",
+      "記",
+      "記錄",
+      "繼續"
+     ],
+     "idx": 12
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "用心",
+      "有關",
+      "答應",
+      "必需",
+      "變成",
+      "來不及",
+      "來自",
+      "浪費"
      ],
      "idx": 13
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-305",
+      "g4-306",
+      "g4-307"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 22,
+     "cats": [
+      "話しことば",
+      "副詞"
+     ]
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "消失",
+      "曉得",
+      "協助",
+      "預期",
+      "按",
+      "擺",
+      "慢用",
+      "衝"
+     ],
+     "idx": 14
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "著急",
+      "受",
+      "受到",
+      "說出",
+      "懶得",
+      "招手",
+      "上街",
+      "採"
+     ],
+     "idx": 15
+    }
+   ]
+  },
+  {
+   "id": "u16",
+   "no": 16,
+   "lead": {
+    "ja": "動詞",
+    "en": "Verbs",
+    "ko": "동사",
+    "vi": "Động từ",
+    "id": "Kata kerja"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "採用",
+      "參考",
+      "藏",
+      "解決",
+      "舉",
+      "舉辦",
+      "舉行",
+      "颳"
+     ],
+     "idx": 16
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-308",
+      "g4-309",
+      "g4-310"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 23,
+     "cats": [
+      "話しことば",
+      "副詞"
+     ]
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "放下",
+      "分開",
+      "接受",
+      "喜愛",
+      "前進",
+      "敲",
+      "入",
+      "拍手"
+     ],
+     "idx": 17
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "配合",
+      "編",
+      "表示",
+      "移動",
+      "在乎",
+      "命令",
+      "恨",
+      "獨立"
+     ],
+     "idx": 18
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "害",
+      "求",
+      "取",
+      "勸",
+      "疼",
+      "提高",
+      "提供",
+      "追"
+     ],
+     "idx": 19
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-311",
+      "g4-312",
+      "g4-313"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 24,
+     "cats": [
+      "介詞",
+      "副詞"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u17",
+   "no": 17,
+   "lead": {
+    "ja": "動詞",
+    "en": "Verbs",
+    "ko": "동사",
+    "vi": "Động từ",
+    "id": "Kata kerja"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "提到",
+      "填",
+      "挑",
+      "貼",
+      "產生",
+      "嘗試",
+      "稱為",
+      "成"
+     ],
+     "idx": 20
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "調整",
+      "挑戰",
+      "通",
+      "同情",
+      "發",
+      "翻",
+      "反應",
+      "放棄"
+     ],
+     "idx": 21
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "碰見",
+      "破壞",
+      "過夜",
+      "嚇",
+      "想起",
+      "結合",
+      "領",
+      "罵"
+     ],
+     "idx": 22
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-314",
+      "g4-315",
+      "g4-316"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 25,
+     "cats": [
+      "補語",
+      "副詞"
+     ]
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "足夠",
+      "看出",
+      "靠",
+      "算了",
+      "算是",
+      "抬",
+      "打架",
+      "打聽"
+     ],
+     "idx": 23
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "傳來",
+      "創造",
+      "形容",
+      "見到",
+      "講話",
+      "講價",
+      "說明",
+      "躺"
+     ],
+     "idx": 24
+    }
+   ]
+  },
+  {
+   "id": "u18",
+   "no": 18,
+   "lead": {
+    "ja": "動詞",
+    "en": "Verbs",
+    "ko": "동사",
+    "vi": "Động từ",
+    "id": "Kata kerja"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "端",
+      "對待",
+      "發財",
+      "集中",
+      "加強",
+      "吹",
+      "靠近",
+      "開花"
+     ],
+     "idx": 25
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-317",
+      "g4-318",
+      "g4-319"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 26,
+     "cats": [
+      "副詞",
+      "比較"
+     ]
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "看不起",
+      "看得起",
+      "扮演",
+      "包含",
+      "保持",
+      "保證",
+      "遇到",
+      "遇見"
+     ],
+     "idx": 26
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "增加",
+      "增",
+      "等待",
+      "熟悉",
+      "受得了",
+      "做出",
+      "過期",
+      "買單"
+     ],
+     "idx": 27
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "關門",
+      "管",
+      "期望",
+      "費",
+      "互動",
+      "花費",
+      "回頭",
+      "回想"
+     ],
+     "idx": 28
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-320",
+      "g4-321",
+      "g4-322"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 27,
+     "cats": [
+      "比較",
+      "補語"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u19",
+   "no": 19,
+   "lead": {
+    "ja": "形容詞・副詞",
+    "en": "形容詞・副詞"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "形容詞・副詞",
+      "en": "形容詞・副詞"
+     },
+     "words": [
+      "突然",
+      "積極",
+      "樂觀",
+      "主動",
+      "複雜",
+      "單純",
+      "隨便"
+     ],
+     "idx": 0
+    },
+    {
+     "name": {
+      "ja": "交通補充",
+      "en": "交通補充"
+     },
+     "words": [
+      "紅綠燈",
+      "路線",
+      "誤點",
+      "塞車"
+     ],
+     "idx": 0
+    },
+    {
+     "name": {
+      "ja": "家事",
+      "en": "家事"
+     },
+     "words": [
+      "煮飯",
+      "擦",
+      "掃",
+      "整理"
+     ],
+     "idx": 0
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-323",
+      "g4-324",
+      "g4-325"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 28,
+     "cats": [
+      "接続",
+      "介詞"
+     ]
+    },
+    {
+     "name": {
+      "ja": "動詞補充",
+      "en": "動詞補充"
+     },
+     "words": [
+      "複習",
+      "預習",
+      "報名",
+      "慶祝",
+      "拜訪",
+      "載",
+      "叫醒"
+     ],
+     "idx": 0
+    },
+    {
+     "name": {
+      "ja": "職場",
+      "en": "職場"
+     },
+     "words": [
+      "薪水",
+      "面試",
+      "客戶",
+      "主管",
+      "負責",
+      "表現"
+     ],
+     "idx": 0
+    }
+   ]
+  },
+  {
+   "id": "u20",
+   "no": 20,
+   "lead": {
+    "ja": "職場深化",
+    "en": "職場深化"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "職場深化",
+      "en": "職場深化"
+     },
+     "words": [
+      "名片",
+      "部門",
+      "簽名",
+      "效率",
+      "責任"
+     ],
+     "idx": 0
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-326",
+      "g4-327",
+      "g4-328"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 29,
+     "cats": [
+      "接続"
+     ]
+    },
+    {
+     "name": {
+      "ja": "情感深化",
+      "en": "情感深化"
+     },
+     "words": [
+      "滿意",
+      "感動",
+      "失望",
+      "想念",
+      "受不了"
+     ],
+     "idx": 0
+    },
+    {
+     "name": {
+      "ja": "意見・討論",
+      "en": "意見・討論"
+     },
+     "words": [
+      "反對",
+      "溝通",
+      "解釋",
+      "抱怨",
+      "拒絕"
+     ],
+     "idx": 0
+    },
+    {
+     "name": {
+      "ja": "人間関係",
+      "en": "人間関係"
+     },
+     "words": [
+      "信任",
+      "吵架",
+      "原諒",
+      "個性",
+      "相處"
+     ],
+     "idx": 0
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-329",
+      "g4-330",
+      "g4-331"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 30,
+     "cats": [
+      "接続"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u21",
+   "no": 21,
+   "lead": {
+    "ja": "抽象語",
+    "en": "抽象語"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "抽象語",
+      "en": "抽象語"
+     },
+     "words": [
+      "態度",
+      "目標",
+      "壓力",
+      "情況",
+      "條件"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "ja": "抽象語",
+      "en": "抽象語"
+     },
+     "words": [
+      "改變",
+      "失敗",
+      "發展",
+      "適應"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "ja": "台湾生活",
+      "en": "台湾生活"
+     },
+     "words": [
+      "順利",
+      "租金",
+      "合約",
+      "熬夜"
+     ],
+     "idx": 0
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-332",
+      "g4-333",
+      "g4-334"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 31,
+     "cats": [
+      "接続"
+     ]
+    },
+    {
+     "name": {
+      "ja": "描述・副詞",
+      "en": "描述・副詞"
+     },
+     "words": [
+      "順便",
+      "故意",
+      "難得",
+      "幸好",
+      "竟然",
+      "至少",
+      "果然"
+     ],
+     "idx": 0
+    },
+    {
+     "name": {
+      "ja": "抽象",
+      "en": "抽象"
+     },
+     "words": [
+      "記憶",
+      "印象",
+      "觀念",
+      "常識",
+      "規定",
+      "範圍"
+     ],
+     "idx": 1
+    }
+   ]
+  },
+  {
+   "id": "u22",
+   "no": 22,
+   "lead": {
+    "ja": "抽象",
+    "en": "抽象"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "抽象",
+      "en": "抽象"
+     },
+     "words": [
+      "內容",
+      "重點",
+      "優點",
+      "缺點",
+      "信心",
+      "表達"
+     ],
+     "idx": 2
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-335",
+      "g4-336",
+      "g4-337"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 32,
+     "cats": [
+      "特殊構文",
+      "副詞"
+     ]
+    },
+    {
+     "name": {
+      "ja": "社會日常",
+      "en": "社會日常"
+     },
+     "words": [
+      "政府",
+      "警察",
+      "車禍",
+      "意外"
+     ],
+     "idx": 0
+    },
+    {
+     "name": {
+      "ja": "表達意見",
+      "en": "表達意見"
+     },
+     "words": [
+      "懷疑",
+      "確定",
+      "承認",
+      "提醒"
+     ],
+     "idx": 0
+    },
+    {
+     "name": {
+      "g": "society",
+      "ja": "社会",
+      "en": "Society",
+      "ko": "사회",
+      "vi": "Xã hội",
+      "id": "Masyarakat"
+     },
+     "words": [
+      "經濟",
+      "政治",
+      "人口",
+      "中年",
+      "資本",
+      "總統府",
+      "土地",
+      "團體"
+     ],
+     "idx": 1
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-338",
+      "g4-339",
+      "g4-340"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 33,
+     "cats": [
+      "副詞"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u23",
+   "no": 23,
+   "lead": {
+    "g": "society",
+    "ja": "社会",
+    "en": "Society",
+    "ko": "사회",
+    "vi": "Xã hội",
+    "id": "Masyarakat"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "society",
+      "ja": "社会",
+      "en": "Society",
+      "ko": "사회",
+      "vi": "Xã hội",
+      "id": "Masyarakat"
+     },
+     "words": [
+      "雙方",
+      "和平",
+      "戰爭",
+      "老年",
+      "青年",
+      "總統",
+      "性別"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "society",
+      "ja": "社会",
+      "en": "Society",
+      "ko": "사회",
+      "vi": "Xã hội",
+      "id": "Masyarakat"
+     },
+     "words": [
+      "軍隊",
+      "民間",
+      "青少年",
+      "爭",
+      "反",
+      "公共",
+      "公平"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "ja": "抽象動詞",
+      "en": "抽象動詞"
+     },
+     "words": [
+      "考慮",
+      "處理",
+      "安排",
+      "避免",
+      "忽略",
+      "面對"
+     ],
+     "idx": 0
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-341",
+      "g4-342",
+      "g4-343"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 34,
+     "cats": [
+      "副詞",
+      "疑問"
+     ]
+    },
+    {
+     "name": {
+      "ja": "連接詞・接続",
+      "en": "連接詞・接続"
+     },
+     "words": [
+      "因此",
+      "於是",
+      "既然",
+      "否則",
+      "甚至"
+     ],
+     "idx": 0
+    },
+    {
+     "name": {
+      "ja": "形容詞",
+      "en": "Adjectives",
+      "ko": "형용사",
+      "vi": "Tính từ",
+      "id": "Kata sifat"
+     },
+     "words": [
+      "嚴格",
+      "合理",
+      "詳細",
+      "迅速",
+      "平等",
+      "普遍",
+      "重大",
+      "穩定"
+     ],
+     "idx": 1
+    }
+   ]
+  },
+  {
+   "id": "u24",
+   "no": 24,
+   "lead": {
+    "ja": "形容詞",
+    "en": "Adjectives",
+    "ko": "형용사",
+    "vi": "Tính từ",
+    "id": "Kata sifat"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "形容詞",
+      "en": "Adjectives",
+      "ko": "형용사",
+      "vi": "Tính từ",
+      "id": "Kata sifat"
+     },
+     "words": [
+      "準",
+      "直",
+      "軟",
+      "日常",
+      "仔細",
+      "自在",
+      "淡",
+      "尖"
+     ],
+     "idx": 2
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-344",
+      "g4-345",
+      "g4-346"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 35,
+     "cats": [
+      "副詞"
+     ]
+    },
+    {
+     "name": {
+      "ja": "形容詞",
+      "en": "Adjectives",
+      "ko": "형용사",
+      "vi": "Tính từ",
+      "id": "Kata sifat"
+     },
+     "words": [
+      "粉紅",
+      "瘋",
+      "激烈",
+      "可靠",
+      "可笑",
+      "濃",
+      "嚴",
+      "完美"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "ja": "形容詞",
+      "en": "Adjectives",
+      "ko": "형용사",
+      "vi": "Tính từ",
+      "id": "Kata sifat"
+     },
+     "words": [
+      "典型",
+      "完整",
+      "溫",
+      "具體",
+      "常見",
+      "硬",
+      "粗",
+      "必要"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "ja": "形容詞",
+      "en": "Adjectives",
+      "ko": "형용사",
+      "vi": "Tính từ",
+      "id": "Kata sifat"
+     },
+     "words": [
+      "快速",
+      "寬",
+      "懶",
+      "小氣",
+      "愉快",
+      "沒用",
+      "厲害",
+      "真正"
+     ],
+     "idx": 5
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-347",
+      "g4-348",
+      "g4-349"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 36,
+     "cats": [
+      "副詞",
+      "特殊構文"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u25",
+   "no": 25,
+   "lead": {
+    "ja": "形容詞",
+    "en": "Adjectives",
+    "ko": "형용사",
+    "vi": "Tính từ",
+    "id": "Kata sifat"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "形容詞",
+      "en": "Adjectives",
+      "ko": "형용사",
+      "vi": "Tính từ",
+      "id": "Kata sifat"
+     },
+     "words": [
+      "正確",
+      "傷心",
+      "緊",
+      "固定",
+      "豐富",
+      "細",
+      "幸運",
+      "強大"
+     ],
+     "idx": 6
+    },
+    {
+     "name": {
+      "ja": "形容詞",
+      "en": "Adjectives",
+      "ko": "형용사",
+      "vi": "Tính từ",
+      "id": "Kata sifat"
+     },
+     "words": [
+      "親愛",
+      "弱",
+      "普通",
+      "強",
+      "靜",
+      "拿手",
+      "冰涼",
+      "糟"
+     ],
+     "idx": 7
+    },
+    {
+     "name": {
+      "ja": "形容詞",
+      "en": "Adjectives",
+      "ko": "형용사",
+      "vi": "Tính từ",
+      "id": "Kata sifat"
+     },
+     "words": [
+      "清",
+      "輕便",
+      "天生",
+      "主要",
+      "熱心",
+      "糊塗",
+      "滑"
+     ],
+     "idx": 8
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-350",
+      "g4-351",
+      "g4-352"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 37,
+     "cats": [
+      "介詞",
+      "副詞"
+     ]
+    },
+    {
+     "name": {
+      "ja": "形容詞",
+      "en": "Adjectives",
+      "ko": "형용사",
+      "vi": "Tính từ",
+      "id": "Kata sifat"
+     },
+     "words": [
+      "良好",
+      "實用",
+      "聽話",
+      "不當",
+      "不安",
+      "不足",
+      "平均"
+     ],
+     "idx": 9
+    },
+    {
+     "name": {
+      "ja": "形容詞",
+      "en": "Adjectives",
+      "ko": "형용사",
+      "vi": "Tính từ",
+      "id": "Kata sifat"
+     },
+     "words": [
+      "過分",
+      "相反",
+      "相同",
+      "滿足",
+      "自動",
+      "刺激",
+      "幸福"
+     ],
+     "idx": 10
+    }
+   ]
+  },
+  {
+   "id": "u26",
+   "no": 26,
+   "lead": {
+    "ja": "形容詞",
+    "en": "Adjectives",
+    "ko": "형용사",
+    "vi": "Tính từ",
+    "id": "Kata sifat"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "形容詞",
+      "en": "Adjectives",
+      "ko": "형용사",
+      "vi": "Tính từ",
+      "id": "Kata sifat"
+     },
+     "words": [
+      "要緊",
+      "深刻",
+      "鬆",
+      "醜",
+      "可憐",
+      "適當",
+      "迷人"
+     ],
+     "idx": 11
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-353",
+      "g4-354",
+      "g4-355"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 38,
+     "cats": [
+      "接続"
+     ]
+    },
+    {
+     "name": {
+      "ja": "形容詞",
+      "en": "Adjectives",
+      "ko": "형용사",
+      "vi": "Tính từ",
+      "id": "Kata sifat"
+     },
+     "words": [
+      "美好",
+      "窮",
+      "乖",
+      "怪",
+      "平",
+      "平靜",
+      "高大"
+     ],
+     "idx": 12
+    },
+    {
+     "name": {
+      "ja": "接続詞",
+      "en": "Conjunctions",
+      "ko": "접속사",
+      "vi": "Liên từ",
+      "id": "Kata sambung"
+     },
+     "words": [
+      "由於",
+      "換句話說",
+      "即使",
+      "反之",
+      "藉此",
+      "一般來說"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "ja": "接続詞",
+      "en": "Conjunctions",
+      "ko": "접속사",
+      "vi": "Liên từ",
+      "id": "Kata sambung"
+     },
+     "words": [
+      "一方面",
+      "不論",
+      "要不然",
+      "並且",
+      "與",
+      "除非"
+     ],
+     "idx": 2
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-356",
+      "g4-357",
+      "g4-358"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 39,
+     "cats": [
+      "接続",
+      "副詞"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u27",
+   "no": 27,
+   "lead": {
+    "ja": "接続詞",
+    "en": "Conjunctions",
+    "ko": "접속사",
+    "vi": "Liên từ",
+    "id": "Kata sambung"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "接続詞",
+      "en": "Conjunctions",
+      "ko": "접속사",
+      "vi": "Liên từ",
+      "id": "Kata sambung"
+     },
+     "words": [
+      "無論",
+      "若是",
+      "就算",
+      "要不是",
+      "一邊",
+      "假如"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "fun",
+      "ja": "遊びと趣味",
+      "en": "Leisure & hobbies",
+      "ko": "여가와 취미",
+      "vi": "Giải trí & sở thích",
+      "id": "Hiburan & hobi"
+     },
+     "words": [
+      "音樂家",
+      "小說",
+      "字幕",
+      "導演",
+      "博物館",
+      "演員",
+      "電視劇",
+      "電視台"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "fun",
+      "ja": "遊びと趣味",
+      "en": "Leisure & hobbies",
+      "ko": "여가와 취미",
+      "vi": "Giải trí & sở thích",
+      "id": "Hiburan & hobi"
+     },
+     "words": [
+      "鋼琴",
+      "歌手",
+      "角色",
+      "影片",
+      "小提琴",
+      "毛筆",
+      "水準",
+      "沙灘"
+     ],
+     "idx": 2
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-359",
+      "g4-360",
+      "g4-361"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 40,
+     "cats": [
+      "接続",
+      "副詞"
+     ]
+    },
+    {
+     "name": {
+      "g": "fun",
+      "ja": "遊びと趣味",
+      "en": "Leisure & hobbies",
+      "ko": "여가와 취미",
+      "vi": "Giải trí & sở thích",
+      "id": "Hiburan & hobi"
+     },
+     "words": [
+      "舞台",
+      "休閒",
+      "排球",
+      "樂團",
+      "明星",
+      "隊",
+      "主題",
+      "球隊"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "fun",
+      "ja": "遊びと趣味",
+      "en": "Leisure & hobbies",
+      "ko": "여가와 취미",
+      "vi": "Giải trí & sở thích",
+      "id": "Hiburan & hobi"
+     },
+     "words": [
+      "球賽",
+      "勝利",
+      "海灘",
+      "卡通",
+      "舞臺",
+      "太極拳",
+      "藝術",
+      "獎"
+     ],
+     "idx": 4
+    }
+   ]
+  },
+  {
+   "id": "u28",
+   "no": 28,
+   "lead": {
+    "g": "fun",
+    "ja": "遊びと趣味",
+    "en": "Leisure & hobbies",
+    "ko": "여가와 취미",
+    "vi": "Giải trí & sở thích",
+    "id": "Hiburan & hobi"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "fun",
+      "ja": "遊びと趣味",
+      "en": "Leisure & hobbies",
+      "ko": "여가와 취미",
+      "vi": "Giải trí & sở thích",
+      "id": "Hiburan & hobi"
+     },
+     "words": [
+      "對手",
+      "吉他",
+      "網友",
+      "乒乓球",
+      "戶外",
+      "畫面",
+      "享受",
+      "下棋"
+     ],
+     "idx": 5
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-362",
+      "g4-363",
+      "g4-364"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 41,
+     "cats": [
+      "接続"
+     ]
+    },
+    {
+     "name": {
+      "g": "fun",
+      "ja": "遊びと趣味",
+      "en": "Leisure & hobbies",
+      "ko": "여가와 취미",
+      "vi": "Giải trí & sở thích",
+      "id": "Hiburan & hobi"
+     },
+     "words": [
+      "養",
+      "釣魚",
+      "輸",
+      "賽跑",
+      "演出",
+      "滑雪",
+      "溜冰"
+     ],
+     "idx": 6
+    },
+    {
+     "name": {
+      "g": "fun",
+      "ja": "遊びと趣味",
+      "en": "Leisure & hobbies",
+      "ko": "여가와 취미",
+      "vi": "Giải trí & sở thích",
+      "id": "Hiburan & hobi"
+     },
+     "words": [
+      "彈",
+      "欣賞",
+      "贏",
+      "留念",
+      "歌唱",
+      "浪漫",
+      "賣座"
+     ],
+     "idx": 7
+    },
+    {
+     "name": {
+      "g": "public",
+      "ja": "公共サービス",
+      "en": "Public services",
+      "ko": "공공 서비스",
+      "vi": "Dịch vụ công",
+      "id": "Layanan publik"
+     },
+     "words": [
+      "日圓",
+      "歐元",
+      "郵差",
+      "美金",
+      "美元"
+     ],
+     "idx": 1
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-365",
+      "g4-366",
+      "g4-367"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 42,
+     "cats": [
+      "特殊構文",
+      "副詞"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u29",
+   "no": 29,
+   "lead": {
+    "g": "public",
+    "ja": "公共サービス",
+    "en": "Public services",
+    "ko": "공공 서비스",
+    "vi": "Dịch vụ công",
+    "id": "Layanan publik"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "public",
+      "ja": "公共サービス",
+      "en": "Public services",
+      "ko": "공공 서비스",
+      "vi": "Dịch vụ công",
+      "id": "Layanan publik"
+     },
+     "words": [
+      "新台幣",
+      "台幣",
+      "窗口",
+      "信件",
+      "辦事處"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "safety",
+      "ja": "安全と緊急時",
+      "en": "Safety & emergencies",
+      "ko": "안전과 긴급 상황",
+      "vi": "An toàn & khẩn cấp",
+      "id": "Keselamatan & darurat"
+     },
+     "words": [
+      "小偷",
+      "現場",
+      "毒",
+      "槍",
+      "律師",
+      "案子",
+      "案",
+      "騙子"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "safety",
+      "ja": "安全と緊急時",
+      "en": "Safety & emergencies",
+      "ko": "안전과 긴급 상황",
+      "vi": "An toàn & khẩn cấp",
+      "id": "Keselamatan & darurat"
+     },
+     "words": [
+      "引起",
+      "殺",
+      "自殺",
+      "傷害",
+      "搶",
+      "逃",
+      "騙",
+      "出現"
+     ],
+     "idx": 2
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-368",
+      "g4-369",
+      "g4-370"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 43,
+     "cats": [
+      "介詞"
+     ]
+    },
+    {
+     "name": {
+      "g": "safety",
+      "ja": "安全と緊急時",
+      "en": "Safety & emergencies",
+      "ko": "안전과 긴급 상황",
+      "vi": "An toàn & khẩn cấp",
+      "id": "Keselamatan & darurat"
+     },
+     "words": [
+      "受騙",
+      "騙人",
+      "犯",
+      "犯罪",
+      "不幸",
+      "平安",
+      "恐怖"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "feel",
+      "ja": "気持ちと態度",
+      "en": "Feelings & attitudes",
+      "ko": "감정과 태도",
+      "vi": "Cảm xúc & thái độ",
+      "id": "Perasaan & sikap"
+     },
+     "words": [
+      "嚇一跳",
+      "充滿",
+      "吸引",
+      "臉紅",
+      "驚訝",
+      "痛苦"
+     ],
+     "idx": 1
+    }
+   ]
+  },
+  {
+   "id": "u30",
+   "no": 30,
+   "lead": {
+    "g": "feel",
+    "ja": "気持ちと態度",
+    "en": "Feelings & attitudes",
+    "ko": "감정과 태도",
+    "vi": "Cảm xúc & thái độ",
+    "id": "Perasaan & sikap"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "feel",
+      "ja": "気持ちと態度",
+      "en": "Feelings & attitudes",
+      "ko": "감정과 태도",
+      "vi": "Cảm xúc & thái độ",
+      "id": "Perasaan & sikap"
+     },
+     "words": [
+      "好奇",
+      "勇敢",
+      "真實",
+      "難忘",
+      "自我"
+     ],
+     "idx": 2
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-371",
+      "g4-372",
+      "g4-373"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 44,
+     "cats": [
+      "補語",
+      "副詞"
+     ]
+    },
+    {
+     "name": {
+      "g": "study",
+      "ja": "学校と学び",
+      "en": "School & study",
+      "ko": "학교와 공부",
+      "vi": "Học tập",
+      "id": "Sekolah & belajar"
+     },
+     "words": [
+      "補習班",
+      "中文系",
+      "校長",
+      "地球",
+      "生詞",
+      "聲調",
+      "家長",
+      "會話"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "study",
+      "ja": "学校と学び",
+      "en": "School & study",
+      "ko": "학교와 공부",
+      "vi": "Học tập",
+      "id": "Sekolah & belajar"
+     },
+     "words": [
+      "博士",
+      "數學",
+      "課堂",
+      "名詞",
+      "問號",
+      "漢語",
+      "研究所",
+      "圖書"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "study",
+      "ja": "学校と学び",
+      "en": "School & study",
+      "ko": "학교와 공부",
+      "vi": "Học tập",
+      "id": "Sekolah & belajar"
+     },
+     "words": [
+      "文件",
+      "文學",
+      "學問",
+      "學院",
+      "學者",
+      "紀錄",
+      "口音",
+      "筆記"
+     ],
+     "idx": 3
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-374",
+      "g4-375",
+      "g4-376"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 45,
+     "cats": [
+      "副詞",
+      "否定"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u31",
+   "no": 31,
+   "lead": {
+    "g": "study",
+    "ja": "学校と学び",
+    "en": "School & study",
+    "ko": "학교와 공부",
+    "vi": "Học tập",
+    "id": "Sekolah & belajar"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "study",
+      "ja": "学校と学び",
+      "en": "School & study",
+      "ko": "학교와 공부",
+      "vi": "Học tập",
+      "id": "Sekolah & belajar"
+     },
+     "words": [
+      "筆記本",
+      "哲學",
+      "操場",
+      "測驗",
+      "近年",
+      "古代",
+      "教學",
+      "文章"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "g": "study",
+      "ja": "学校と学び",
+      "en": "School & study",
+      "ko": "학교와 공부",
+      "vi": "Học tập",
+      "id": "Sekolah & belajar"
+     },
+     "words": [
+      "文",
+      "文字",
+      "民族",
+      "動詞",
+      "主任",
+      "專家",
+      "成果",
+      "成就"
+     ],
+     "idx": 5
+    },
+    {
+     "name": {
+      "g": "study",
+      "ja": "学校と学び",
+      "en": "School & study",
+      "ko": "학교와 공부",
+      "vi": "Học tập",
+      "id": "Sekolah & belajar"
+     },
+     "words": [
+      "國語",
+      "系",
+      "結論",
+      "考卷",
+      "形容詞",
+      "英雄",
+      "獎學金",
+      "教師"
+     ],
+     "idx": 6
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-377",
+      "g4-378",
+      "g4-379"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 46,
+     "cats": [
+      "特殊構文",
+      "介詞"
+     ]
+    },
+    {
+     "name": {
+      "g": "study",
+      "ja": "学校と学び",
+      "en": "School & study",
+      "ko": "학교와 공부",
+      "vi": "Học tập",
+      "id": "Sekolah & belajar"
+     },
+     "words": [
+      "社區",
+      "課程",
+      "課文",
+      "讀者",
+      "技巧",
+      "科技",
+      "科學",
+      "科系"
+     ],
+     "idx": 7
+    },
+    {
+     "name": {
+      "g": "study",
+      "ja": "学校と学び",
+      "en": "School & study",
+      "ko": "학교와 공부",
+      "vi": "Học tập",
+      "id": "Sekolah & belajar"
+     },
+     "words": [
+      "道德",
+      "地理",
+      "作家",
+      "國際",
+      "論文",
+      "規則",
+      "方式",
+      "推薦"
+     ],
+     "idx": 8
+    }
+   ]
+  },
+  {
+   "id": "u32",
+   "no": 32,
+   "lead": {
+    "g": "study",
+    "ja": "学校と学び",
+    "en": "School & study",
+    "ko": "학교와 공부",
+    "vi": "Học tập",
+    "id": "Sekolah & belajar"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "study",
+      "ja": "学校と学び",
+      "en": "School & study",
+      "ko": "학교와 공부",
+      "vi": "Học tập",
+      "id": "Sekolah & belajar"
+     },
+     "words": [
+      "演講",
+      "舉手",
+      "出版",
+      "證明",
+      "支持",
+      "指導",
+      "公開",
+      "專心"
+     ],
+     "idx": 9
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-380",
+      "g4-381",
+      "g4-382"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 47,
+     "cats": [
+      "話しことば",
+      "副詞"
+     ]
+    },
+    {
+     "name": {
+      "g": "study",
+      "ja": "学校と学び",
+      "en": "School & study",
+      "ko": "학교와 공부",
+      "vi": "Học tập",
+      "id": "Sekolah & belajar"
+     },
+     "words": [
+      "實現",
+      "成立",
+      "統一",
+      "發明",
+      "發音",
+      "翻譯",
+      "譯"
+     ],
+     "idx": 10
+    },
+    {
+     "name": {
+      "g": "study",
+      "ja": "学校と学び",
+      "en": "School & study",
+      "ko": "학교와 공부",
+      "vi": "Học tập",
+      "id": "Sekolah & belajar"
+     },
+     "words": [
+      "訪問",
+      "訪",
+      "練",
+      "留學",
+      "寫作",
+      "發表",
+      "退步"
+     ],
+     "idx": 11
+    },
+    {
+     "name": {
+      "g": "study",
+      "ja": "学校と学び",
+      "en": "School & study",
+      "ko": "학교와 공부",
+      "vi": "Học tập",
+      "id": "Sekolah & belajar"
+     },
+     "words": [
+      "閱讀",
+      "放學",
+      "好學",
+      "實際",
+      "流利",
+      "級",
+      "節"
+     ],
+     "idx": 12
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-383",
+      "g4-384",
+      "g4-385"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 48,
+     "cats": [
+      "接続",
+      "話しことば"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u33",
+   "no": 33,
+   "lead": {
+    "g": "culture",
+    "ja": "文化",
+    "en": "Culture",
+    "ko": "문화",
+    "vi": "Văn hóa",
+    "id": "Budaya"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "culture",
+      "ja": "文化",
+      "en": "Culture",
+      "ko": "문화",
+      "vi": "Văn hóa",
+      "id": "Budaya"
+     },
+     "words": [
+      "神",
+      "假期",
+      "喜酒",
+      "喜事",
+      "紅包",
+      "喜帖"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "culture",
+      "ja": "文化",
+      "en": "Culture",
+      "ko": "문화",
+      "vi": "Văn hóa",
+      "id": "Budaya"
+     },
+     "words": [
+      "王",
+      "元旦",
+      "元宵",
+      "初一",
+      "功夫",
+      "氣功"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "culture",
+      "ja": "文化",
+      "en": "Culture",
+      "ko": "문화",
+      "vi": "Văn hóa",
+      "id": "Budaya"
+     },
+     "words": [
+      "鬼",
+      "傳說",
+      "春聯",
+      "拜年",
+      "偉大"
+     ],
+     "idx": 3
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-386",
+      "g4-387",
+      "g4-388"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 49,
+     "cats": [
+      "話しことば",
+      "接続"
+     ]
+    },
+    {
+     "name": {
+      "g": "daily",
+      "ja": "日々の暮らし",
+      "en": "Daily life",
+      "ko": "일상생활",
+      "vi": "Sinh hoạt hằng ngày",
+      "id": "Kehidupan sehari-hari"
+     },
+     "words": [
+      "住戶",
+      "巷",
+      "巷口",
+      "巷子",
+      "自來水",
+      "建築",
+      "設備",
+      "公寓"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "daily",
+      "ja": "日々の暮らし",
+      "en": "Daily life",
+      "ko": "일상생활",
+      "vi": "Sinh hoạt hằng ngày",
+      "id": "Kehidupan sehari-hari"
+     },
+     "words": [
+      "電風扇",
+      "電扇",
+      "家鄉",
+      "鄉村",
+      "地下室",
+      "電器",
+      "位置",
+      "郊外"
+     ],
+     "idx": 2
+    }
+   ]
+  },
+  {
+   "id": "u34",
+   "no": 34,
+   "lead": {
+    "g": "daily",
+    "ja": "日々の暮らし",
+    "en": "Daily life",
+    "ko": "일상생활",
+    "vi": "Sinh hoạt hằng ngày",
+    "id": "Kehidupan sehari-hari"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "daily",
+      "ja": "日々の暮らし",
+      "en": "Daily life",
+      "ko": "일상생활",
+      "vi": "Sinh hoạt hằng ngày",
+      "id": "Kehidupan sehari-hari"
+     },
+     "words": [
+      "大廳",
+      "玻璃",
+      "老公",
+      "老婆",
+      "掃把",
+      "草地",
+      "費用"
+     ],
+     "idx": 3
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "g4-389",
+      "g4-390",
+      "l4-4"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 50,
+     "cats": [
+      "接続",
+      "話しことば"
+     ]
+    },
+    {
+     "name": {
+      "g": "daily",
+      "ja": "日々の暮らし",
+      "en": "Daily life",
+      "ko": "일상생활",
+      "vi": "Sinh hoạt hằng ngày",
+      "id": "Kehidupan sehari-hari"
+     },
+     "words": [
+      "屋頂",
+      "旗子",
+      "皮帶",
+      "暖氣",
+      "木頭",
+      "都市",
+      "區域"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "g": "daily",
+      "ja": "日々の暮らし",
+      "en": "Daily life",
+      "ko": "일상생활",
+      "vi": "Sinh hoạt hằng ngày",
+      "id": "Kehidupan sehari-hari"
+     },
+     "words": [
+      "人家",
+      "梯子",
+      "花園",
+      "區",
+      "布",
+      "光線",
+      "香水"
+     ],
+     "idx": 5
+    },
+    {
+     "name": {
+      "g": "daily",
+      "ja": "日々の暮らし",
+      "en": "Daily life",
+      "ko": "일상생활",
+      "vi": "Sinh hoạt hằng ngày",
+      "id": "Kehidupan sehari-hari"
+     },
+     "words": [
+      "香菸",
+      "菸",
+      "郊區",
+      "空間",
+      "家電",
+      "被子",
+      "文具"
+     ],
+     "idx": 6
+    },
+    {
+     "kind": "grammar",
+     "gids": [
+      "l4-11",
+      "l4-12",
+      "l4-15"
+     ],
+     "name": {
+      "g": "grammar",
+      "ja": "文法",
+      "en": "Grammar",
+      "ko": "문법",
+      "vi": "Ngữ pháp",
+      "id": "Tata bahasa"
+     },
+     "idx": 51,
+     "cats": [
+      "書面",
+      "語氣"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u35",
+   "no": 35,
+   "lead": {
+    "g": "daily",
+    "ja": "日々の暮らし",
+    "en": "Daily life",
+    "ko": "일상생활",
+    "vi": "Sinh hoạt hằng ngày",
+    "id": "Kehidupan sehari-hari"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "daily",
+      "ja": "日々の暮らし",
+      "en": "Daily life",
+      "ko": "일상생활",
+      "vi": "Sinh hoạt hằng ngày",
+      "id": "Kehidupan sehari-hari"
+     },
+     "words": [
+      "地板",
+      "室內",
+      "室外",
+      "梳子",
+      "美容院",
+      "隔壁",
+      "格子"
+     ],
+     "idx": 7
+    },
+    {
+     "name": {
+      "g": "daily",
+      "ja": "日々の暮らし",
+      "en": "Daily life",
+      "ko": "일상생활",
+      "vi": "Sinh hoạt hằng ngày",
+      "id": "Kehidupan sehari-hari"
+     },
+     "words": [
+      "髮型",
+      "掃地",
+      "化妝",
+      "吸菸",
+      "響",
+      "餵",
+      "理髮"
+     ],
+     "idx": 8
+    },
+    {
+     "name": {
+      "g": "daily",
+      "ja": "日々の暮らし",
+      "en": "Daily life",
+      "ko": "일상생활",
+      "vi": "Sinh hoạt hằng ngày",
+      "id": "Kehidupan sehari-hari"
+     },
+     "words": [
+      "醒",
+      "淋浴",
+      "打扮",
+      "發出",
+      "出租",
+      "收費",
+      "做夢"
+     ],
+     "idx": 9
+    },
+    {
+     "name": {
+      "g": "social",
+      "ja": "人づきあい",
+      "en": "People & relationships",
+      "ko": "인간관계",
+      "vi": "Giao tiếp",
+      "id": "Pergaulan"
+     },
+     "words": [
+      "愛情",
+      "新郎",
+      "典禮",
+      "婚禮",
+      "感情",
+      "新娘",
+      "節慶",
+      "握手"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "social",
+      "ja": "人づきあい",
+      "en": "People & relationships",
+      "ko": "인간관계",
+      "vi": "Giao tiếp",
+      "id": "Pergaulan"
+     },
+     "words": [
+      "訂婚",
+      "交流",
+      "接觸",
+      "聚",
+      "聚餐",
+      "紀念",
+      "打招呼"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "social",
+      "ja": "人づきあい",
+      "en": "People & relationships",
+      "ko": "인간관계",
+      "vi": "Giao tiếp",
+      "id": "Pergaulan"
+     },
+     "words": [
+      "聯絡",
+      "分享",
+      "問好",
+      "碰面",
+      "戀愛",
+      "失戀",
+      "談戀愛"
+     ],
+     "idx": 3
+    }
+   ]
+  },
+  {
+   "id": "u36",
+   "no": 36,
+   "lead": {
+    "g": "social",
+    "ja": "人づきあい",
+    "en": "People & relationships",
+    "ko": "인간관계",
+    "vi": "Giao tiếp",
+    "id": "Pergaulan"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "social",
+      "ja": "人づきあい",
+      "en": "People & relationships",
+      "ko": "인간관계",
+      "vi": "Giao tiếp",
+      "id": "Pergaulan"
+     },
+     "words": [
+      "交換",
+      "抱歉",
+      "親密",
+      "親切",
+      "熱情",
+      "了不起",
+      "大方"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "g": "tech",
+      "ja": "テクノロジー",
+      "en": "Technology",
+      "ko": "기술",
+      "vi": "Công nghệ",
+      "id": "Teknologi"
+     },
+     "words": [
+      "電子",
+      "數字",
+      "平板電腦",
+      "隨身碟",
+      "計算",
+      "存檔"
+     ],
+     "idx": 0
+    },
+    {
+     "name": {
+      "g": "work",
+      "ja": "仕事",
+      "en": "Work",
+      "ko": "직업",
+      "vi": "Công việc",
+      "id": "Pekerjaan"
+     },
+     "words": [
+      "人才",
+      "上班族",
+      "地位",
+      "收入",
+      "工廠",
+      "技術",
+      "耐心",
+      "業務"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "work",
+      "ja": "仕事",
+      "en": "Work",
+      "ko": "직업",
+      "vi": "Công việc",
+      "id": "Pekerjaan"
+     },
+     "words": [
+      "規模",
+      "經理",
+      "買賣",
+      "傳真",
+      "創意",
+      "身分",
+      "基礎",
+      "家教"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "work",
+      "ja": "仕事",
+      "en": "Work",
+      "ko": "직업",
+      "vi": "Công việc",
+      "id": "Pekerjaan"
+     },
+     "words": [
+      "員工",
+      "事業",
+      "組合",
+      "派",
+      "成長",
+      "製造",
+      "製",
+      "賺"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "work",
+      "ja": "仕事",
+      "en": "Work",
+      "ko": "직업",
+      "vi": "Công việc",
+      "id": "Pekerjaan"
+     },
+     "words": [
+      "管理",
+      "開放",
+      "從事",
+      "設計",
+      "生產",
+      "升級",
+      "面談",
+      "大量"
+     ],
+     "idx": 4
+    }
+   ]
+  },
+  {
+   "id": "u37",
+   "no": 37,
+   "lead": {
+    "g": "shop",
+    "ja": "買い物とお店",
+    "en": "Shopping",
+    "ko": "쇼핑과 가게",
+    "vi": "Mua sắm",
+    "id": "Belanja"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "shop",
+      "ja": "買い物とお店",
+      "en": "Shopping",
+      "ko": "쇼핑과 가게",
+      "vi": "Mua sắm",
+      "id": "Belanja"
+     },
+     "words": [
+      "價值",
+      "內衣",
+      "服裝",
+      "地攤",
+      "電池",
+      "價格",
+      "剪刀",
+      "扣子"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "shop",
+      "ja": "買い物とお店",
+      "en": "Shopping",
+      "ko": "쇼핑과 가게",
+      "vi": "Mua sắm",
+      "id": "Belanja"
+     },
+     "words": [
+      "牛仔褲",
+      "牌子",
+      "牌",
+      "西裝",
+      "大小",
+      "膠帶",
+      "襯衫"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "shop",
+      "ja": "買い物とお店",
+      "en": "Shopping",
+      "ko": "쇼핑과 가게",
+      "vi": "Mua sắm",
+      "id": "Belanja"
+     },
+     "words": [
+      "小販",
+      "圓形",
+      "數量",
+      "拉鍊",
+      "鏡",
+      "鉛筆",
+      "內褲"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "shop",
+      "ja": "買い物とお店",
+      "en": "Shopping",
+      "ko": "쇼핑과 가게",
+      "vi": "Mua sắm",
+      "id": "Belanja"
+     },
+     "words": [
+      "帳單",
+      "名牌",
+      "品質",
+      "海報",
+      "金錢",
+      "攤販",
+      "攤位"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "g": "shop",
+      "ja": "買い物とお店",
+      "en": "Shopping",
+      "ko": "쇼핑과 가게",
+      "vi": "Mua sắm",
+      "id": "Belanja"
+     },
+     "words": [
+      "形狀",
+      "塑膠",
+      "攤子",
+      "貨",
+      "背心",
+      "門市",
+      "顧客"
+     ],
+     "idx": 5
+    },
+    {
+     "name": {
+      "g": "shop",
+      "ja": "買い物とお店",
+      "en": "Shopping",
+      "ko": "쇼핑과 가게",
+      "vi": "Mua sắm",
+      "id": "Belanja"
+     },
+     "words": [
+      "櫃檯",
+      "櫃台",
+      "櫃臺",
+      "購買",
+      "退",
+      "訂購",
+      "購物"
+     ],
+     "idx": 6
+    }
+   ]
+  },
+  {
+   "id": "u38",
+   "no": 38,
+   "lead": {
+    "g": "shop",
+    "ja": "買い物とお店",
+    "en": "Shopping",
+    "ko": "쇼핑과 가게",
+    "vi": "Mua sắm",
+    "id": "Belanja"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "shop",
+      "ja": "買い物とお店",
+      "en": "Shopping",
+      "ko": "쇼핑과 가게",
+      "vi": "Mua sắm",
+      "id": "Belanja"
+     },
+     "words": [
+      "修",
+      "縮水",
+      "超級",
+      "便利",
+      "冷門",
+      "熱門",
+      "尺"
+     ],
+     "idx": 7
+    },
+    {
+     "name": {
+      "g": "health",
+      "ja": "体と医療",
+      "en": "Body & health",
+      "ko": "몸과 의료",
+      "vi": "Cơ thể & y tế",
+      "id": "Tubuh & kesehatan"
+     },
+     "words": [
+      "傷",
+      "功能",
+      "口水",
+      "腦子",
+      "腦",
+      "胖子",
+      "喉嚨",
+      "喉"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "g": "health",
+      "ja": "体と医療",
+      "en": "Body & health",
+      "ko": "몸과 의료",
+      "vi": "Cơ thể & y tế",
+      "id": "Tubuh & kesehatan"
+     },
+     "words": [
+      "眼淚",
+      "淚",
+      "耳",
+      "病房",
+      "口罩",
+      "效果",
+      "成人",
+      "手指頭"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "g": "health",
+      "ja": "体と医療",
+      "en": "Body & health",
+      "ko": "몸과 의료",
+      "vi": "Cơ thể & y tế",
+      "id": "Tubuh & kesehatan"
+     },
+     "words": [
+      "牙",
+      "救護車",
+      "腦袋",
+      "鼻涕",
+      "醫",
+      "醫學",
+      "汗水"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "g": "health",
+      "ja": "体と医療",
+      "en": "Body & health",
+      "ko": "몸과 의료",
+      "vi": "Cơ thể & y tế",
+      "id": "Tubuh & kesehatan"
+     },
+     "words": [
+      "鬍子",
+      "體重",
+      "體力",
+      "牙醫",
+      "腰",
+      "全身",
+      "力氣"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "g": "health",
+      "ja": "体と医療",
+      "en": "Body & health",
+      "ko": "몸과 의료",
+      "vi": "Cơ thể & y tế",
+      "id": "Tubuh & kesehatan"
+     },
+     "words": [
+      "病情",
+      "脖子",
+      "脖",
+      "哈欠",
+      "血型",
+      "身",
+      "身材"
+     ],
+     "idx": 5
+    }
+   ]
+  },
+  {
+   "id": "u39",
+   "no": 39,
+   "lead": {
+    "g": "health",
+    "ja": "体と医療",
+    "en": "Body & health",
+    "ko": "몸과 의료",
+    "vi": "Cơ thể & y tế",
+    "id": "Tubuh & kesehatan"
+   },
+   "lessons": [
+    {
+     "name": {
+      "g": "health",
+      "ja": "体と医療",
+      "en": "Body & health",
+      "ko": "몸과 의료",
+      "vi": "Cơ thể & y tế",
+      "id": "Tubuh & kesehatan"
+     },
+     "words": [
+      "毛病",
+      "指頭",
+      "個子",
+      "鬍",
+      "停止",
+      "活",
+      "死亡"
+     ],
+     "idx": 6
+    },
+    {
+     "name": {
+      "g": "health",
+      "ja": "体と医療",
+      "en": "Body & health",
+      "ko": "몸과 의료",
+      "vi": "Cơ thể & y tế",
+      "id": "Tubuh & kesehatan"
+     },
+     "words": [
+      "吸收",
+      "呼吸",
+      "用力",
+      "出院",
+      "止",
+      "救",
+      "張開"
+     ],
+     "idx": 7
+    },
+    {
+     "name": {
+      "g": "health",
+      "ja": "体と医療",
+      "en": "Body & health",
+      "ko": "몸과 의료",
+      "vi": "Cơ thể & y tế",
+      "id": "Tubuh & kesehatan"
+     },
+     "words": [
+      "喝醉",
+      "伸",
+      "發炎",
+      "醉",
+      "成熟",
+      "疼痛",
+      "肥胖"
+     ],
+     "idx": 8
+    },
+    {
+     "name": {
+      "ja": "副詞",
+      "en": "Adverbs",
+      "ko": "부사",
+      "vi": "Trạng từ",
+      "id": "Kata keterangan"
+     },
+     "words": [
+      "一時",
+      "一天到晚",
+      "不得不",
+      "曾經",
+      "曾",
+      "差一點",
+      "差點",
+      "專門"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "ja": "副詞",
+      "en": "Adverbs",
+      "ko": "부사",
+      "vi": "Trạng từ",
+      "id": "Kata keterangan"
+     },
+     "words": [
+      "只是",
+      "仍然",
+      "仍",
+      "簡直",
+      "漸漸",
+      "漸",
+      "通常",
+      "寧可"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "ja": "副詞",
+      "en": "Adverbs",
+      "ko": "부사",
+      "vi": "Trạng từ",
+      "id": "Kata keterangan"
+     },
+     "words": [
+      "寧願",
+      "共同",
+      "趕緊",
+      "時常",
+      "十分",
+      "或許",
+      "幾乎",
+      "不斷"
+     ],
+     "idx": 3
+    }
+   ]
+  },
+  {
+   "id": "u40",
+   "no": 40,
+   "lead": {
+    "ja": "副詞",
+    "en": "Adverbs",
+    "ko": "부사",
+    "vi": "Trạng từ",
+    "id": "Kata keterangan"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "副詞",
+      "en": "Adverbs",
+      "ko": "부사",
+      "vi": "Trạng từ",
+      "id": "Kata keterangan"
+     },
+     "words": [
+      "說不定",
+      "四處",
+      "肯定",
+      "忽然",
+      "忽",
+      "改天",
+      "往往",
+      "將近"
+     ],
+     "idx": 4
+    },
+    {
+     "name": {
+      "ja": "副詞",
+      "en": "Adverbs",
+      "ko": "부사",
+      "vi": "Trạng từ",
+      "id": "Kata keterangan"
+     },
+     "words": [
+      "多半",
+      "居然",
+      "絕對",
+      "幸虧",
+      "永遠",
+      "從小",
+      "恐怕",
+      "原本"
+     ],
+     "idx": 5
+    },
+    {
+     "name": {
+      "ja": "副詞",
+      "en": "Adverbs",
+      "ko": "부사",
+      "vi": "Trạng từ",
+      "id": "Kata keterangan"
+     },
+     "words": [
+      "比如說",
+      "比如",
+      "老是",
+      "整天",
+      "至多",
+      "接下來",
+      "怪不得",
+      "千萬"
+     ],
+     "idx": 6
+    },
+    {
+     "name": {
+      "ja": "副詞",
+      "en": "Adverbs",
+      "ko": "부사",
+      "vi": "Trạng từ",
+      "id": "Kata keterangan"
+     },
+     "words": [
+      "如今",
+      "首先",
+      "竟",
+      "偶爾",
+      "難道",
+      "難怪",
+      "並",
+      "一向"
+     ],
+     "idx": 7
+    },
+    {
+     "name": {
+      "ja": "副詞",
+      "en": "Adverbs",
+      "ko": "부사",
+      "vi": "Trạng từ",
+      "id": "Kata keterangan"
+     },
+     "words": [
+      "一再",
+      "再三",
+      "暫時",
+      "互相",
+      "卻",
+      "連續",
+      "不見得"
+     ],
+     "idx": 8
+    },
+    {
+     "name": {
+      "ja": "副詞",
+      "en": "Adverbs",
+      "ko": "부사",
+      "vi": "Trạng từ",
+      "id": "Kata keterangan"
+     },
+     "words": [
+      "不免",
+      "進一步",
+      "總共",
+      "從此",
+      "一同",
+      "隨時",
+      "急忙"
+     ],
+     "idx": 9
+    }
+   ]
+  },
+  {
+   "id": "u41",
+   "no": 41,
+   "lead": {
+    "ja": "副詞",
+    "en": "Adverbs",
+    "ko": "부사",
+    "vi": "Trạng từ",
+    "id": "Kata keterangan"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "副詞",
+      "en": "Adverbs",
+      "ko": "부사",
+      "vi": "Trạng từ",
+      "id": "Kata keterangan"
+     },
+     "words": [
+      "可",
+      "看來",
+      "到底",
+      "倒是",
+      "的確",
+      "根本",
+      "反正"
+     ],
+     "idx": 10
+    },
+    {
+     "name": {
+      "ja": "量詞",
+      "en": "Measure words",
+      "ko": "양사",
+      "vi": "Lượng từ",
+      "id": "Kata satuan"
+     },
+     "words": [
+      "組",
+      "公分",
+      "公斤",
+      "公里",
+      "幅",
+      "棟",
+      "架",
+      "秒"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "ja": "量詞",
+      "en": "Measure words",
+      "ko": "양사",
+      "vi": "Lượng từ",
+      "id": "Kata satuan"
+     },
+     "words": [
+      "根",
+      "頓",
+      "公尺",
+      "陣",
+      "匹",
+      "段",
+      "堆",
+      "群"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "ja": "量詞",
+      "en": "Measure words",
+      "ko": "양사",
+      "vi": "Lượng từ",
+      "id": "Kata satuan"
+     },
+     "words": [
+      "羣",
+      "篇",
+      "斤",
+      "頁",
+      "棵",
+      "首",
+      "面",
+      "秒鐘"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "ja": "代名詞",
+      "en": "Pronouns",
+      "ko": "대명사",
+      "vi": "Đại từ",
+      "id": "Kata ganti"
+     },
+     "words": [
+      "任何",
+      "本人",
+      "此",
+      "牠",
+      "各自"
+     ],
+     "idx": 0
+    },
+    {
+     "name": {
+      "ja": "介詞",
+      "en": "Prepositions",
+      "ko": "개사",
+      "vi": "Giới từ",
+      "id": "Preposisi"
+     },
+     "words": [
+      "自從",
+      "為",
+      "趁",
+      "按照",
+      "直到"
+     ],
+     "idx": 1
+    }
+   ]
+  },
+  {
+   "id": "u42",
+   "no": 42,
+   "lead": {
+    "ja": "介詞",
+    "en": "Prepositions",
+    "ko": "개사",
+    "vi": "Giới từ",
+    "id": "Preposisi"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "介詞",
+      "en": "Prepositions",
+      "ko": "개사",
+      "vi": "Giới từ",
+      "id": "Preposisi"
+     },
+     "words": [
+      "據",
+      "關於",
+      "距",
+      "根據"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "ja": "感嘆詞",
+      "en": "Interjections",
+      "ko": "감탄사",
+      "vi": "Thán từ",
+      "id": "Kata seru"
+     },
+     "words": [
+      "哎呀",
+      "哎喲",
+      "哦",
+      "嗯",
+      "噢"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "ja": "感嘆詞",
+      "en": "Interjections",
+      "ko": "감탄사",
+      "vi": "Thán từ",
+      "id": "Kata seru"
+     },
+     "words": [
+      "喔",
+      "唉",
+      "哈",
+      "嗨"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "推",
+      "抱",
+      "受傷",
+      "掛號",
+      "打掃",
+      "請教",
+      "邀請",
+      "修理"
+     ],
+     "idx": 1
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "出發",
+      "打字",
+      "過敏",
+      "打噴嚏",
+      "找錢",
+      "分手",
+      "檢查",
+      "拉肚子"
+     ],
+     "idx": 2
+    },
+    {
+     "name": {
+      "ja": "動詞",
+      "en": "Verbs",
+      "ko": "동사",
+      "vi": "Động từ",
+      "id": "Kata kerja"
+     },
+     "words": [
+      "討厭",
+      "完成",
+      "充電",
+      "鼓勵",
+      "批評",
+      "退休",
+      "減肥",
+      "期待"
+     ],
+     "idx": 3
+    }
+   ]
+  },
+  {
+   "id": "u43",
+   "no": 43,
+   "lead": {
+    "ja": "名詞",
+    "en": "Nouns",
+    "ko": "명사",
+    "vi": "Danh từ",
+    "id": "Kata benda"
+   },
+   "lessons": [
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "牙齒",
+      "雲",
+      "氣溫",
+      "包裹",
+      "護照",
+      "宵夜"
+     ],
+     "idx": 1
     },
     {
      "name": {
@@ -915,17 +5544,55 @@
       "id": "Kata benda"
      },
      "words": [
-      "遺產",
-      "古蹟",
-      "象徵",
-      "融合",
-      "信仰"
+      "夫妻",
+      "現金",
+      "陽台",
+      "帳號",
+      "密碼",
+      "資訊"
      ],
-     "idx": 21
+     "idx": 2
+    },
+    {
+     "name": {
+      "ja": "名詞",
+      "en": "Nouns",
+      "ko": "명사",
+      "vi": "Danh từ",
+      "id": "Kata benda"
+     },
+     "words": [
+      "折扣",
+      "瓦斯",
+      "氣氛",
+      "話題",
+      "煩惱"
+     ],
+     "idx": 3
+    },
+    {
+     "name": {
+      "ja": "いろいろ",
+      "en": "Mixed",
+      "ko": "기타",
+      "vi": "Từ khác",
+      "id": "Lain-lain"
+     },
+     "words": [
+      "免費",
+      "興奮",
+      "終於",
+      "供不應求",
+      "供過於求",
+      "各式各樣",
+      "而已"
+     ],
+     "idx": 0
     }
    ]
   }
  ],
- "total": 299,
- "lessons": 44
+ "total": 1474,
+ "lessons": 205,
+ "gtotal": 153
 }

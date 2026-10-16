@@ -3,7 +3,7 @@
 // Chrome の「Google 國語（臺灣）」> macOS/iOS の Enhanced/Premium 版 > 標準 Meijia の順。
 // ユーザーが選んだボイスは localStorage("stw-voice") に保存。
 const TTS = (() => {
-  let list = [];
+  let list = [], all = [];
 
   // ── 事前生成 mp3（scripts/tts-generate.py）があれば最優先で使う ──
   // manifest: { "原文テキスト": "ハッシュ.mp3" }。無い環境では Web Speech にフォールバック。
@@ -66,11 +66,11 @@ const TTS = (() => {
 
   function refresh() {
     if (!("speechSynthesis" in window)) return;
-    list = speechSynthesis.getVoices().filter(v => {
+    // 台湾の声だけ(Mia 2026-10-16「網站不准有大陸口音」)。zh-CN 等は候補にも出さない
+    all = speechSynthesis.getVoices();
+    list = all.filter(v => {
       const lang = (v.lang || "").toLowerCase().replace("_", "-");
-      if (!lang.startsWith("zh")) return false;
-      if (lang.includes("hk") || /cantonese|粵|广东话|廣東話/i.test(v.name)) return false; // 広東語は除外
-      return true;
+      return lang === "zh-tw" || lang.startsWith("zh-hant-tw") || lang === "cmn-tw" || /mei-?jia|美佳|taiwan|臺灣|台灣/i.test(v.name || "");
     });
   }
 
@@ -118,6 +118,9 @@ const TTS = (() => {
   // Web Speech（mp3 が無い/読めない時のフォールバック）
   function synthSpeak(text, onend, onprog, rate) {
     if (!("speechSynthesis" in window)) { if (onend) onend(); return; }
+    // 端末の声一覧が読めていて台湾の声が無い → 大陸の声で読まれるよりは鳴らさない
+    if (!list.length) refresh();
+    if (all.length && !list.length) { if (onend) onend(); return; }
     text = sanitize(text);
     if (!text) { if (onend) onend(); return; }
     speechSynthesis.cancel();

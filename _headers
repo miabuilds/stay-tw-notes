@@ -12,6 +12,14 @@
   Cache-Control: no-cache
 /*.html
   Cache-Control: no-cache
+# JS は全部 <script src="...?v=NN"> で読んでいる（2026-09 時点で 73/73 本。動的に足すのは
+# Apple/Google/Firebase の外部 SDK だけなのでここには当たらない）。
+# URL が版番号を持っているので永久快取でよい。これが無いと毎回 78 本ぶん「変わった?」を
+# 聞きに行き、中身は 304 で返るのに表頭だけで 197KB・1 往復ぶん待つことになる。
+# ★ .js を触ったら index.html の ?v= を必ず上げること。上げないと古いまま張り付く。
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
 # 音檔檔名 = 內容 hash → 可以放心永久快取（改內容檔名就變）
 /audio/tts/*
   Cache-Control: public, max-age=31536000, immutable

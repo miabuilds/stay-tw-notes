@@ -10,3 +10,9 @@ firebase-debug.log
 audio/tts/
 out/
 data/*.bak
+
+# 2026-10-16: 大檔/快取不進 git(wrangler pages deploy 仍會上傳整個資料夾)
+images/social/video/
+data/tbcl/freq.xlsx
+scripts/.moedict_bulk.json
+scripts/.last-regen-files.json

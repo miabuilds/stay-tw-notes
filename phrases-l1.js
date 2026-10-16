@@ -99,7 +99,7 @@ const PHRASES_L1 = [
 {z:"袋子不用，謝謝。",py:"Dàizi búyòng, xièxie.",m:{j:"袋はいりません、ありがとう。",e:"No bag, thanks.",k:"봉투는 필요 없어요, 감사합니다."},note:{j:"レジ袋は有料。エコバッグ持参が普通。",e:"Plastic bags cost extra; bringing your own is normal.",k:"비닐봉투는 유료라 에코백을 들고 다니는 게 보통."}},
 ]},
 {icon:"typhoon",t:"both",cat:{j:"天気・台風・地震",e:"Weather, Typhoons & Earthquakes",k:"날씨・태풍・지진"},items:[
-{z:"今天會下雨嗎？記得帶傘。",py:"Jīntiān huì xiàyǔ ma? Jìdé dài sǎn.",m:{j:"今日は雨降るかな？傘を忘れずに。",e:"Will it rain today? Don't forget an umbrella.",k:"오늘 비 올까요? 우산 챙기세요."}},
+{z:"今天會下雨嗎？記得帶傘。",py:"Jīntiān huì xiàyǔ ma? Jìde dài sǎn.",m:{j:"今日は雨降るかな？傘を忘れずに。",e:"Will it rain today? Don't forget an umbrella.",k:"오늘 비 올까요? 우산 챙기세요."}},
 {z:"聽說颱風要來了。",py:"Tīngshuō táifēng yào lái le.",m:{j:"台風が来るらしいよ。",e:"I hear a typhoon is coming.",k:"태풍이 온다더라고요."},note:{j:"台風接近時は各県市が「停班停課（＝台風休み）」を発表。前夜にニュースや市政府の公式SNSで確認する。",e:"When a typhoon nears, each city may declare work/school off. Check the news or the city's official page the night before.",k:"태풍이 오면 지자체가 휴무·휴교를 발표. 전날 밤 뉴스나 시청 공식 계정을 확인."}},
 {z:"明天放颱風假嗎？",py:"Míngtiān fàng táifēngjià ma?",m:{j:"明日は台風休みですか。",e:"Is tomorrow a typhoon day off?",k:"내일 태풍 휴무인가요?"}},
 {z:"剛剛是不是地震？",py:"Gānggāng shì bú shì dìzhèn?",m:{j:"今の、地震じゃなかった？",e:"Was that an earthquake just now?",k:"방금 지진 아니었어요?"},note:{j:"台湾は地震が多い。強い揺れの前にスマホの「国家級警報」が大音量で鳴るので驚かないで。",e:"Earthquakes are common; phones blast a loud national alert before strong shaking.",k:"대만은 지진이 잦아 강한 흔들림 전에 휴대폰 '국가급 경보'가 크게 울린다."}},

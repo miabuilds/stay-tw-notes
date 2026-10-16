@@ -1,0 +1,18 @@
+{
+  "_why": "官方 TBCL 詞語表を上書きする例外。根拠のあるものだけ。萌典=教育部《重編國語辭典》/《國語辭典簡編本》",
+  "_rules": [
+    "file-error : TBCL 側の明らかな入力ミス。萌典の読みを採る",
+    "colloquial : TBCL は讀音(full tone)、萌典は語音(輕聲)。台湾で実際に話される語音を採る。どちらも教育部",
+    "polyphone  : 破音字。うちの語義に合う読みを残す。TBCL は別の語義の読みを載せている"
+  ],
+  "zy": {
+    "橘子":   { "use": "ㄐㄩˊ ˙ㄗ",        "py": "júzi",      "kind": "file-error", "note": "TBCL は「橘」の読み ㄐㄩˊ を「橘子」に付けている" },
+    "早上":   { "use": "ㄗㄠˇ ˙ㄕㄤ",      "py": "zǎoshang",  "kind": "colloquial", "note": "TBCL ㄗㄠˇ ㄕㄤˋ / 萌典 ㄗㄠˇ ˙ㄕㄤ" },
+    "晚上":   { "use": "ㄨㄢˇ ˙ㄕㄤ",      "py": "wǎnshang",  "kind": "colloquial", "note": "TBCL ㄨㄢˇ ㄕㄤˋ / 萌典 ㄨㄢˇ ˙ㄕㄤ" },
+    "豆腐":   { "use": "ㄉㄡˋ ˙ㄈㄨ",      "py": "dòufu",     "kind": "colloquial", "note": "TBCL ㄉㄡˋ ㄈㄨˇ / 萌典 ㄉㄡˋ ˙ㄈㄨ" },
+    "差不多": { "use": "ㄔㄚˋ ˙ㄅㄨ ㄉㄨㄛ", "py": "chàbuduō",  "kind": "colloquial", "note": "TBCL ㄔㄚ ㄅㄨˋ ㄉㄨㄛ / 萌典 ㄔㄚˋ ˙ㄅㄨ ㄉㄨㄛ" },
+    "尺寸":   { "use": "ㄔˇ ㄘㄨㄣˋ",      "py": "chǐcùn",    "kind": "polyphone",  "note": "萌典は ㄔˇ ㄘㄨㄣˋ / ㄔˊ ˙ㄘㄨㄣ の両方。標準的な前者を採る" },
+    "空":     { "use": "ㄎㄨㄥ",           "py": "kōng",      "kind": "polyphone",  "note": "うちの語義は「空っぽ」= ㄎㄨㄥ。TBCL の ㄎㄨㄥˋ は「空き/暇」の義" },
+    "還":     { "use": "ㄏㄨㄢˊ",          "py": "huán",      "kind": "polyphone",  "note": "うちの語義は「返す」= ㄏㄨㄢˊ。TBCL の ㄏㄞˊ は「まだ」の義" }
+  }
+}

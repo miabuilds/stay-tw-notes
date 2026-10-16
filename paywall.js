@@ -31,7 +31,7 @@ const Paywall = (() => {
   // 「買う手段が存在しない」状態だった（＝ web の売上がゼロだった理由）。
   const STORE_IOS = "https://apps.apple.com/app/id6794272037";
   const STORE_ANDROID = "https://play.google.com/store/apps/details?id=com.staytw.app";
-  const ANDROID_LIVE = false;   // ★ Play 公開日に true にする（それまでは待機リストへ）
+  const ANDROID_LIVE = true;    // 2026-10-09 Play 正式公開
   function device() {
     const ua = (typeof navigator !== "undefined" && navigator.userAgent) || "";
     if (/android/i.test(ua)) return "android";
@@ -127,6 +127,26 @@ const Paywall = (() => {
     return `<p class="pw-invested">${t}</p>`;
   }
 
+  // 闖關の壁の中身:今日の成果と、次の課・残りの量
+  function lessonsContext() {
+    try {
+      const lv = (typeof currentLevel !== "undefined") ? currentLevel : "l1";
+      const pk = (typeof LS !== "undefined" && LS.peek) ? LS.peek(lv) : null;
+      if (!pk) return "";
+      const today = new Date().toISOString().split("T")[0];
+      let w = 0; try { const d = JSON.parse(localStorage.getItem("stw_srs") || "{}"); for (const k in d) if (d[k] && d[k].lastReview === today && k.indexOf(":g#") < 0) w++; } catch (e) {}
+      const used = LS.quota ? LS.quota().used : 0;
+      const e = (x) => String(x == null ? "" : x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+      const nx = pk.next;
+      const prev = nx ? (nx.ws.length ? nx.ws.join("・") : nx.gs.join("・")) : "";
+      return `<div class="pw-ls">
+        <div class="pw-ls-today">${icon("check", { size: 16 })} ${e(twT("pwLsToday").replace("{l}", used).replace("{w}", w))}</div>
+        ${nx ? `<div class="pw-ls-next"><span>${e(twT("pwLsNext"))}</span><b>${e(nx.title)}</b>${prev ? `<em>${e(prev)}…</em>` : ""}</div>` : ""}
+        <div class="pw-ls-rest">${e(twT("pwLsRest").replace("{n}", pk.rest).replace("{g}", pk.restG))}</div>
+      </div>`;
+    } catch (err) { return ""; }
+  }
+
   // Premium だけのもの。枠が「0 回」なのではなく、そもそも枠という考え方ではない。
   const PRO_ONLY = ["writing", "aiscore", "ytsquiz", "article", "provocab", "lessons"];
 
@@ -134,21 +154,25 @@ const Paywall = (() => {
     const bg = document.getElementById("pwBg");
     if (!bg) return;
     track(feature);
-    const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore"), listen: twT("lsTitle"), fav: twT("pwFavName"), ytsquiz: twT("ytsQzTitle"), ytshadow: twT("toolYts"), provocab: twT("pwProVocab"), lessons: twT("pwLessons") }[feature] || "";
+    const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore"), listen: twT("lsTitle"), fav: twT("pwFavName"), ytsquiz: twT("ytsQzTitle"), ytshadow: twT("toolYts"), provocab: twT("pwProVocab"), lessons: twT("pwLessons"), aichat: twT("toolAiChat") }[feature] || "";
     const desc = feature === "article" ? twT("pwContentHit")
       : feature === "myvocab" ? twT("pwMyVocabHit").replace("{n}", String((typeof MyVocab !== "undefined" && MyVocab.FREE_MAX) || 10))
       : feature === "fav" ? twT("pwFavHit").replace("{n}", String(FAV_FREE_MAX))
       // Premium 限定のものに「今日の無料枠を使い切りました」と出すのは嘘。枠ではなく線。
+      : feature === "lessons" ? twT("pwLessonsHit").replace(/\{n\}/g, String((typeof LS !== "undefined" && LS.quota) ? LS.quota().free : 2))
       : PRO_ONLY.indexOf(feature) >= 0 ? twT("pwProHit").replace("{f}", featName)
       : twT("pwLimitHit").replace("{f}", featName);
+    // 闖關の壁(曝光の 6 割)は機能一覧ではなく「今日やったこと → 次に待っている課 → 今すぐ続ける」で見せる。
+    // 2 課やり終えた直後=いちばん乗っている時に出る壁なので、その勢いを切らない選択肢として Premium を置く
+    const lsCtx = feature === "lessons" ? lessonsContext() : "";
     document.getElementById("pwBox").innerHTML = `
       <button class="qclose" style="float:right" onclick="Paywall.close()">✕</button>
       <div style="text-align:center;padding:8px 0 4px">
-        <img src="images/bear.svg" alt="" style="width:74px;height:auto">
-        <h3 style="font-family:var(--serif);font-size:21px;font-weight:700;margin:10px 0 4px">${twT("pwTitle")}</h3>
-        <p style="font-size:13.5px;color:var(--tx2)">${desc}</p>
+        <img class="il" src="images/il/05_premium.webp" alt="" width="110" height="110" style="width:110px;height:110px;display:block;margin:0 auto">
+        <h3 style="font-family:var(--serif);font-size:21px;font-weight:700;margin:10px 0 4px">${lsCtx ? twT("pwLsTitle") : twT("pwTitle")}</h3>
+        <p style="font-size:13.5px;color:var(--tx2)">${lsCtx ? twT("pwLsChoice").replace(/\{n\}/g, String((typeof LS !== "undefined" && LS.quota) ? LS.quota().free : 2)) : desc}</p>
       </div>
-      ${investedLine()}
+      ${lsCtx || investedLine()}
       <ul class="pw-benefits">
         <li>✓ ${twT("pwB1")}</li>
         <li>✓ ${twT("pwB2")}</li>
@@ -163,7 +187,7 @@ const Paywall = (() => {
       </div>
       <p class="pw-trial">${icon("gift",{size:15})} ${twT("pwTrial").replace("{n}", String(TRIAL_DAYS))}</p>
       ${isNative() ? `<button class="btn primary" style="width:100%;padding:13px" onclick="Paywall.openNative()">${twT("pwCtaNative")}</button>` : webCta()}
-      ${feature === "fav" || feature === "article" || feature === "myvocab" ? "" : `<p style="text-align:center;font-size:12px;color:var(--tx3);margin-top:10px">${twT("pwTomorrow")}</p>`}`;
+      ${feature === "fav" || feature === "article" || feature === "myvocab" || lsCtx ? "" : `<p style="text-align:center;font-size:12px;color:var(--tx3);margin-top:10px">${twT("pwTomorrow")}</p>`}`;
     bg.classList.add("show");
   }
 
