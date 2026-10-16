@@ -62,6 +62,11 @@ main{flex:1;padding:18px}
 .hint-chip:active{transform:translateY(1px)}
 .hint-spk{background:var(--ac-soft);color:var(--ac);border:none;border-left:1px solid var(--ac);padding:0 12px;cursor:pointer;font-size:13px}
 .hint-spk:active{background:var(--ac);color:#fff}
+.ttsload{display:none;align-items:center;gap:8px;width:max-content;margin:4px 16px 10px;padding:7px 14px;border-radius:999px;background:var(--ac-soft);color:var(--ac);font-size:13px}
+.ttsload.on{display:flex}
+.ttsload i{display:inline-block;width:3px;height:12px;border-radius:2px;background:var(--ac);animation:eqb .9s ease-in-out infinite}
+.ttsload i:nth-child(2){animation-delay:.15s}.ttsload i:nth-child(3){animation-delay:.3s}
+@keyframes eqb{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1.15)}}
 .inbar{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:12px 14px calc(12px + env(safe-area-inset-bottom));display:flex;gap:10px}
 .inbar input{flex:1;border:1px solid var(--bd);background:var(--bg2);color:var(--tx);border-radius:999px;padding:12px 18px;font-size:16px;font-family:var(--serif)}
 .inbar input:focus{outline:none;border-color:var(--ac)}
@@ -146,6 +151,7 @@ main{flex:1;padding:18px}
     <button class="lang" id="langBtn" onclick="cycleLang()">日</button>
   </header>
   <main id="main"></main>
+  <div class="ttsload" id="ttsLoad" aria-live="polite"><i></i><i></i><i></i><b></b></div>
   <div class="hints" id="hints"></div>
   <div id="micNote" class="micnote"></div>
   <div class="tozh" id="toZhRow" style="display:none"><button onclick="toZh()" id="toZhBtn"></button></div>
@@ -226,6 +232,12 @@ function sayMsg(i){ const m=history[i]; if(m) speak(m.reply, curScene&&curScene.
 function phOf(txt){
   try{ const zya=zyFromPy(txt,""); return [...String(txt)].map((c,i)=>zya[i]?{c,ph:zya[i]}:null).filter(Boolean); }catch(e){ return []; }
 }
+// 聲音が出るまで 1〜2 秒かかるので「準備中」を出す(2026-10 Mia「有點慢…有點loading提示吧」)
+const TTS_LOAD={ja:"音声を準備中…",en:"Preparing audio…",ko:"음성 준비 중…",vi:"Đang chuẩn bị âm thanh…",id:"Menyiapkan suara…"};
+let _ttsLoadT=null;
+function ttsLoading(on){ var el=document.getElementById("ttsLoad"); if(!el) return; clearTimeout(_ttsLoadT);
+  if(on){ el.querySelector("b").textContent=TTS_LOAD[LANG]||TTS_LOAD.en; el.classList.add("on"); _ttsLoadT=setTimeout(function(){el.classList.remove("on");},10000); }
+  else el.classList.remove("on"); }
 async function speak(txt, voice, zya){
   if(!txt) return; if(recording) return;   // 録音中は鳴らさない(自分の声を拾う)
   var say=ttsText(txt), seq=++_ttsSeq, key="v3|"+(voice||"f")+"|"+say;
@@ -236,12 +248,14 @@ async function speak(txt, voice, zya){
   try{
     var b64=_ttsCache[key];
     if(b64===undefined){
+      ttsLoading(true);
       var r=await fetch("/api/tts",{method:"POST",headers:authH(),body:JSON.stringify({el:1,text:say,voice:voice||"f",ph:ph.map(x=>({c:x.c,ph:x.ph,py:(window.zy2py?window.zy2py(x.ph):"")}))})});
       b64 = r.ok ? ((await r.json()).audio||null) : null; _ttsCache[key]=b64;
     }
     if(seq!==_ttsSeq) return;
-    if(b64){ speechSynthesis.cancel(); if(!_audio)_audio=new Audio(); _audio.src="data:audio/mp3;base64,"+b64; _audio.play().catch(function(){ browserSpeak(txt); }); return; }
+    if(b64){ speechSynthesis.cancel(); if(!_audio)_audio=new Audio(); _audio.src="data:audio/mp3;base64,"+b64; _audio.play().then(function(){ ttsLoading(false); }).catch(function(){ ttsLoading(false); browserSpeak(txt); }); return; }
   }catch(e){}
+  if(seq===_ttsSeq) ttsLoading(false);
   browserSpeak(txt);
 }
 function primeAudio(){
@@ -258,6 +272,7 @@ function updateMic(){var b=document.getElementById("micBtn"); if(b)b.classList.t
 function toggleRec(){ recording ? stopRec() : startRec(); }
 function _nPost(o){ try{ window.ReactNativeWebView.postMessage(JSON.stringify(o)); }catch(e){} }
 function startRec(){
+  ttsLoading(false);
   try{ if(_audio){ _audio.pause(); } speechSynthesis.cancel(); }catch(e){}
   _recBase=(document.getElementById("inp").value||"");
   if(NATIVE_STT){
@@ -608,7 +623,7 @@ async function callAI(retry){
     showTyping(false);
     const ai=parseLines(full); ai.role="ai";
     if(!ai.reply){ const c=document.getElementById("chat"); if(c)c.insertAdjacentHTML("beforeend",'<div class="err">'+tt("err")+'</div>'); return; }
-    if(!retry && HOKKIEN_RE.test(ai.reply+ai.hints.join(""))){ if(liveEl) liveEl.remove(); try{ _ttsSeq++; if(_audio) _audio.pause(); }catch(e){} return callAI(true); }
+    if(!retry && HOKKIEN_RE.test(ai.reply+ai.hints.join(""))){ if(liveEl) liveEl.remove(); try{ _ttsSeq++; if(_audio) _audio.pause(); ttsLoading(false); }catch(e){} return callAI(true); }
     ai.zya=zyFromPy(ai.reply, ai.pinyin);        // 1 字ずつの注音(官方詞表優先)
     if(ai.correction) history.push({role:"corr",text:ai.correction});
     history.push(ai);
