@@ -579,7 +579,8 @@ const HOKKIEN_RE=/[呷嘸毋袂佇恁汝攏佮囝]|今日有|早上好|上午好
 async function callAI(retry){
   busy=true; document.getElementById("sendBtn").disabled=true;
   renderChat(); showTyping(true); renderHints([]); anchorLatest(true);
-  let liveEl=null;
+  let liveEl=null, spokeEarly=false, earlyText="";
+  try{ if(_audio) _audio.pause(); }catch(e){}
   try{
     const r=await fetch("/api/speak-chat",{method:"POST",headers:authH(),
       body:JSON.stringify({sid:SID,strict:retry?1:0,scene:curScene.scene,userRole:L(curScene.rl),level:LV,lang:LANG,
@@ -599,15 +600,19 @@ async function callAI(retry){
         if(!liveEl){ const c=document.getElementById("chat"); c.insertAdjacentHTML("beforeend",'<div class="msg ai" id="live"><div class="bub"><div class="zh"></div></div></div>'); liveEl=document.getElementById("live"); anchorLatest(true); }
         liveEl.querySelector(".zh").textContent=part.reply;
       }
+      // 聲音を早く:REPLY と PINYIN の行が出そろった時点で読み上げ開始(TR/HINT の生成を待たない。2026-10 Mia「聲音出現好慢」)
+      if(!spokeEarly && part.reply && part.pinyin && /PINYIN\s*[:：][^\n]*\n/.test(full) && !HOKKIEN_RE.test(part.reply)){
+        spokeEarly=true; earlyText=part.reply; speak(part.reply, curScene.voice, zyFromPy(part.reply, part.pinyin));
+      }
     }
     showTyping(false);
     const ai=parseLines(full); ai.role="ai";
     if(!ai.reply){ const c=document.getElementById("chat"); if(c)c.insertAdjacentHTML("beforeend",'<div class="err">'+tt("err")+'</div>'); return; }
-    if(!retry && HOKKIEN_RE.test(ai.reply+ai.hints.join(""))){ if(liveEl) liveEl.remove(); return callAI(true); }
+    if(!retry && HOKKIEN_RE.test(ai.reply+ai.hints.join(""))){ if(liveEl) liveEl.remove(); try{ _ttsSeq++; if(_audio) _audio.pause(); }catch(e){} return callAI(true); }
     ai.zya=zyFromPy(ai.reply, ai.pinyin);        // 1 字ずつの注音(官方詞表優先)
     if(ai.correction) history.push({role:"corr",text:ai.correction});
     history.push(ai);
-    renderChat(); renderHints(ai.hints); speak(ai.reply, curScene.voice, ai.zya);
+    renderChat(); renderHints(ai.hints); if(!spokeEarly || ai.reply!==earlyText) speak(ai.reply, curScene.voice, ai.zya);
     if(!history.some(m=>m.role==="me") && QUOTA && QUOTA.left<=0){ showNoLeft(QUOTA); return; }
     if(ai.correction){ const c=document.getElementById("chat"); const el=c&&c.children[c.children.length-2]; if(el) el.scrollIntoView({block:"start",behavior:"smooth"}); } else anchorLatest(true);
     if(history.filter(m=>m.role==="me").length>=MAX_TURNS){
