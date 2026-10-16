@@ -103,6 +103,12 @@ async function serverPremium(env, uid) {
   } catch (e) { return false; }
 }
 const CHAT_LIMIT = { free: 1, premium: 5 };   // 1 日の AI 會話の場数(StayJP と同じ)。AI の挨拶は数えず、自分が 1 句送った時点で 1 場
+// 管理者(ADMIN_EMAILS)は AI 會話の場数無制限(Mia 2026-10-16:自分でテストすると 5 場で詰まる)
+async function isAdminUid(env, uid) {
+  if (!uid) return false;
+  try { const au = await env.DB.prepare("SELECT email FROM auth_users WHERE uid=?1").bind(uid).first();
+        return !!(au && au.email && ADMIN_EMAILS.includes(String(au.email).toLowerCase())); } catch (e) { return false; }
+}
 
 // Google 網頁ログイン用（後台・Web）。iOS は env.GOOGLE_IOS_CLIENT_ID、Web はこの公開 client id。
 const YT_KEY = "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w";   // youtube.com 前端寫死的公開 key(非機密)
@@ -176,7 +182,7 @@ export default {
       const who = uid ? "u:" + uid : "ip:" + ip, day = new Date().toISOString().slice(0, 10);
       const premium = await serverPremium(env, uid);
       const row = await env.DB.prepare("SELECT count FROM chat_quota WHERE key=?1").bind("ses:" + who + ":" + day).first();
-      const limit = premium ? CHAT_LIMIT.premium : CHAT_LIMIT.free, used = (row && row.count) || 0;
+      const limit = (await isAdminUid(env, uid)) ? 9999 : premium ? CHAT_LIMIT.premium : CHAT_LIMIT.free, used = (row && row.count) || 0;
       return json({ premium, loggedIn: !!uid, limit, used, left: Math.max(0, limit - used) }, 200, h);
     }
 
@@ -235,7 +241,7 @@ export default {
         const seen = sid && await env.DB.prepare("SELECT count FROM chat_quota WHERE key=?1").bind(mark).first();
         if (!seen) {
           const premium = await serverPremium(env, uidC);
-          const limit = premium ? CHAT_LIMIT.premium : CHAT_LIMIT.free;
+          const limit = (await isAdminUid(env, uidC)) ? 9999 : premium ? CHAT_LIMIT.premium : CHAT_LIMIT.free;
           const skey = "ses:" + who + ":" + day;
           const srow = await env.DB.prepare("SELECT count FROM chat_quota WHERE key=?1").bind(skey).first();
           if (srow && srow.count >= limit) return json({ error: "sessions", premium, loggedIn: !!uidC, limit }, 429, h);
@@ -462,7 +468,8 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
             const er = await fetch("https://api.elevenlabs.io/v1/text-to-speech/NIqnuIdrAT3LLSSxN05L?output_format=mp3_44100_64", {
               method: "POST",
               headers: { "xi-api-key": env.ELEVENLABS_API_KEY, "Content-Type": "application/json" },
-              body: JSON.stringify({ text, model_id: "eleven_v3", language_code: "zh" }),
+              // 台湾の声でも捲舌・大陸発音が出る → v3 の指示タグで台湾腔に寄せる(Mia「不准有大陸腔」2026-10-16)
+              body: JSON.stringify({ text: "[soft Taiwanese Mandarin accent, no retroflex] " + text, model_id: "eleven_v3", language_code: "zh" }),
             });
             if (er.ok) {
               const buf = new Uint8Array(await er.arrayBuffer());
