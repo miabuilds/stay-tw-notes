@@ -1556,6 +1556,12 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 
 /* == Footer == */
 .ft{padding:40px 24px;color:var(--tx3);font-size:12px;border-top:1px solid var(--line);text-align:center;line-height:1.9}
+/* 姊妹 App 互推(sister-apps.js)。頁尾置中,但清單本身靠左;沒東西可推時整塊 hidden */
+.ft-sis{max-width:440px;margin:0 auto 28px;padding-bottom:24px;border-bottom:1px solid var(--line);text-align:left;color:var(--tx);line-height:1.5}
+.ft-sis[hidden],#setSisterSec[hidden]{display:none!important}
+#setSisterSec .sis-t{font-size:11.5px;letter-spacing:.08em;color:var(--tx2);font-weight:700;text-transform:uppercase;margin-bottom:9px;opacity:1}
+#setSisterSec .sis{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:4px 14px}
+#setSisterSec .sis-t{margin:10px 0 2px}
 
 /* == モバイル下部ナビ == */
 .bnav{display:none;position:fixed;left:0;right:0;bottom:0;z-index:120;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
@@ -1991,10 +1997,12 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
       <button data-set-lang="id" onclick="twSetLangDirect('id')">Bahasa</button>
     </div>
   </div>
+  <div class="set-sec" id="setSisterSec" hidden><div id="setSister"></div></div>
   <a class="set-fb" href="contact.html"><svg class="ic" viewBox="0 0 24 24"><path d="M4.5 5.5h15a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H10l-4 3.2V16.5H4.5a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1z"/></svg><span data-i18n="setFeedback">ご意見・不具合報告</span></a>
 </div>
 
 <footer class="ft">
+  <div class="ft-sis" id="ftSister" hidden></div>
   <div style="font-family:var(--serif);font-size:13px;color:var(--tx2)">© 2026 StayTW Study</div>
   <div style="margin-top:6px">
     <a href="pricing" id="ftPricing" style="color:var(--tx2)" data-i18n="navPricing">料金・プラン</a>
@@ -2011,6 +2019,25 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
   var p=document.getElementById('ftPricing'), s=document.getElementById('ftPricingSep');
   if(p)p.style.display='none'; if(s)s.style.display='none';
 }}catch(e){}})();
+// 姊妹 App 互推(頁尾+設定)。App 殼內傳平台 → 元件改連商店頁;點擊走原生 OPEN_STORE 橋接開系統商店。
+// 韓/越/印介面沒有可推的 App → render 回傳 false,外框一起藏。不寫任何價格字樣。
+function twRenderSister(){
+  try {
+    if (!window.SisterApps) return;
+    var n = window.STAYTW_NATIVE, nat = (n && n.isNativeApp && (n.platform === "ios" || n.platform === "android")) ? n.platform : undefined;
+    var opt = { from: "staytw", lang: twGetLang(), native: nat };
+    var ft = document.getElementById("ftSister");
+    if (ft) SisterApps.render(ft, opt);
+    var box = document.getElementById("setSister"), sec = document.getElementById("setSisterSec");
+    if (box && sec) sec.hidden = !SisterApps.render(box, opt);
+  } catch (e) {}
+}
+document.addEventListener("click", function (e) {
+  var a = e.target && e.target.closest ? e.target.closest("a[data-sister]") : null;
+  if (!a || !window.ReactNativeWebView || !(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp)) return;
+  e.preventDefault();
+  try { window.ReactNativeWebView.postMessage(JSON.stringify({ type: "OPEN_STORE", url: a.href })); } catch (err) {}
+});
 </script>
 
 <script src="i18n.js?v=135"></script>
@@ -2087,6 +2114,8 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 <script src="tour.js?v=2"></script>
 <script src="ytshadow.js?v=30"></script>
 <script src="listen.js?v=7"></script>
+<script src="sister-apps.js?v=1"></script>
+<script>twRenderSister();</script>
 <script src="websync.js?v=66"></script>
 <script src="srs.js?v=61"></script>
 <script src="mock-exam.js?v=60"></script>
@@ -3682,6 +3711,7 @@ function fillVoiceSel(){
 
 /* ===== 言語切替時の再描画 ===== */
 function onLangChange(){
+  try { twRenderSister(); } catch (e) {}
   applyExLocale();
   renderCard(); renderPosRow(); renderList(); renderGrammar(); renderPhrases();
   renderSrsHome(); renderExamHome(); qzReset(); SPK.reset();
