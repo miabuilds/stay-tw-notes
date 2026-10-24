@@ -183,7 +183,12 @@ button{font-family:inherit}
 @media(hover:hover){.btn:hover{border-color:var(--ac);color:var(--ac)}}
 .btn.primary{background:var(--tx);color:var(--bg);border-color:var(--tx)}
 @media(hover:hover){.btn.primary:hover{background:var(--ac);border-color:var(--ac);color:#fff}}
-.fc-prog{text-align:center;font-size:13px;color:var(--tx3);margin-top:12px}
+.fc-prog{display:block;margin:12px auto 0;font-size:13px;color:var(--tx2);background:none;border:1px dashed var(--bd,#d6d0c8);border-radius:999px;padding:4px 14px;cursor:pointer;font-family:inherit}
+.fc-prog.open{border-style:solid;cursor:default;display:flex;align-items:center;gap:8px;width:max-content}
+.fc-prog input{width:72px;font-size:16px;padding:4px 8px;border:1px solid var(--bd,#d6d0c8);border-radius:8px;text-align:center;background:var(--bg,#fff);color:var(--tx,#222)}
+.qz-quit{display:block;margin:0 0 4px auto;width:34px;height:34px;border-radius:999px;border:1px solid var(--bd,#d6d0c8);background:none;color:var(--tx2);font-size:15px;cursor:pointer}
+.qz-quit[hidden]{display:none}
+.fc-prog-go{margin-left:8px;padding-left:8px;border-left:1px solid var(--bd,#d6d0c8);color:var(--ac,#c0392b);font-weight:600}
 .tts-btn{background:var(--ac-soft);border:none;color:var(--ac);border-radius:999px;width:38px;height:38px;font-size:17px;cursor:pointer;flex-shrink:0}
 @media(hover:hover){.tts-btn:hover{background:var(--ac);color:#fff}}
 
@@ -1181,6 +1186,29 @@ body.ls-open{overflow:hidden}
 .ls-ans-m{color:var(--tx2);font-size:14px;margin-top:3px}
 .ls-ans-ex{color:var(--tx2);font-size:13.5px;margin-top:9px;line-height:1.85}
 .ls-cta{width:100%;margin-top:14px;padding:15px;font-size:16px}
+/* ── 程度測驗(placement.js, 2026-10-24) ── */
+.ls-plc{display:flex;align-items:center;gap:10px;width:100%;margin:2px 0 14px;padding:13px 14px;border:2px solid var(--line);border-radius:18px;background:var(--bg2);color:var(--tx);font-size:13.5px;font-weight:700;text-align:left;cursor:pointer;line-height:1.45;box-shadow:0 3px 0 var(--line)}
+.ls-plc:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.ls-plc svg{flex:none;color:var(--ac)}
+.ls-plc.lite{margin-top:-4px;font-weight:600;font-size:13px;color:var(--tx2);box-shadow:none;border-style:dashed;background:transparent}
+.ls-plc.lite svg{color:var(--tx3)}
+.ls-plc-done{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 14px;margin:0 0 12px;font-size:12.5px;color:var(--tx3)}
+.ls-plc-acts{display:flex;gap:14px;white-space:nowrap}
+.ls-plc-done a{color:var(--ac);font-weight:700;text-decoration:none}
+.ls-fin.plc .ls-cta{margin-top:12px}
+.ls-pick{display:flex;align-items:center;gap:10px;margin:2px 0 14px;padding:12px 14px;border:2px dashed var(--ac);border-radius:18px;background:color-mix(in srgb,var(--ac) 8%,var(--bg2));font-size:13px;font-weight:700;color:var(--tx);line-height:1.5}
+.ls-pick span{flex:1}
+.ls-pick button{flex:none;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--bg2);color:var(--tx2);font-size:12.5px;font-weight:700;cursor:pointer}
+.plc-sub{background:var(--bg2);color:var(--tx2)}
+.plc-lead{color:var(--tx2);font-size:14px;line-height:1.75;margin:8px 0 14px;text-align:center}
+.plc-score{font-family:var(--serif);font-size:40px;font-weight:700;margin:4px 0 2px;color:var(--tx)}
+.plc-score b{font-size:56px;color:var(--ac)}
+.plc-lv{font-family:var(--serif);font-size:38px;font-weight:800;color:var(--ac);line-height:1.1;margin-top:2px}
+.plc-lv-s{font-size:14px;color:var(--tx2);margin:4px 0 12px}
+.plc-hist{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.plc-hist div{display:flex;flex-direction:column;align-items:center;min-width:64px;padding:8px 10px;border:1px solid var(--line);border-radius:14px;background:var(--bg2);font-size:11.5px;color:var(--tx3)}
+.plc-hist b{font-size:20px;color:var(--tx);line-height:1.2}
+.plc-hist small{font-size:10.5px}
 .ls-fin{padding:34px 0 24px;text-align:center}
 .ls-ring{width:132px;height:132px;margin:0 auto 6px;position:relative}
 .ls-ring svg{transform:rotate(-90deg)}
@@ -1714,7 +1742,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
       <button class="btn js-ruby" onclick="event.stopPropagation();cycleRuby()" title="拼音／注音" aria-label="拼音／注音" style="min-width:44px">拼</button>
       <button class="btn js-hidepron" onclick="event.stopPropagation();toggleHidePron()" data-i18n-aria="hidePronToggle" aria-label="発音を隠す" title="発音を隠す" style="min-width:44px"><svg viewBox="0 0 24 24" class="ic" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.1 9.1 0 0 1 12 4c7 0 10 8 10 8a13.2 13.2 0 0 1-1.67 2.68M6.6 6.6A13.5 13.5 0 0 0 2 12s3 8 10 8a9.7 9.7 0 0 0 5.4-1.6"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="2" y1="2" x2="22" y2="22"/></svg></button>
     </div>
-    <div class="fc-prog" id="fcProg"></div>
+    <button type="button" class="fc-prog" id="fcProg" onclick="fcJumpOpen()"></button>
     <div class="kbd-hint" data-i18n="kbdHint">Space:めくる ／ ←→:前後 ／ 1・2・3:評価</div>
   </section>
 
@@ -1755,6 +1783,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
   <!-- クイズ -->
   <section class="panel" id="panel-quiz">
     <div class="pos-row" id="qzModeRow" style="justify-content:center"></div>
+    <button type="button" class="qz-quit" id="qzQuit" data-nav-back onclick="qzReset()" aria-label="close" hidden>✕</button>
     <div class="qz" id="qzBox"></div>
   </section>
 
@@ -1984,7 +2013,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 }}catch(e){}})();
 </script>
 
-<script src="i18n.js?v=132"></script>
+<script src="i18n.js?v=135"></script>
 <script src="native-ui.js?v=2"></script>
 <script src="tts.js?v=67"></script>
 <script src="tbcl.js?v=1"></script>
@@ -2049,18 +2078,19 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 <script src="icons.js?v=2"></script>
 <script src="paywall.js?v=115"></script>
 <script src="essentials.js?v=2"></script>
-<script src="essentials-ui.js?v=4"></script>
+<script src="essentials-ui.js?v=5"></script>
 <script src="fortune.js?v=5"></script>
-<script src="myvocab.js?v=6"></script>
+<script src="myvocab.js?v=7"></script>
 <script src="whatsnew.js?v=3"></script>
-<script src="lessons.js?v=32"></script>
+<script src="lessons.js?v=33"></script>
+<script src="placement.js?v=1"></script>
 <script src="tour.js?v=2"></script>
-<script src="ytshadow.js?v=28"></script>
+<script src="ytshadow.js?v=30"></script>
 <script src="listen.js?v=7"></script>
-<script src="websync.js?v=64"></script>
-<script src="srs.js?v=60"></script>
-<script src="mock-exam.js?v=59"></script>
-<script src="polyphone.js?v=4"></script>
+<script src="websync.js?v=66"></script>
+<script src="srs.js?v=61"></script>
+<script src="mock-exam.js?v=60"></script>
+<script src="polyphone.js?v=5"></script>
 <script>
 /* ===== テーマ ===== */
 /* ===== 表示設定：テーマ・文字サイズ・アクセント・言語（統一設定シート）===== */
@@ -2289,7 +2319,7 @@ function openWrongBook(lv){
   if(!list.length){ box.innerHTML = `<p class="muted" style="text-align:center;color:var(--tx2);padding:30px 0">${twT("wbEmpty")}</p>`; return; }
   box.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
       <div style="font-size:13px;color:var(--tx3)">${list.length} ${twT("wbCount")}</div>
-      <button class="btn sm" onclick="if(confirm(twT('wbClearAsk'))){WrongBook.clearLevel('${lv}');openWrongBook('${lv}');}">${twT("wbClear")}</button></div>` +
+      <button class="btn sm" onclick="if(this.dataset.armed){WrongBook.clearLevel('${lv}');openWrongBook('${lv}');}else{this.dataset.armed='1';this.textContent=twT('wbClearAgain');setTimeout(()=>{if(this.isConnected){delete this.dataset.armed;this.textContent=twT('wbClear');}},4000);}">${twT("wbClear")}</button></div>` +
     list.map((x)=>`<div class="wb-item">
       <div class="wb-q">${x.q?esc(x.q)+' → ':''}<b class="wb-a" onclick="speakZh('${(x.word||'').replace(/'/g,"")}')">${esc(x.correct||"")}</b>
         ${x.word?`<button class="tts-btn" style="width:26px;height:26px;font-size:11px" onclick="speakZh('${(x.word||'').replace(/'/g,"")}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button>`:''}</div>
@@ -2327,7 +2357,23 @@ function setLevel(lv){
 document.querySelectorAll(".lv-btn").forEach(b => b.onclick = () => setLevel(b.dataset.lv));
 
 /* ===== タブ（上部タブ＋モバイル下部ナビの両方から呼ぶ） ===== */
+// ── 上一頁(2026-10 Mia:「按上一頁要看到真的上一個畫面或上一層」)──
+// NAV.stack = 走過的畫面順序。回到 path(首頁)就清空,因為首頁是最上層。
+// Android 返回鍵 / iPhone 滑動 / 瀏覽器上一頁 / 畫面上的返回鈕,都走 window.stwBack() 這一條。
+const NAV = { stack: [], silent: false };
+function twNavPanelBack(){
+  const curEl = document.querySelector(".panel.on"), cur = curEl ? curEl.id.slice(6) : "";
+  let prev = NAV.stack.pop();
+  while (prev && (prev === cur || !document.getElementById("panel-" + prev))) prev = NAV.stack.pop();
+  if (!prev && cur !== "path") prev = "path";
+  if (!prev) return false;
+  NAV.silent = true;
+  try { switchPanel(prev); } finally { NAV.silent = false; }
+  return true;
+}
 function switchPanel(p){
+  { const pe = document.querySelector(".panel.on"), pv = pe ? pe.id.slice(6) : "";
+    if (!NAV.silent && pv && pv !== p) { if (p === "path") NAV.stack = []; else { NAV.stack.push(pv); if (NAV.stack.length > 30) NAV.stack.shift(); } } }
   if (window.TTS && TTS.stop) TTS.stop();   // タブ/ページ切替で再生中の音声を止める
   // ハブの「前回の続き」用。トップ(path)自身は記録しない
   try { if (p !== "path") localStorage.setItem("stw_last_panel", p); } catch (e) {}
@@ -2372,7 +2418,7 @@ function switchPanel(p){
     fab.innerHTML='<svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg>';
     fab.onclick=function(){
       var p=document.querySelector(".panel.on"), id=p&&p.id;
-      try { if (id==="panel-reading") RD.render(); else if (id==="panel-articles") AR.render(); } catch(e){}
+      try { if (id==="panel-reading") RD.render(); else if (id==="panel-articles") AR.back(); } catch(e){}
       fab.classList.remove("show");   // 一覧に戻ったら即座に隠す
       window.scrollTo({top:0});
     };
@@ -2598,7 +2644,7 @@ function renderCard(){
   document.getElementById("fcEx").innerHTML =
     `<span class="ex-z">${(w.ex && w.ex.z) || ""} <svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></span><span class="ex-r">${exRuby(w.ex.z, w.ex.py)}</span><span class="tr">${w.ex[mk] || w.ex.e || w.ex.j}</span>`;
   { const _fe = document.getElementById("fcEx"); if (_fe) _fe.onclick = e => { e.stopPropagation(); if (w.ex && w.ex.z) speakZh(w.ex.z); }; }
-  document.getElementById("fcProg").textContent = `${fcIdx+1} / ${deck.length}`;
+  { const pg = document.getElementById("fcProg"); pg.classList.remove("open"); pg.innerHTML = `${fcIdx+1} / ${deck.length}<span class="fc-prog-go">${twT("fcJump")}</span>`; pg.title = twT("fcJumpTip"); }
   updateFavBtn(); markSeen(); saveFcPos(); refreshSpeedLabels(); refreshRubyLabels();
 }
 /* ===== 再生速度（全音声共通・localStorage 永続） ===== */
@@ -2613,6 +2659,21 @@ function flipCard(){
 }
 function fcMove(d){
   fcIdx = (fcIdx + d + deck.length) % deck.length;
+  renderCard();
+  document.getElementById("fcHint").textContent = twT("cardHintFront");
+}
+// 番号で好きなカードへ(2026-10 韓国のユーザー「単語が多すぎて最初に見た単語に戻れない」)
+function fcJumpOpen(){
+  const el = document.getElementById("fcProg"); if(!el || el.classList.contains("open") || !deck.length) return;
+  el.classList.add("open");
+  el.innerHTML = `<input id="fcJumpIn" type="number" inputmode="numeric" min="1" max="${deck.length}" value="${fcIdx+1}" onkeydown="if(event.key==='Enter'){event.preventDefault();fcJumpGo();}else if(event.key==='Escape'){renderCard();}"> / ${deck.length} <span class="btn sm primary" role="button" onclick="event.stopPropagation();fcJumpGo()">${twT("fcJump")}</span>`;
+  const i = document.getElementById("fcJumpIn"); if(i){ i.focus(); i.select(); }
+}
+function fcJumpGo(){
+  const i = document.getElementById("fcJumpIn"); if(!i) return;
+  const n = Math.round(Number(i.value));
+  if(!n || n < 1){ i.focus(); return; }
+  fcIdx = Math.min(deck.length, n) - 1;
   renderCard();
   document.getElementById("fcHint").textContent = twT("cardHintFront");
 }
@@ -2802,6 +2863,7 @@ function renderQzModeRow(){
 }
 function qzReset(){
   quizStarted = false;
+  { const x = document.getElementById("qzQuit"); if (x) x.hidden = true; }
   renderQzModeRow();
   document.getElementById("qzBox").innerHTML =
     `<img class="il" src="images/il/10_quiz.webp" alt="" width="120" height="120" style="width:120px;height:120px;display:block;margin:22px auto 0"><p style="color:var(--tx2);margin:10px 0 8px">${qzMode==="type" ? twT("qzTypeHint") : twT("quizQ")}</p>
@@ -2811,6 +2873,7 @@ function qzReset(){
 }
 function qzStart(){
   quizStarted = true; qzScore = 0; qzIdx = 0;
+  { const x = document.getElementById("qzQuit"); if (x) x.hidden = false; }
   qzOrder = qzPickWords(10);
   qzNext();
 }
@@ -3238,7 +3301,7 @@ const WR = (() => {
     cur = WRITING.find(t => t.id === id);
     const ck = lang(), d = drafts();
     document.getElementById("wrBox").innerHTML = `
-      <button class="btn" style="margin-bottom:14px" onclick="WR.list()">${twT("wrBack")}</button>
+      <button class="btn" data-nav-back style="margin-bottom:14px" onclick="WR.list()">${twT("wrBack")}</button>
       <h3 style="font-family:var(--serif);font-size:22px;font-weight:700"><span style="font-size:12px;color:var(--ac);border:1px solid var(--ac);border-radius:6px;padding:1px 8px;vertical-align:middle;margin-right:8px">${cur.lv.toUpperCase()}</span>${cur.title[ck] || cur.title.j}</h3>
       <div class="wr-task">${cur.task[ck] || cur.task.j}</div>
       <div style="font-size:12px;color:var(--tx3);letter-spacing:.08em;margin-bottom:6px">${twT("wrHints")} ${twT("wrHintTap")}</div>
@@ -3344,7 +3407,7 @@ const WR = (() => {
   }
   function history(){
     const a = scores(), ck = lang();
-    document.getElementById("wrBox").innerHTML = `<button class="btn" style="margin-bottom:14px" onclick="WR.list()">${twT("wrBack")}</button>
+    document.getElementById("wrBox").innerHTML = `<button class="btn" data-nav-back style="margin-bottom:14px" onclick="WR.list()">${twT("wrBack")}</button>
       <h3 style="font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:12px">${twT("wrHistory")}</h3>
       ${a.length ? a.map(r=>`<div class="wr-hist" onclick="WR.openHist(${r.ts})">
         <div class="wr-hist-top"><b>${esc(r.title||"")}</b><span class="wr-hist-score">${r.score!=null?r.score:"—"}</span></div>
@@ -3353,7 +3416,7 @@ const WR = (() => {
   }
   function openHist(ts){
     const r = scores().find(x=>x.ts===ts); if(!r) return;
-    document.getElementById("wrBox").innerHTML = `<button class="btn" style="margin-bottom:14px" onclick="WR.history()">${twT("wrBack")}</button>
+    document.getElementById("wrBox").innerHTML = `<button class="btn" data-nav-back style="margin-bottom:14px" onclick="WR.history()">${twT("wrBack")}</button>
       <h3 style="font-family:var(--serif);font-size:19px;font-weight:700">${esc(r.title||"")}</h3>
       <div class="wr-model" style="margin:10px 0"><div class="zh" onclick="speakZh(this.textContent)" style="white-space:pre-wrap">${esc(r.draft||"")}</div></div>
       ${renderScore(r.fb||{score:r.score})}`;
@@ -4075,7 +4138,7 @@ const PA = (() => {
       const pick = [...idx.filter((i) => !rd.includes(items[i].id)), ...idx.filter((i) => rd.includes(items[i].id))].slice(0, 6);
       return `<div class="hb-sech"><span class="hb-sec">${esc(twT("toolArticles"))}</span><button onclick="switchPanel('articles')">${esc(twT("hbArtAll"))} ›</button></div>
       <div class="hb-art">${pick.map((i) => { const a = items[i], lk = i !== 0 && !prem, done = rd.includes(a.id);
-        return `<button class="hb-art-c" onclick="switchPanel('articles');setTimeout(function(){AR.open(${i})},0)">
+        return `<button class="hb-art-c" onclick="switchPanel('articles');setTimeout(function(){AR.open(${i},'hub')},0)">
           <span class="hb-art-im"><img src="images/articles/${a.id}.jpg" alt="" width="600" height="600" loading="lazy" decoding="async" onerror="this.remove()">${lk ? `<span class="hb-art-lk">${icon("lock",{size:13})}</span>` : (done ? `<span class="hb-art-ok">✓</span>` : "")}</span>
           <span class="hb-art-t">${esc(String(a.zhTitle).split("：")[0])}</span>
           <span class="hb-art-s">${esc(a.title[mk] || a.title.e || "")}</span></button>`; }).join("")}</div>`;
@@ -4341,21 +4404,55 @@ function twCloseWord(){ if(window.TTS&&TTS.stop)TTS.stop(); const bg=document.ge
 // 何も開いていなくて、パス以外のタブにいればパスへ戻して "handled"。パスなら "exit"(原生が終了確認を出す)。
 window.stwBack = function(){
   const on = (id, cls) => { const e = document.getElementById(id); return !!(e && e.classList.contains(cls || "show")); };
+  const vis = (e) => !!(e && e.offsetParent !== null);
   try {
+    // ① 最上面的彈出視窗/全螢幕
     if (document.querySelector(".tour-box")) { TOUR.close(); return "handled"; }
+    if (on("personaBg")) { pickPersona(""); return "handled"; }
     if (on("lsSkipSheet", "on")) { LS.skip(false, true); return "handled"; }
     if (on("lsPlay", "on")) { LS.quit(); return "handled"; }
+    if (document.body.classList.contains("ls-open") && window.Listen) { if (document.getElementById("lsPP")) Listen.back(); else Listen.close(); return "handled"; }
     if (on("pwBg")) { Paywall.close(); return "handled"; }
+    if (on("loginBg")) { STW_WEB.closeModal(); return "handled"; }
+    if (on("delAccBg")) { twCloseDelAcc(); return "handled"; }
     if (on("quizBg")) { SRS.close(); return "handled"; }
     const wm = document.getElementById("wrongModal"); if (wm && wm.style.display && wm.style.display !== "none") { closeWrongBook(); return "handled"; }
     if (on("wsBg")) { twCloseWord(); return "handled"; }
     if (document.body.classList.contains("set-open")) { twCloseSettings(); return "handled"; }
     if (document.body.classList.contains("more-open")) { toggleMore(false); return "handled"; }
-    const cur = document.querySelector(".bnav .bn-item.on");
-    if (cur && cur.dataset.bn !== "path") { const p = document.querySelector('.bnav [data-bn="path"]'); if (p) { p.click(); window.scrollTo(0, 0); return "handled"; } }
+    // ② 畫面裡的內頁 → 回列表(上一層)
+    const panel = document.querySelector(".panel.on");
+    if (panel) {
+      // 模擬考作答中:手滑就交卷太可惜 → 連按兩次才結束
+      if (panel.id === "panel-exam" && document.getElementById("exTimer")) {
+        if (Date.now() - (NAV.examArm || 0) < 2500) { NAV.examArm = 0; MockExam.quit(); }
+        else { NAV.examArm = Date.now(); try { showToast(twT("navExamAgain")); } catch (e) {} }
+        return "handled";
+      }
+      if (panel.id === "panel-zhuyin") { const t = panel.querySelector('.zy-tab[data-zy="table"]'); if (t && !t.classList.contains("on")) { t.click(); return "handled"; } }
+      const bk = [...panel.querySelectorAll("[data-nav-back]")].find(vis);
+      if (bk) { bk.click(); window.scrollTo(0, 0); return "handled"; }
+    }
+    // ③ 回到真的上一個畫面;沒有就回首頁
+    if (twNavPanelBack()) { window.scrollTo(0, 0); return "handled"; }
   } catch (e) {}
   return "exit";
 };
+// iPhone 往右滑 / 瀏覽器上一頁:頁面裡永遠墊一格紀錄,被退掉就照上面的規則回上一層再墊回去;已經在首頁才真的離開
+(function(){
+  try { if (!(history.state && history.state.stwTop)) { history.replaceState({ stwBase: 1 }, ""); history.pushState({ stwTop: 1 }, ""); } } catch (e) {}
+  window.addEventListener("popstate", function(){
+    let r = "exit";
+    try { r = window.stwBack(); } catch (e) {}
+    if (r === "handled") { try { history.pushState({ stwTop: 1 }, ""); } catch (e) {} }
+    else { try { history.back(); } catch (e) {} }
+  });
+  // 去別頁(AI 會話、生活會話…)前記住現在的畫面,回來時接回去
+  window.addEventListener("pagehide", function(){
+    try { const pe = document.querySelector(".panel.on"); sessionStorage.setItem("stw_ret", JSON.stringify({ p: pe ? pe.id.slice(6) : "path", t: Date.now() })); } catch (e) {}
+  });
+  window.addEventListener("pageshow", function(e){ if (e.persisted) { try { sessionStorage.removeItem("stw_back"); } catch (x) {} } });
+})();
 
 /* ===== 分級閲読（読解）：台湾のリアルな短文＋逐句音声＋生詞＋理解チェック ===== */
 const RD = (() => {
@@ -4406,7 +4503,7 @@ const RD = (() => {
       </div>`).join("");
     box().innerHTML = `
       <div class="ar-top">
-        <button class="ar-back" onclick="RD.render()"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="ar-back" data-nav-back onclick="RD.render()"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button>
         <div class="ar-fontctl"><button onclick="RD.font(-1)">A<small>−</small></button><button onclick="RD.font(1)">A<small>＋</small></button></div>
       </div>
       <h3 class="rd-title">${s.title[mk] || s.title.e || s.title.j}</h3>
@@ -4561,7 +4658,7 @@ const AR = (() => {
       const tag = lk ? `<span class="ar-lock"><svg viewBox="0 0 24 24" class="ic" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg> ${twT("arLocked")}</span>` : (i===0 ? `<span class="ar-freetag">${twT("arFree")}</span>` : "");
       const prev = (a.paras && a.paras[0] ? a.paras[0].z : "").slice(0, 46);
       // 封面(CC0、images/articles/CREDITS.md)。無い時は img を消して色だけ残す
-      return `<button class="ar-card ${lk?"locked":""}" onclick="AR.open(${i})">
+      return `<button class="ar-card ${lk?"locked":""}" onclick="AR.open(${i},'list')">
         <span class="ar-card-im"><img src="images/articles/${a.id}.jpg" alt="" width="600" height="600" loading="lazy" decoding="async" onerror="this.remove()"></span>
         <span class="ar-card-b">
         <div class="ar-card-cat">${a.cat[mk] || a.cat.e || a.cat.j}${readDone(a.id) ? ` ・ <span class="rd-ok">${twT("rdRead")}</span>` : ""} ${tag}</div>
@@ -4576,7 +4673,10 @@ const AR = (() => {
     box().innerHTML = `<div class="il-lead"><img class="il" src="images/il/09_reading.webp" alt="" width="84" height="84" style="width:84px;height:84px"><p class="rd-lead">${twT("arLead")}</p></div>` + favBtn + chips + cards;
   }
   function filter(ci){ arFilter = ci < 0 ? "all" : arCats[ci]; renderList(); }
-  function open(i){
+  let fromHub = false;
+  // from: "hub"=首頁的文章條 / "list"=文章列表。測驗回文章時不帶 → 維持原本的來處
+  function open(i, from){
+    if (from !== undefined) fromHub = from === "hub";
     if (locked(i)) { Paywall.show("article"); return; }   // 有料記事はペイウォールへ
     cur = twArticles()[i]; if (!cur) return; showTr = false; renderArticle(); window.scrollTo({top:0});
   }
@@ -4601,7 +4701,7 @@ const AR = (() => {
         <span class="rd-voc-m">${v.m[mk] || v.m.e || v.m.j}</span></div>`).join("");
     box().innerHTML = `
       <div class="ar-top">
-        <button class="ar-back" onclick="AR.render()"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="ar-back" data-nav-back onclick="AR.back()"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button>
         <div class="ar-fontctl"><button onclick="AR.font(-1)">A<small>−</small></button><button onclick="AR.font(1)">A<small>＋</small></button></div>
       </div>
       <div class="ar-hero"><img src="images/articles/${a.id}.jpg" alt="" width="600" height="600" decoding="async" onerror="this.parentNode.remove()"></div>
@@ -4714,7 +4814,7 @@ const AR = (() => {
           <button class="tts-btn" style="width:26px;height:26px;font-size:11px" onclick="speakZh('${x.z.replace(/'/g,"")}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
         ${x.m ? `<div class="wb-d">${x.m}</div>` : ""}${x.art ? `<div class="wb-d" style="opacity:.7">— ${x.art}</div>` : ""}
         <button class="wb-del" onclick="AR.favDel(${i})">${icon("trash",{size:16})}</button></div>`).join("") : `<p class="rd-empty">${twT("arFavEmpty")}</p>`;
-    box().innerHTML = `<div class="ar-top"><button class="ar-back" onclick="AR.render()"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button></div>
+    box().innerHTML = `<div class="ar-top"><button class="ar-back" data-nav-back onclick="AR.render()"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button></div>
       <h3 class="ar-zhtitle">★ ${twT("arFavTitle")}</h3><div style="margin-top:16px">${items}</div><div style="height:40px"></div>`;
   }
   // ── 文章後クイズ（記事の単語で意味当て。誤答は解説＋間違いノート記録）──
@@ -4734,7 +4834,7 @@ const AR = (() => {
   function aqRender(){
     if (!aq) return; if (aq.i >= aq.qs.length) return aqDone();
     const mk = twMKey(), q = aq.qs[aq.i], w = q.w;
-    box().innerHTML = `<div class="ar-top"><button class="ar-back" onclick="AR.open(${artIdx(aq.id)})"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button></div>
+    box().innerHTML = `<div class="ar-top"><button class="ar-back" data-nav-back onclick="AR.open(${artIdx(aq.id)})"><svg viewBox="0 0 24 24" class="ic"><path d="M15 5l-7 7 7 7"/></svg></button></div>
       <div class="aq-wrap">
         <div style="font-size:13px;color:var(--tx3)">${aq.i+1} / ${aq.qs.length}　✓ ${aq.score}</div>
         <div class="aq-word" onclick="speakZh('${w.w}')">${w.w}</div>
@@ -4768,7 +4868,8 @@ const AR = (() => {
 
   // 言語切替時：開いている記事はその場で再描画。一覧なら一覧を再描画。
   function relang(){ if (cur) renderArticle(); else renderList(); }
-  return { render, open, para, togglePy, rubyBtn, toggleTr, playAll, filter, font, speed, closeWord, hideBar, stopPlay, relang,
+  function back(){ if (fromHub) { fromHub = false; twNavPanelBack(); } else render(); }
+  return { render, open, back, para, togglePy, rubyBtn, toggleTr, playAll, filter, font, speed, closeWord, hideBar, stopPlay, relang,
            toggleRepeat, trOne, favPara, favDel, openFav, quiz, aqAnswer, aqNext, artFavHas, artFavList };
 })();
 
@@ -4863,6 +4964,13 @@ function twNormalizeContent(){
   fillVoiceSel();
   try { refreshToolsEdge(); const _t = document.querySelector(".tools"); if (_t) _t.addEventListener("scroll", refreshToolsEdge, { passive: true }); addEventListener("resize", refreshToolsEdge); } catch (e) {}
   if (!localStorage.getItem("stw_persona")) document.getElementById("personaBg").classList.add("show");
+  try {   // 別頁的返回(stwReturn)會留 stw_back → 回到離開前的畫面
+    if (sessionStorage.getItem("stw_back")) {
+      sessionStorage.removeItem("stw_back");
+      const r = JSON.parse(sessionStorage.getItem("stw_ret") || "null");
+      if (r && r.p && r.p !== "path" && Date.now() - r.t < 3 * 3600e3 && document.getElementById("panel-" + r.p)) setTimeout(() => switchPanel(r.p), 0);
+    }
+  } catch (e) {}
   if ("speechSynthesis" in window) speechSynthesis.onvoiceschanged = () => { TTS.refresh(); fillVoiceSel(); };
 })();
 </script>

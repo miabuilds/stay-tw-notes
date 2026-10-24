@@ -41,7 +41,35 @@ const LS = (() => {
     try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {}
     try { if (typeof window.onSRSChange === "function") window.onSRSChange(); } catch (e) {}
   }
-  const doneOf = (lv) => (state()[lv] || {});
+  // 程度測驗(placement.js)「從 X 級開始」:X 級以前的課全部當成已學過(值 2 = 沒真的做過)。
+  // 不真的寫幾百個 key,只記 stw_placed;再測到較低的級就自動收回
+  const placedNum = () => { try { return +String(localStorage.getItem("stw_placed") || "").slice(1) || 0; } catch (e) { return 0; } };
+  // 自己選起點(2026-10-24 Mia「讓使用者自由選擇想從哪關開始」):stw_ls_start = { lv: key }。
+  // 起點前面的課也當成已學過(值 2)。改成更前面的起點,後面的標記就自動消失
+  const SKEY = "stw_ls_start";
+  const startOf = (lv) => { try { return (JSON.parse(localStorage.getItem(SKEY) || "{}") || {})[lv] || ""; } catch (e) { return ""; } };
+  let pickMode = false;
+  function doneOf(lv) {
+    const s = state()[lv] || {};
+    if (!DATA[lv]) return s;
+    const below = placedNum() > (+String(lv).slice(1) || 0), sk = startOf(lv);
+    if (!below && !sk) return s;
+    const o = Object.assign({}, s);
+    const all = flat(lv), si = sk ? all.findIndex((x) => x.key === sk) : -1;
+    all.forEach((x, i) => { if (!o[x.key] && (below || (si >= 0 && i < si))) o[x.key] = 2; });
+    return o;
+  }
+  function choose() { pickMode = true; try { PA.render(); } catch (e) {} try { const el = document.querySelector(".ls-pick"); el && el.scrollIntoView({ block: "center" }); } catch (e) {} }
+  function pickCancel() { pickMode = false; try { PA.render(); } catch (e) {} }
+  function pickStart(lv, key) {
+    let o = {}; try { o = JSON.parse(localStorage.getItem(SKEY) || "{}") || {}; } catch (e) {}
+    o[lv] = key;
+    try { localStorage.setItem(SKEY, JSON.stringify(o)); } catch (e) {}
+    try { if (typeof window.onSRSChange === "function") window.onSRSChange(); } catch (e) {}
+    pickMode = false; open = {};
+    try { PA.render(); } catch (e) {}
+    try { showToast(T("lsPickToast", "起點設好了,從這裡開始")); } catch (e) {}
+  }
 
   function words(lv) {
     const m = {};
@@ -93,7 +121,7 @@ const LS = (() => {
     const doneN = all.filter((x) => s[x.key]).length;
     // 単元の見出しが 20 本近く並ぶと長くて散らかる(ユーザー指摘)。今の単元から 4 本だけ見せて、残りは「すべて表示」で
     const curNo = nx ? nx.unit.no : 1;
-    const showAll = !!open[lv + ":all"];
+    const showAll = pickMode || !!open[lv + ":all"];
     let hiddenN = 0;
     const units = DATA[lv].units.map((u) => {
       const mine = all.filter((x) => x.unit.no === u.no);
@@ -118,8 +146,8 @@ const LS = (() => {
         const done = !!s[x.key], now = nx && nx.key === x.key;
         const run = done ? null : runOf(lv, x.key);
         const pct = done ? 100 : (run ? Math.round(run.i / run.n * 100) : 0);
-        const lk = !done && !run && !now && quotaLeft() <= 0;
-        const click = (!done && !run && quotaLeft() <= 0) ? `LS.locked()` : `LS.start('${lv}','${x.key}')`;
+        const lk = !pickMode && !done && !run && !now && quotaLeft() <= 0;
+        const click = pickMode ? `LS.pickStart('${lv}','${x.key}')` : (!done && !run && quotaLeft() <= 0) ? `LS.locked()` : `LS.start('${lv}','${x.key}')`;
         const g = x.kind === "grammar";
         const st = done ? "done" : (now || run) ? "now" : lk ? "locked" : "todo";
         const face = lk ? icon("lock", { size: 22 }) : done ? "✓" : g ? "文" : String(x.li + 1);
@@ -149,7 +177,7 @@ const LS = (() => {
         <span>${esc(T("lsAllDoneN", "{a} / {b} 課").replace("{a}", doneN).replace("{b}", all.length))}</span>
         <b>${pc}%</b>
       </div>
-      <div class="ls-headbar"><i style="width:${pc}%"></i></div>${freeLine}${units}${(hiddenN || showAll) ? `<button class="ls-more" onclick="LS.togAll('${lv}')">${esc(showAll ? T("lsFewerUnits", "単元をたたむ") : T("lsAllUnits", "すべての単元を表示（全 {n}）").replace("{n}", DATA[lv].units.length))}<span class="ls-more-c">${showAll ? "\u25B4" : "\u25BE"}</span></button>` : ""}`;
+      <div class="ls-headbar"><i style="width:${pc}%"></i></div>${pickMode ? `<div class="ls-pick"><span>${esc(T("lsPickBanner", "點一課當起點,它前面的課會標成「已學過」"))}</span><button onclick="LS.pickCancel()">${esc(T("lsPickCancel", "取消"))}</button></div>` : (typeof Placement !== "undefined") ? Placement.entry(lv, doneN) : ""}${freeLine}${units}${(hiddenN || showAll) ? `<button class="ls-more" onclick="LS.togAll('${lv}')">${esc(showAll ? T("lsFewerUnits", "単元をたたむ") : T("lsAllUnits", "すべての単元を表示（全 {n}）").replace("{n}", DATA[lv].units.length))}<span class="ls-more-c">${showAll ? "\u25B4" : "\u25BE"}</span></button>` : ""}`;
   }
 
   // どの単元を開いているか。畳んだ状態は端末に覚えさせる(学習の記録ではないので軽く扱う)
@@ -203,7 +231,7 @@ const LS = (() => {
   function allRuns() { try { const o = JSON.parse(localStorage.getItem(RKEY) || "{}"); return (o && typeof o === "object" && !o.lv) ? o : {}; } catch (e) { return {}; } }
   function putRuns(o) { try { localStorage.setItem(RKEY, JSON.stringify(o)); } catch (e) {} }
   function saveRun() {
-    if (!L) return;
+    if (!L || L.kind === "placement") return;                  // 程度測驗不存「途中」
     const o = allRuns(), k = rid(L.lv, L.key);
     if (idx <= 0) { delete o[k]; putRuns(o); return; }        // 1 問目は「途中」ではない
     o[k] = { idx, score, asked, wrong, skipped, queue, t: Date.now() };
@@ -532,11 +560,37 @@ const LS = (() => {
   }
   function quit() {
     if (recording) stopRec();
+    if (L && L.kind === "placement") { L = null; try { Placement.reset(); } catch (e) {} }
     document.body.classList.remove("ls-open");
     $("lsPlay").classList.remove("on");
     try { PA.render(); } catch (e) {}
   }
   function say(w) { try { speakZh(w); } catch (e) {} }
+
+  // ── 程度測驗(placement.js)借這個全畫面框和出題器 ──
+  function placementOpen() {
+    L = { lv: currentLevel, key: "__plc", kind: "placement", ws: [], gs: [], unit: { no: 0 }, title: "" };
+    queue = []; idx = 0; score = 0; asked = 0; wrong = {}; skipped = {};
+    document.body.classList.add("ls-open");
+    if ($("lsPlay").parentElement !== document.body) document.body.appendChild($("lsPlay"));
+    $("lsPlay").classList.add("on");
+    $("lsSkipSheet").classList.remove("on");
+    $("lsSkipBtn").style.display = "none";
+  }
+  // 一輪:4 個單字各一種題型(意思/反查/注音/填空/聲調,不出聽音・口說)+ 文法填空・意思。答錯不補題
+  function placementRound(lv, ws, gs) {
+    L = { lv, key: "__plc", kind: "placement", ws: ws.slice(), gs: gs.slice(), unit: { no: 0 }, title: "" };
+    W = words(lv);
+    score = 0; asked = 0; idx = 0; wrong = {}; skipped = {};
+    const kinds = shuf(["meaning", "reverse", "zhuyin", "cloze", "tone"]);
+    queue = ws.map((w, i) => mkQ(w, kinds[i % kinds.length]));
+    gs.forEach((id, i) => queue.push(mkG(id, i % 2 ? "gmean" : "gcloze")));
+    queue = shuf(queue.filter(Boolean));
+    try { if (typeof loadExZy === "function") loadExZy(() => {}); } catch (e) {}
+    $("lsSkipBtn").style.display = "none";
+    draw();
+  }
+  const gmapOf = (lv) => gmap(lv);
 
   function draw() {
     if (idx >= queue.length) { finish(); return; }
@@ -729,7 +783,7 @@ const LS = (() => {
     });
     if (q.kind === "gcloze" || q.kind === "gmean") {
       const g = gmap(L.lv)[q.g];
-      if (!ok) requeue(mkG(q.g, "gmean"));
+      if (!ok && L.kind !== "placement") requeue(mkG(q.g, "gmean"));
       let gp = "";
       if (!ok) {
         const got = q.opts[i], G2 = gmap(L.lv);
@@ -748,7 +802,7 @@ const LS = (() => {
         <button class="btn primary ls-cta" onclick="LS.next()">${esc(idx + 1 < queue.length ? T("lsNext", "次へ") : T("lsResult", "結果"))}</button>`;
       return;
     }
-    if (!ok) requeue(mkQ(q.w, "meaning"));
+    if (!ok && L.kind !== "placement") requeue(mkQ(q.w, "meaning"));
     const ex = v && v.ex;
     // 「違う」とだけ言われても学べない。選んだ方が何だったのかを並べる
     let picked = "";
@@ -793,6 +847,11 @@ const LS = (() => {
   }
 
   function finish() {
+    if (L.kind === "placement") {                             // 程度測驗:一輪答完交回去判升降,不記進度、不進 SRS
+      const ok = score, of = asked; L = null;
+      try { Placement.roundDone(ok, of); } catch (e) { quit(); }
+      return;
+    }
     setDone(L.lv, L.key);
     clearRun();
     // 覚えた語を復習に載せる。ここを繋がないと「復習に回りました」がただの文字になる。
@@ -873,6 +932,6 @@ const LS = (() => {
 
   function again() { const nx = next(L.lv); if (nx) start(nx.lv, nx.key); else quit(); }
 
-  return { section, ensure, start, quit, next: nextStep, pick, say, again, locked, flat, nextOf: next, tog, togAll, save, skip, ord, ordUndo, ordDone, mic, spkSkip, quota, peek };
+  return { section, ensure, start, quit, next: nextStep, placementOpen, placementRound, gmapOf, choose, pickCancel, pickStart, pick, say, again, locked, flat, nextOf: next, tog, togAll, save, skip, ord, ordUndo, ordDone, mic, spkSkip, quota, peek };
 })();
 if (typeof window !== "undefined") window.LS = LS;   // const は window に乗らない
