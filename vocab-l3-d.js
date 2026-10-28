@@ -71,7 +71,7 @@ const VOCAB_L3_D = [
 {"w":"文法","py":"wénfǎ","zy":"ㄨㄣˊ ㄈㄚˇ","c":"名","m":{"j":"文法","e":"grammar","k":"문법"},"ex":{"z":"這個文法規則很難記住。","py":"Zhège wénfǎ guīzé hěn nán jìzhù.","j":"この文法規則は覚えにくい。","e":"This grammar rule is hard to remember.","k":"이 문법 규칙은 외우기 어렵다."},"pro":1},
 {"w":"校園","py":"xiàoyuán","zy":"ㄒㄧㄠˋ ㄩㄢˊ","c":"名","m":{"j":"キャンパス、校庭","e":"campus","k":"캠퍼스"},"ex":{"z":"校園裡種了很多樹。","py":"Xiàoyuán lǐ zhòng le hěn duō shù.","j":"キャンパスにはたくさんの木が植えられている。","e":"Many trees are planted on the campus.","k":"캠퍼스에는 나무가 많이 심어져 있다."},"pro":1},
 {"w":"詞","py":"cí","zy":"ㄘˊ","c":"名","m":{"j":"言葉、単語","e":"word","k":"단어"},"ex":{"z":"這個詞是什麼意思?","py":"Zhège cí shì shénme yìsi?","j":"この単語はどういう意味ですか?","e":"What does this word mean?","k":"이 단어는 무슨 뜻이에요?"},"pro":1},
-{"w":"答案","py":"dáàn","zy":"ㄉㄚˊ ㄢˋ","c":"名","m":{"j":"答え、解答","e":"answer","k":"답, 답안"},"ex":{"z":"這是這次考試的答案。","py":"Zhè shì zhè cì kǎoshì de dáàn.","j":"これは今回の試験の答えです。","e":"This is the answer to this exam.","k":"이것은 이번 시험의 답입니다."},"pro":1},
+{"w":"答案","py":"dá'àn","zy":"ㄉㄚˊ ㄢˋ","c":"名","m":{"j":"答え、解答","e":"answer","k":"답, 답안"},"ex":{"z":"這是這次考試的答案。","py":"Zhè shì zhè cì kǎoshì de dáàn.","j":"これは今回の試験の答えです。","e":"This is the answer to this exam.","k":"이것은 이번 시험의 답입니다."},"pro":1},
 {"w":"教育","py":"jiàoyù","zy":"ㄐㄧㄠˋ ㄩˋ","c":"名","m":{"j":"教育","e":"education","k":"교육"},"ex":{"z":"台灣的教育很重視考試。","py":"Táiwān de jiàoyù hěn zhòngshì kǎoshì.","j":"台湾の教育は試験をとても重視している。","e":"Taiwan's education system places great emphasis on exams.","k":"대만의 교육은 시험을 매우 중시해."},"pro":1},
 {"w":"方面","py":"fāngmiàn","zy":"ㄈㄤ ㄇㄧㄢˋ","c":"名","m":{"j":"方面","e":"aspect; respect","k":"방면"},"ex":{"z":"他在很多方面都很優秀。","py":"Tā zài hěn duō fāngmiàn dōu hěn yōuxiù.","j":"彼は多くの面でとても優秀です。","e":"He is excellent in many aspects.","k":"그는 여러 방면에서 매우 우수해요."},"pro":1},
 {"w":"台語","py":"táiyǔ","zy":"ㄊㄞˊ ㄩˇ","c":"名","m":{"j":"台湾語","e":"Taiwanese (Hokkien)","k":"대만어(타이완어)"},"ex":{"z":"我奶奶只會說台語。","py":"Wǒ nǎinai zhǐ huì shuō táiyǔ.","j":"おばあちゃんは台湾語しか話せない。","e":"My grandma can only speak Taiwanese.","k":"할머니는 대만어만 할 줄 아셔."},"pro":1},
@@ -358,7 +358,7 @@ const VOCAB_L3_D = [
 {"w":"除了","py":"chúle","zy":"ㄔㄨˊ ˙ㄌㄜ","c":"介","m":{"j":"〜を除いて、〜のほかに","e":"except for; besides","k":"~을 제외하고"},"ex":{"z":"除了他，大家都到了。","py":"Chúle tā, dàjiā dōu dào le.","j":"彼以外はみんな着いた。","e":"Except for him, everyone has arrived.","k":"그를 제외하고 모두 도착했다."},"pro":1},
 {"w":"連","py":"lián","zy":"ㄌㄧㄢˊ","c":"介","m":{"j":"〜さえ、〜も（強調）","e":"even (emphasizing)","k":"~조차, ~마저"},"ex":{"z":"他連感冒藥都沒吃。","py":"Tā lián gǎnmào yào dōu méi chī.","j":"彼は風邪薬さえ飲まなかった。","e":"He didn't even take cold medicine.","k":"그는 감기약조차 먹지 않았다."},"pro":1},
 {"w":"等等","py":"děngděng","zy":"ㄉㄥˇ ㄉㄥˇ","c":"助","m":{"j":"〜など","e":"etc.; and so on","k":"등등"},"ex":{"z":"他買了水果、麵包等等。","py":"Tā mǎile shuǐguǒ, miànbāo děngděng.","j":"彼は果物、パンなどを買いました。","e":"He bought fruit, bread, and so on.","k":"그는 과일, 빵 등을 샀습니다."},"pro":1},
-{"w":"哇","py":"wɑ","zy":"˙ㄨㄚ","c":"嘆","m":{"j":"わあ(驚きを表す)","e":"wow","k":"와"},"ex":{"z":"哇，這隻狗好可愛！","py":"Wa, zhè zhī gǒu hǎo kě'ài!","j":"わあ、この犬すごくかわいい！","e":"Wow, this dog is so cute!","k":"와, 이 강아지 정말 귀엽다!"},"pro":1}
+{"w":"哇","py":"wa","zy":"˙ㄨㄚ","c":"嘆","m":{"j":"わあ(驚きを表す)","e":"wow","k":"와"},"ex":{"z":"哇，這隻狗好可愛！","py":"Wa, zhè zhī gǒu hǎo kě'ài!","j":"わあ、この犬すごくかわいい！","e":"Wow, this dog is so cute!","k":"와, 이 강아지 정말 귀엽다!"},"pro":1}
 ];
 if (typeof window !== "undefined") window.VOCAB_L3_D = VOCAB_L3_D;
 if (typeof module !== "undefined") module.exports = { VOCAB_L3_D };

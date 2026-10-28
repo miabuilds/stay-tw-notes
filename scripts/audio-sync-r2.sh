@@ -7,11 +7,14 @@ set -euo pipefail
 BUCKET="${STW_R2_BUCKET:-staytw-audio}"
 DIR="${STW_AUDIO_DIR:-$(cd "$(dirname "$0")/../.." && pwd)/stay-tw-audio/tts}"
 CC="public, max-age=31536000, immutable"
+# 帳號有兩個 → 沒指定 wrangler 會拒跑；最新版 wrangler 曾裝不起來 → 固定版本
+export CLOUDFLARE_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID:-cbd5f1853670279112bc9aae44c4c4a4}"
+WRANGLER="${WRANGLER:-wrangler@4.40.0}"
 
 put_one() {  # $1 = path
-  npx wrangler r2 object put --remote "$BUCKET/$(basename "$1")" --file "$1" --content-type audio/mpeg --cache-control "$CC" >/dev/null 2>&1 || echo "FAIL $1"
+  npx "$WRANGLER" r2 object put --remote "$BUCKET/$(basename "$1")" --file "$1" --content-type audio/mpeg --cache-control "$CC" >/dev/null 2>&1 || { echo "FAIL $1"; return 1; }
 }
-export -f put_one; export BUCKET CC
+export -f put_one; export BUCKET CC WRANGLER
 
 if [ $# -gt 0 ]; then
   for f in "$@"; do
