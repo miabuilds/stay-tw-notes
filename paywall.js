@@ -196,13 +196,21 @@ const Paywall = (() => {
     try { window.ReactNativeWebView.postMessage(JSON.stringify({ type: "OPEN_PAYWALL", lang: twGetLang() })); } catch (e) {}
   }
   // Web の CTA。iPhone なら App Store、Android は（公開後）Play、まだなら待機リスト、PC は両方案内。
+  // 網頁直接購買(綠界網頁版,共用 staypay):只在一般瀏覽器出現;App 內(WebView)絕不出現(Apple 3.1.1)。網頁只賣年費(一次付清)與終身。
+  const WEB_BUY = { ja: ["Web で購入(カード・ATM・コンビニ)", "年額は一括払い・自動更新なし、買い切りは一度きり。支払い後すぐ Web で解鎖。"], en: ["Buy on the web (card / ATM / store)", "Yearly is a one-time payment with no auto-renewal; lifetime is pay once. Unlocks on the web right after payment."], ko: ["웹에서 구매(카드·ATM·편의점)", "연간은 일시불·자동 갱신 없음, 평생은 한 번 결제. 결제 후 웹에서 바로 해제."], vi: ["Mua trên web (thẻ / ATM / cửa hàng)", "Gói năm trả một lần không tự gia hạn; gói trọn đời trả một lần. Mở khóa trên web ngay sau khi thanh toán."], id: ["Beli di web (kartu / ATM / minimarket)", "Tahunan dibayar sekali tanpa perpanjangan otomatis; seumur hidup bayar sekali. Terbuka di web segera setelah pembayaran."], zh: ["網頁直接購買（信用卡／ATM／超商）", "年費一次付清不自動續扣、終身付一次；付款後網頁立即解鎖。"] };
+  function webBuyBtn() {
+    if (isNative()) return "";
+    const t = WEB_BUY[twGetLang()] || WEB_BUY.en;
+    return `<button class="btn primary" style="width:100%;padding:13px;margin-bottom:8px" onclick="if(window.StayPay)StayPay.open()">${t[0]}</button>
+      <p style="font-size:12px;color:var(--tx3);margin:0 0 12px">${t[1]}</p>`;
+  }
   function webCta() {
     const d = device();
     const label = d === "android" ? (ANDROID_LIVE ? twT("pwCtaAndroid") : twT("pwCtaAndroidSoon")) : twT("pwCtaIos");
     const note = d === "desktop" ? twT("pwWebNoteDesktop") : twT("pwWebNote");
     const sub = (d !== "android" && !ANDROID_LIVE)
       ? `<p style="font-size:12px;margin-top:6px"><a href="javascript:void(0)" onclick="Paywall.androidWait()" style="color:var(--ac)">${twT("pwAndroidWaitLink")}</a></p>` : "";
-    return `<div style="text-align:center">
+    return webBuyBtn() + `<div style="text-align:center">
         <button class="btn primary" style="width:100%;padding:13px" onclick="Paywall.openStore()">${label}</button>
         <p style="font-size:12px;color:var(--tx3);margin-top:8px">${note}</p>${sub}
       </div>`;
@@ -254,3 +262,9 @@ const Paywall = (() => {
 // ★重要：Paywall は const 宣言なので window に自動では乗らない。renderProfile / twUpgrade が
 //   window.Paywall で判定・呼び出しており、undefined だと「アップグレード無反応」になる（TTS/STW_WEB と同じ罠）。
 if (typeof window !== "undefined") window.Paywall = Paywall;
+
+// ── 網頁直接購買(綠界網頁版,五站共用 staypay):只在一般瀏覽器載入;App 內(WebView)不載、不出現任何網頁價(Apple 3.1.1)
+if (typeof window !== "undefined" && !window.ReactNativeWebView && !(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp)) {
+  window.STAYPAY_CFG = { product: "staytw", name: "StayTW", sessionKey: "stw_session", api: "https://staypay.getclockin.workers.dev", app: "/?app=1", lang: () => twGetLang(), login: () => { if (window.STW_WEB) STW_WEB.login(); }, refundUrl: "/refund?lang=" + twGetLang() };
+  const _sp = document.createElement("script"); _sp.src = "webpay.js?v=1"; _sp.async = true; document.head.appendChild(_sp);
+}

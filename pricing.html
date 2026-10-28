@@ -204,8 +204,8 @@ function startSubscribe(btn){
     try{if(window.ReactNativeWebView && window.ReactNativeWebView.postMessage){var lng=(function(){try{return localStorage.getItem('stw-lang')}catch(e){return null}})()||'ja';window.ReactNativeWebView.postMessage(JSON.stringify({type:'OPEN_PAYWALL',plan:plan,lang:lng}));}}catch(_){}
     return false;
   }
-  // 一般瀏覽器：走統一金流 PayUni。
-  // TODO(PayUni): 商店審核通過後，改為 POST /api/payuni/create-order → 導向回傳的付款網址。
+  // 一般瀏覽器：綠界網頁版結帳（五站共用 staypay，webpay.js）。網頁只賣年費／終身，月費請在 App 內訂（視窗內會說明）。
+  if(window.StayPay){ StayPay.start(plan==='monthly'?'yearly':plan); return false; }
   try{localStorage.setItem('stw_pending_plan',plan);}catch(_){}
   showNotice(); return false;
 }
@@ -216,6 +216,9 @@ function showNotice(){
   n.innerHTML=msg+'<br><a href="mailto:stayjpplan@gmail.com" style="color:#ffb3ac">stayjpplan@gmail.com</a>';
   n.style.display='block';clearTimeout(window.__stwNoticeT);window.__stwNoticeT=setTimeout(function(){n.style.display='none';},6000);
 }
+// 網頁直接購買（綠界）：這頁沒有登入 UI，沒登入就帶著方案回 App 首頁登入再開購買視窗（?app=1&buy=）
+window.STAYPAY_CFG={product:'staytw',name:'StayTW',sessionKey:'stw_session',api:'https://staypay.getclockin.workers.dev',app:'/?app=1',lang:function(){return lang;},login:function(){var p='lifetime';try{p=sessionStorage.getItem('staypay_resume')||p;}catch(_){ } location.href='/?app=1&buy='+p;},refundUrl:'/refund?lang='+lang};
 </script>
+<script src="webpay.js?v=1"></script>
 </body>
 </html>
