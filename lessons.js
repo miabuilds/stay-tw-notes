@@ -256,6 +256,8 @@ const LS = (() => {
   function runOf(lv, key) { const r = loadRun(lv, key); return r ? { i: r.idx, n: r.queue.length } : null; }
   const shuf = (a) => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [b[i], b[j]] = [b[j], b[i]]; } return b; };
   const mean = (v) => (v && v.m && (v.m[MK()] || v.m.e || v.m.j)) || "";
+  const meanSegs = (s) => String(s || "").toLowerCase().replace(/[（(][^）)]*[）)]/g, "")
+    .split(/[、，,;；\/・。]/).map((x) => x.trim()).filter(Boolean);
 
   // 文法 1 点ぶんの問題。錯誤選択肢は同じ級の他の文法点から取る(級を跨ぐと不自然に易しくなる)
   function mkG(id, kind) {
@@ -325,12 +327,14 @@ const LS = (() => {
       return { k, sc };
     }).filter((x) => x.sc > 0).sort((x, y) => y.sc - x.sc).map((x) => x.k);
   }
-  function distract(fn, not, n) {
+  // bad(k): 正解と区別できない候補(同音語を聞き取り問題に、同義語を意味問題に)を外す。
+  // 区別できない選択肢があると何度やっても正解できず、出し直しから抜けられない
+  function distract(fn, not, n, bad) {
     const out = [], self = fn(W[not]);
     const push = (k) => {
       if (k === not || out.length >= n) return;
       const v = fn(W[k]);
-      if (!v || v === self || out.indexOf(v) >= 0) return;
+      if (!v || v === self || out.indexOf(v) >= 0 || (bad && bad(k))) return;
       out.push(v);
     };
     // 上位の紛らわしい候補から少し散らして取る(毎回同じ 3 つだと覚えてしまう)
@@ -468,8 +472,10 @@ const LS = (() => {
     if (kind === "tone" && v.zy) {
       const syls = String(v.zy).split(" ").filter(Boolean);
       const chars = [...v.w].filter((c) => /[\u3400-\u9fff]/.test(c));
-      if (syls.length && syls.length === chars.length) {
-        const i = (Math.random() * syls.length) | 0;
+      // 軽声は 1〜4 声の選択肢に無いので、軽声の字は出さない(正解が選べなくなる)
+      const can = syls.length === chars.length ? syls.map((s, j) => j).filter((j) => toneOf(syls[j]) !== "0") : [];
+      if (can.length) {
+        const i = can[(Math.random() * can.length) | 0];
         const k = toneOf(syls[i]);
         if (k) return { kind: "tone", w, ci: i, ch: chars[i], ans: toneLabel(k),
                         opts: TONE.map((x) => toneLabel(x.k)) };
@@ -485,9 +491,13 @@ const LS = (() => {
       return { kind, w, ans: v.w, opts: shuf([v.w].concat(distract((x) => x.w, w, 3))) };
     if (kind === "zhuyin" && v.zy)
       return { kind, w, ans: v.zy, opts: shuf([v.zy].concat(distract((x) => x.zy, w, 3))) };
-    if (kind === "reverse" || kind === "listen")
-      return { kind, w, ans: v.w, opts: shuf([v.w].concat(distract((x) => x.w, w, 3))) };
-    return { kind: "meaning", w, ans: mean(v), opts: shuf([mean(v)].concat(distract((x) => mean(x), w, 3))) };
+    if (kind === "reverse" || kind === "listen") {
+      const homo = kind === "listen" && v.zy ? (k) => W[k].zy === v.zy : null;   // 音だけでは 期中/其中 を区別できない
+      return { kind, w, ans: v.w, opts: shuf([v.w].concat(distract((x) => x.w, w, 3, homo))) };
+    }
+    const mine = meanSegs(mean(v));
+    const syn = (k) => meanSegs(mean(W[k])).some((x) => mine.indexOf(x) >= 0);  // 「必ず」と「必ず、きっと」は両方正しい
+    return { kind: "meaning", w, ans: mean(v), opts: shuf([mean(v)].concat(distract((x) => mean(x), w, 3, syn))) };
   }
 
   function start(lv, key) {
@@ -760,8 +770,12 @@ const LS = (() => {
 
   // まちがえた問題は最後に積むだけだと、その頃には何を間違えたか忘れている。
   // 少し先に差し込んで、覚えている間にもう一度出す。
+  // 出し直しは 1 語 2 回まで。上限が無いと、どうしても取れない問題で課が終わらなくなる
+  // (2026-10 報告:同じ単語ばかり出て進まず「知っている」で抜けるしかない)
   function requeue(q) {
     if (!q) return;
+    const id = q.w || q.g;
+    if (queue.filter((x) => x.again && (x.w || x.g) === id).length >= 2) return;
     queue.splice(Math.min(queue.length, idx + 3), 0, Object.assign(q, { again: true }));
   }
 
