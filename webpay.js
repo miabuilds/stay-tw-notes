@@ -10,20 +10,23 @@
   if (window.StayPay) return;
   var C = window.STAYPAY_CFG || {};
   var API = (C.api || "https://staypay.getclockin.workers.dev").replace(/\/$/, "");
-  var KEY_LAST = "staypay_last_no", KEY_UNTIL = (C.product || "x") + "_web_prem_until", KEY_SET = (C.product || "x") + "_web_prem_set";
+  var KEY_LAST = "staypay_last_no", KEY_REF = "staypay_ref", KEY_UNTIL = (C.product || "x") + "_web_prem_until", KEY_SET = (C.product || "x") + "_web_prem_set";
   var isNative = function () { return !!window.ReactNativeWebView || !!(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp); };
   var ls = { get: function (k) { try { return localStorage.getItem(k) || ""; } catch (e) { return ""; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }, del: function (k) { try { localStorage.removeItem(k); } catch (e) {} } };
   var token = function () { return ls.get(C.sessionKey || ""); };
   var lang = function () { try { var l = C.lang ? C.lang() : "zh"; return String(l || "zh").slice(0, 2); } catch (e) { return "zh"; } };
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
   var fmt = function (n) { return "NT$" + Number(n).toLocaleString("en-US"); };
+  // 推薦碼:輸入框、或連結 ?ref=CODE 帶進來,存 localStorage(跨站共用一組碼:總部 partners)。大寫英數、最多 20 字
+  var normRef = function (s) { return String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 20); };
+  var refCode = function () { return normRef(ls.get(KEY_REF)); };
 
   // ── 文案(網站語言找不到就用英文;StayKR/TH/PollyTalk/Ajolito 介面是中文,TW 是外國人用)──
   var I = {
-    zh: { title: "網頁直接購買", sub: "信用卡、ATM 轉帳、超商代碼都可以,付款在綠界安全頁面完成。", yearly: "年費", lifetime: "終身", yearlyNote: "一次付清 12 個月,不會自動續扣", lifetimeNote: "付一次,一直用", family: "家族價", launch: "新朋友限時", list: "原價", monthly: "月費方案請在 App 內訂閱。", taxId: "統一編號(選填,報帳用)", consent: "我已滿 18 歲,並了解這是數位內容,付款後立即開通,開通後不適用七日鑑賞期(詳見退款政策)。", pay: "前往綠界付款", loginFirst: "請先登入再購買", login: "登入", processing: "處理中…", needConsent: "請先勾選同意", badTax: "統一編號格式不正確", err: "系統忙碌中,請稍後再試", priceChanged: "價格已更新,請重新確認", paid: "付款成功,Premium 已開通!", pending: "付款處理中,入帳後會自動開通。", atmTitle: "ATM 轉帳資訊", cvsTitle: "超商繳費代碼", bank: "銀行代碼", account: "虛擬帳號", code: "繳費代碼", amount: "金額", expire: "繳費期限", atmNote: "繳費完成後(通常幾分鐘內)重新整理頁面就會開通。", close: "關閉", refund: "退款政策", cancel: "先不用" },
-    en: { title: "Buy on the web", sub: "Credit card, ATM transfer or convenience-store code. Payment is completed on ECPay's secure page.", yearly: "Yearly", lifetime: "Lifetime", yearlyNote: "One payment for 12 months, no auto-renewal", lifetimeNote: "Pay once, use forever", family: "Family price", launch: "New-member offer", list: "List price", monthly: "Monthly plan is available in the app.", taxId: "Taiwan tax ID (optional)", consent: "I am 18+ and understand this is digital content unlocked immediately after payment; the 7-day cooling-off period does not apply (see refund policy).", pay: "Pay with ECPay", loginFirst: "Please sign in first", login: "Sign in", processing: "Processing…", needConsent: "Please tick the consent box", badTax: "Invalid tax ID", err: "Something went wrong, please try again", priceChanged: "Price updated, please check again", paid: "Payment received. Premium is unlocked!", pending: "Payment is being processed. Premium unlocks automatically once confirmed.", atmTitle: "ATM transfer details", cvsTitle: "Convenience-store payment code", bank: "Bank code", account: "Account", code: "Code", amount: "Amount", expire: "Pay by", atmNote: "After paying, reload the page (usually within minutes) and Premium will be on.", close: "Close", refund: "Refund policy", cancel: "Not now" },
-    ja: { title: "Web で購入", sub: "クレジットカード・ATM 振込・コンビニ決済に対応。支払いは ECPay(綠界)の安全なページで行います。", yearly: "年額", lifetime: "買い切り", yearlyNote: "12 か月分を一括払い、自動更新なし", lifetimeNote: "一度払えばずっと使える", family: "ファミリー価格", launch: "新規限定", list: "通常価格", monthly: "月額プランはアプリ内でご登録ください。", taxId: "統一編號(任意・領収用)", consent: "18 歳以上で、デジタルコンテンツのため支払い後すぐ開通し、開通後は 7 日間のクーリングオフが適用されないことを理解しました(返金ポリシー参照)。", pay: "ECPay で支払う", loginFirst: "先にログインしてください", login: "ログイン", processing: "処理中…", needConsent: "同意にチェックしてください", badTax: "統一編號の形式が正しくありません", err: "エラーが発生しました。もう一度お試しください", priceChanged: "価格が更新されました。ご確認ください", paid: "お支払い完了。Premium が有効になりました!", pending: "お支払い処理中です。入金確認後、自動で有効になります。", atmTitle: "ATM 振込先", cvsTitle: "コンビニ支払いコード", bank: "銀行コード", account: "口座番号", code: "支払いコード", amount: "金額", expire: "支払期限", atmNote: "お支払い後(通常数分以内)にページを再読み込みすると有効になります。", close: "閉じる", refund: "返金ポリシー", cancel: "今はしない" },
-    ko: { title: "웹에서 구매", sub: "신용카드, ATM 이체, 편의점 결제 가능. 결제는 ECPay(綠界) 보안 페이지에서 진행됩니다.", yearly: "연간", lifetime: "평생", yearlyNote: "12개월 일시불, 자동 갱신 없음", lifetimeNote: "한 번 결제로 평생 사용", family: "패밀리 가격", launch: "신규 한정", list: "정가", monthly: "월간 플랜은 앱에서 구독해 주세요.", taxId: "통일번호(선택)", consent: "만 18세 이상이며, 디지털 콘텐츠로 결제 후 즉시 개통되고 개통 후에는 7일 청약철회가 적용되지 않음을 이해합니다(환불 정책 참고).", pay: "ECPay로 결제", loginFirst: "먼저 로그인해 주세요", login: "로그인", processing: "처리 중…", needConsent: "동의에 체크해 주세요", badTax: "통일번호 형식이 올바르지 않습니다", err: "오류가 발생했습니다. 다시 시도해 주세요", priceChanged: "가격이 변경되었습니다. 다시 확인해 주세요", paid: "결제 완료! Premium이 활성화되었습니다.", pending: "결제 처리 중입니다. 입금 확인 후 자동으로 활성화됩니다.", atmTitle: "ATM 이체 정보", cvsTitle: "편의점 결제 코드", bank: "은행 코드", account: "계좌번호", code: "결제 코드", amount: "금액", expire: "결제 기한", atmNote: "결제 후(보통 몇 분 내) 페이지를 새로고침하면 활성화됩니다.", close: "닫기", refund: "환불 정책", cancel: "다음에" },
+    zh: { title: "網頁直接購買", sub: "信用卡、ATM 轉帳、超商代碼都可以,付款在綠界安全頁面完成。", yearly: "年費", lifetime: "終身", yearlyNote: "一次付清 12 個月,不會自動續扣", lifetimeNote: "付一次,一直用", family: "家族價", launch: "新朋友限時", list: "原價", monthly: "月費方案請在 App 內訂閱。", taxId: "統一編號(選填,報帳用)", consent: "我已滿 18 歲,並了解這是數位內容,付款後立即開通,開通後不適用七日鑑賞期(詳見退款政策)。", pay: "前往綠界付款", loginFirst: "請先登入再購買", login: "登入", processing: "處理中…", needConsent: "請先勾選同意", badTax: "統一編號格式不正確", err: "系統忙碌中,請稍後再試", priceChanged: "價格已更新,請重新確認", paid: "付款成功,Premium 已開通!", pending: "付款處理中,入帳後會自動開通。", atmTitle: "ATM 轉帳資訊", cvsTitle: "超商繳費代碼", bank: "銀行代碼", account: "虛擬帳號", code: "繳費代碼", amount: "金額", expire: "繳費期限", atmNote: "繳費完成後(通常幾分鐘內)重新整理頁面就會開通。", close: "關閉", refund: "退款政策", cancel: "先不用", refLabel: "推薦碼(選填)", refApply: "套用", refOk: "推薦碼已套用,年費、買斷再打 9 折", refBad: "查無此推薦碼,請確認後再輸入。", refSelf: "這是你自己的推薦碼,請分享給別人。", refTag: "推薦碼價", refClear: "清除" },
+    en: { title: "Buy on the web", sub: "Credit card, ATM transfer or convenience-store code. Payment is completed on ECPay's secure page.", yearly: "Yearly", lifetime: "Lifetime", yearlyNote: "One payment for 12 months, no auto-renewal", lifetimeNote: "Pay once, use forever", family: "Family price", launch: "New-member offer", list: "List price", monthly: "Monthly plan is available in the app.", taxId: "Taiwan tax ID (optional)", consent: "I am 18+ and understand this is digital content unlocked immediately after payment; the 7-day cooling-off period does not apply (see refund policy).", pay: "Pay with ECPay", loginFirst: "Please sign in first", login: "Sign in", processing: "Processing…", needConsent: "Please tick the consent box", badTax: "Invalid tax ID", err: "Something went wrong, please try again", priceChanged: "Price updated, please check again", paid: "Payment received. Premium is unlocked!", pending: "Payment is being processed. Premium unlocks automatically once confirmed.", atmTitle: "ATM transfer details", cvsTitle: "Convenience-store payment code", bank: "Bank code", account: "Account", code: "Code", amount: "Amount", expire: "Pay by", atmNote: "After paying, reload the page (usually within minutes) and Premium will be on.", close: "Close", refund: "Refund policy", cancel: "Not now", refLabel: "Referral code (optional)", refApply: "Apply", refOk: "Code applied: 10% off yearly and lifetime", refBad: "Code not found, please check and try again.", refSelf: "That is your own code. Share it with someone else.", refTag: "Referral price", refClear: "Clear" },
+    ja: { title: "Web で購入", sub: "クレジットカード・ATM 振込・コンビニ決済に対応。支払いは ECPay(綠界)の安全なページで行います。", yearly: "年額", lifetime: "買い切り", yearlyNote: "12 か月分を一括払い、自動更新なし", lifetimeNote: "一度払えばずっと使える", family: "ファミリー価格", launch: "新規限定", list: "通常価格", monthly: "月額プランはアプリ内でご登録ください。", taxId: "統一編號(任意・領収用)", consent: "18 歳以上で、デジタルコンテンツのため支払い後すぐ開通し、開通後は 7 日間のクーリングオフが適用されないことを理解しました(返金ポリシー参照)。", pay: "ECPay で支払う", loginFirst: "先にログインしてください", login: "ログイン", processing: "処理中…", needConsent: "同意にチェックしてください", badTax: "統一編號の形式が正しくありません", err: "エラーが発生しました。もう一度お試しください", priceChanged: "価格が更新されました。ご確認ください", paid: "お支払い完了。Premium が有効になりました!", pending: "お支払い処理中です。入金確認後、自動で有効になります。", atmTitle: "ATM 振込先", cvsTitle: "コンビニ支払いコード", bank: "銀行コード", account: "口座番号", code: "支払いコード", amount: "金額", expire: "支払期限", atmNote: "お支払い後(通常数分以内)にページを再読み込みすると有効になります。", close: "閉じる", refund: "返金ポリシー", cancel: "今はしない", refLabel: "紹介コード(任意)", refApply: "適用", refOk: "紹介コード適用:年額・買い切りが 10% OFF", refBad: "紹介コードが見つかりません。ご確認ください。", refSelf: "ご自身の紹介コードは使えません。", refTag: "紹介価格", refClear: "クリア" },
+    ko: { title: "웹에서 구매", sub: "신용카드, ATM 이체, 편의점 결제 가능. 결제는 ECPay(綠界) 보안 페이지에서 진행됩니다.", yearly: "연간", lifetime: "평생", yearlyNote: "12개월 일시불, 자동 갱신 없음", lifetimeNote: "한 번 결제로 평생 사용", family: "패밀리 가격", launch: "신규 한정", list: "정가", monthly: "월간 플랜은 앱에서 구독해 주세요.", taxId: "통일번호(선택)", consent: "만 18세 이상이며, 디지털 콘텐츠로 결제 후 즉시 개통되고 개통 후에는 7일 청약철회가 적용되지 않음을 이해합니다(환불 정책 참고).", pay: "ECPay로 결제", loginFirst: "먼저 로그인해 주세요", login: "로그인", processing: "처리 중…", needConsent: "동의에 체크해 주세요", badTax: "통일번호 형식이 올바르지 않습니다", err: "오류가 발생했습니다. 다시 시도해 주세요", priceChanged: "가격이 변경되었습니다. 다시 확인해 주세요", paid: "결제 완료! Premium이 활성화되었습니다.", pending: "결제 처리 중입니다. 입금 확인 후 자동으로 활성화됩니다.", atmTitle: "ATM 이체 정보", cvsTitle: "편의점 결제 코드", bank: "은행 코드", account: "계좌번호", code: "결제 코드", amount: "금액", expire: "결제 기한", atmNote: "결제 후(보통 몇 분 내) 페이지를 새로고침하면 활성화됩니다.", close: "닫기", refund: "환불 정책", cancel: "다음에", refLabel: "추천 코드(선택)", refApply: "적용", refOk: "추천 코드 적용: 연간·평생 10% 할인", refBad: "추천 코드를 찾을 수 없습니다. 다시 확인해 주세요.", refSelf: "본인의 추천 코드는 사용할 수 없습니다.", refTag: "추천가", refClear: "지우기" },
   };
   I.vi = I.en; I.id = I.en; I.th = I.en; I.es = I.en;
   var T = function (k) { var L = I[lang()] || I.en; return L[k] || I.en[k] || k; };
@@ -57,19 +60,21 @@
     b.box.innerHTML = '<p style="text-align:center;padding:30px 0;color:var(--tx3,#888)">' + esc(T("processing")) + "</p>";
     b.show();
     var tok = token();
-    fetch(API + "/api/plans?product=" + encodeURIComponent(C.product), { headers: tok ? { Authorization: "Bearer " + tok } : {} })
+    var rc = refCode();
+    fetch(API + "/api/plans?product=" + encodeURIComponent(C.product) + (rc ? "&ref=" + encodeURIComponent(rc) : ""), { headers: tok ? { Authorization: "Bearer " + tok } : {} })
       .then(function (r) { return r.json(); })
       .then(function (d) { if (!d || !d.plans) throw new Error("plans"); plans = d; render(); })
       .catch(function (e) { try { console.error("[StayPay] open failed", e); } catch (_) {} b.box.innerHTML = '<p style="text-align:center;padding:30px 0">' + esc(T("err")) + '</p><button style="' + ghostStyle + '" onclick="StayPay.close()">' + esc(T("close")) + "</button>"; });
   }
   function planCard(k) {
     var p = plans.plans[k], sel = chosen === k;
-    var fam = !!p.family, launch = !!p.launch;
+    var fam = !!p.family, launch = !!p.launch, ref = !!p.ref;
+    var was = ref ? (p.base_twd || p.list_twd) : p.list_twd, strike = (fam || launch || ref) && Number(was) > Number(p.twd);
     return '<label style="display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid ' + (sel ? "var(--ac,#e8503a)" : "var(--line,var(--bd,#ddd))") + ';border-radius:14px;cursor:pointer;margin-bottom:10px">' +
       '<input type="radio" name="spPlan" value="' + k + '" ' + (sel ? "checked" : "") + ' onchange="StayPay.pick(\'' + k + '\')" style="width:18px;height:18px;accent-color:var(--ac,#e8503a)">' +
-      '<span style="flex:1"><b style="font-size:16px">' + esc(T(k)) + '</b>' + (fam || launch ? ' <span style="font-size:11px;background:var(--ac,#e8503a);color:#fff;border-radius:999px;padding:2px 8px;vertical-align:middle">' + esc(T(fam ? "family" : "launch")) + "</span>" : "") +
+      '<span style="flex:1"><b style="font-size:16px">' + esc(T(k)) + '</b>' + (fam || launch || ref ? ' <span style="font-size:11px;background:var(--ac,#e8503a);color:#fff;border-radius:999px;padding:2px 8px;vertical-align:middle">' + esc(T(ref ? "refTag" : fam ? "family" : "launch")) + "</span>" : "") +
       '<br><span style="font-size:12.5px;color:var(--tx3,#888)">' + esc(T(k + "Note")) + "</span></span>" +
-      '<span style="text-align:right"><b style="font-size:18px">' + esc(fmt(p.twd)) + "</b>" + (fam || launch ? '<br><s style="font-size:12px;color:var(--tx3,#888)">' + esc(fmt(p.list_twd)) + "</s>" : "") + "</span></label>";
+      '<span style="text-align:right"><b style="font-size:18px">' + esc(fmt(p.twd)) + "</b>" + (strike ? '<br><s style="font-size:12px;color:var(--tx3,#888)">' + esc(fmt(was)) + "</s>" : "") + "</span></label>";
   }
   function render() {
     var b = box(), tok = token();
@@ -78,6 +83,7 @@
       '<p style="font-size:13px;color:var(--tx2,#555);margin:0 0 14px">' + esc(T("sub")) + "</p>" +
       planCard("lifetime") + planCard("yearly") +
       '<p style="font-size:12px;color:var(--tx3,#888);margin:0 0 12px">' + esc(T("monthly")) + "</p>";
+    html += refRow();
     if (!tok) {
       html += '<p style="text-align:center;font-size:14px;margin:6px 0 10px">' + esc(T("loginFirst")) + "</p>" +
         '<button style="' + btnStyle + '" onclick="StayPay.login()">' + esc(T("login")) + "</button>";
@@ -92,6 +98,26 @@
     b.show();
   }
   function pick(k) { chosen = k; if (plans) render(); }
+  // ── 推薦碼列:輸入 → 套用(重抓 /api/plans 讓後端算價);已套用就顯示綠字 + 清除
+  function refRow() {
+    var r = plans && plans.ref, cur = refCode();
+    var inputStyle = "flex:1;min-width:0;padding:10px 12px;border:1px solid var(--line,var(--bd,#ddd));border-radius:10px;background:var(--bg2,#fafafa);color:inherit;font:inherit;font-size:14px;text-transform:uppercase";
+    var applyStyle = "flex:none;padding:10px 14px;border-radius:10px;border:1px solid var(--ac,#e8503a);background:transparent;color:var(--ac,#e8503a);font:inherit;font-weight:700;cursor:pointer;font-size:14px";
+    var html = '<div style="display:flex;gap:8px;align-items:center;margin:0 0 6px"><input id="spRef" value="' + esc(cur) + '" placeholder="' + esc(T("refLabel")) + '" autocapitalize="characters" autocomplete="off" maxlength="20" style="' + inputStyle + '" onkeydown="if(event.key===\'Enter\'){event.preventDefault();StayPay.applyRef();}">';
+    html += (r && r.ok && cur) ? '<button type="button" style="' + applyStyle + '" onclick="StayPay.clearRef()">' + esc(T("refClear")) + "</button>" : '<button type="button" style="' + applyStyle + '" onclick="StayPay.applyRef()">' + esc(T("refApply")) + "</button>";
+    html += "</div>";
+    var note = "", color = "var(--tx3,#888)";
+    if (r && cur) { if (r.ok) { note = T("refOk"); color = "#16A34A"; } else { note = r.reason === "self" ? T("refSelf") : T("refBad"); color = "var(--ac2,#c0392b)"; } }
+    html += '<p id="spRefMsg" style="font-size:12.5px;color:' + color + ';margin:0 0 12px;min-height:1em">' + esc(note) + "</p>";
+    return html;
+  }
+  function applyRef() {
+    var el = document.getElementById("spRef"), code = normRef(el && el.value);
+    if (!code) { clearRef(); return; }
+    ls.set(KEY_REF, code);
+    open(chosen);
+  }
+  function clearRef() { ls.del(KEY_REF); open(chosen); }
   function login() {
     try { sessionStorage.setItem("staypay_resume", chosen); } catch (e) {}
     hide();
@@ -113,13 +139,14 @@
     if (payBtn) { payBtn.disabled = true; payBtn.textContent = T("processing"); }
     var p = plans.plans[chosen];
     fetch(API + "/api/create", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + tok },
-      body: JSON.stringify({ product: C.product, plan: chosen, expected_twd: p.twd, tax_id: tax, lang: lang() }) })
+      body: JSON.stringify({ product: C.product, plan: chosen, expected_twd: p.twd, tax_id: tax, lang: lang(), ref: (plans.ref && plans.ref.ok) ? plans.ref.code : "" }) })
       .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, status: r.status, d: d }; }); })
       .then(function (x) {
         if (!x.ok) {
           busy = false; if (payBtn) { payBtn.disabled = false; payBtn.textContent = T("pay"); }
           if (x.status === 409) { if (msg) msg.textContent = T("priceChanged"); plans = null; setTimeout(function () { open(chosen); }, 1200); return; }
           if (x.status === 401) { if (msg) msg.textContent = T("loginFirst"); return; }
+          if (x.d && (x.d.error === "bad_ref" || x.d.error === "self_ref")) { ls.del(KEY_REF); if (msg) msg.textContent = x.d.error === "self_ref" ? T("refSelf") : T("refBad"); plans = null; setTimeout(function () { open(chosen); }, 1500); return; }
           if (msg) msg.textContent = (x.d && (x.d.reason || x.d.error)) || T("err");
           return;
         }
@@ -160,6 +187,8 @@
   function onReturn() {
     var q; try { q = new URLSearchParams(location.search); } catch (e) { return; }
     var paid = q.get("paid"), no = q.get("no") || ls.get(KEY_LAST), buy = q.get("buy");
+    // KOL 連結 ?ref=CODE:先記起來,之後開購買視窗自動套用(沒登入也先存)
+    var refQ = normRef(q.get("ref")); if (refQ) ls.set(KEY_REF, refQ);
     if (paid) {
       q.delete("paid"); q.delete("no");
       try { history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q.toString() : "") + location.hash); } catch (e) {}
@@ -192,6 +221,6 @@
     }
   }
 
-  window.StayPay = { open: open, start: start, pick: pick, login: login, close: hide, onReturn: onReturn, isNative: isNative };
+  window.StayPay = { open: open, start: start, pick: pick, login: login, close: hide, onReturn: onReturn, isNative: isNative, applyRef: applyRef, clearRef: clearRef };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", onReturn); else onReturn();
 })();

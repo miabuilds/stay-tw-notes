@@ -266,5 +266,5 @@ if (typeof window !== "undefined") window.Paywall = Paywall;
 // ── 網頁直接購買(綠界網頁版,五站共用 staypay):只在一般瀏覽器載入;App 內(WebView)不載、不出現任何網頁價(Apple 3.1.1)
 if (typeof window !== "undefined" && !window.ReactNativeWebView && !(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp)) {
   window.STAYPAY_CFG = { product: "staytw", name: "StayTW", sessionKey: "stw_session", api: "https://staypay.getclockin.workers.dev", app: "/?app=1", lang: () => twGetLang(), login: () => { if (window.STW_WEB) STW_WEB.login(); }, refundUrl: "/refund?lang=" + twGetLang() };
-  const _sp = document.createElement("script"); _sp.src = "webpay.js?v=1"; _sp.async = true; document.head.appendChild(_sp);
+  const _sp = document.createElement("script"); _sp.src = "webpay.js?v=2"; _sp.async = true; document.head.appendChild(_sp);
 }
