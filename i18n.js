@@ -563,6 +563,18 @@ function twGCat(cat){
 function twGetLang(){ return localStorage.getItem("stw-lang") || "ja"; }
 // 内容の釈義キー。vi/id は訳があれば vi/id、無ければ各アクセス側で e→j にフォールバック。
 function twMKey(){ return {ja:"j",en:"e",ko:"k",vi:"vi",id:"id"}[twGetLang()] || "e"; }
+// 4 択で「正解と区別できない」誤答か。同音(聞くだけでは 其中/期中 を分けられない)か、
+// 意味が重なる(孩子/小孩 はどちらも「子ども」)と、どれを選んでも正解になってしまう。
+// 誤答を作るところは全部これで外す。m は {j,e,k…} でも文字列でもよい。
+function twMeanSegs(s){ return String(s||"").toLowerCase().replace(/[（(][^）)]*[）)]/g,"").split(/[、，,;；\/・。]/).map(x=>x.trim()).filter(Boolean); }
+function twConfusable(a, b){
+  if (!a || !b) return false;
+  if (a.w && a.w === b.w) return true;
+  if (a.zy && b.zy && String(a.zy).trim() === String(b.zy).trim()) return true;
+  // 表示中の言語だけでなく日英韓どれかで意味が重なれば同義扱い(英語は同じでも日本語の書き方が違う、を拾う)
+  const segs = (v, k) => twMeanSegs(typeof v.m === "string" ? (k === twMKey() ? v.m : "") : (v.m && v.m[k]) || "");
+  return [twMKey(), "j", "e", "k"].some((k) => { const sa = segs(a, k), sb = segs(b, k); return sa.some((x) => sb.indexOf(x) >= 0); });
+}
 function twT(key){ const L = I18N[twGetLang()] || I18N.ja; return L[key] ?? I18N.en[key] ?? I18N.ja[key] ?? key; }
 function twApplyI18n(root){
   (root||document).querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent = twT(el.dataset.i18n); });

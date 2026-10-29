@@ -223,7 +223,7 @@ const MyVocab = (() => {
     const qs = picks.map((it) => {
       const types = it.m ? ["w2m", "a2w", "m2w"] : ["a2w"];
       const type = types[Math.floor(Math.random() * types.length)];
-      const cand = shuffle(mine.filter((x) => x.w !== it.w).concat(shuffle(others).slice(0, 30)).filter((x) => x.w !== it.w && (type !== "w2m" || (x.m && x.m !== it.m))));
+      const cand = shuffle(mine.filter((x) => x.w !== it.w).concat(shuffle(others).slice(0, 30)).filter((x) => x.w !== it.w && !twConfusable(it, x) && (type !== "w2m" || (x.m && x.m !== it.m))));
       const seen = new Set([type === "w2m" ? it.m : it.w]); const dis = [];
       for (const c of cand) { const k = type === "w2m" ? c.m : c.w; if (k && !seen.has(k)) { seen.add(k); dis.push(c); } if (dis.length === 3) break; }
       return { it, type, opts: shuffle([it].concat(dis)) };
@@ -260,7 +260,7 @@ const MyVocab = (() => {
         <div class="mvq-btns">
           ${quiz.wrong.length ? `<button class="btn primary" onclick="MyVocab.startQuiz(true)">${esc(T("mvQRetryWrong", "まちがえた語だけもう一度"))}</button>` : ""}
           <button class="btn ${quiz.wrong.length ? "" : "primary"}" onclick="MyVocab.startQuiz()">${esc(T("mvQRetry", "もう一度テスト"))}</button>
-          <button class="btn" onclick="MyVocab.qQuit()">${esc(T("mvQBack", "単語帳にもどる"))}</button>
+          <button class="btn" data-nav-back onclick="MyVocab.qQuit()">${esc(T("mvQBack", "単語帳にもどる"))}</button>
         </div></div>`;
       return;
     }
@@ -276,7 +276,7 @@ const MyVocab = (() => {
     }).join("");
     const okNow = quiz.done && q.opts[quiz.pick].w === it.w;
     box.innerHTML = `<div class="mvq">
-      <div class="mvq-top"><button class="mvq-x" onclick="MyVocab.qQuit()" aria-label="close">✕</button><span>${quiz.i + 1} / ${quiz.qs.length}</span></div>
+      <div class="mvq-top"><button class="mvq-x" data-nav-back onclick="MyVocab.qQuit()" aria-label="close">✕</button><span>${quiz.i + 1} / ${quiz.qs.length}</span></div>
       <div class="mvq-bar"><i style="width:${Math.round(quiz.i / quiz.qs.length * 100)}%"></i></div>
       <div class="mvq-lab">${esc(lab)}</div>
       <div class="mvq-prompt">${prompt}</div>

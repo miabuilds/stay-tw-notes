@@ -48,7 +48,7 @@ const ESS = (() => {
   function drawQuiz() {
     const cur = ESSENTIALS.find((s) => s.k === sec);
     const q = quiz.pool[quiz.i];
-    const opts = [q, ...cur.items.filter((x) => x.w !== q.w).sort(() => Math.random() - 0.5).slice(0, 3)].sort(() => Math.random() - 0.5);
+    const opts = [q, ...cur.items.filter((x) => x.w !== q.w && !twConfusable(q, x)).sort(() => Math.random() - 0.5).slice(0, 3)].sort(() => Math.random() - 0.5);
     body().innerHTML = `<div class="ess-quiz">
       <div class="ess-q-prog">${quiz.i + 1} / ${quiz.pool.length}　✓ ${quiz.ok}</div>
       <p class="ess-q-hint">${esc(T("essQuizHint"))}</p>
@@ -56,7 +56,7 @@ const ESS = (() => {
       <div class="ess-q-opts">${opts.map((o) =>
         `<button class="ess-opt" data-w="${esc(o.w)}" onclick="ESS.pick(this,'${esc(o.w)}','${esc(q.w)}')">${esc(o.w)}</button>`).join("")}</div>
       <div class="ess-q-fb" id="essFb"></div>
-      <div class="ess-actions"><button class="btn" onclick="ESS.go('${sec}')">${esc(T("essBack"))}</button></div>
+      <div class="ess-actions"><button class="btn" data-nav-back onclick="ESS.go('${sec}')">${esc(T("essBack"))}</button></div>
     </div>`;
   }
   // 読み札:正解の語＋注音＋拼音＋意味＋音。詳解で使い回す。
@@ -108,7 +108,7 @@ const ESS = (() => {
       <div class="ess-done">${quiz.ok} / ${quiz.pool.length}</div>
       <div class="ess-actions">
         <button class="btn primary" onclick="ESS.startQuiz()">${esc(T("essAgain"))}</button>
-        <button class="btn" onclick="ESS.go('${sec}')">${esc(T("essBack"))}</button></div>
+        <button class="btn" data-nav-back onclick="ESS.go('${sec}')">${esc(T("essBack"))}</button></div>
     </div>`;
   }
   return { render, go, say, sayW, startQuiz, pick, next };

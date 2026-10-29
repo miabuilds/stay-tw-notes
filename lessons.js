@@ -256,8 +256,6 @@ const LS = (() => {
   function runOf(lv, key) { const r = loadRun(lv, key); return r ? { i: r.idx, n: r.queue.length } : null; }
   const shuf = (a) => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [b[i], b[j]] = [b[j], b[i]]; } return b; };
   const mean = (v) => (v && v.m && (v.m[MK()] || v.m.e || v.m.j)) || "";
-  const meanSegs = (s) => String(s || "").toLowerCase().replace(/[（(][^）)]*[）)]/g, "")
-    .split(/[、，,;；\/・。]/).map((x) => x.trim()).filter(Boolean);
 
   // 文法 1 点ぶんの問題。錯誤選択肢は同じ級の他の文法点から取る(級を跨ぐと不自然に易しくなる)
   function mkG(id, kind) {
@@ -487,17 +485,14 @@ const LS = (() => {
       const z = (ex && ex.z && stripTags(ex.z).length <= 14) ? stripTags(ex.z) : v.w;
       return { kind: "speak", w, z, py: (z === v.w ? (v.py || "") : (ex.py || "")) };
     }
+    const conf = (k) => twConfusable(v, W[k]);   // 同音・同義の誤答は正解と区別できない(i18n.js)
     if (kind === "cloze" && ex && ex.z && ex.z.indexOf(v.w) >= 0)
-      return { kind, w, ans: v.w, opts: shuf([v.w].concat(distract((x) => x.w, w, 3))) };
+      return { kind, w, ans: v.w, opts: shuf([v.w].concat(distract((x) => x.w, w, 3, conf))) };
     if (kind === "zhuyin" && v.zy)
       return { kind, w, ans: v.zy, opts: shuf([v.zy].concat(distract((x) => x.zy, w, 3))) };
-    if (kind === "reverse" || kind === "listen") {
-      const homo = kind === "listen" && v.zy ? (k) => W[k].zy === v.zy : null;   // 音だけでは 期中/其中 を区別できない
-      return { kind, w, ans: v.w, opts: shuf([v.w].concat(distract((x) => x.w, w, 3, homo))) };
-    }
-    const mine = meanSegs(mean(v));
-    const syn = (k) => meanSegs(mean(W[k])).some((x) => mine.indexOf(x) >= 0);  // 「必ず」と「必ず、きっと」は両方正しい
-    return { kind: "meaning", w, ans: mean(v), opts: shuf([mean(v)].concat(distract((x) => mean(x), w, 3, syn))) };
+    if (kind === "reverse" || kind === "listen")
+      return { kind, w, ans: v.w, opts: shuf([v.w].concat(distract((x) => x.w, w, 3, conf))) };
+    return { kind: "meaning", w, ans: mean(v), opts: shuf([mean(v)].concat(distract((x) => mean(x), w, 3, conf))) };
   }
 
   function start(lv, key) {

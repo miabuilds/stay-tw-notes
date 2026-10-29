@@ -77,7 +77,7 @@ const MockExam = (() => {
     const grammar = getGrammarData(level) || [];
     const mk = twMKey();
     const qs = [];
-    const wm = (w, n = 3) => shuf(vocab.filter(v => v.w !== w.w)).slice(0, n);   // 誤答の単語
+    const wm = (w, n = 3) => shuf(vocab.filter(v => v.w !== w.w && !twConfusable(w, v))).slice(0, n);   // 誤答の単語(同音・同義は除く)
     const withEx = vocab.filter(v => v.ex && v.ex.z);
     const withZy = vocab.filter(v => v.zy);
     // ① 聽力A：例文を聞いて意味を選ぶ（本文は見せない = TOCFL 聴解形式）
@@ -169,7 +169,7 @@ const MockExam = (() => {
         <span class="ex-sec">${SEC_LABEL()[q.sec]}</span>
         <span style="color:var(--tx3);font-size:13px">${cur + 1} / ${questions.length}</span>
         <span id="exTimer" style="font-weight:700;font-size:14px;margin-left:auto"></span>
-        <button class="btn" style="padding:4px 12px;font-size:12px" onclick="MockExam.quit()">✕</button>
+        <button class="btn" data-nav-back style="padding:4px 12px;font-size:12px" onclick="MockExam.quit()">✕</button>
       </div>
       ${q.passage ? `<div class="ex-passage" onclick="speakZh(this.textContent)">${q.passage}</div>` : ""}
       ${(q.sec === "listen" || q.sec === "listenW")
