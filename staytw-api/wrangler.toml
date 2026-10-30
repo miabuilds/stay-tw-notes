@@ -10,3 +10,8 @@ APPLE_WEB_SERVICE_ID = "com.staytw.web"
 binding = "DB"
 database_name = "staytw-db"
 database_id = "210c9251-2707-442f-9357-0a293e5b6d28"
+
+# StayHQ 總部(KOL 推廣碼驗證 /api/partner/validate、分潤回報 /api/ingest/attribution)。HQ_TOKEN 是 secret。
+[[services]]
+binding = "HQ"
+service = "stayhq"

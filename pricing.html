@@ -219,6 +219,7 @@ function showNotice(){
 // 網頁直接購買（綠界）：這頁沒有登入 UI，沒登入就帶著方案回 App 首頁登入再開購買視窗（?app=1&buy=）
 window.STAYPAY_CFG={product:'staytw',name:'StayTW',sessionKey:'stw_session',api:'https://staypay.getclockin.workers.dev',app:'/?app=1',lang:function(){return lang;},login:function(){var p='lifetime';try{p=sessionStorage.getItem('staypay_resume')||p;}catch(_){ } location.href='/?app=1&buy='+p;},refundUrl:'/refund?lang='+lang};
 </script>
+<script src="ref.js?v=1"></script>
 <script src="webpay.js?v=2"></script>
 </body>
 </html>

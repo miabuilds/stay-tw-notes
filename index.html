@@ -2117,6 +2117,7 @@ document.addEventListener("click", function (e) {
 <script src="sister-apps.js?v=1"></script>
 <script>twRenderSister();</script>
 <script src="websync.js?v=66"></script>
+<script src="ref.js?v=1"></script>
 <script src="srs.js?v=61"></script>
 <script src="mock-exam.js?v=61"></script>
 <script src="polyphone.js?v=5"></script>
@@ -3604,6 +3605,7 @@ function renderProfile(){
   const isPrem = !!(window.Paywall && Paywall.isPremium && Paywall.isPremium());
   const upBtn = isPrem ? "" : `<button class="pf-upgrade" onclick="twUpgrade()">${twT("pfUpgrade")}</button>`;
   document.getElementById("pfBody").innerHTML = `${upBtn}${acc}
+    <div id="refBox" hidden></div>
     <div class="pf-streak">
       <div class="pf-streak-n">${streak.cur}<small>${twT("pfStreakUnit")}</small></div>
       <div class="pf-streak-lbl"><b>${twT("pfStreak")}</b><span>${twT("pfStreakTotal").replace("{n}", streak.total)}</span></div>
@@ -3632,6 +3634,7 @@ function renderProfile(){
     ${exam.length ? `<h3 class="pf-h">${twT("exHistory")}</h3><div class="ex-hist">${exam.slice(-8).reverse().map(h =>
       `<div class="ex-hist-item"><span>${new Date(h.ts).toLocaleDateString()}</span><b>${h.score} / ${h.total}</b><span>${Math.round(h.score / h.total * 100)}%</span></div>`).join("")}</div>` : ""}`;
   try { renderRefBlock(); } catch (e) {}
+  try { if (window.STWRef) { STWRef.render(); STWRef.sync(); } } catch (e) {}
 }
 // ログイン状態が変わったら呼ぶ（websync が renderAuth 内から呼ぶ）。プロフィール面の
 // 「ログイン/ログアウト」表示を最新化する。これが無いと sign in 後もカードが「Sign in」のままだった。

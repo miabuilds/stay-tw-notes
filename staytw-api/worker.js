@@ -143,6 +143,96 @@ async function verifyGoogleWeb(token) {
     ["accounts.google.com", "https://accounts.google.com"], GOOGLE_WEB_CLIENT_ID);
 }
 
+// ───────────────────── KOL 推廣碼(六站共用一組碼)─────────────────────
+// 碼的正本在 StayHQ 的 partners 表 → 一律透過 service binding 問總部,本站不存碼。
+// 買家拿到的價格:網頁走 staypay(webpay.js 讀 localStorage staypay_ref)、App 改賣 yearly_ref / lifetime_ref 商品。
+// 分潤:照 StayKR,只算買家「首筆真實付款」(試用 0 元、一般續訂都不算),只算 PRODUCTION。
+//   算好的毛額/淨額 POST 給 HQ /api/ingest/attribution,HQ 依該碼抽成算佣金(ext_id 防重)。
+//   本站 kol_sales 記一買家一筆(防重);退款時拿同一筆金額回沖(event_type "refund"、負數)。
+// 歸因來源:① RevenueCat subscriber attribute ref_code(App 從網頁 REF_CODE 橋接寫進去,匿名購買也有)
+//           ② ref_attrib(有登入的帳號綁過碼)
+const REF_FX = 31.6;            // 非台幣訂單用 RC 美金價換台幣(= 總部 settings 預設 fx_usd_twd)
+const REF_STORE_FEE = 0.15, REF_RC_FEE = 0.01;   // 淨額估算同總部:(毛額 − 稅) × (1 − 15%) − 毛額 × 1%
+const normRefCode = (c) => String(c || "").toUpperCase().replace(/[^A-Z0-9_-]/g, "").slice(0, 24);
+const okRefCode = (c) => /^[A-Z0-9_-]{3,24}$/.test(c);
+const _partnerCache = new Map();   // code → { at, v }(isolate 內 5 分鐘)
+
+async function hqPartner(env, raw) {
+  const code = normRefCode(raw);
+  if (!okRefCode(code) || !env.HQ) return null;
+  const c = _partnerCache.get(code);
+  if (c && Date.now() - c.at < 300000) return c.v;
+  try {
+    const r = await env.HQ.fetch("https://hq/api/partner/validate?code=" + encodeURIComponent(code) + "&product=staytw");
+    const j = r.ok ? await r.json() : null;
+    const v = j && j.ok ? { code: j.code, name: j.name || "", rate_pct: j.rate_pct } : null;
+    _partnerCache.set(code, { at: Date.now(), v });
+    return v;
+  } catch (e) { return null; }
+}
+
+async function refIpHash(req, env) {
+  const ip = req.headers.get("CF-Connecting-IP") || "";
+  if (!ip) return "";
+  const d = await crypto.subtle.digest("SHA-256", TE.encode("stw-ref:" + (env.SESSION_SECRET || "") + ":" + ip));
+  return bytesToB64url(new Uint8Array(d)).slice(0, 22);
+}
+
+async function hqAttribution(env, body) {
+  if (!env.HQ || !env.HQ_TOKEN) throw new Error("HQ binding/token missing");
+  const r = await env.HQ.fetch("https://hq/api/ingest/attribution", {
+    method: "POST",
+    headers: { Authorization: "Bearer " + env.HQ_TOKEN, "Content-Type": "application/json" },
+    body: JSON.stringify({ product: "staytw", ...body }),
+  });
+  if (!r.ok) throw new Error("HQ attribution " + r.status + " " + (await r.text()).slice(0, 200));
+}
+
+// RevenueCat webhook 每筆事件呼叫。HQ 連不上會 throw → webhook 回 500 讓 RC 重送(兩邊都防重,重送安全)
+async function kolOnRcEvent(env, e) {
+  if (!e || e.environment !== "PRODUCTION") return;
+  const ids = [...new Set([e.app_user_id, e.original_app_user_id, ...(e.aliases || [])].filter(Boolean).map(String))];
+  if (!ids.length) return;
+  const qs = ids.map((_, i) => "?" + (i + 1)).join(",");
+  // 退款:RevenueCat 記成 CANCELLATION(cancel_reason=CUSTOMER_SUPPORT)→ 把那筆分潤回沖
+  if (e.type === "CANCELLATION" && /CUSTOMER_SUPPORT|REFUND/i.test(String(e.cancel_reason || ""))) {
+    const s = await env.DB.prepare(`SELECT * FROM kol_sales WHERE buyer IN (${qs}) AND state='paid' LIMIT 1`).bind(...ids).first();
+    if (!s) return;
+    await hqAttribution(env, { code: s.code, event_type: "refund", gross_twd: -s.gross_twd, net_twd: -s.net_twd,
+      buyer_ref: "…" + String(s.buyer).slice(-6), ext_id: "refund:" + s.ext_id });
+    await env.DB.prepare("UPDATE kol_sales SET state='refund', refunded_at=?2 WHERE id=?1").bind(s.id, nowMs()).run();
+    return;
+  }
+  const firstPay = (e.type === "INITIAL_PURCHASE" && e.period_type !== "TRIAL")
+    || e.type === "NON_RENEWING_PURCHASE"
+    || (e.type === "RENEWAL" && e.is_trial_conversion === true);
+  if (!firstPay) return;
+  const lp = Number(e.price_in_purchased_currency || 0), usd = Number(e.price || 0);
+  const gross = Math.round(e.currency === "TWD" && lp > 0 ? lp : usd * REF_FX);
+  if (!(gross > 0)) return;
+  let code = normRefCode(e.subscriber_attributes && e.subscriber_attributes.ref_code && e.subscriber_attributes.ref_code.value);
+  if (!okRefCode(code)) {
+    const r = await env.DB.prepare(`SELECT code FROM ref_attrib WHERE uid IN (${qs}) ORDER BY at LIMIT 1`).bind(...ids).first();
+    code = r ? r.code : "";
+  }
+  if (!okRefCode(code)) return;
+  const kol = await hqPartner(env, code);
+  if (!kol) return;
+  // 一買家(含別名)只算首筆
+  const had = await env.DB.prepare(`SELECT id FROM kol_sales WHERE buyer IN (${qs}) LIMIT 1`).bind(...ids).first();
+  if (had) return;
+  const tax = gross * (Number(e.tax_percentage) || 0);
+  const net = Math.round(((gross - tax) * (1 - REF_STORE_FEE) - gross * REF_RC_FEE) * 100) / 100;
+  const buyer = e.app_user_id || ids[0];
+  const ext = String(e.transaction_id || e.original_transaction_id || e.id || "");
+  await hqAttribution(env, { code: kol.code, event_type: "paid", gross_twd: gross, net_twd: net,
+    buyer_ref: "…" + String(buyer).slice(-6), ext_id: ext || null });
+  await env.DB.prepare(
+    `INSERT OR IGNORE INTO kol_sales (id, code, buyer, product, store, gross_twd, net_twd, ext_id, state, at)
+     VALUES (?1,?2,?3,?4,?5,?6,?7,?8,'paid',?9)`
+  ).bind(kol.code + "_" + buyer, kol.code, buyer, e.product_id || "", e.store || "", gross, net, ext, Number(e.purchased_at_ms) || nowMs()).run();
+}
+
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
@@ -697,6 +787,43 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       return json({ error: "method_not_allowed" }, 405, h);
     }
 
+    // ---------- KOL 推廣碼(碼的正本在 StayHQ;helpers 在上方 hqPartner / kolOnRcEvent)----------
+    // 檢查碼(設定頁輸入時用)
+    if (url.pathname === "/api/ref/check") {
+      const k = await hqPartner(env, url.searchParams.get("code"));
+      return json(k ? { ok: true, code: k.code, name: k.name } : { ok: false }, 200, h);
+    }
+    // 記一次推廣連結點擊(ip 只存雜湊)
+    if (url.pathname === "/api/ref/hit" && req.method === "POST") {
+      let b; try { b = await req.json(); } catch { b = {}; }
+      const k = await hqPartner(env, b.code);
+      if (!k) return json({ ok: false }, 200, h);
+      await env.DB.prepare("INSERT INTO ref_clicks (code, ip_hash, app, at) VALUES (?1,?2,0,?3)").bind(k.code, await refIpHash(req, env), nowMs()).run();
+      return json({ ok: true, code: k.code, name: k.name }, 200, h);
+    }
+    // App 第一次開啟、裝置上還沒碼 → 同一網路 72 小時內點過的推廣連結對回來(點連結 → 去商店裝 App)
+    if (url.pathname === "/api/ref/auto") {
+      const ih = await refIpHash(req, env);
+      if (!ih) return json({ ok: false }, 200, h);
+      const r = await env.DB.prepare("SELECT code FROM ref_clicks WHERE ip_hash=?1 AND app=0 AND at>?2 ORDER BY at DESC LIMIT 1")
+        .bind(ih, nowMs() - 72 * 3600e3).first();
+      const k = r && await hqPartner(env, r.code);
+      if (!k) return json({ ok: false }, 200, h);
+      await env.DB.prepare("INSERT INTO ref_clicks (code, ip_hash, app, at) VALUES (?1,?2,1,?3)").bind(k.code, ih, nowMs()).run();
+      return json({ ok: true, code: k.code, name: k.name }, 200, h);
+    }
+    // 登入的帳號綁碼(first touch,綁過就不換)
+    if (url.pathname === "/api/ref/attach" && req.method === "POST") {
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      if (!uid) return json({ error: "unauthorized" }, 401, h);
+      let b; try { b = await req.json(); } catch { b = {}; }
+      const k = await hqPartner(env, b.code);
+      if (!k) return json({ ok: false }, 200, h);
+      await env.DB.prepare("INSERT OR IGNORE INTO ref_attrib (uid, code, at) VALUES (?1,?2,?3)").bind(uid, k.code, nowMs()).run();
+      const cur = await env.DB.prepare("SELECT code FROM ref_attrib WHERE uid=?1").bind(uid).first();
+      return json({ ok: true, code: cur && cur.code }, 200, h);
+    }
+
     // ---------- RevenueCat webhook ----------
     if (url.pathname === "/api/rc-webhook" && req.method === "POST") {
       const auth = req.headers.get("Authorization") || "";
@@ -711,6 +838,9 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
              e.price ?? null, e.price_in_purchased_currency ?? null,
              e.currency || "", e.country_code || "", e.environment || "",
              e.app_user_id || "", JSON.stringify(b).slice(0, 50000)).run();
+      // KOL 分潤(首筆真實付款/退款回沖)。總部連不上 → 回 500 讓 RevenueCat 重送(rc_events 與 HQ 都防重)
+      try { await kolOnRcEvent(env, e); }
+      catch (err) { console.error("kolOnRcEvent", err && err.message); return json({ error: "kol_retry" }, 500); }
       return json({ ok: true });
     }
 
