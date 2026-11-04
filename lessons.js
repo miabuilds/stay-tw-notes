@@ -727,7 +727,7 @@ const LS = (() => {
     else if (q.kind === "listen") head = `<div class="ls-q">${esc(T("lsAskListen", "聞こえたのは?"))}</div><button class="ls-spk" onclick="LS.say('${esc(v.w)}')">${icon("volume", { size: 30 })}</button>`;
     else head = `<div class="ls-q">${esc(T("lsAskBlank", "空いているのは?"))}</div><div class="ls-cloze">${esc(ex.z).split(esc(v.w)).join('<b>　</b>')}</div>`;
     $("lsStage").innerHTML = again + head +
-      `<div class="ls-opts">${q.opts.map((o, i) => `<button class="ls-opt" onclick="LS.pick(${i})">${q.kind === "zhuyin" && typeof twZy === "function" ? (typeof twPyOnly === "function" && twPyOnly() ? esc((Object.keys(W).map((k) => W[k]).find((x) => x.zy === o) || {}).py || o) : twZy(o)) : esc(o)}</button>`).join("")}</div><div id="lsAfter"></div>`;
+      `<div class="ls-opts">${q.opts.map((o, i) => `<button class="ls-opt" onclick="LS.pick(${i})">${q.kind === "zhuyin" ? zyOpt(o) : esc(o)}</button>`).join("")}</div><div id="lsAfter"></div>`;
     if (q.kind === "listen") say(v.w);
   }
   // 並べかえ: 押した語を下の枠へ。枠を押すと 1 つ戻す
@@ -838,10 +838,16 @@ const LS = (() => {
 
   // My単語帳(2026-10 韓国のユーザー要望「単元の単語をそのまま単語帳に」)。覚える面の右上と、終了画面の一覧から
   // 注音(+設定で拼音)。2026-10 日本のユーザー「拼音で学んできたので注音だけだと読めない、併記してほしい」
-  function zyp(v) {
+  // 読み方問題の選択肢:注音だけだと拼音派(韓国・外国語 UI)が選べない(2026-11-02 韓国ユーザー) → 単語を引いて zyp と同じ表示(注音＋拼音 / 拼音のみ)
+  function zyOpt(zy) {
+    const o = Object.keys(W).map((k) => W[k]).find((x) => x.zy === zy);
+    if (o) return zyp(Object.assign({}, o, { py: o.py || "" }), true);
+    return typeof twZy === "function" ? twZy(zy) : esc(zy);
+  }
+  function zyp(v, forceBoth) {
     if (typeof twPyOnly === "function" && twPyOnly()) return esc((v && (v.py || v.zy)) || "");
     const z = typeof twZy === "function" ? twZy((v && v.zy) || "") : "";
-    return (typeof twShowPy === "function" && twShowPy() && v && v.py) ? z + ` <span class="ls-pyx">${esc(v.py)}</span>` : z;
+    return ((forceBoth || (typeof twShowPy === "function" && twShowPy())) && v && v.py) ? z + ` <span class="ls-pyx">${esc(v.py)}</span>` : z;
   }
   function saveBtn(w) {
     if (!window.MyVocab) return "";

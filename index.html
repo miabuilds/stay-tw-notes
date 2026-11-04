@@ -2040,7 +2040,7 @@ document.addEventListener("click", function (e) {
 });
 </script>
 
-<script src="i18n.js?v=136"></script>
+<script src="i18n.js?v=137"></script>
 <script src="native-ui.js?v=2"></script>
 <script src="tts.js?v=67"></script>
 <script src="tbcl.js?v=1"></script>
@@ -2109,14 +2109,14 @@ document.addEventListener("click", function (e) {
 <script src="fortune.js?v=5"></script>
 <script src="myvocab.js?v=8"></script>
 <script src="whatsnew.js?v=3"></script>
-<script src="lessons.js?v=35"></script>
+<script src="lessons.js?v=36"></script>
 <script src="placement.js?v=1"></script>
 <script src="tour.js?v=2"></script>
 <script src="ytshadow.js?v=30"></script>
 <script src="listen.js?v=7"></script>
 <script src="sister-apps.js?v=1"></script>
 <script>twRenderSister();</script>
-<script src="websync.js?v=66"></script>
+<script src="websync.js?v=67"></script>
 <script src="ref.js?v=1"></script>
 <script src="srs.js?v=61"></script>
 <script src="mock-exam.js?v=61"></script>
@@ -3593,6 +3593,9 @@ function renderProfile(){
       <div style="flex:1;min-width:0;overflow:hidden"><b style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.name || u.email || ""}</b><span style="display:block;font-size:12.5px;color:var(--tx3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.email || ""}</span></div>
       <button class="pf-logout" onclick="STW_WEB.logout();renderProfile()">${twT("acLogout")}</button></div>
       <p class="pf-sync">✓ ${twT("pfSynced")}</p>
+      <label class="pf-mailopt" style="display:flex;align-items:flex-start;gap:10px;margin:10px 0 4px;padding:12px 14px;border:1px solid var(--bd);border-radius:12px;font-size:13.5px;color:var(--tx2);line-height:1.6;cursor:pointer">
+        <input type="checkbox" id="pfMailOpt" onchange="twSetMailOpt(this.checked)" disabled style="width:17px;height:17px;margin-top:2px;flex-shrink:0;accent-color:var(--ac)">
+        <span>${twT("pfMailOpt")}</span></label>
       <div id="pfRef"></div>
       ${(u.email === "abc83327@gmail.com") ? `<a href="/admin.html" target="_blank" style="display:block;text-align:center;margin:8px auto 0;font-size:13px;color:var(--tx3)">管理後台 →</a>` : ""}
       <div style="text-align:center;margin-top:2px"><button class="pf-del" onclick="twDeleteAccount()">${twT("acDelete")}</button></div>`;
@@ -3635,6 +3638,17 @@ function renderProfile(){
       `<div class="ex-hist-item"><span>${new Date(h.ts).toLocaleDateString()}</span><b>${h.score} / ${h.total}</b><span>${Math.round(h.score / h.total * 100)}%</span></div>`).join("")}</div>` : ""}`;
   try { renderRefBlock(); } catch (e) {}
   try { if (window.STWRef) { STWRef.render(); STWRef.sync(); } } catch (e) {}
+  if (li && STW_WEB.mailOpt) STW_WEB.mailOpt().then(on => {
+    const cb = document.getElementById("pfMailOpt"); if (!cb || on === null) return;
+    cb.checked = on; cb.disabled = false;
+  });
+}
+// 学習メール同意(既定は未勾。本人が勾した人だけ subscribers に optin で入る)
+async function twSetMailOpt(on){
+  const cb = document.getElementById("pfMailOpt"); if (cb) cb.disabled = true;
+  const r = await STW_WEB.mailOpt(on);
+  if (cb) { cb.disabled = false; if (r === null) cb.checked = !on; }
+  try { if (window.showToast) showToast(twT(r === null ? "pfMailOptFail" : on ? "pfMailOptOn" : "pfMailOptOff")); } catch (e) {}
 }
 // ログイン状態が変わったら呼ぶ（websync が renderAuth 内から呼ぶ）。プロフィール面の
 // 「ログイン/ログアウト」表示を最新化する。これが無いと sign in 後もカードが「Sign in」のままだった。
