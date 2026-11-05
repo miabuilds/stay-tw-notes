@@ -91,8 +91,10 @@ async function serverPremium(env, uid) {
     const rows = (await env.DB.prepare(
       `SELECT event_type t, COALESCE(json_extract(raw,'$.event.expiration_at_ms'),json_extract(raw,'$.expiration_at_ms')) ems,
               COALESCE(json_extract(raw,'$.event.cancel_reason'),json_extract(raw,'$.cancel_reason')) cr
-       FROM rc_events WHERE environment='PRODUCTION' AND (app_user_id=?1 OR raw LIKE ?2) ORDER BY id`)
-      .bind(uid, '%"' + uid + '"%').all()).results || [];
+       FROM rc_events WHERE environment='PRODUCTION' AND (app_user_id=?1 OR instr(raw, ?2) > 0) ORDER BY id`)
+      .bind(uid, '"' + uid + '"').all()).results || [];
+    // ↑ 以前是 raw LIKE '%"uid"%'。D1 的 LIKE 樣式上限 50 bytes,Apple 登入的 uid(apple:000333.…)超過 → 查詢報錯 →
+    //   catch 回 false → Apple 登入的付費用戶全被當免費(AI 會話一天 1 場)。2026-10-18 韓國用戶回報才發現,改用 instr。
     let exp = 0, life = false, refunded = false;
     for (const r of rows) {
       if (r.t === "NON_RENEWING_PURCHASE") life = true;
@@ -265,6 +267,19 @@ export default {
     }
 
     // ---------- 流量計數（公開ビーコン。JS を実行する実ブラウザのみ＝bot 除外）----------
+    // ---------- 熟記本(Shuji)內部端點:這個 uid 在本產品是不是付費 ----------
+    // 熟記本後端(Firebase Functions shujiApi)用 Google/Apple sub 組成 uid 來問,付費用戶到熟記本自動 Premium。
+    // 只認 x-shuji-secret(= env.SHUJI_SECRET,沒設就一律 403),不回其他任何個資。
+    if (url.pathname === "/api/internal/premium" && req.method === "GET") {
+      const given = req.headers.get("x-shuji-secret") || "", want = env.SHUJI_SECRET || "";
+      let same = want.length > 0 && given.length === want.length;
+      for (let i = 0; same && i < want.length; i++) if (given.charCodeAt(i) !== want.charCodeAt(i)) same = false;
+      if (!same) return json({ error: "forbidden" }, 403, h);
+      const quid = String(url.searchParams.get("uid") || "");
+      if (!/^(google|apple):[A-Za-z0-9._-]{1,200}$/.test(quid)) return json({ error: "bad_uid" }, 400, h);
+      return json({ premium: await serverPremium(env, quid) }, 200, h);
+    }
+
     // ---------- AI 會話:今日の残り場数 ----------
     if (url.pathname === "/api/chat-quota") {
       const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
@@ -357,7 +372,7 @@ PINYIN: Hanyu Pinyin of your reply with tone marks, exactly ONE syllable per Chi
 TR: a ${langName} translation of your reply
 HINT: a short natural sentence the LEARNER (playing ${userRole || "the learner"}) could actually SAY next — Traditional Chinese ONLY, a real spoken line, never stage directions or another language
 HINT: a second, different option (if the conversation is wrapping up, a polite closing line such as 謝謝，再見！)
-CORR: if the learner's LAST message has a clear mistake, one short gentle note IN ${langName} on how to fix it; otherwise leave it empty`;
+CORR: if the learner's LAST message has a clear mistake, one short gentle note IN ${langName} on how to fix it. If there is no mistake, write nothing at all after "CORR:" (do NOT write 空, なし, none, 없음 or any placeholder)`;
 
       // 2026-10:過去の AI 発言を素の文で渡すと、数往復で AI がそれを真似て REPLY: などの行を落とす(画面は「通信エラー」)。
       // 過去の AI 発言にも REPLY: を付け、今回の返事は "REPLY:" から書かせる(prefill。Haiku 対応)
@@ -691,8 +706,21 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       const device = /android/i.test(ua) ? "android"
         : /iphone|ipad|ipod/i.test(ua) ? "ios"
         : /mobile/i.test(ua) ? "mobile-other" : "desktop";
-      await env.DB.prepare("INSERT INTO hits (path, referrer, country, source, device) VALUES (?1,?2,?3,?4,?5)")
-        .bind(path, ref, country, inApp, device).run();
+      // 訪客代號(2026-11-05 總部要看「每天幾個人」):IP+UA+台灣日期+密鑰做 hash,只能在同一天內認出同一個人,隔天就換,存不到真 IP
+      let vid = "";
+      try {
+        const ip = req.headers.get("CF-Connecting-IP") || "";
+        const dayTW = new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 10);
+        const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(ip + "|" + ua + "|" + dayTW + "|" + (env.SESSION_SECRET || "")));
+        vid = [...new Uint8Array(buf)].slice(0, 8).map((x) => x.toString(16).padStart(2, "0")).join("");
+      } catch (e) {}
+      try {
+        await env.DB.prepare("INSERT INTO hits (path, referrer, country, source, device, vid) VALUES (?1,?2,?3,?4,?5,?6)")
+          .bind(path, ref, country, inApp, device, vid).run();
+      } catch (e) {   // vid 欄位還沒加(ALTER 沒跑)→ 照舊寫,不丟流量
+        await env.DB.prepare("INSERT INTO hits (path, referrer, country, source, device) VALUES (?1,?2,?3,?4,?5)")
+          .bind(path, ref, country, inApp, device).run();
+      }
       return new Response(null, { status: 204, headers: h });
     }
 
@@ -844,6 +872,83 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       return json({ ok: true });
     }
 
+    // ---------- StayHQ 總部日報(Bearer HQ_TOKEN;HQ Worker 透過 service binding 拉,公網也擋 token)----------
+    // 回每日(台灣日期)美金毛額/代扣稅/筆數/退款/試用/新帳號;有 kol_codes 表的站順便回夥伴碼給總部匯入。
+    if (url.pathname === "/api/hq/daily") {
+      if (!env.HQ_TOKEN || (req.headers.get("Authorization") || "") !== `Bearer ${env.HQ_TOKEN}`) return json({ error: "unauthorized" }, 401);
+      const days = Math.min(parseInt(url.searchParams.get("days") || "14", 10) || 14, 2000);
+      const sinceDay = new Date(Date.now() + 8 * 3600000 - days * 86400000).toISOString().slice(0, 10);
+      const dayTW = (ms) => new Date(ms + 8 * 3600000).toISOString().slice(0, 10);
+      const J = (k) => `COALESCE(json_extract(raw,'$.event.${k}'), json_extract(raw,'$.${k}'))`;
+      const ev = (await env.DB.prepare(
+        `SELECT ts, event_type t, product_id p, price usd, ${J("store")} st, ${J("period_type")} pt, ${J("tax_percentage")} tax,
+                ${J("purchased_at_ms")} pms, ${J("cancel_reason")} cr, ${J("original_transaction_id")} otx, app_user_id u,
+                ${J("original_app_user_id")} ou, ${J("aliases")} al
+         FROM rc_events WHERE environment='PRODUCTION' ORDER BY id`).all()).results || [];
+      const PAID = new Set(["INITIAL_PURCHASE", "RENEWAL", "NON_RENEWING_PURCHASE"]);
+      const rows = {}; const R = (d) => (rows[d] ||= { day: d, gross_usd: 0, tax_usd: 0, paid_n: 0, new_paid_n: 0, refund_n: 0, refund_usd: 0, trial_n: 0, new_users: 0, by_store: {}, by_plan: {} });
+      const lastPaid = {};   // otx 或 user|product → 最近一筆收入金額(退款扣回用)
+      for (const e of ev) {
+        const ms = Number(e.pms) || Date.parse(String(e.ts).replace(" ", "T") + "Z"); if (!ms) continue;
+        const d = dayTW(ms); const usd = Number(e.usd) || 0;
+        const plan = /lifetime/i.test(e.p || "") ? "lifetime" : /year|annual/i.test(e.p || "") ? "yearly" : /month/i.test(e.p || "") ? "monthly" : (e.p || "?");
+        if (PAID.has(e.t) && usd > 0) {
+          lastPaid[e.otx || (e.u + "|" + e.p)] = usd;
+          const r = R(d); r.paid_n++; r.gross_usd += usd; r.tax_usd += usd * (Number(e.tax) || 0);
+          if (e.t === "INITIAL_PURCHASE") r.new_paid_n++;
+          r.by_store[e.st || "APP_STORE"] = (r.by_store[e.st || "APP_STORE"] || 0) + usd;
+          r.by_plan[plan] = (r.by_plan[plan] || 0) + usd;
+        } else if (e.t === "INITIAL_PURCHASE" && e.pt === "TRIAL") {
+          R(d).trial_n++;
+        } else if (e.t === "CANCELLATION" && e.cr === "CUSTOMER_SUPPORT") {
+          const r = R(d); r.refund_n++; r.refund_usd += lastPaid[e.otx || (e.u + "|" + e.p)] || Math.abs(usd) || 0;
+        }
+      }
+      try {
+        const us = (await env.DB.prepare("SELECT created_at FROM auth_users WHERE created_at IS NOT NULL").all()).results || [];
+        for (const x of us) { const ms = Number(x.created_at) || 0; if (ms) R(dayTW(ms < 1e12 ? ms * 1000 : ms)).new_users++; }
+      } catch (e) {}
+      let partners = [];
+      try {
+        const k = (await env.DB.prepare("SELECT code, name, pct, status FROM kol_codes").all()).results || [];
+        partners = k.map((x) => ({ code: x.code, name: x.name || "", rate_pct: Number(x.pct) || 10, active: x.status === "active" }));
+      } catch (e) {}
+      // 家族價名單:付過錢(正式環境、金額>0)的 RC app_user_id / 別名 → auth_users 信箱 → sha256(小寫)。
+      let family = [];
+      try {
+        const ids = new Set();
+        for (const e of ev) {
+          if (!PAID.has(e.t) || !(Number(e.usd) > 0)) continue;
+          for (const v of [e.u, e.ou]) if (v) ids.add(String(v));
+          try { for (const v of JSON.parse(e.al || "[]")) if (v) ids.add(String(v)); } catch (x) {}
+        }
+        if (ids.size) {
+          const au = (await env.DB.prepare("SELECT uid, email FROM auth_users WHERE email IS NOT NULL AND email != ''").all()).results || [];
+          const emails = new Set();
+          for (const a of au) if (ids.has(String(a.uid))) emails.add(String(a.email).trim().toLowerCase());
+          for (const em of emails) {
+            const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(em));
+            family.push({ h: [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("") });
+          }
+        }
+      } catch (e) {}
+      // 流量(hits 表,台灣日期):瀏覽數(扣掉付費牆曝光的紀錄)、App 內瀏覽、付費牆曝光(/__paywall/*)
+      try {
+        const hs = (await env.DB.prepare(
+          `SELECT date(ts,'+8 hours') d, COUNT(*) n, SUM(CASE WHEN source='app' THEN 1 ELSE 0 END) app,
+                  SUM(CASE WHEN path LIKE '/__paywall/%' THEN 1 ELSE 0 END) pw,
+                  COUNT(DISTINCT CASE WHEN path LIKE '/__paywall/%' THEN NULL ELSE NULLIF(vid,'') END) uv
+           FROM hits WHERE ts >= datetime('now', ?1) GROUP BY d`).bind(`-${days + 1} days`).all()).results || [];
+        for (const x of hs) { if (!x.d) continue; const r = R(x.d); r.pageviews = Math.max(0, (x.n || 0) - (x.pw || 0)); r.app_views = x.app || 0; r.paywall_n = x.pw || 0; r.visitors = x.uv || 0; }
+      } catch (e) {}
+      // 未處理回饋(近 30 天、status=new),不帶信箱
+      let feedback = [];
+      try {
+        const fbs = (await env.DB.prepare("SELECT id, ts, type, message FROM feedback WHERE status='new' AND ts >= datetime('now','-30 days') ORDER BY id DESC LIMIT 40").all()).results || [];
+        feedback = fbs.map((f) => ({ ext_id: String(f.id), ts: f.ts, type: f.type || "", message: String(f.message || "").slice(0, 240) }));
+      } catch (e) {}
+      return json({ rows: Object.values(rows).filter((r) => r.day >= sinceDay).sort((a, b) => a.day < b.day ? -1 : 1), partners, family, feedback });
+    }
     // ---------- 後台 Google ログイン（→ 管理 session。ホワイトリストのみ）----------
     if (url.pathname === "/api/admin-login" && req.method === "POST") {
       let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
@@ -868,6 +973,26 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
         `INSERT INTO subscribers (email, lang, source) VALUES (?1,?2,?3) ON CONFLICT(email) DO NOTHING`
       ).bind(email, String(b.lang || "").slice(0, 8), String(b.source || "web").slice(0, 24)).run();
       return json({ ok: true }, 200, h);
+    }
+
+    // ---------- 学習メール同意（ログインユーザーが自分で勾。既定は未勾、解除=行ごと削除）----------
+    // subscribers に source='optin' で入れる。待機リスト(Android 通知)の行があれば optin に格上げ
+    if (url.pathname === "/api/mail-opt") {
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      if (!uid) return json({ error: "unauthorized" }, 401, h);
+      const au = await env.DB.prepare("SELECT email FROM auth_users WHERE uid=?1").bind(uid).first();
+      const email = String((au && au.email) || "").trim().toLowerCase();
+      if (!email) return json({ on: false, no_email: true }, 200, h);
+      if (req.method === "POST") {
+        const b = await req.json().catch(() => ({}));
+        if (b.on) await env.DB.prepare(
+          `INSERT INTO subscribers (email, lang, source) VALUES (?1,?2,'optin') ON CONFLICT(email) DO UPDATE SET source='optin', lang=?2`
+        ).bind(email, String(b.lang || "").slice(0, 8)).run();
+        else await env.DB.prepare("DELETE FROM subscribers WHERE email=?1").bind(email).run();
+        return json({ on: !!b.on }, 200, h);
+      }
+      const row = await env.DB.prepare("SELECT source FROM subscribers WHERE email=?1").bind(email).first();
+      return json({ on: !!(row && row.source === "optin") }, 200, h);
     }
 
     // ---------- YouTube 跟讀:字幕快取 ----------
