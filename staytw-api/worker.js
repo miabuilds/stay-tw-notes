@@ -147,6 +147,22 @@ async function verifyGoogleWeb(token) {
     ["accounts.google.com", "https://accounts.google.com"], GOOGLE_WEB_CLIENT_ID);
 }
 
+// ───────────────────── 家族價(2026-11,照 BirdSpeak)─────────────────────
+// 買過 StayJP/StayKR/BirdSpeak… 任一「其他」產品的信箱(總部 family_members)→ App 賣家族價商品(*_family)。
+// exclude=staytw:只買過 StayTW 本身不算。查不到/總部掛了一律 false,不影響付費牆。
+async function familyOf(env, uid) {
+  try {
+    if (!uid || !env.HQ || !env.HQ_TOKEN) return { family: false, products: [] };
+    const au = await env.DB.prepare("SELECT email FROM auth_users WHERE uid=?1").bind(uid).first();
+    const em = au && au.email ? String(au.email).trim().toLowerCase() : ""; if (!em) return { family: false, products: [] };
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(em));
+    const hh = [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+    const r = await env.HQ.fetch(new Request("https://hq.internal/api/family/check?exclude=staytw&h=" + hh, { headers: { Authorization: "Bearer " + env.HQ_TOKEN } }));
+    if (!r.ok) return { family: false, products: [] };
+    const d = await r.json(); return { family: !!d.family, products: d.products || [] };
+  } catch (e) { return { family: false, products: [] }; }
+}
+
 // ───────────────────── KOL 推廣碼(六站共用一組碼)─────────────────────
 // 碼的正本在 StayHQ 的 partners 表 → 一律透過 service binding 問總部,本站不存碼。
 // 買家拿到的價格:網頁走 staypay(webpay.js 讀 localStorage staypay_ref)、App 改賣 yearly_ref / lifetime_ref 商品。
@@ -1090,7 +1106,14 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       const until = ent && ent.status === "active" ? (ent.expires_at || 0) : 0;
       // premium:伺服器整體判定(白名單 comp_emails / 推薦天數 / RevenueCat 正式交易)。網頁端 websync.js 登入後看這個解鎖、登出收回
       return json({ uid, refCode: code, referrals: (cnt && cnt.n) || 0,
-                    premiumUntil: until, entitled: until > nowMs(), refDays: REF_DAYS, premium: await serverPremium(env, uid) }, 200, h);
+                    premiumUntil: until, entitled: until > nowMs(), refDays: REF_DAYS, premium: await serverPremium(env, uid), family: (await familyOf(env, uid)).family }, 200, h);
+    }
+
+    // 家族價查詢(App 原生付費牆用,未登入一律 false)
+    if (url.pathname === "/api/family") {
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      if (!uid) return json({ family: false, products: [] }, 200, h);
+      return json(await familyOf(env, uid), 200, h);
     }
 
     if (url.pathname === "/api/referral/claim" && req.method === "POST") {
