@@ -86,6 +86,8 @@ async function serverPremium(env, uid) {
     // 白名單(管理者)。App の paywall.js の WHITELIST_HASHES と同じ人。購入記録が無いので ここで先に認める
     const au = await env.DB.prepare("SELECT email FROM auth_users WHERE uid=?1").bind(uid).first();
     if (au && au.email && ADMIN_EMAILS.includes(String(au.email).toLowerCase())) return true;
+    // 贈送 Premium 的白名單（朋友、合作 KOL）：存在 D1 comp_emails，不寫進程式碼（StayKR 同款）
+    if (au && au.email && await env.DB.prepare("SELECT email FROM comp_emails WHERE email=?1").bind(String(au.email).toLowerCase()).first()) return true;
     const ent = await env.DB.prepare("SELECT status, expires_at FROM entitlements WHERE uid=?1").bind(uid).first();
     if (ent && ent.status === "active" && (ent.expires_at || 0) > nowMs()) return true;
     const rows = (await env.DB.prepare(
@@ -1086,8 +1088,9 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       const ent = await env.DB.prepare("SELECT plan, status, expires_at FROM entitlements WHERE uid=?1").bind(uid).first();
       const cnt = await env.DB.prepare("SELECT COUNT(*) n FROM referral_claims WHERE referrer_uid=?1").bind(uid).first();
       const until = ent && ent.status === "active" ? (ent.expires_at || 0) : 0;
+      // premium:伺服器整體判定(白名單 comp_emails / 推薦天數 / RevenueCat 正式交易)。網頁端 websync.js 登入後看這個解鎖、登出收回
       return json({ uid, refCode: code, referrals: (cnt && cnt.n) || 0,
-                    premiumUntil: until, entitled: until > nowMs(), refDays: REF_DAYS }, 200, h);
+                    premiumUntil: until, entitled: until > nowMs(), refDays: REF_DAYS, premium: await serverPremium(env, uid) }, 200, h);
     }
 
     if (url.pathname === "/api/referral/claim" && req.method === "POST") {

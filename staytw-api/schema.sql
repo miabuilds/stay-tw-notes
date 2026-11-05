@@ -62,6 +62,13 @@ CREATE TABLE IF NOT EXISTS ref_attrib (
   at INTEGER
 );
 -- 已回報給 StayHQ 的分潤(一買家只算首筆真實付款;退款時用這筆金額回沖)
+-- 贈送 Premium 的白名單（登入帳號 email 符合就算 Premium；朋友、合作 KOL。不寫進程式碼）
+CREATE TABLE IF NOT EXISTS comp_emails (
+  email TEXT PRIMARY KEY,
+  note TEXT,
+  at INTEGER
+);
+
 CREATE TABLE IF NOT EXISTS kol_sales (
   id TEXT PRIMARY KEY,                 -- code_buyer
   code TEXT,

@@ -149,6 +149,7 @@ const STW_WEB = (() => {
     try {
       const r = await fetch(STW_API + "/api/delete-account", { method: "POST", headers: { Authorization: "Bearer " + session } });
       if (!r.ok) return false;
+      revokeServerPremium();
       session = null; user = null;
       localStorage.removeItem("stw_session"); localStorage.removeItem("stw_user");
       try { google.accounts.id.disableAutoSelect(); } catch (e) {}
@@ -157,7 +158,14 @@ const STW_WEB = (() => {
       return true;
     } catch (e) { return false; }
   }
+  // 伺服器判定給的 Premium 只跟著帳號走：登出就收回（這台裝置自己買的 RC/綠界不經這裡，不受影響）
+  function revokeServerPremium(){
+    if (localStorage.getItem("stw_srv_prem") !== "1") return;
+    localStorage.removeItem("stw_srv_prem");
+    try { window.Paywall && Paywall.setEntitled(false); } catch (e) {}
+  }
   function logout(){
+    revokeServerPremium();
     session = null; user = null;
     localStorage.removeItem("stw_session"); localStorage.removeItem("stw_user");
     try { google.accounts.id.disableAutoSelect(); } catch (e) {}
@@ -191,7 +199,22 @@ const STW_WEB = (() => {
       if (!r.ok) return null;
       me = await r.json();
       if (me && me.entitled && window.Paywall && Paywall.setEntitled) Paywall.setEntitled(true);
+      // 伺服器說這個帳號是 Premium（贈送白名單 comp_emails、RC 正式交易等，不是在這台裝置買的）→ 解鎖。登出時收回
+      if (me && me.premium) { localStorage.setItem("stw_srv_prem", "1"); if (window.Paywall && !Paywall.isPremium()) Paywall.setEntitled(true); }
+      else if (me && !me.entitled && localStorage.getItem("stw_srv_prem") === "1") { localStorage.removeItem("stw_srv_prem"); try { Paywall.setEntitled(false); } catch (e) {} }
       return me;
+    } catch (e) { return null; }
+  }
+  // 学習メール同意。on 省略=現在値を取得、true/false=設定。失敗は null
+  async function mailOpt(on){
+    if (!session) return null;
+    try {
+      const r = await fetch(STW_API + "/api/mail-opt", on === undefined
+        ? { headers: { Authorization: "Bearer " + session } }
+        : { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + session },
+            body: JSON.stringify({ on: !!on, lang: (typeof twGetLang === "function" ? twGetLang() : "") }) });
+      if (!r.ok) return null;
+      return !!(await r.json()).on;
     } catch (e) { return null; }
   }
   // ?ref=CODE で来た人は、ログインするまで覚えておいて、ログイン後に引き換える
@@ -322,7 +345,7 @@ const STW_WEB = (() => {
   initGoogle();
 
   stashRef();
-  return { login, logout, closeModal, initGoogle, copyUrl, isInApp, loginApple, deleteAccount, isLoggedIn: () => !!session, getUser: () => user, sync: pullMerge, me: () => me, fetchMe, claimRef };
+  return { login, logout, closeModal, initGoogle, copyUrl, isInApp, loginApple, deleteAccount, isLoggedIn: () => !!session, getUser: () => user, sync: pullMerge, me: () => me, fetchMe, claimRef, mailOpt };
 })();
 // ★重要：STW_WEB は const 宣言なので window に自動では乗らない。renderProfile 等が
 //   `window.STW_WEB && STW_WEB.isLoggedIn()` でログイン判定しており、window.STW_WEB が
