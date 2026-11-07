@@ -16,3 +16,6 @@ images/social/video/
 data/tbcl/freq.xlsx
 scripts/.moedict_bulk.json
 scripts/.last-regen-files.json
+
+# 2026-11-07: 部署產物(scripts/build-dist.sh 產)
+dist/

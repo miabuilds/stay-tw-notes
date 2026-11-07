@@ -5,6 +5,8 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=(self), payment=()
   Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Content-Security-Policy: frame-ancestors 'self'; object-src 'none'; base-uri 'self'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
 
 # Cloudflare Pages 快取策略
 # HTML は必ず再検証（古い index.html がキャッシュされて「記事が旧 Web Speech のまま」になるのを防ぐ）

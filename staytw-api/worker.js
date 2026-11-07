@@ -57,24 +57,63 @@ async function verifyOidcJwt(token, jwksUrl, issuers, audience) {
   return ok ? payload : null;
 }
 
+// ───────────────────── 安全共用（2026-11-07 資安檢查後補）─────────────────────
+// 定長比對(token/secret 用,避免 === 的時間差)
+function safeEq(a, b) {
+  a = String(a || ""); b = String(b || "");
+  if (!a || !b || a.length !== b.length) return false;
+  let r = 0; for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return r === 0;
+}
+// AI 路由的 body 上限(20KB)。超過 → err:"too_large";壞 JSON → err:"bad json"
+const MAX_AI_BODY = 20 * 1024;
+async function readJson(req, max) {
+  let t = ""; try { t = await req.text(); } catch { return { err: "bad json" }; }
+  if (t.length > (max || MAX_AI_BODY)) return { err: "too_large" };
+  try { return { b: JSON.parse(t) }; } catch { return { err: "bad json" }; }
+}
+// 全站每日總量保險絲(擋換 IP 刷 AI 的花費):chat_quota key = global:<tag>:<day>,原子 +1 後比上限
+async function globalQuota(env, tag, limit) {
+  const day = new Date().toISOString().slice(0, 10), k = "global:" + tag + ":" + day;
+  const r = await env.DB.prepare("INSERT INTO chat_quota (key,count,day) VALUES (?1,1,?2) ON CONFLICT(key) DO UPDATE SET count=count+1, day=?2 RETURNING count").bind(k, day).first();
+  return !r || Number(r.count) <= limit;
+}
+// 每 IP 每日計數(原子版)
+async function ipQuota(env, req, tag, limit) {
+  const ip = req.headers.get("CF-Connecting-IP") || "unknown", day = new Date().toISOString().slice(0, 10);
+  const k = ip + ":" + tag + ":" + day;
+  const r = await env.DB.prepare("INSERT INTO chat_quota (key,count,day) VALUES (?1,1,?2) ON CONFLICT(key) DO UPDATE SET count=count+1, day=?2 RETURNING count").bind(k, day).first();
+  return !r || Number(r.count) <= limit;
+}
+
 // StayTW 自前の session トークン（HS256、SESSION_SECRET で署名）
+// SESSION_SECRET 沒設就不退回 "dev"(會讓人自己簽 admin session);fetch 開頭已擋,這裡再保險
 async function hmacKey(secret) {
-  return crypto.subtle.importKey("raw", TE.encode(secret || "dev"), { name: "HMAC", hash: "SHA-256" }, false, ["sign", "verify"]);
+  if (!secret) throw new Error("SESSION_SECRET missing");
+  return crypto.subtle.importKey("raw", TE.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign", "verify"]);
 }
 async function signSession(uid, secret) {
   const head = bytesToB64url(TE.encode(JSON.stringify({ alg: "HS256", typ: "JWT" })));
-  const body = bytesToB64url(TE.encode(JSON.stringify({ uid, iat: nowSec(), exp: nowSec() + 90 * 86400 })));
+  const ttl = String(uid).startsWith("admin:") ? 86400 : 90 * 86400;   // 管理 session 24h、一般 90 天
+  const body = bytesToB64url(TE.encode(JSON.stringify({ uid, iat: nowSec(), exp: nowSec() + ttl })));
   const sig = new Uint8Array(await crypto.subtle.sign("HMAC", await hmacKey(secret), TE.encode(head + "." + body)));
   return `${head}.${body}.${bytesToB64url(sig)}`;
 }
-async function verifySession(token, secret) {
+async function verifySession(token, secret, env) {
   const parts = String(token || "").split(".");
   if (parts.length !== 3) return null;
   const ok = await crypto.subtle.verify("HMAC", await hmacKey(secret), b64urlToBytes(parts[2]), TE.encode(parts[0] + "." + parts[1]));
   if (!ok) return null;
   let payload; try { payload = decodeJwtPart(parts[1]); } catch { return null; }
   if (!payload.exp || payload.exp < nowSec()) return null;
-  return payload.uid || null;
+  const uid = payload.uid || null;
+  if (!uid) return null;
+  // 撤銷:刪帳號後 auth_users 沒這個 uid → 舊 token 立刻失效(admin: session 不在 auth_users,只看期限)
+  if (env && env.DB && !String(uid).startsWith("admin:")) {
+    const r = await env.DB.prepare("SELECT 1 AS x FROM auth_users WHERE uid=?1").bind(uid).first();
+    if (!r) return null;
+  }
+  return uid;
 }
 
 // サーバー側の Premium 判定(AI 會話の場数用)。クライアントの「stw_premium」は信用しない。
@@ -258,6 +297,8 @@ export default {
     const url = new URL(req.url);
     const h = cors(req);
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: h });
+    // 關鍵 secret 沒設就整個拒絕(否則 session 能被人自己簽、webhook 能被人打)
+    if (!env.SESSION_SECRET || !env.RC_WEBHOOK_SECRET || !env.ADMIN_TOKEN) return json({ error: "misconfigured" }, 500, h);
 
     // ---------- 使用者回饋 ----------
     if (url.pathname === "/api/feedback" && req.method === "POST") {
@@ -300,7 +341,7 @@ export default {
 
     // ---------- AI 會話:今日の残り場数 ----------
     if (url.pathname === "/api/chat-quota") {
-      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET, env);
       const ip = req.headers.get("CF-Connecting-IP") || "unknown";
       const who = uid ? "u:" + uid : "ip:" + ip, day = new Date().toISOString().slice(0, 10);
       const premium = await serverPremium(env, uid);
@@ -318,7 +359,8 @@ export default {
       if (row && row.count >= DAILY) return json({ error: "quota", message: "本日の無料枠を使い切りました" }, 429, h);
       await env.DB.prepare("INSERT INTO chat_quota (key,count,day) VALUES (?1,1,?2) ON CONFLICT(key) DO UPDATE SET count=count+1, day=?2").bind(qkey, day).run();
 
-      let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
+      if (!(await globalQuota(env, "chat", 3000))) return json({ error: "busy" }, 429, h);
+      let b; { const r = await readJson(req, MAX_AI_BODY); if (r.err) return json({ error: r.err }, r.err === "too_large" ? 413 : 400, h); b = r.b; }
       if (!env.ANTHROPIC_API_KEY) return json({ error: "ai_not_configured" }, 501, h);
       const LANGS = { ja: "Japanese", en: "English", ko: "Korean", vi: "Vietnamese", id: "Indonesian" };
       const lang = LANGS[b.lang] ? b.lang : "ja";
@@ -354,7 +396,7 @@ export default {
       const history = Array.isArray(b.history) ? b.history.slice(-24) : [];
 
       // 場数:自分の発言が 1 つ以上ある会話(sid)を、その日の最初の 1 回だけ数える
-      const uidC = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      const uidC = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET, env);
       const who = uidC ? "u:" + uidC : "ip:" + ip;
       const sid = String(b.sid || "").replace(/[^a-z0-9]/gi, "").slice(0, 32);
       const userTurns = history.filter(m => m && m.role !== "ai").length;
@@ -394,7 +436,7 @@ CORR: if the learner's LAST message has a clear mistake, one short gentle note I
 
       // 2026-10:過去の AI 発言を素の文で渡すと、数往復で AI がそれを真似て REPLY: などの行を落とす(画面は「通信エラー」)。
       // 過去の AI 発言にも REPLY: を付け、今回の返事は "REPLY:" から書かせる(prefill。Haiku 対応)
-      const messages = history.map(m => ({ role: m.role === "ai" ? "assistant" : "user", content: m.role === "ai" ? ("REPLY: " + String(m.reply || m.text || "")) : String(m.text || "") })).filter(m => m.content && m.content !== "REPLY: ");
+      const messages = history.map(m => ({ role: m.role === "ai" ? "assistant" : "user", content: m.role === "ai" ? ("REPLY: " + String(m.reply || m.text || "").slice(0, 400)) : String(m.text || "").slice(0, 400) })).filter(m => m.content && m.content !== "REPLY: ");
       if (!messages.length || messages[messages.length - 1].role !== "user") messages.push({ role: "user", content: "（在角色中用台灣華語跟我打招呼，開始這個情境）" });
       messages.push({ role: "assistant", content: "REPLY:" });
 
@@ -440,7 +482,8 @@ CORR: if the learner's LAST message has a clear mistake, one short gentle note I
       if (row && row.count >= DAILY) return json({ error: "quota" }, 429, h);
       await env.DB.prepare("INSERT INTO chat_quota (key,count,day) VALUES (?1,1,?2) ON CONFLICT(key) DO UPDATE SET count=count+1, day=?2").bind(qkey, day).run();
 
-      let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
+      if (!(await globalQuota(env, "wl", 2000))) return json({ error: "busy" }, 429, h);
+      let b; { const r = await readJson(req, MAX_AI_BODY); if (r.err) return json({ error: r.err }, r.err === "too_large" ? 413 : 400, h); b = r.b; }
       if (!env.ANTHROPIC_API_KEY) return json({ error: "ai_not_configured" }, 501, h);
       const word = String(b.word || "").trim().slice(0, 20);
       if (!word) return json({ error: "empty" }, 400, h);
@@ -483,7 +526,8 @@ If the input is not a real Chinese word, set "w" to "" and leave the rest empty.
       if (row && row.count >= DAILY) return json({ error: "quota" }, 429, h);
       await env.DB.prepare("INSERT INTO chat_quota (key,count,day) VALUES (?1,1,?2) ON CONFLICT(key) DO UPDATE SET count=count+1, day=?2").bind(qkey, day).run();
 
-      let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
+      if (!(await globalQuota(env, "review", 3000))) return json({ error: "busy" }, 429, h);
+      let b; { const r = await readJson(req, MAX_AI_BODY); if (r.err) return json({ error: r.err }, r.err === "too_large" ? 413 : 400, h); b = r.b; }
       if (!env.ANTHROPIC_API_KEY) return json({ error: "ai_not_configured" }, 501, h);
       const RLANGS = { ja: "Japanese", en: "English", ko: "Korean", vi: "Vietnamese", id: "Indonesian" };
       const lang = RLANGS[b.lang] ? b.lang : "ja";
@@ -528,7 +572,8 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       const row = await env.DB.prepare("SELECT count FROM chat_quota WHERE key=?1").bind(qkey).first();
       if (row && row.count >= DAILY) return json({ error: "quota" }, 429, h);
       await env.DB.prepare("INSERT INTO chat_quota (key,count,day) VALUES (?1,1,?2) ON CONFLICT(key) DO UPDATE SET count=count+1, day=?2").bind(qkey, day).run();
-      let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
+      if (!(await globalQuota(env, "ws", 2000))) return json({ error: "busy" }, 429, h);
+      let b; { const r = await readJson(req, MAX_AI_BODY); if (r.err) return json({ error: r.err }, r.err === "too_large" ? 413 : 400, h); b = r.b; }
       if (!env.ANTHROPIC_API_KEY) return json({ error: "ai_not_configured" }, 501, h);
       const lang = ["ja", "en", "ko"].includes(b.lang) ? b.lang : "ja";
       const langName = { ja: "Japanese", en: "English", ko: "Korean" }[lang];
@@ -570,7 +615,8 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       // 自然人聲。優先 Azure（文章朗讀同款 zh-TW-HsiaoChenNeural），次 Google，皆無 → 501，前端退回瀏覽器音。
       const hasAzure = !!env.AZURE_SPEECH_KEY, hasGoogle = !!env.GOOGLE_TTS_KEY;
       if (!hasAzure && !hasGoogle) return json({ error: "tts_not_configured" }, 501, h);
-      let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
+      if (!(await globalQuota(env, "tts", 10000))) return json({ error: "busy" }, 429, h);
+      let b; { const r = await readJson(req, MAX_AI_BODY); if (r.err) return json({ error: r.err }, r.err === "too_large" ? 413 : 400, h); b = r.b; }
       const text = String(b.text || "").trim().slice(0, 240);
       if (!text) return json({ error: "no text" }, 400, h);
       const ip = req.headers.get("CF-Connecting-IP") || "unknown";
@@ -585,7 +631,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       // ElevenLabs 試用(2026-10 Mia):管理者だけ。AI 會話の声を Chihiro Yoko(台湾腔)で聞き比べる。
       // ElevenLabs は字音が大陸寄り(垃圾 lā・綜合 zōng)なので一般公開はまだ。失敗したら下の Azure に落ちる
       if (b.el && env.ELEVENLABS_API_KEY) {
-        const euid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+        const euid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET, env);
         const eau = euid ? await env.DB.prepare("SELECT email FROM auth_users WHERE uid=?1").bind(euid).first() : null;
         if (eau && eau.email && ADMIN_EMAILS.includes(String(eau.email).toLowerCase())) {
           try {
@@ -612,7 +658,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
           const region = env.AZURE_SPEECH_REGION || "japaneast";
           const AZ = { f: "zh-TW-HsiaoChenNeural", m: "zh-TW-YunJheNeural", f2: "zh-TW-HsiaoYuNeural" };
           const voice = AZ[b.voice] || AZ.f;
-          const xesc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+          const xesc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
           // 話し方の調子(AI 會話用)。台湾華語の Azure 音声は 3 人だけで「スタイル」が無いので、速さと高さで調整する。
           // 決まった組み合わせしか受けない(任意の値を SSML に入れない)
           const TONES = { std: null, casual: { rate: "+8%", pitch: "+4%" }, lively: { rate: "+12%", pitch: "+7%" } };
@@ -714,6 +760,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       // 混ざると「PC の割合」みたいな判断がそのまま狂う(実際 1 日ぶん汚した)。
       const from = req.headers.get("Referer") || req.headers.get("Origin") || "";
       if (/ytstest\./i.test(from)) return new Response(null, { status: 204, headers: h });
+      if (!(await ipQuota(env, req, "hit", 300))) return new Response(null, { status: 204, headers: h });
       let b; try { b = await req.json(); } catch { b = {}; }
       const path = String(b.path || "/").slice(0, 200);
       const ref = String(b.ref || "").slice(0, 300);
@@ -759,7 +806,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       } else return json({ error: "bad_provider" }, 400, h);
       if (!payload || !payload.sub) return json({ error: "invalid_token" }, 401, h);
       const uid = `${provider}:${payload.sub}`;
-      const email = String(payload.email || "");
+      const email = (provider === "google" && payload.email_verified !== true) ? "" : String(payload.email || "");   // Google 未驗證信箱不採信(comp/admin 都靠 email)
       await env.DB.prepare(
         `INSERT INTO auth_users (uid, provider, sub, email, created_at, updated_at)
          VALUES (?1,?2,?3,?4,?5,?5) ON CONFLICT(uid) DO UPDATE SET email=?4, updated_at=?5`
@@ -784,7 +831,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       }
       if (!payload || !payload.sub) return json({ error: "invalid_token" }, 401, h);
       const uid = provider + ":" + payload.sub;
-      const email = String(payload.email || "");
+      const email = (provider === "google" && payload.email_verified !== true) ? "" : String(payload.email || "");   // Google 未驗證信箱不採信(comp/admin 都靠 email)
       await env.DB.prepare(
         `INSERT INTO auth_users (uid, provider, sub, email, created_at, updated_at)
          VALUES (?1,?2,?3,?4,?5,?5) ON CONFLICT(uid) DO UPDATE SET email=?4, updated_at=?5`
@@ -796,7 +843,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     // ---------- 学習進度クラウド同期（Bearer session）----------
     // ---------- 帳號刪除（Apple 5.1.1(v) 必要）：本人 session で自分の全データを消す ----------
     if (url.pathname === "/api/delete-account" && req.method === "POST") {
-      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET, env);
       if (!uid) return json({ error: "unauthorized" }, 401, h);
       // Play の「帳戶和關聯資料刪除」に合わせ、この uid に紐づくものは一通り消す。
       // 取引記録(rc_events)だけは会計帳簿として残す必要があるが、auth_users を消した時点で
@@ -814,7 +861,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     }
 
     if (url.pathname === "/api/progress") {
-      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET, env);
       if (!uid) return json({ error: "unauthorized" }, 401, h);
       if (req.method === "GET") {
         const row = await env.DB.prepare("SELECT data, updated_at FROM progress WHERE uid=?1").bind(uid).first();
@@ -841,6 +888,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     }
     // 記一次推廣連結點擊(ip 只存雜湊)
     if (url.pathname === "/api/ref/hit" && req.method === "POST") {
+      if (!(await ipQuota(env, req, "refhit", 300))) return json({ ok: false }, 429, h);
       let b; try { b = await req.json(); } catch { b = {}; }
       const k = await hqPartner(env, b.code);
       if (!k) return json({ ok: false }, 200, h);
@@ -849,6 +897,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     }
     // App 第一次開啟、裝置上還沒碼 → 同一網路 72 小時內點過的推廣連結對回來(點連結 → 去商店裝 App)
     if (url.pathname === "/api/ref/auto") {
+      if (!(await ipQuota(env, req, "refauto", 300))) return json({ ok: false }, 429, h);
       const ih = await refIpHash(req, env);
       if (!ih) return json({ ok: false }, 200, h);
       const r = await env.DB.prepare("SELECT code FROM ref_clicks WHERE ip_hash=?1 AND app=0 AND at>?2 ORDER BY at DESC LIMIT 1")
@@ -860,7 +909,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     }
     // 登入的帳號綁碼(first touch,綁過就不換)
     if (url.pathname === "/api/ref/attach" && req.method === "POST") {
-      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET, env);
       if (!uid) return json({ error: "unauthorized" }, 401, h);
       let b; try { b = await req.json(); } catch { b = {}; }
       const k = await hqPartner(env, b.code);
@@ -873,7 +922,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     // ---------- RevenueCat webhook ----------
     if (url.pathname === "/api/rc-webhook" && req.method === "POST") {
       const auth = req.headers.get("Authorization") || "";
-      if (auth !== `Bearer ${env.RC_WEBHOOK_SECRET}`) return json({ error: "unauthorized" }, 401);
+      if (!safeEq(auth, "Bearer " + env.RC_WEBHOOK_SECRET)) return json({ error: "unauthorized" }, 401);
       let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400); }
       const e = b.event || {};
       await env.DB.prepare(
@@ -893,7 +942,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     // ---------- StayHQ 總部日報(Bearer HQ_TOKEN;HQ Worker 透過 service binding 拉,公網也擋 token)----------
     // 回每日(台灣日期)美金毛額/代扣稅/筆數/退款/試用/新帳號;有 kol_codes 表的站順便回夥伴碼給總部匯入。
     if (url.pathname === "/api/hq/daily") {
-      if (!env.HQ_TOKEN || (req.headers.get("Authorization") || "") !== `Bearer ${env.HQ_TOKEN}`) return json({ error: "unauthorized" }, 401);
+      if (!env.HQ_TOKEN || !safeEq(req.headers.get("Authorization") || "", "Bearer " + env.HQ_TOKEN)) return json({ error: "unauthorized" }, 401);
       const days = Math.min(parseInt(url.searchParams.get("days") || "14", 10) || 14, 2000);
       const sinceDay = new Date(Date.now() + 8 * 3600000 - days * 86400000).toISOString().slice(0, 10);
       const dayTW = (ms) => new Date(ms + 8 * 3600000).toISOString().slice(0, 10);
@@ -971,7 +1020,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     if (url.pathname === "/api/admin-login" && req.method === "POST") {
       let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
       const payload = await verifyGoogleWeb(b.token);
-      if (!payload || !payload.email) return json({ error: "invalid_token" }, 401, h);
+      if (!payload || !payload.email || payload.email_verified !== true) return json({ error: "invalid_token" }, 401, h);
       if (!ADMIN_EMAILS.includes(payload.email.toLowerCase())) return json({ error: "not_admin", email: payload.email }, 403, h);
       const sessionToken = await signSession("admin:" + payload.email.toLowerCase(), env.SESSION_SECRET);
       return json({ sessionToken, email: payload.email }, 200, h);
@@ -996,7 +1045,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     // ---------- 学習メール同意（ログインユーザーが自分で勾。既定は未勾、解除=行ごと削除）----------
     // subscribers に source='optin' で入れる。待機リスト(Android 通知)の行があれば optin に格上げ
     if (url.pathname === "/api/mail-opt") {
-      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET, env);
       if (!uid) return json({ error: "unauthorized" }, 401, h);
       const au = await env.DB.prepare("SELECT email FROM auth_users WHERE uid=?1").bind(uid).first();
       const email = String((au && au.email) || "").trim().toLowerCase();
@@ -1017,6 +1066,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     // 影片本身走官方 IFrame 嵌入(不下載不重製);這裡只存「哪一秒講了哪一句」的時間軸。
     // YouTube 會擋機房 IP,Worker 現場抓多半抓不到 → 主要靠本機(住宅 IP)用 scripts/yt-seed.mjs 種進來。
     if (url.pathname === "/api/yt-captions" && req.method === "POST") {
+      if (!(await ipQuota(env, req, "ytc", 300))) return json({ error: "quota" }, 429, h);
       let b; try { b = await req.json(); } catch { b = {}; }
       const v = String(b.v || "");
       if (!/^[A-Za-z0-9_-]{11}$/.test(v)) return json({ error: "bad_video_id" }, 400, h);
@@ -1052,7 +1102,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     // 本機種字幕用(住宅 IP 抓得到)。要 ADMIN_TOKEN,不開放一般人寫。
     if (url.pathname === "/api/yt-seed" && req.method === "POST") {
       const bearer = (req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
-      if (!env.ADMIN_TOKEN || bearer !== env.ADMIN_TOKEN) return json({ error: "unauthorized" }, 401, h);
+      if (!safeEq(bearer, env.ADMIN_TOKEN)) return json({ error: "unauthorized" }, 401, h);
       let b; try { b = await req.json(); } catch { return json({ error: "bad json" }, 400, h); }
       const v = String(b.v || "");
       if (!/^[A-Za-z0-9_-]{11}$/.test(v)) return json({ error: "bad_video_id" }, 400, h);
@@ -1098,7 +1148,7 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     }
 
     if (url.pathname === "/api/me") {
-      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET, env);
       if (!uid) return json({ error: "unauthorized" }, 401, h);
       const code = await refCodeOf(uid);
       const ent = await env.DB.prepare("SELECT plan, status, expires_at FROM entitlements WHERE uid=?1").bind(uid).first();
@@ -1111,13 +1161,13 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
 
     // 家族價查詢(App 原生付費牆用,未登入一律 false)
     if (url.pathname === "/api/family") {
-      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET, env);
       if (!uid) return json({ family: false, products: [] }, 200, h);
       return json(await familyOf(env, uid), 200, h);
     }
 
     if (url.pathname === "/api/referral/claim" && req.method === "POST") {
-      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET);
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET, env);
       if (!uid) return json({ error: "unauthorized" }, 401, h);
       let b; try { b = await req.json(); } catch { b = {}; }
       const code = String(b.code || "").trim().toUpperCase().slice(0, 12);
@@ -1140,9 +1190,9 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
     if (url.pathname.startsWith("/api/admin/")) {
       const auth = req.headers.get("Authorization") || "";
       const bearer = auth.replace(/^Bearer\s+/i, "");
-      let ok = env.ADMIN_TOKEN && bearer === env.ADMIN_TOKEN;   // 旧トークン（後方互換）
+      let ok = safeEq(bearer, env.ADMIN_TOKEN);   // 旧トークン（後方互換）
       if (!ok) {
-        const uid = await verifySession(bearer, env.SESSION_SECRET);   // Google 管理 session
+        const uid = await verifySession(bearer, env.SESSION_SECRET, env);   // Google 管理 session
         ok = uid && uid.startsWith("admin:") && ADMIN_EMAILS.includes(uid.slice(6));
         // 手機上 Google 登入彈窗常被擋（Safari 防追蹤、LINE/Threads 內建瀏覽器）→ 主站已登入的管理員帳號（Apple 或 Google）也可以直接用
         if (!ok && uid && !uid.startsWith("admin:")) {

@@ -179,7 +179,7 @@ const STW_WEB = (() => {
     el.style.display = "";
     if (session && user) {
       const label = (user.name || user.email || "?").trim().slice(0, 1).toUpperCase();
-      el.innerHTML = `<button onclick="switchPanel('profile')" title="${(user.email||'')}"
+      el.innerHTML = `<button onclick="switchPanel('profile')" title="${String(user.email||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}"
         style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--ac);color:#fff;font-weight:700;font-size:13px;border:none;cursor:pointer">${label}</button>`;
     } else {
       el.innerHTML = `<button class="lang-btn" onclick="STW_WEB.login()">${(typeof twT==="function"?twT("navLogin"):"ログイン")}</button>`;

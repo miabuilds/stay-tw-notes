@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "include": ["/", "/index.html", "/home", "/home.html", "/api/*", "/audio/tts/*"],
+  "exclude": []
+}

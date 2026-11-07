@@ -1,0 +1,15 @@
+staytw-api
+scripts
+out
+review
+data/tbcl
+*.md
+.git
+.*
+audio/tts
+node_modules
+.wrangler
+wrangler.toml
+firebase.json
+firestore.rules
+dist
