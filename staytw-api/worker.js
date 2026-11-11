@@ -142,8 +142,30 @@ async function serverPremium(env, uid) {
       if (["INITIAL_PURCHASE", "RENEWAL", "UNCANCELLATION", "PRODUCT_CHANGE"].includes(r.t) && r.ems) { exp = Math.max(exp, Number(r.ems)); refunded = false; }
       if (r.t === "CANCELLATION" && r.cr === "CUSTOMER_SUPPORT") refunded = true;
     }
-    return !refunded && (life || exp > nowMs());
+    if (!refunded && (life || exp > nowMs())) return true;
+    if (refunded) return false;
+    return await rcPremium(env, uid);
   } catch (e) { return false; }
+}
+// 先買後登入:匿名 ID 買的,App 之後 Purchases.logIn(uid) 會在 RevenueCat 併帳,但 webhook 不會通知 → rc_events 裡沒有這個 uid。
+//   2026-11-11 日本年費用戶回報 AI 會話只有免費額度才發現(10/21 匿名買、20 秒後 Apple 登入)。
+//   本機查不到時問 RevenueCat(公開 SDK key 的 GET subscribers,唯讀),結果按小時快取在 chat_quota。
+const RC_PUBLIC_KEY = "appl_IpOdqiSmbjjhHDcmNuYtFBzpAZM", RC_ENTITLEMENT = "StayTW Premium";
+async function rcPremium(env, uid) {
+  if (!/^(google|apple):[A-Za-z0-9._-]{1,200}$/.test(uid)) return false;
+  const day = new Date().toISOString().slice(0, 10), ck = "rcp:" + uid + ":" + new Date().toISOString().slice(0, 13);
+  const hit = await env.DB.prepare("SELECT count FROM chat_quota WHERE key=?1").bind(ck).first();
+  if (hit) return hit.count === 2;
+  let ok = false;
+  try {
+    const r = await fetch("https://api.revenuecat.com/v1/subscribers/" + encodeURIComponent(uid), {
+      headers: { Authorization: "Bearer " + RC_PUBLIC_KEY, "X-Platform": "ios" }, signal: AbortSignal.timeout(4000) });
+    if (!r.ok) return false;   // 失敗不快取,下次再問
+    const e = (((await r.json()).subscriber || {}).entitlements || {})[RC_ENTITLEMENT];
+    ok = !!e && (!e.expires_date || Date.parse(e.grace_period_expires_date || e.expires_date) > nowMs());
+  } catch (err) { return false; }
+  await env.DB.prepare("INSERT OR REPLACE INTO chat_quota (key,count,day) VALUES (?1,?2,?3)").bind(ck, ok ? 2 : 1, day).run();
+  return ok;
 }
 const CHAT_LIMIT = { free: 1, premium: 5 };   // 1 日の AI 會話の場数(StayJP と同じ)。AI の挨拶は数えず、自分が 1 句送った時点で 1 場
 // 管理者(ADMIN_EMAILS)は AI 會話の場数無制限(Mia 2026-10-16:自分でテストすると 5 場で詰まる)
