@@ -136,7 +136,7 @@ const YTS = (() => {
       box.innerHTML = `<div class="yts-empty">
         <p>${esc(T("ytsNoCap"))}</p>
         <p class="yts-sub">${esc(T("ytsNoCapSub"))}</p>
-        <button class="btn" onclick="YTS.render()">${esc(T("ytsBackList"))}</button></div>`;
+        <button class="btn" data-nav-back onclick="YTS.render()">${esc(T("ytsBackList"))}</button></div>`;
       return;
     }
     vid = v; meta = data; cur = 0; spdIdx = 0; loopOn = false; mode = "follow";
@@ -151,7 +151,7 @@ const YTS = (() => {
   function renderPlayer() {
     $("ytsBody").innerHTML = `
       <div class="yts-head">
-        <button class="yts-back" onclick="YTS.render()">‹ ${esc(T("ytsBackList"))}</button>
+        <button class="yts-back" data-nav-back onclick="YTS.render()">‹ ${esc(T("ytsBackList"))}</button>
         <div class="yts-title">${esc(meta.title || "")}</div>
       </div>
       <div class="yts-video"><div id="ytsFrame"></div></div>
@@ -176,12 +176,13 @@ const YTS = (() => {
                 const r = segRange(cur);
                 watchSeg(r.s, r.e, () => { clearWatch(); try { player.pauseVideo(); } catch (e2) {} if (loopOn) setTimeout(playSeg, 350); });
               }
-            } else if (st === 2) { clearWatch(); clearFollow(); clearSeek(); }   // 使用者自己按暫停
+            } else if (st === 2) { if (seekT) return;   // 我們自己 seek 前按的暫停
+              clearWatch(); clearFollow(); clearSeek(); }   // 使用者自己按暫停
           },
           onError: (e) => {
             const code = e && e.data;
             $("ytsCard").innerHTML = `<div class="yts-empty"><p>${esc(code === 101 || code === 150 ? T("ytsNoEmbed") : T("ytsPlayErr"))}</p>
-              <button class="btn" onclick="YTS.render()">${esc(T("ytsBackList"))}</button></div>`;
+              <button class="btn" data-nav-back onclick="YTS.render()">${esc(T("ytsBackList"))}</button></div>`;
           },
         },
       });
@@ -268,7 +269,8 @@ const YTS = (() => {
   function clearWatch() { clearInterval(watchT); watchT = 0; }
   // seek 待ちは watchSeg とは別物。watchSeg は冒頭で clearWatch を呼ぶので、
   // ここを一緒くたにすると「seek したのに鳴らない」になる(実際そうなった)。
-  function clearSeek() { clearInterval(seekT); seekT = 0; }
+  let ourMute = false;   // 這次靜音是我們 seek 時按的；中途被清掉也要把聲音還回去
+  function clearSeek() { clearInterval(seekT); seekT = 0; if (ourMute) { ourMute = false; try { player.unMute(); } catch (e) {} } }
   // 再生ボタンの見た目は「プレイヤーの実際の状態」だけを見る。
   // 自前のボタンから動かしても、YouTube 側のボタンから動かしても同じ絵になる。
   function syncPlayBtn(state) {
@@ -301,11 +303,11 @@ const YTS = (() => {
   // なので「seek 中はミュート → 本当に開始点を過ぎてから音を戻す」で確実に殺す。
   // 利用者が自分でミュートしていた場合は戻さない。
   function seekThenPlay(sec, done) {
-    clearInterval(seekT);
+    clearSeek();
     let wasMuted = false;
     try { wasMuted = !!player.isMuted(); } catch (e) {}
     try {
-      if (!wasMuted) player.mute();
+      if (!wasMuted) { player.mute(); ourMute = true; }
       player.pauseVideo();
       player.seekTo(sec, true);
       player.playVideo();
@@ -315,8 +317,7 @@ const YTS = (() => {
       let c = -1; try { c = player.getCurrentTime(); } catch (e) {}
       // 開始点を過ぎた／待ちすぎた、のどちらかで音を戻す(最大 ~1.5 秒)
       if (c >= sec - 0.02 || ++n > 30) {
-        clearInterval(seekT); seekT = 0;
-        try { if (!wasMuted) player.unMute(); } catch (e) {}
+        clearSeek();
         if (done) done();
       }
     }, 50);
@@ -628,7 +629,7 @@ const YTS = (() => {
     result(said);
   }
 
-  function toast(m) { try { if (typeof showToast === "function") showToast(m); else alert(m); } catch (e) {} }
+  function toast(m) { try { if (typeof showToast === "function") showToast(m); } catch (e) {} }
 
   // ── 首頁:影片牆 ──
   function render() {
