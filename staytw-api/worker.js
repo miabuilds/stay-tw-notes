@@ -119,6 +119,30 @@ async function verifySession(token, secret, env) {
 // サーバー側の Premium 判定(AI 會話の場数用)。クライアントの「stw_premium」は信用しない。
 //   ・推薦で付いた entitlements
 //   ・RevenueCat の正式取引:この uid(または aliases にこの uid を含む)の、まだ期限内の購入/更新、または買い切り。返金されていれば無効
+// ── 取消問卷(2026-11-19 Mia):取消都是在 App Store / Play 的設定裡按的,我們攔不到那一刻。
+// RevenueCat webhook 會送 CANCELLATION 進 rc_events → 這個帳號下次開 App/網頁時 /api/me 帶 cancelAsk,前端跳一次問卷。
+// 只問「自己取消」(UNSUBSCRIBE)和韓國常見的「未同意漲價」(PRICE_INCREASE);扣款失敗、退款不問。
+// 之後又續訂/重訂就不問;一次取消只問一次(答了或略過都記在 cancel_survey)。
+const CANCEL_REASONS = ["price", "trial_only", "level", "no_time", "feature", "bug", "other_app", "forgot", "other"];
+async function cancelSurveyTable(env) {
+  await env.DB.prepare("CREATE TABLE IF NOT EXISTS cancel_survey (id INTEGER PRIMARY KEY AUTOINCREMENT, uid TEXT NOT NULL, event_ts TEXT, product_id TEXT, period_type TEXT, store TEXT, country TEXT, cancel_reason TEXT, reason TEXT, note TEXT, lang TEXT, skipped INTEGER DEFAULT 0, created_at TEXT DEFAULT (datetime('now')))").run();
+}
+async function cancelAskOf(env, uid) {
+  try {
+    if (!uid) return null;
+    const ev = await env.DB.prepare(
+      `SELECT ts, product_id, country, json_extract(raw,'$.event.period_type') pt, json_extract(raw,'$.event.store') store, json_extract(raw,'$.event.cancel_reason') cr
+       FROM rc_events WHERE app_user_id=?1 AND environment='PRODUCTION' AND event_type='CANCELLATION' AND ts > datetime('now','-45 day') ORDER BY ts DESC LIMIT 1`).bind(uid).first();
+    if (!ev || !["UNSUBSCRIBE", "PRICE_INCREASE"].includes(String(ev.cr || ""))) return null;
+    const back = await env.DB.prepare("SELECT 1 x FROM rc_events WHERE app_user_id=?1 AND environment='PRODUCTION' AND event_type IN ('INITIAL_PURCHASE','RENEWAL','UNCANCELLATION','NON_RENEWING_PURCHASE') AND ts > ?2 LIMIT 1").bind(uid, ev.ts).first();
+    if (back) return null;
+    await cancelSurveyTable(env);
+    const done = await env.DB.prepare("SELECT 1 x FROM cancel_survey WHERE uid=?1 AND event_ts=?2 LIMIT 1").bind(uid, ev.ts).first();
+    if (done) return null;
+    return { at: ev.ts, product: ev.product_id || "", trial: String(ev.pt || "") === "TRIAL", store: ev.store || "", country: ev.country || "", cr: ev.cr || "" };
+  } catch (e) { return null; }
+}
+
 async function serverPremium(env, uid) {
   if (!uid) return false;
   try {
@@ -1178,7 +1202,30 @@ Respond with a SINGLE valid JSON object only (no markdown), keys:
       const until = ent && ent.status === "active" ? (ent.expires_at || 0) : 0;
       // premium:伺服器整體判定(白名單 comp_emails / 推薦天數 / RevenueCat 正式交易)。網頁端 websync.js 登入後看這個解鎖、登出收回
       return json({ uid, refCode: code, referrals: (cnt && cnt.n) || 0,
-                    premiumUntil: until, entitled: until > nowMs(), refDays: REF_DAYS, premium: await serverPremium(env, uid), family: (await familyOf(env, uid)).family }, 200, h);
+                    premiumUntil: until, entitled: until > nowMs(), refDays: REF_DAYS, premium: await serverPremium(env, uid), family: (await familyOf(env, uid)).family,
+                    cancelAsk: await cancelAskOf(env, uid) }, 200, h);
+    }
+
+    // 取消問卷回覆。skip=true 也記一筆(之後不再問)。有回答的同時抄一份進 feedback,後台回饋/總部看得到。
+    if (url.pathname === "/api/cancel-survey" && req.method === "POST") {
+      const uid = await verifySession((req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, ""), env.SESSION_SECRET, env);
+      if (!uid) return json({ error: "unauthorized" }, 401, h);
+      let b; try { b = await req.json(); } catch { b = {}; }
+      const ask = await cancelAskOf(env, uid);
+      if (!ask) return json({ ok: true }, 200, h);
+      const skip = !!b.skip, reason = CANCEL_REASONS.includes(b.reason) ? b.reason : "", note = String(b.note || "").trim().slice(0, 1000), lang = String(b.lang || "").slice(0, 8);
+      if (!skip && !reason) return json({ error: "reason required" }, 400, h);
+      await env.DB.prepare("INSERT INTO cancel_survey (uid,event_ts,product_id,period_type,store,country,cancel_reason,reason,note,lang,skipped) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11)")
+        .bind(uid, ask.at, ask.product, ask.trial ? "TRIAL" : "NORMAL", ask.store, ask.country, ask.cr, skip ? "" : reason, skip ? "" : note, lang, skip ? 1 : 0).run();
+      if (!skip) {
+        try {
+          const au = await env.DB.prepare("SELECT email FROM auth_users WHERE uid=?1").bind(uid).first();
+          const msg = `[取消問卷] 原因:${reason}${note ? "｜" + note : ""}｜${ask.product}${ask.trial ? "(試用中取消)" : ""}｜${ask.store} ${ask.country}`;
+          await env.DB.prepare("INSERT INTO feedback (type, message, email, contact_email, lang, ua) VALUES ('other', ?1, ?2, '', ?3, ?4)")
+            .bind(msg, (au && au.email) || "", lang, (req.headers.get("User-Agent") || "").slice(0, 300)).run();
+        } catch (e) {}
+      }
+      return json({ ok: true }, 200, h);
     }
 
     // 家族價查詢(App 原生付費牆用,未登入一律 false)

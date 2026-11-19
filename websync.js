@@ -202,6 +202,7 @@ const STW_WEB = (() => {
       // 伺服器說這個帳號是 Premium（贈送白名單 comp_emails、RC 正式交易等，不是在這台裝置買的）→ 解鎖。登出時收回
       if (me && me.premium) { localStorage.setItem("stw_srv_prem", "1"); if (window.Paywall && !Paywall.isPremium()) Paywall.setEntitled(true); }
       else if (me && !me.entitled && localStorage.getItem("stw_srv_prem") === "1") { localStorage.removeItem("stw_srv_prem"); try { Paywall.setEntitled(false); } catch (e) {} }
+      try { if (window.CancelSurvey) CancelSurvey.maybe(me, session); } catch (e) {}   // 取消問卷(cancelsurvey.js)
       return me;
     } catch (e) { return null; }
   }
