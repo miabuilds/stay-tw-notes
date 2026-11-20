@@ -170,7 +170,7 @@ const SRS = (() => {
       if (v) queue.push(Object.assign({}, v, { level: x.level, isNew: false }));
     });
     nw.forEach(v => queue.push({ ...v, level: lvl, isNew: true }));
-    if (!queue.length) { alert(twT("srsNoReview")); return; }
+    if (!queue.length) { if (typeof showToast === "function") showToast(twT("srsNoReview")); return; }   // 原生 alert 禁止
     // 無料版は1セッション SRS_FREE_CARDS 枚まで（due 優先の順は維持）。Premium は無制限。
     capped = false;
     try {

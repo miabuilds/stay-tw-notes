@@ -7,14 +7,20 @@
    "id": "u1",
    "no": 1,
    "lead": {
-    "ja": "情感深化",
-    "en": "情感深化"
+    "ja": "気持ち(もっと深く)",
+    "en": "Feelings in depth",
+    "ko": "감정 더 깊이",
+    "vi": "Cảm xúc chuyên sâu",
+    "id": "Perasaan lebih dalam"
    },
    "lessons": [
     {
      "name": {
-      "ja": "情感深化",
-      "en": "情感深化"
+      "ja": "気持ち(もっと深く)",
+      "en": "Feelings in depth",
+      "ko": "감정 더 깊이",
+      "vi": "Cảm xúc chuyên sâu",
+      "id": "Perasaan lebih dalam"
      },
      "words": [
       "後悔",
@@ -3814,8 +3820,11 @@
     },
     {
      "name": {
-      "ja": "科技網路",
-      "en": "科技網路"
+      "ja": "テクノロジーとネット",
+      "en": "Tech & the internet",
+      "ko": "기술과 인터넷",
+      "vi": "Công nghệ & Internet",
+      "id": "Teknologi & internet"
      },
      "words": [
       "程式",
@@ -3828,8 +3837,11 @@
     },
     {
      "name": {
-      "ja": "人際",
-      "en": "人際"
+      "ja": "人との関わり",
+      "en": "Getting along with people",
+      "ko": "대인 관계",
+      "vi": "Quan hệ giao tiếp",
+      "id": "Pergaulan sosial"
      },
      "words": [
       "聚會",
@@ -3841,8 +3853,11 @@
     },
     {
      "name": {
-      "ja": "求職",
-      "en": "求職"
+      "ja": "仕事さがし",
+      "en": "Job hunting",
+      "ko": "구직",
+      "vi": "Tìm việc",
+      "id": "Mencari kerja"
      },
      "words": [
       "應徵",
@@ -3860,14 +3875,20 @@
    "id": "u30",
    "no": 30,
    "lead": {
-    "ja": "健康生活",
-    "en": "健康生活"
+    "ja": "健康な暮らし",
+    "en": "Healthy living",
+    "ko": "건강한 생활",
+    "vi": "Sống khỏe",
+    "id": "Hidup sehat"
    },
    "lessons": [
     {
      "name": {
-      "ja": "健康生活",
-      "en": "健康生活"
+      "ja": "健康な暮らし",
+      "en": "Healthy living",
+      "ko": "건강한 생활",
+      "vi": "Sống khỏe",
+      "id": "Hidup sehat"
      },
      "words": [
       "健身",
@@ -4128,13 +4149,19 @@
    "no": 32,
    "lead": {
     "ja": "感情",
-    "en": "感情"
+    "en": "Emotions",
+    "ko": "감정",
+    "vi": "Cảm xúc",
+    "id": "Emosi"
    },
    "lessons": [
     {
      "name": {
       "ja": "感情",
-      "en": "感情"
+      "en": "Emotions",
+      "ko": "감정",
+      "vi": "Cảm xúc",
+      "id": "Emosi"
      },
      "words": [
       "捨不得",
@@ -4146,8 +4173,11 @@
     },
     {
      "name": {
-      "ja": "意見・観点",
-      "en": "意見・観点"
+      "ja": "意見と視点",
+      "en": "Opinions & viewpoints",
+      "ko": "의견과 관점",
+      "vi": "Ý kiến & quan điểm",
+      "id": "Pendapat & sudut pandang"
      },
      "words": [
       "觀點",
@@ -4162,8 +4192,11 @@
     },
     {
      "name": {
-      "ja": "抽象動詞",
-      "en": "抽象動詞"
+      "ja": "抽象的な動詞",
+      "en": "Abstract verbs",
+      "ko": "추상 동사",
+      "vi": "Động từ trừu tượng",
+      "id": "Kata kerja abstrak"
      },
      "words": [
       "掌握",
@@ -4176,8 +4209,11 @@
     },
     {
      "name": {
-      "ja": "形容詞・副詞",
-      "en": "形容詞・副詞"
+      "ja": "形容詞と副詞",
+      "en": "Adjectives & adverbs",
+      "ko": "형용사와 부사",
+      "vi": "Tính từ & phó từ",
+      "id": "Kata sifat & keterangan"
      },
      "words": [
       "消極",

@@ -85,7 +85,7 @@ function applyLang(){
   document.querySelectorAll("[data-i18n-html]").forEach(function(el){var k=el.getAttribute("data-i18n-html");if(d[k]!==undefined)el.innerHTML=d[k];});
 }
 function cycleLang(){var o=["zh","ja","en","ko"];LANG=o[(o.indexOf(LANG)+1)%o.length];if(LANG!=="zh")localStorage.setItem("stw-lang",LANG);applyLang();}
-function stwBack(){ if(history.length>1){ history.back(); } else { location.href="index.html"; } }
+function stwBack(){ try{ sessionStorage.setItem("stw_back","1"); }catch(e){} if(history.length>1){ history.back(); } else { location.href="index.html"; } return "handled"; }
 applyLang();
 </script>
 </body></html>

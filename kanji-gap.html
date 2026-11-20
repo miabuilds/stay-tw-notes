@@ -193,12 +193,13 @@ function render(){
       <div class="act"><button class="pri" onclick="shareImg(${KANJI_GAP.indexOf(k)})">${esc(t("save"))}</button><button onclick="copyText(${KANJI_GAP.indexOf(k)})">${esc(t("copy"))}</button></div>
     </article>`).join("");
 }
+function copyFallback(txt){ try { const ta=document.createElement("textarea"); ta.value=txt; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select(); const ok=document.execCommand("copy"); ta.remove(); return ok; } catch(e){ return false; } }
 function toast(msg){ const el = document.getElementById("toast"); el.textContent = msg; el.classList.add("on"); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove("on"), 1800); }
 function fill(k){
   const l = lang();
   return t("shareText").replace("{w}", k.tw).replace("{jp}", k.m[l].jp).replace("{tw}", k.m[l].tw).replace("{z}", k.ex.z).replace("{py}", k.ex.py).replace("{ja}", k.ex.ja).replace("{en}", k.ex.en);
 }
-async function copyText(i){ try { await navigator.clipboard.writeText(fill(KANJI_GAP[i])); toast(t("copied")); } catch(e){ prompt("", fill(KANJI_GAP[i])); } }
+async function copyText(i){ try { await navigator.clipboard.writeText(fill(KANJI_GAP[i])); toast(t("copied")); } catch(e){ if (copyFallback(fill(KANJI_GAP[i]))) toast(t("copied")); } }
 
 // ── シェア画像（1080×1350、Threads / X / Instagram 向け縦長）──
 function wrapText(ctx, text, maxW){
@@ -258,5 +259,15 @@ async function shareImg(i){
 applyLang();
 </script>
 <script>try{fetch("/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname+(function(){try{var u=new URLSearchParams(location.search).get("utm_source");return u?"?utm_source="+u.replace(/[^\w-]/g,"").slice(0,40):""}catch(e){return ""}})(),ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
+<script>
+/* 回主程式時接回原本的畫面(index.html 讀 sessionStorage 的 stw_back)。Android 返回鍵 → stwReturn() */
+(function(){
+  var H = window.history;   // speak-chat.html 有全域 let history=[](聊天紀錄)會蓋掉 history,一律用 window.history
+  function fromApp(){ try { return !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) { return false; } }
+  window.stwReturn = function(){ try { sessionStorage.setItem("stw_back", "1"); } catch (e) {} if (H.length > 1 && fromApp()) H.back(); else location.href = "/?app=1"; };
+  if (!window.stwBack) window.stwBack = function(){ window.stwReturn(); return "handled"; };
+  window.addEventListener("pagehide", function(){ try { sessionStorage.setItem("stw_back", "1"); } catch (e) {} });
+})();
+</script>
 </body>
 </html>

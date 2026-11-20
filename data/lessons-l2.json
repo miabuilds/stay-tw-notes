@@ -326,7 +326,10 @@
     {
      "name": {
       "ja": "買い物",
-      "en": "買い物"
+      "en": "Shopping",
+      "ko": "쇼핑",
+      "vi": "Mua sắm",
+      "id": "Belanja"
      },
      "words": [
       "老闆",
@@ -401,13 +404,19 @@
    "no": 4,
    "lead": {
     "ja": "住まい",
-    "en": "住まい"
+    "en": "Home & housing",
+    "ko": "집과 주거",
+    "vi": "Nhà ở",
+    "id": "Tempat tinggal"
    },
    "lessons": [
     {
      "name": {
       "ja": "住まい",
-      "en": "住まい"
+      "en": "Home & housing",
+      "ko": "집과 주거",
+      "vi": "Nhà ở",
+      "id": "Tempat tinggal"
      },
      "words": [
       "窗戶",
@@ -629,7 +638,10 @@
     {
      "name": {
       "ja": "仕事",
-      "en": "仕事"
+      "en": "Work",
+      "ko": "일",
+      "vi": "Công việc",
+      "id": "Pekerjaan"
      },
      "words": [
       "上班",
@@ -646,14 +658,20 @@
    "id": "u6",
    "no": 6,
    "lead": {
-    "ja": "餐飲",
-    "en": "餐飲"
+    "ja": "食事",
+    "en": "Food & dining",
+    "ko": "음식과 식사",
+    "vi": "Ăn uống",
+    "id": "Makanan & minuman"
    },
    "lessons": [
     {
      "name": {
-      "ja": "餐飲",
-      "en": "餐飲"
+      "ja": "食事",
+      "en": "Food & dining",
+      "ko": "음식과 식사",
+      "vi": "Ăn uống",
+      "id": "Makanan & minuman"
      },
      "words": [
       "冰淇淋",
@@ -1334,7 +1352,10 @@
     {
      "name": {
       "ja": "毎日の生活",
-      "en": "毎日の生活"
+      "en": "Daily routine",
+      "ko": "매일의 생활",
+      "vi": "Sinh hoạt mỗi ngày",
+      "id": "Rutinitas harian"
      },
      "words": [
       "洗澡",
@@ -1367,8 +1388,11 @@
     },
     {
      "name": {
-      "ja": "方位",
-      "en": "方位"
+      "ja": "方向と位置",
+      "en": "Directions & positions",
+      "ko": "방향과 위치",
+      "vi": "Phương hướng & vị trí",
+      "id": "Arah & posisi"
      },
      "words": [
       "東",
@@ -1383,7 +1407,10 @@
     {
      "name": {
       "ja": "日常の動詞",
-      "en": "日常の動詞"
+      "en": "Everyday verbs",
+      "ko": "일상 동사",
+      "vi": "Động từ thường ngày",
+      "id": "Kata kerja sehari-hari"
      },
      "words": [
       "參加",
@@ -1402,13 +1429,19 @@
    "no": 12,
    "lead": {
     "ja": "生活の名詞",
-    "en": "生活の名詞"
+    "en": "Everyday nouns",
+    "ko": "생활 명사",
+    "vi": "Danh từ đời sống",
+    "id": "Kata benda sehari-hari"
    },
    "lessons": [
     {
      "name": {
       "ja": "生活の名詞",
-      "en": "生活の名詞"
+      "en": "Everyday nouns",
+      "ko": "생활 명사",
+      "vi": "Danh từ đời sống",
+      "id": "Kata benda sehari-hari"
      },
      "words": [
       "信用卡",
@@ -1444,7 +1477,10 @@
     {
      "name": {
       "ja": "時間の副詞",
-      "en": "時間の副詞"
+      "en": "Time adverbs",
+      "ko": "시간 부사",
+      "vi": "Phó từ chỉ thời gian",
+      "id": "Kata keterangan waktu"
      },
      "words": [
       "一直",
@@ -1457,7 +1493,10 @@
     {
      "name": {
       "ja": "外食",
-      "en": "外食"
+      "en": "Eating out",
+      "ko": "외식",
+      "vi": "Ăn ngoài",
+      "id": "Makan di luar"
      },
      "words": [
       "菜單",
@@ -1469,8 +1508,11 @@
     },
     {
      "name": {
-      "ja": "交通補充",
-      "en": "交通補充"
+      "ja": "交通(追加)",
+      "en": "More on transport",
+      "ko": "교통 더 알기",
+      "vi": "Giao thông (bổ sung)",
+      "id": "Transportasi (tambahan)"
      },
      "words": [
       "騎",
@@ -1507,14 +1549,20 @@
    "id": "u13",
    "no": 13,
    "lead": {
-    "ja": "通訊",
-    "en": "通訊"
+    "ja": "通信・連絡",
+    "en": "Staying in touch",
+    "ko": "통신과 연락",
+    "vi": "Liên lạc",
+    "id": "Komunikasi"
    },
    "lessons": [
     {
      "name": {
-      "ja": "通訊",
-      "en": "通訊"
+      "ja": "通信・連絡",
+      "en": "Staying in touch",
+      "ko": "통신과 연락",
+      "vi": "Liên lạc",
+      "id": "Komunikasi"
      },
      "words": [
       "已讀",
@@ -1527,8 +1575,11 @@
     },
     {
      "name": {
-      "ja": "身體感受",
-      "en": "身體感受"
+      "ja": "体の感覚",
+      "en": "How your body feels",
+      "ko": "몸의 느낌",
+      "vi": "Cảm giác cơ thể",
+      "id": "Rasa di tubuh"
      },
      "words": [
       "頭暈",
@@ -1540,8 +1591,11 @@
     },
     {
      "name": {
-      "ja": "購物・金錢",
-      "en": "購物・金錢"
+      "ja": "買い物とお金",
+      "en": "Shopping & money",
+      "ko": "쇼핑과 돈",
+      "vi": "Mua sắm & tiền bạc",
+      "id": "Belanja & uang"
      },
      "words": [
       "付錢",
@@ -1574,8 +1628,11 @@
     },
     {
      "name": {
-      "ja": "程度副詞",
-      "en": "程度副詞"
+      "ja": "程度の副詞",
+      "en": "Degree adverbs",
+      "ko": "정도 부사",
+      "vi": "Phó từ chỉ mức độ",
+      "id": "Kata keterangan derajat"
      },
      "words": [
       "特別",
@@ -1955,8 +2012,11 @@
     },
     {
      "name": {
-      "ja": "抽象語",
-      "en": "抽象語"
+      "ja": "抽象的なことば",
+      "en": "Abstract words",
+      "ko": "추상적인 말",
+      "vi": "Từ trừu tượng",
+      "id": "Kata abstrak"
      },
      "words": [
       "習慣",

@@ -36,7 +36,7 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--ac)}
 <body>
 <div class="wrap">
   <div class="top">
-    <a class="back" href="index.html" data-i18n="back">← 学習ツールへ戻る</a>
+    <a class="back" href="index.html" onclick="event.preventDefault();stwReturn()" data-i18n="back">← 学習ツールへ戻る</a>
     <button class="lang-btn" id="langBtn" onclick="cycleLang()">日</button>
   </div>
   <h1 data-i18n="title">ご意見・不具合報告</h1>
@@ -150,5 +150,15 @@ document.getElementById("f").addEventListener("submit", async (e)=>{
 </script>
 <script>try{fetch("/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname+(function(){try{var u=new URLSearchParams(location.search).get("utm_source");return u?"?utm_source="+u.replace(/[^\w-]/g,"").slice(0,40):""}catch(e){return ""}})(),ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
 <script src="inapp-hint.js?v=1"></script>
+<script>
+/* 回主程式時接回原本的畫面(index.html 讀 sessionStorage 的 stw_back)。Android 返回鍵 → stwReturn() */
+(function(){
+  var H = window.history;   // speak-chat.html 有全域 let history=[](聊天紀錄)會蓋掉 history,一律用 window.history
+  function fromApp(){ try { return !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) { return false; } }
+  window.stwReturn = function(){ try { sessionStorage.setItem("stw_back", "1"); } catch (e) {} if (H.length > 1 && fromApp()) H.back(); else location.href = "/?app=1"; };
+  if (!window.stwBack) window.stwBack = function(){ window.stwReturn(); return "handled"; };
+  window.addEventListener("pagehide", function(){ try { sessionStorage.setItem("stw_back", "1"); } catch (e) {} });
+})();
+</script>
 </body>
 </html>

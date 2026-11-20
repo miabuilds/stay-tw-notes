@@ -133,7 +133,7 @@ const POLY = (() => {
     const arr = fav ? POLYPHONE.filter(p => pfHas(p.c)) : POLYPHONE;
     const body = arr.length ? arr.map(polyDetail).join("") : `<p style="color:var(--tx2);text-align:center;margin:30px 12px">${twT("polyFavEmpty")}</p>`;
     box().innerHTML = `<div class="aq-wrap"><div class="poly-list-top">
-      <button class="btn" onclick="POLY.home()">‹ ${twT("polyTitle")}</button>
+      <button class="btn" data-nav-back onclick="POLY.home()">‹ ${twT("polyTitle")}</button>
       <div class="poly-seg"><button class="${!fav ? "on" : ""}" onclick="POLY.list(false)">${twT("polyAll")} (${POLYPHONE.length})</button><button class="${fav ? "on" : ""}" onclick="POLY.list(true)">★ ${pfGet().length}</button></div>
     </div><div class="poly-list">${body}</div></div>`;
   }
@@ -175,7 +175,7 @@ const POLY = (() => {
     const it = deck[qi], p = it.p;
     const wordHtml = it.word.split("").map(ch => ch === p.c ? `<b class="poly-hi">${ch}</b>` : ch).join("");
     box().innerHTML = `<div class="aq-wrap">
-      <div style="font-size:13px;color:var(--tx3)">${qi+1} / ${deck.length}　✓ ${score}</div>
+      <div style="font-size:13px;color:var(--tx3);display:flex;justify-content:space-between;align-items:center">${qi+1} / ${deck.length}　✓ ${score}<button class="btn sm" data-nav-back onclick="POLY.home()" aria-label="close">✕</button></div>
       <div class="poly-word" onclick="POLY.say('${it.word}','${p.c}','${p.r[it.ri].py}')">${wordHtml} <button class="tts-btn" style="width:30px;height:30px;font-size:13px" onclick="event.stopPropagation();POLY.say('${it.word}','${p.c}','${p.r[it.ri].py}')"><svg viewBox="0 0 24 24" class="ic"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.3 8.7a4.5 4.5 0 0 1 0 6.6"/></svg></button></div>
       <div class="ex-prompt">${twT("polyAsk").replace("%c", p.c)}</div>
       <div class="qz-opts zy" id="polyOpts">${it.opts.map(oi => `<button class="qz-opt" data-i="${oi}" data-ok="${oi===it.ri}" onclick="POLY.answer(${oi})">${p.r[oi].zy}</button>`).join("")}</div>

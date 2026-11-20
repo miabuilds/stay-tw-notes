@@ -281,6 +281,21 @@ button{font-family:inherit}
 .zy-cell .zy-z{font-family:var(--zhuyin);font-size:30px;font-weight:700;line-height:1.15;letter-spacing:.03em}
 .zy-cell .zy-py{font-size:12.5px;color:var(--tx2);margin-top:3px}
 .zy-hint{text-align:center;font-size:13px;color:var(--tx3);margin-bottom:16px}
+.zk-lead{color:var(--tx2);font-size:14px;line-height:1.6;max-width:520px;margin-left:auto;margin-right:auto}
+.zk-board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:4px;max-width:640px;margin:0 auto 14px}
+.zk-col{display:flex;flex-direction:column;gap:4px;padding:4px 2px;border-radius:10px;background:var(--bg2);border:1px solid var(--line)}
+.zk-col.alt{background:var(--bg3)}
+.zk-key{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-height:46px;padding:4px 0;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--tx);cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent;transition:transform .1s var(--ease),border-color .1s}
+.zk-key:active{transform:scale(.93)}
+.zk-key.play{border-color:var(--ac);background:var(--ac-soft)}
+.zk-key.tone{cursor:default;border-style:dashed;color:var(--tx3);background:transparent}
+.zk-k{font-size:9px;color:var(--tx3);letter-spacing:.02em;line-height:1}
+.zk-z{font-family:var(--zhuyin);font-size:clamp(15px,4.4vw,24px);font-weight:700;line-height:1.15}
+.zk-t{font-size:9px;line-height:1;color:var(--tx3);white-space:nowrap}
+@media(max-width:560px){.zk-t{display:none}}
+.zk-key.tone .zk-z{font-family:inherit;font-size:clamp(20px,5.5vw,28px);font-weight:700;color:var(--tx)}
+.zk-order{text-align:center;font-family:var(--zhuyin);font-size:15px;color:var(--tx2);letter-spacing:.04em;line-height:1.8;margin:0 0 10px}
+@media(hover:hover){.zk-key:not(.tone):hover{border-color:var(--ac)}}
 .zy-test{max-width:460px;margin:0 auto;text-align:center}
 .zy-prompt{font-family:var(--zhuyin);font-size:76px;font-weight:700;line-height:1.05;margin:8px 0;letter-spacing:.03em}
 .zy-play-btn{background:var(--bg3);color:var(--tx);border:1px solid var(--bd);border-radius:999px;padding:11px 24px;font-size:15px;font-weight:700;cursor:pointer;margin:6px 0 18px;font-family:inherit}
@@ -1550,6 +1565,13 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
 .spk-cmp{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .spk-cmp-b{flex:1;min-width:130px;padding:9px 10px;font-size:13px}
 .pw-per{display:block;font-style:normal;font-size:10.5px;color:var(--ac);font-weight:700;margin-top:3px;line-height:1.3}
+.tw-offer{display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;border:1.5px solid #E7B24A;border-radius:16px;background:rgba(231,178,74,.13);color:var(--tx);font:inherit;text-align:left;cursor:pointer}
+.tw-offer-ic{color:#C98A14;display:flex;flex:none}
+.tw-offer-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.tw-offer-tx b{font-size:14.5px;font-weight:700;line-height:1.35}
+.tw-offer-tx small{font-size:12px;color:var(--tx2);line-height:1.5}
+.tw-offer-go{flex:none;font-size:13px;font-weight:700;color:#C98A14;white-space:nowrap}
+.pw-trial.tw-offer-line{color:#B57A0E;background:rgba(231,178,74,.16)}
 .pw-trial{text-align:center;font-size:13px;font-weight:700;color:var(--ac);background:var(--ac-soft);border-radius:10px;padding:9px 10px;margin:0 0 12px;line-height:1.45}
 .pw-invested{text-align:center;font-size:12.5px;color:var(--tx2);background:var(--bg3);border-radius:10px;padding:9px 12px;margin:12px 0 0;line-height:1.5}
 .pw-tag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--ac);color:#fff!important;font-size:9.5px!important;font-weight:700;border-radius:999px;padding:1px 8px;white-space:nowrap}
@@ -1765,6 +1787,7 @@ html[data-theme="dark"] .fo-slip{background:linear-gradient(#241f18,#1e1a15);bor
       <button class="zy-tab on" data-zy="table" data-i18n="zyTabTable">一覧</button>
       <button class="zy-tab" data-zy="write" data-i18n="zyTabWrite">書き方</button>
       <button class="zy-tab" data-zy="listen" data-i18n="zyTabListen">聴きテスト</button>
+      <button class="zy-tab" data-zy="keyboard" data-i18n="zyTabKb">キーボード</button>
     </div>
     <div id="zyBody"></div>
   </section>
@@ -2040,7 +2063,7 @@ document.addEventListener("click", function (e) {
 });
 </script>
 
-<script src="i18n.js?v=137"></script>
+<script src="i18n.js?v=139"></script>
 <script src="native-ui.js?v=2"></script>
 <script src="tts.js?v=67"></script>
 <script src="tbcl.js?v=1"></script>
@@ -2103,20 +2126,24 @@ document.addEventListener("click", function (e) {
 <script src="articles-20.js?v=2"></script>
 <script src="writing-data.js?v=52"></script>
 <script src="icons.js?v=2"></script>
-<script src="paywall.js?v=117"></script>
+<script src="paywall.js?v=121"></script>
+<script>/* 月費調整預告(11/26 前),到期自動不顯示 */ window.PRICE_NOTICE = { lang: function () { return twGetLang(); }, premium: function () { return Paywall.isPremium(); }, open: function () { Paywall.show("menu"); } };</script>
+<script src="price-notice.js?v=1"></script>
 <script src="essentials.js?v=2"></script>
 <script src="essentials-ui.js?v=6"></script>
 <script src="fortune.js?v=5"></script>
 <script src="myvocab.js?v=8"></script>
 <script src="whatsnew.js?v=3"></script>
-<script src="lessons.js?v=36"></script>
+<script src="lessons.js?v=38"></script>
 <script src="placement.js?v=1"></script>
 <script src="tour.js?v=2"></script>
-<script src="ytshadow.js?v=30"></script>
+<script src="onboard-plan.js?v=2"></script>
+<script src="ytshadow.js?v=31"></script>
 <script src="listen.js?v=7"></script>
-<script src="sister-apps.js?v=1"></script>
+<script src="sister-apps.js?v=2"></script>
 <script>twRenderSister();</script>
-<script src="websync.js?v=69"></script>
+<script src="cancelsurvey.js?v=1"></script>
+<script src="websync.js?v=70"></script>
 <script src="ref.js?v=1"></script>
 <script src="srs.js?v=61"></script>
 <script src="mock-exam.js?v=61"></script>
@@ -2762,6 +2789,8 @@ function pickPersona(key){
   // 以前はここで「はじめての流れ」の帯を出していたが、ハブのステージ一覧が同じことを
   // 言っているので撤去した(同じ内容を 2 箇所で言うと、どちらも読まれない)。
   localStorage.setItem("stw-onboarded", "1");
+  // 目的を選んだ人 → 「1 日何分 → あなたのプラン」(onboard-plan.js、終わったら TOUR を出す)。スキップした人はそのまま TOUR
+  if (key && window.OnboardPlan && !(window.Paywall && Paywall.isPremium())) { try { OnboardPlan.start(key); return; } catch (e) {} }
   try { setTimeout(() => TOUR.start(), 400); } catch (e) {}   // 4 ステップのガイド(飛ばせる・1 回だけ)
 }
 
@@ -3772,6 +3801,7 @@ const ZY = (() => {
     document.querySelectorAll(".zy-tab").forEach(t => t.classList.toggle("on", t.dataset.zy === mode));
     if (mode === "table") renderTable();
     else if (mode === "write") renderWrite();
+    else if (mode === "keyboard") renderKeyboard();
     else startTest();
   }
 
@@ -3906,6 +3936,34 @@ const ZY = (() => {
         `</div></div>`;
     }
     html += `<p class="zy-credit">${twT("zyCredit")} <a href="https://creativecommons.org/licenses/by/4.0/deed.zh_TW" target="_blank" rel="noopener">CC BY 4.0</a></p>`;
+    body().innerHTML = html;
+  }
+  /* ── キーボード配列：各列を上から下に読むと注音表の順（ㄅㄆㄇㄈ・ㄉㄊㄋㄌ…）そのまま。
+     韓国の学習者(2026-11-08 Threads DM)の提案:「配列がㄅㄆㄇ順だと知ったら数日で覚えられた」── 順番＝キー位置、を見せる */
+  const ZY_KB = [
+    [["1","ㄅ"],["Q","ㄆ"],["A","ㄇ"],["Z","ㄈ"]],
+    [["2","ㄉ"],["W","ㄊ"],["S","ㄋ"],["X","ㄌ"]],
+    [["3","ˇ",3],["E","ㄍ"],["D","ㄎ"],["C","ㄏ"]],
+    [["4","ˋ",4],["R","ㄐ"],["F","ㄑ"],["V","ㄒ"]],
+    [["5","ㄓ"],["T","ㄔ"],["G","ㄕ"],["B","ㄖ"]],
+    [["6","ˊ",2],["Y","ㄗ"],["H","ㄘ"],["N","ㄙ"]],
+    [["7","˙",0],["U","ㄧ"],["J","ㄨ"],["M","ㄩ"]],
+    [["8","ㄚ"],["I","ㄛ"],["K","ㄜ"],[",","ㄝ"]],
+    [["9","ㄞ"],["O","ㄟ"],["L","ㄠ"],[".","ㄡ"]],
+    [["0","ㄢ"],["P","ㄣ"],[";","ㄤ"],["/","ㄥ"]],
+    [["-","ㄦ"]],
+  ];
+  function renderKeyboard(){
+    const rep = {}; ZHUYIN.forEach(z => rep[z.z] = z.rep);
+    const tone = n => n === 0 ? twT("zyKbNeutral") : twT("zyKbTone").replace("{n}", n);
+    let html = `<p class="zy-hint zk-lead">${twT("zyKbHint")}</p>`;
+    html += `<div class="zk-board">` + ZY_KB.map((col, ci) => `<div class="zk-col${ci % 2 ? " alt" : ""}">` + col.map(([k, z, t]) =>
+      t !== undefined
+        ? `<div class="zk-key tone"><span class="zk-k">${k}</span><span class="zk-z">${z}</span><span class="zk-t">${tone(t)}</span></div>`
+        : `<button class="zk-key" onclick="ZY.play(this,'${z}','${rep[z]}')"><span class="zk-k">${k}</span><span class="zk-z">${twZy(z)}</span></button>`
+    ).join("") + `</div>`).join("") + `</div>`;
+    html += `<p class="zk-order">${ZY_KB.map(col => col.filter(c => c[2] === undefined).map(c => c[1]).join("")).join(" · ")}</p>`;
+    html += `<p class="zy-hint">${twT("zyKbTap")}</p>`;
     body().innerHTML = html;
   }
   function play(el, sym, rep){
@@ -4239,6 +4297,7 @@ const PA = (() => {
 
     document.getElementById("paBody").innerHTML = `<div class="hb">
       ${hero}
+      ${(typeof Paywall !== "undefined" && Paywall.offerCard) ? Paywall.offerCard() : ""}
       ${resume}
       ${(typeof WhatsNew !== "undefined") ? WhatsNew.card() : ""}
       <div>
@@ -4456,6 +4515,7 @@ window.stwBack = function(){
     // ① 最上面的彈出視窗/全螢幕
     if (document.querySelector(".tour-box")) { TOUR.close(); return "handled"; }
     if (on("personaBg")) { pickPersona(""); return "handled"; }
+    if (window.OnboardPlan && OnboardPlan.isOpen()) { OnboardPlan.free(); return "handled"; }
     if (on("lsSkipSheet", "on")) { LS.skip(false, true); return "handled"; }
     if (on("lsPlay", "on")) { LS.quit(); return "handled"; }
     if (document.body.classList.contains("ls-open") && window.Listen) { if (document.getElementById("lsPP")) Listen.back(); else Listen.close(); return "handled"; }

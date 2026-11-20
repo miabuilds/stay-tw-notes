@@ -24,7 +24,8 @@ const Paywall = (() => {
   const LIMITS = { srs: 1, exam: 1 };
   const SRS_FREE_CARDS = 10;
   // 買い切りは年額の 2.2 倍しか取れていなかった（原価は永久に続くのに）。年額の約 3 倍へ。
-  const PRICES = { monthly: "¥980", yearly: "¥5,800", lifetime: "¥17,800" };
+  // 2026-11-26 起月費調漲(NT$299 等值,日幣 ¥1,500);日期到了自動換
+  const PRICES = { monthly: Date.now() >= Date.parse("2026-11-26T00:00:00+08:00") ? "¥1,500" : "¥980", yearly: "¥5,800", lifetime: "¥17,800" };
   // 単語帳（★）の無料上限。辞書を引く人＝いちばん多い層が自然に Premium に出会う接点。
   const FAV_FREE_MAX = 20;
   // ストアの出し分け。以前は誰に対しても App Store を開いていたので、Android と PC の人には
@@ -112,6 +113,32 @@ const Paywall = (() => {
     try { if (typeof gtag === "function") gtag("event", "paywall_shown", { feature }); } catch (e) {}
   }
 
+  // 限時優惠(2026-11-10 Mia):App 內首次開啟 72 小時(既有用戶更新後一次性 72 小時)年費/買斷改賣約 9 折的商品。
+  //   時間與「商店真的給得出限時商品」都由原生判斷,確認後才注入 STAYTW_NATIVE.offerEndsAt(舊版 App、iOS 商品未過審 → 沒有值 → 這裡什麼都不出)。
+  //   金額不寫在這裡(各國商店價不同),點進原生付費牆看實價。
+  function nativeOffer() {
+    const n = (typeof window !== "undefined") && window.STAYTW_NATIVE;
+    if (!n || !n.offerEndsAt || isPremium()) return null;
+    const left = n.offerEndsAt - Date.now();
+    return left > 0 ? { left, kind: n.offerKind } : null;
+  }
+  function fmtRough(ms) {
+    const h = Math.floor(ms / 3600e3);
+    return h >= 24 ? twT("offerDH").replace("{d}", Math.floor(h / 24)).replace("{h}", h % 24) : h >= 1 ? twT("offerH").replace("{h}", h) : twT("offerM").replace("{m}", Math.max(1, Math.floor(ms / 60e3)));
+  }
+  function offerCard() {
+    const o = nativeOffer(); if (!o) return "";
+    return `<button class="tw-offer" onclick="Paywall.offerOpen()">
+      <span class="tw-offer-ic">${icon("clock", { size: 20 })}</span>
+      <span class="tw-offer-tx"><b>${twT("offerTitle")}</b><small>${twT("offerSub").replace("{t}", fmtRough(o.left))}</small></span>
+      <span class="tw-offer-go">${twT("offerGo")}</span></button>`;
+  }
+  function offerOpen() { track("offer"); openNative(); }
+  // 原生確認有限時商品後會呼叫這個 → 首頁重畫,卡片才出現
+  if (typeof window !== "undefined") window.stwOfferUpdate = function () {
+    try { if (document.getElementById("panel-path")?.classList.contains("on") && typeof PA !== "undefined" && PA.render) PA.render(); } catch (e) {}
+  };
+
   // 「機能一覧」だけの paywall は効かない。ネイティブ側（src/components/Paywall.tsx）は
   // 実価格・月あたり・51%・無料試用まで出しているのに、web はどれも無かったので揃える。
   const TRIAL_DAYS = 7;                                   // App Store Connect の introductory offer（2026-09-16 設定）と一致
@@ -155,7 +182,8 @@ const Paywall = (() => {
     if (!bg) return;
     track(feature);
     const featName = { quiz: twT("toolQuiz"), srs: twT("toolSrs"), exam: twT("toolExam"), speak: twT("toolSpeak"), writing: twT("toolWrite"), aiscore: twT("wrAiScore"), listen: twT("lsTitle"), fav: twT("pwFavName"), ytsquiz: twT("ytsQzTitle"), ytshadow: twT("toolYts"), provocab: twT("pwProVocab"), lessons: twT("pwLessons"), aichat: twT("toolAiChat") }[feature] || "";
-    const desc = feature === "article" ? twT("pwContentHit")
+    const desc = feature === "onboard" ? ((window.OnboardPlan && OnboardPlan.pwDesc()) || "")
+      : feature === "article" ? twT("pwContentHit")
       : feature === "myvocab" ? twT("pwMyVocabHit").replace("{n}", String((typeof MyVocab !== "undefined" && MyVocab.FREE_MAX) || 10))
       : feature === "fav" ? twT("pwFavHit").replace("{n}", String(FAV_FREE_MAX))
       // Premium 限定のものに「今日の無料枠を使い切りました」と出すのは嘘。枠ではなく線。
@@ -186,8 +214,9 @@ const Paywall = (() => {
         <div class="pw-plan"><b>${PRICES.lifetime}</b><span>${twT("pwLifetime")}</span></div>
       </div>
       <p class="pw-trial">${icon("gift",{size:15})} ${twT("pwTrial").replace("{n}", String(TRIAL_DAYS))}</p>
+      ${isNative() && nativeOffer() ? `<p class="pw-trial tw-offer-line">${icon("clock",{size:15})} ${twT("offerTitle")}・${twT("offerSub").replace("{t}", fmtRough(nativeOffer().left))}</p>` : ""}
       ${isNative() ? `<button class="btn primary" style="width:100%;padding:13px" onclick="Paywall.openNative()">${twT("pwCtaNative")}</button>` : webCta()}
-      ${feature === "fav" || feature === "article" || feature === "myvocab" || lsCtx ? "" : `<p style="text-align:center;font-size:12px;color:var(--tx3);margin-top:10px">${twT("pwTomorrow")}</p>`}`;
+      ${feature === "fav" || feature === "article" || feature === "myvocab" || feature === "onboard" || lsCtx ? "" : `<p style="text-align:center;font-size:12px;color:var(--tx3);margin-top:10px">${twT("pwTomorrow")}</p>`}`;
     bg.classList.add("show");
   }
 
@@ -257,7 +286,7 @@ const Paywall = (() => {
   // ネイティブ側から window.stwSetEntitled(true/false) を注入して呼ぶ
   if (typeof window !== "undefined") window.stwSetEntitled = setEntitled;
 
-  return { gate, isPremium, setEntitled, quotaBadge, left, show, close, openNative, openStore, androidWait, androidWaitSend, device, ANDROID_LIVE, LIMITS, SRS_FREE_CARDS, FAV_FREE_MAX };
+  return { gate, isPremium, setEntitled, quotaBadge, left, show, close, openNative, openStore, nativeOffer, offerCard, offerOpen, androidWait, androidWaitSend, device, ANDROID_LIVE, LIMITS, SRS_FREE_CARDS, FAV_FREE_MAX };
 })();
 // ★重要：Paywall は const 宣言なので window に自動では乗らない。renderProfile / twUpgrade が
 //   window.Paywall で判定・呼び出しており、undefined だと「アップグレード無反応」になる（TTS/STW_WEB と同じ罠）。
@@ -266,5 +295,5 @@ if (typeof window !== "undefined") window.Paywall = Paywall;
 // ── 網頁直接購買(綠界網頁版,五站共用 staypay):只在一般瀏覽器載入;App 內(WebView)不載、不出現任何網頁價(Apple 3.1.1)
 if (typeof window !== "undefined" && !window.ReactNativeWebView && !(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp)) {
   window.STAYPAY_CFG = { product: "staytw", name: "StayTW", sessionKey: "stw_session", api: "https://staypay.getclockin.workers.dev", app: "/?app=1", lang: () => twGetLang(), login: () => { if (window.STW_WEB) STW_WEB.login(); }, refundUrl: "/refund?lang=" + twGetLang() };
-  const _sp = document.createElement("script"); _sp.src = "webpay.js?v=2"; _sp.async = true; document.head.appendChild(_sp);
+  const _sp = document.createElement("script"); _sp.src = "webpay.js?v=3"; _sp.async = true; document.head.appendChild(_sp);
 }

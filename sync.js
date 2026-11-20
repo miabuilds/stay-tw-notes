@@ -45,7 +45,8 @@ const Sync = (() => {
     } catch (e) { console.warn("[sync] login fail", e); }
   }
   async function logout() {
-    if (confirm(twT("syncLogoutConfirm"))) await firebase.auth().signOut();
+    // 畫面上的登出走 STW_WEB.logout(),這支沒有入口;原生 confirm 禁止 → 直接登出
+    await firebase.auth().signOut();
   }
 
   // ── 統合: 単語ごとに lastReviewTs が新しい方を採用（端末A/Bどちらで学習しても消えない）──

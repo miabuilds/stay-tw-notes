@@ -1,7 +1,7 @@
 #!/bin/sh
 # 把要上線的檔案複製到 dist/（不含後端 staytw-api、腳本、產生用資料、文件、dotfiles）
 # 2026-11-07 資安檢查:原本 pages_build_output_dir="." 把整個 repo 連 worker.js/schema.sql/scripts 都上線了
-# 部署：sh scripts/build-dist.sh && npx wrangler pages deploy dist --project-name=staytw --branch=main --commit-dirty=true
+# 部署：sh scripts/build-dist.sh && npx wrangler pages deploy dist --project-name=staytw --branch=master --commit-dirty=true  (正式站是 master;--branch=main 只會更新預覽 main.staytw.pages.dev)
 # （functions/ 由 wrangler 從 repo 根目錄讀,不用進 dist;audio/tts 在 R2）
 set -e
 cd "$(dirname "$0")/.."

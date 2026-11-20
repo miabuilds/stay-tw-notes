@@ -89,6 +89,74 @@ const NAMES = {
  "科技": {g:"tech", ja:"テクノロジー", en:"Technology", ko:"기술", vi:"Công nghệ", id:"Teknologi"},
  "社會": {g:"society", ja:"社会", en:"Society", ko:"사회", vi:"Xã hội", id:"Masyarakat"},
 };
+// 單字檔裡有、但沒對到上面單元的主題註解 → 自己的五語名稱(分組 key 仍是原字串,課的切法不變)。
+// 2026-11-20 英文用戶回報「Unit 4 有日文」:以前這裡落空就 {ja:raw,en:raw},英韓越印全看到日文/中文。
+// 新增主題註解要在這裡補,build 會擋。
+const RAW_NAMES = {
+ "学校": ["学校","School","학교","Trường học","Sekolah"],
+ "方位": ["方向と位置","Directions & positions","방향과 위치","Phương hướng & vị trí","Arah & posisi"],
+ "程度副詞": ["程度の副詞","Degree adverbs","정도 부사","Phó từ chỉ mức độ","Kata keterangan derajat"],
+ "交通補充": ["交通(追加)","More on transport","교통 더 알기","Giao thông (bổ sung)","Transportasi (tambahan)"],
+ "仕事": ["仕事","Work","일","Công việc","Pekerjaan"],
+ "住まい": ["住まい","Home & housing","집과 주거","Nhà ở","Tempat tinggal"],
+ "外食": ["外食","Eating out","외식","Ăn ngoài","Makan di luar"],
+ "抽象語": ["抽象的なことば","Abstract words","추상적인 말","Từ trừu tượng","Kata abstrak"],
+ "抽象": ["考えと概念","Ideas & concepts","생각과 개념","Ý niệm & khái niệm","Ide & konsep"],
+ "日常の動詞": ["日常の動詞","Everyday verbs","일상 동사","Động từ thường ngày","Kata kerja sehari-hari"],
+ "時間の副詞": ["時間の副詞","Time adverbs","시간 부사","Phó từ chỉ thời gian","Kata keterangan waktu"],
+ "毎日の生活": ["毎日の生活","Daily routine","매일의 생활","Sinh hoạt mỗi ngày","Rutinitas harian"],
+ "生活の名詞": ["生活の名詞","Everyday nouns","생활 명사","Danh từ đời sống","Kata benda sehari-hari"],
+ "買い物": ["買い物","Shopping","쇼핑","Mua sắm","Belanja"],
+ "購物・金錢": ["買い物とお金","Shopping & money","쇼핑과 돈","Mua sắm & tiền bạc","Belanja & uang"],
+ "身體感受": ["体の感覚","How your body feels","몸의 느낌","Cảm giác cơ thể","Rasa di tubuh"],
+ "通訊": ["通信・連絡","Staying in touch","통신과 연락","Liên lạc","Komunikasi"],
+ "餐飲": ["食事","Food & dining","음식과 식사","Ăn uống","Makanan & minuman"],
+ "台湾生活": ["台湾の暮らし","Life in Taiwan","대만 생활","Cuộc sống ở Đài Loan","Hidup di Taiwan"],
+ "意見・討論": ["意見と議論","Opinions & discussion","의견과 토론","Ý kiến & thảo luận","Pendapat & diskusi"],
+ "日用品・衣物": ["日用品と服","Daily items & clothes","생활용품과 옷","Đồ dùng & quần áo","Barang & pakaian"],
+ "気持ち": ["気持ち","Feelings","기분","Tâm trạng","Perasaan"],
+ "生活便利": ["便利な暮らし","Getting things done","생활 편의","Tiện ích đời sống","Kemudahan hidup"],
+ "社會日常": ["社会と日常","Society & everyday life","사회와 일상","Xã hội & đời thường","Masyarakat & keseharian"],
+ "科技網路": ["テクノロジーとネット","Tech & the internet","기술과 인터넷","Công nghệ & Internet","Teknologi & internet"],
+ "租屋生活": ["部屋を借りる","Renting a place","집 구하기","Thuê nhà","Menyewa tempat tinggal"],
+ "人間関係": ["人間関係","Relationships","인간관계","Các mối quan hệ","Hubungan"],
+ "動詞補充": ["動詞(追加)","More verbs","동사 더 알기","Động từ (bổ sung)","Kata kerja (tambahan)"],
+ "家事": ["家事","Housework","집안일","Việc nhà","Pekerjaan rumah"],
+ "形容詞・副詞": ["形容詞と副詞","Adjectives & adverbs","형용사와 부사","Tính từ & phó từ","Kata sifat & keterangan"],
+ "情感深化": ["気持ち(もっと深く)","Feelings in depth","감정 더 깊이","Cảm xúc chuyên sâu","Perasaan lebih dalam"],
+ "抽象動詞": ["抽象的な動詞","Abstract verbs","추상 동사","Động từ trừu tượng","Kata kerja abstrak"],
+ "描述・副詞": ["描写と副詞","Describing & adverbs","묘사와 부사","Miêu tả & phó từ","Deskripsi & keterangan"],
+ "職場": ["職場","Workplace","직장","Nơi làm việc","Tempat kerja"],
+ "職場・辦公": ["職場・オフィス","At the office","사무실","Văn phòng","Di kantor"],
+ "職場深化": ["職場(もっと深く)","Workplace in depth","직장 더 깊이","Nơi làm việc chuyên sâu","Tempat kerja lebih dalam"],
+ "表達意見": ["意見を言う","Giving your opinion","의견 말하기","Nêu ý kiến","Menyampaikan pendapat"],
+ "連接詞・接続": ["接続詞","Connectors","접속사","Từ nối","Kata penghubung"],
+ "人際": ["人との関わり","Getting along with people","대인 관계","Quan hệ giao tiếp","Pergaulan sosial"],
+ "健康生活": ["健康な暮らし","Healthy living","건강한 생활","Sống khỏe","Hidup sehat"],
+ "意見・観点": ["意見と視点","Opinions & viewpoints","의견과 관점","Ý kiến & quan điểm","Pendapat & sudut pandang"],
+ "感情": ["感情","Emotions","감정","Cảm xúc","Emosi"],
+ "求職": ["仕事さがし","Job hunting","구직","Tìm việc","Mencari kerja"],
+ "よく使う形容詞": ["よく使う形容詞","Common adjectives","자주 쓰는 형용사","Tính từ thông dụng","Kata sifat umum"],
+ "健康・病院": ["健康と病院","Health & hospitals","건강과 병원","Sức khỏe & bệnh viện","Kesehatan & rumah sakit"],
+ "接続詞・副詞": ["接続詞と副詞","Connectors & adverbs","접속사와 부사","Từ nối & phó từ","Kata penghubung & keterangan"],
+ "体・健康": ["体と健康","Body & health","몸과 건강","Cơ thể & sức khỏe","Tubuh & kesehatan"],
+ "趣味": ["趣味","Hobbies","취미","Sở thích","Hobi"],
+ "気持ち・考え": ["気持ちと考え","Feelings & thoughts","감정과 생각","Cảm xúc & suy nghĩ","Perasaan & pikiran"],
+ "時間・副詞": ["時間と副詞","Time & adverbs","시간과 부사","Thời gian & phó từ","Waktu & keterangan"],
+ "天気・季節": ["天気と季節","Weather & seasons","날씨와 계절","Thời tiết & mùa","Cuaca & musim"],
+ "天気の補充": ["天気(追加)","More on weather","날씨 더 알기","Thời tiết (bổ sung)","Cuaca (tambahan)"],
+ "道・方向": ["道と方向","Roads & directions","길과 방향","Đường & phương hướng","Jalan & arah"],
+ "テクノロジー": ["テクノロジー","Technology","기술","Công nghệ","Teknologi"],
+ "服・買い物": ["服と買い物","Clothes & shopping","옷과 쇼핑","Quần áo & mua sắm","Pakaian & belanja"],
+ "健康の補充": ["健康(追加)","More on health","건강 더 알기","Sức khỏe (bổ sung)","Kesehatan (tambahan)"],
+ "よく使う動詞": ["よく使う動詞","Common verbs","자주 쓰는 동사","Động từ thông dụng","Kata kerja umum"],
+ "旅遊": ["旅行","Travel","여행","Du lịch","Wisata"],
+ "感情・社交": ["感情と人づきあい","Emotions & socializing","감정과 사교","Cảm xúc & giao tiếp","Emosi & pergaulan"],
+ "網路・科技": ["ネットとテクノロジー","Internet & tech","인터넷과 기술","Internet & công nghệ","Internet & teknologi"],
+ "抽象補充": ["抽象的なことば(追加)","More abstract words","추상어 더 알기","Từ trừu tượng (bổ sung)","Kata abstrak (tambahan)"],
+ "成語・慣用句": ["成語と慣用句","Idioms & set phrases","성어와 관용구","Thành ngữ & quán ngữ","Idiom & ungkapan"],
+};
+const RAW_MISS = new Set();
 // 品詞 → 単元名(テーマが無いレベル用)
 const POS = {
  "名": {ja:"名詞", en:"Nouns", ko:"명사", vi:"Danh từ", id:"Kata benda"},
@@ -151,7 +219,8 @@ function build(lv) {
       const raw = tmap[v.w];
       const hit = raw && NAMES[raw];
       if (hit) return GROUP_NAME[hit.g] || { ja: raw, en: raw };
-      if (raw) return { ja: raw, en: raw };
+      if (raw && RAW_NAMES[raw]) { const [ja, en, ko, vi, id] = RAW_NAMES[raw]; return { k: raw, ja, en, ko, vi, id }; }
+      if (raw) { RAW_MISS.add(raw); return { ja: raw, en: raw }; }
       // テーマコメントが無い語(-b / -c 追加ぶん)は「その他」で括らず品詞で呼ぶ。
       // 課の名前が「その他 5」だと、何をやるのか分からないまま開くことになる。
       return POS[v.c] || { ja: "その他", en: "More", ko: "기타", vi: "Khác", id: "Lainnya" };
@@ -169,7 +238,8 @@ function build(lv) {
   const MIN_THEME = 4;
   const groups = new Map();                       // key → { name, words[] }  出現順
   for (const v of words) {
-    const nm = label(v), key = nm.ja;
+    const lb = label(v), key = lb.k || lb.ja;
+    const { k: _k, ...nm } = lb;
     if (!groups.has(key)) groups.set(key, { name: nm, words: [] });
     groups.get(key).words.push(v.w);
   }
@@ -255,8 +325,9 @@ function build(lv) {
            total: words.length, lessons: lessons.length, gtotal: gi };
 }
 
-for (const lv of ["l1", "l2", "l3", "l4", "l5", "l6"]) {
-  const d = build(lv);
+const BUILT = ["l1", "l2", "l3", "l4", "l5", "l6"].map((lv) => [lv, build(lv)]);
+if (RAW_MISS.size) { console.error("RAW_NAMES に無いテーマ(英韓越印が原文のまま出る):", [...RAW_MISS].join(", ")); process.exit(1); }
+for (const [lv, d] of BUILT) {
   console.log(`${lv}  ${d.total} 語 / ${d.lessons} 課 / ${d.units.length} 単元 / 文法 ${d.gtotal} 点  (${d.by})`);
   for (const u of d.units) console.log(`     第${u.no}単元  ${u.lessons.map((l)=>l.kind==="grammar"?`文法(${l.gids.length})`:l.name.ja+(l.idx?" "+l.idx:"")+"("+l.words.length+")").join(" / ")}`);
   if (!DRY) fs.writeFileSync(path.join(ROOT, "data", `lessons-${lv}.json`), JSON.stringify(d, null, 1));

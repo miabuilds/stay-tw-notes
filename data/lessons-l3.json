@@ -213,7 +213,10 @@
     {
      "name": {
       "ja": "気持ち",
-      "en": "気持ち"
+      "en": "Feelings",
+      "ko": "기분",
+      "vi": "Tâm trạng",
+      "id": "Perasaan"
      },
      "words": [
       "開心",
@@ -445,8 +448,11 @@
     },
     {
      "name": {
-      "ja": "餐飲",
-      "en": "餐飲"
+      "ja": "食事",
+      "en": "Food & dining",
+      "ko": "음식과 식사",
+      "vi": "Ăn uống",
+      "id": "Makanan & minuman"
      },
      "words": [
       "便當",
@@ -964,7 +970,10 @@
     {
      "name": {
       "ja": "仕事",
-      "en": "仕事"
+      "en": "Work",
+      "ko": "일",
+      "vi": "Công việc",
+      "id": "Pekerjaan"
      },
      "words": [
       "開會",
@@ -979,7 +988,10 @@
     {
      "name": {
       "ja": "日常の動詞",
-      "en": "日常の動詞"
+      "en": "Everyday verbs",
+      "ko": "일상 동사",
+      "vi": "Động từ thường ngày",
+      "id": "Kata kerja sehari-hari"
      },
      "words": [
       "選",
@@ -993,7 +1005,10 @@
     {
      "name": {
       "ja": "生活の名詞",
-      "en": "生活の名詞"
+      "en": "Everyday nouns",
+      "ko": "생활 명사",
+      "vi": "Danh từ đời sống",
+      "id": "Kata benda sehari-hari"
      },
      "words": [
       "鑰匙",
@@ -1030,14 +1045,20 @@
    "id": "u9",
    "no": 9,
    "lead": {
-    "ja": "日用品・衣物",
-    "en": "日用品・衣物"
+    "ja": "日用品と服",
+    "en": "Daily items & clothes",
+    "ko": "생활용품과 옷",
+    "vi": "Đồ dùng & quần áo",
+    "id": "Barang & pakaian"
    },
    "lessons": [
     {
      "name": {
-      "ja": "日用品・衣物",
-      "en": "日用品・衣物"
+      "ja": "日用品と服",
+      "en": "Daily items & clothes",
+      "ko": "생활용품과 옷",
+      "vi": "Đồ dùng & quần áo",
+      "id": "Barang & pakaian"
      },
      "words": [
       "衛生紙",
@@ -1051,8 +1072,11 @@
     },
     {
      "name": {
-      "ja": "生活便利",
-      "en": "生活便利"
+      "ja": "便利な暮らし",
+      "en": "Getting things done",
+      "ko": "생활 편의",
+      "vi": "Tiện ích đời sống",
+      "id": "Kemudahan hidup"
      },
      "words": [
       "排隊",
@@ -1066,8 +1090,11 @@
     },
     {
      "name": {
-      "ja": "意見・討論",
-      "en": "意見・討論"
+      "ja": "意見と議論",
+      "en": "Opinions & discussion",
+      "ko": "의견과 토론",
+      "vi": "Ý kiến & thảo luận",
+      "id": "Pendapat & diskusi"
      },
      "words": [
       "同意",
@@ -1100,8 +1127,11 @@
     },
     {
      "name": {
-      "ja": "抽象語",
-      "en": "抽象語"
+      "ja": "抽象的なことば",
+      "en": "Abstract words",
+      "ko": "추상적인 말",
+      "vi": "Từ trừu tượng",
+      "id": "Kata abstrak"
      },
      "words": [
       "環境",
@@ -1115,8 +1145,11 @@
     },
     {
      "name": {
-      "ja": "台湾生活",
-      "en": "台湾生活"
+      "ja": "台湾の暮らし",
+      "en": "Life in Taiwan",
+      "ko": "대만 생활",
+      "vi": "Cuộc sống ở Đài Loan",
+      "id": "Hidup di Taiwan"
      },
      "words": [
       "健保",
@@ -1132,14 +1165,20 @@
    "id": "u10",
    "no": 10,
    "lead": {
-    "ja": "科技網路",
-    "en": "科技網路"
+    "ja": "テクノロジーとネット",
+    "en": "Tech & the internet",
+    "ko": "기술과 인터넷",
+    "vi": "Công nghệ & Internet",
+    "id": "Teknologi & internet"
    },
    "lessons": [
     {
      "name": {
-      "ja": "科技網路",
-      "en": "科技網路"
+      "ja": "テクノロジーとネット",
+      "en": "Tech & the internet",
+      "ko": "기술과 인터넷",
+      "vi": "Công nghệ & Internet",
+      "id": "Teknologi & internet"
      },
      "words": [
       "備份",
@@ -1173,8 +1212,11 @@
     },
     {
      "name": {
-      "ja": "抽象",
-      "en": "抽象"
+      "ja": "考えと概念",
+      "en": "Ideas & concepts",
+      "ko": "생각과 개념",
+      "vi": "Ý niệm & khái niệm",
+      "id": "Ide & konsep"
      },
      "words": [
       "感覺",
@@ -1186,8 +1228,11 @@
     },
     {
      "name": {
-      "ja": "租屋生活",
-      "en": "租屋生活"
+      "ja": "部屋を借りる",
+      "en": "Renting a place",
+      "ko": "집 구하기",
+      "vi": "Thuê nhà",
+      "id": "Menyewa tempat tinggal"
      },
      "words": [
       "水電費",
@@ -1200,8 +1245,11 @@
     },
     {
      "name": {
-      "ja": "社會日常",
-      "en": "社會日常"
+      "ja": "社会と日常",
+      "en": "Society & everyday life",
+      "ko": "사회와 일상",
+      "vi": "Xã hội & đời thường",
+      "id": "Masyarakat & keseharian"
      },
      "words": [
       "新聞",

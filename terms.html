@@ -117,7 +117,7 @@ function cycleLang(){
   localStorage.setItem("stw-lang",next);
   applyLang();
 }
-function stwBack(){ if(history.length>1){ history.back(); } else { location.href="index.html"; } }
+function stwBack(){ try{ sessionStorage.setItem("stw_back","1"); }catch(e){} if(history.length>1){ history.back(); } else { location.href="index.html"; } return "handled"; }
 applyLang();
 </script>
 </body></html>

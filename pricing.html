@@ -84,6 +84,8 @@ var CUR={
   vi:{sym:'₫',   m:'199,000',   y:'999,000',   l:'2,999,000',  pm:'83,250'},
   id:{sym:'Rp',  m:'99,000',    y:'599,000',   l:'1,999,000',  pm:'49,917'}
 };
+// 2026-11-26 起月費調漲(NT$299 與各地區等值價,已用 App Store 換算核對),日期到了自動換
+if(Date.now()>=Date.parse("2026-11-26T00:00:00+08:00")){var NM={ja:"1,500",en:"9.99",ko:"17,000",vi:"299,000",id:"199,000",zh:"299"};for(var k in CUR){if(NM[k])CUR[k].m=NM[k];}}
 var T={
  ja:{name:'日本語',title:'プランと料金',lead:'基礎コンテンツは無料。練習ツールを無制限に使いたい・全コンテンツを解放したいときに有料プランへ。',
    freeH:'無料で使える',freeP:'単語 1,859・注音（ㄅㄆㄇ）・文法・場面別フレーズ・分級リーディング。クイズと発音採点も回数制限なし —— 登録不要。',
@@ -182,7 +184,7 @@ render();
 // ── iOS/Android App（WebView）內：App 內數位訂閱只能走原生內購（App Store 3.1.1／Google 規定），
 //    不可導向外部金流。偵測到在 App 內 → 整頁清成中性 placeholder 並自動開原生付費牆，
 //    移除所有外部金流字眼與價格（反導流合規）。
-function stwBack(){ if(history.length>1){ history.back(); } else { location.href="index.html"; } }
+function stwBack(){ try{ sessionStorage.setItem("stw_back","1"); }catch(e){} if(history.length>1){ history.back(); } else { location.href="index.html"; } return "handled"; }
 function stwScrubPricing(){
   try{
     if(!(window.STAYTW_NATIVE && window.STAYTW_NATIVE.isNativeApp)) return;

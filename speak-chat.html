@@ -140,7 +140,7 @@ main{flex:1;padding:18px}
 <script src="icons.js?v=2"></script>
 <script src="py2zy.js?v=4"></script>
 <script src="tbcl.js?v=1"></script>
-<script src="polyphone.js?v=4"></script>
+<script src="polyphone.js?v=5"></script>
 </head>
 <body>
 <div class="app">
@@ -313,7 +313,7 @@ function authH(){ const h={"Content-Type":"application/json"}; try{ const t=loca
 async function loadQuota(){ try{ const r=await fetch("/api/chat-quota",{headers:authH()}); QUOTA=await r.json(); }catch(e){ QUOTA=null; } const el=document.getElementById("qline"); if(el) el.innerHTML=quotaLine(); }
 function quotaLine(){ if(!QUOTA) return ""; return tt("left").replace("{n}",QUOTA.left)+(QUOTA.premium?"":" ・ "+tt("leftP")); }
 // アプリのホームへ(App 内は WebView のまま戻る)
-function goHome(){ location.href="/?app=1"; }
+function goHome(){ if (window.stwReturn) { window.stwReturn(); return; } location.href="/?app=1"; }   // 回到離開前的畫面(底部 stwReturn)
 const MAX_TURNS=10;   // 1 場 10 往復で採点へ(費用の天井)
 const main=()=>document.getElementById("main");
 function hideEnd(){document.getElementById("endBtn").style.display="none";}
@@ -580,11 +580,13 @@ function viewLog(i){
   window.scrollTo(0,0);
 }
 
+// CORR 欄の「無し」表記。AI が「空のままに」を真に受けて「空」と書いてきて、画面に「空」だけの枠が出た(2026-10 Mia)
+const NO_CORR=/^[\s(（「『\[]*(空|空白|空欄|無|无|なし|ナシ|特になし|ありません|none|no|n\/a|na|null|empty|nothing|ok|-+|—+|–+|ー+|없음|없어요|không có|không|tidak ada|tidak)[\s)）」』\]。.!！]*$/i;
 // 返答は 1 行 1 項目で流れてくる(REPLY / PINYIN / TR / HINT×2 / CORR)。REPLY が来た分から吹き出しに出す
 function parseLines(t){
   const o={reply:"",pinyin:"",translation:"",hints:[],correction:""};
   String(t).split("\n").forEach(l=>{ const m=l.match(/^\s*(REPLY|PINYIN|TR|HINT|CORR)\s*[:：]\s*(.*)$/); if(!m) return;
-    const v=m[2].trim(); if(m[1]==="REPLY")o.reply=v; else if(m[1]==="PINYIN")o.pinyin=v; else if(m[1]==="TR")o.translation=v; else if(m[1]==="HINT"){ if(v)o.hints.push(v); } else o.correction=v; });
+    const v=m[2].trim(); if(m[1]==="REPLY")o.reply=v; else if(m[1]==="PINYIN")o.pinyin=v; else if(m[1]==="TR")o.translation=v; else if(m[1]==="HINT"){ if(v)o.hints.push(v); } else o.correction=NO_CORR.test(v)?"":v; });
   // 行の札が抜けた時(2026-10 実機で「通信エラー」になった):最初の札より前の文を返事として使う
   if(!o.reply){ const head=String(t).split(/\n\s*(?:PINYIN|TR|HINT|CORR)\s*[:：]/)[0].replace(/^\s*REPLY\s*[:：]/,"").trim(); if(head && /[\u3400-\u9fff]/.test(head) && !/^(PINYIN|TR|HINT|CORR)/.test(head)) o.reply=head.split("\n")[0].trim(); }
   return o;
@@ -661,6 +663,16 @@ document.getElementById("inp").addEventListener("input",e=>{ if(recording && e.i
 window.stwBack=function(){ if(curScene||document.querySelector(".favwrap,.rvwrap")){ onBack(); return "handled"; } goHome(); return "handled"; };
 if("speechSynthesis" in window)speechSynthesis.getVoices();
 toIntro();
+</script>
+<script>
+/* 回主程式時接回原本的畫面(index.html 讀 sessionStorage 的 stw_back)。Android 返回鍵 → stwReturn() */
+(function(){
+  var H = window.history;   // speak-chat.html 有全域 let history=[](聊天紀錄)會蓋掉 history,一律用 window.history
+  function fromApp(){ try { return !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) { return false; } }
+  window.stwReturn = function(){ try { sessionStorage.setItem("stw_back", "1"); } catch (e) {} if (H.length > 1 && fromApp()) H.back(); else location.href = "/?app=1"; };
+  if (!window.stwBack) window.stwBack = function(){ window.stwReturn(); return "handled"; };
+  window.addEventListener("pagehide", function(){ try { sessionStorage.setItem("stw_back", "1"); } catch (e) {} });
+})();
 </script>
 </body>
 </html>

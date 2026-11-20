@@ -958,8 +958,11 @@
     },
     {
      "name": {
-      "ja": "方位",
-      "en": "方位"
+      "ja": "方向と位置",
+      "en": "Directions & positions",
+      "ko": "방향과 위치",
+      "vi": "Phương hướng & vị trí",
+      "id": "Arah & posisi"
      },
      "words": [
       "前面",
@@ -1473,7 +1476,10 @@
     {
      "name": {
       "ja": "学校",
-      "en": "学校"
+      "en": "School",
+      "ko": "학교",
+      "vi": "Trường học",
+      "id": "Sekolah"
      },
      "words": [
       "上課",
@@ -1485,8 +1491,11 @@
     },
     {
      "name": {
-      "ja": "程度副詞",
-      "en": "程度副詞"
+      "ja": "程度の副詞",
+      "en": "Degree adverbs",
+      "ko": "정도 부사",
+      "vi": "Phó từ chỉ mức độ",
+      "id": "Kata keterangan derajat"
      },
      "words": [
       "非常",

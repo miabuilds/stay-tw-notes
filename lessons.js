@@ -202,7 +202,7 @@ const LS = (() => {
   function ensure(lv) {
     if (DATA[lv] || loading === lv) return;
     loading = lv;
-    fetch("data/lessons-" + lv + ".json?v=7").then((r) => r.json()).then((d) => {
+    fetch("data/lessons-" + lv + ".json?v=8").then((r) => r.json()).then((d) => {
       DATA[lv] = d; loading = "";
       try { PA.render(); } catch (e) {}
     }).catch(() => { loading = ""; });
@@ -841,7 +841,10 @@ const LS = (() => {
   // 読み方問題の選択肢:注音だけだと拼音派(韓国・外国語 UI)が選べない(2026-11-02 韓国ユーザー) → 単語を引いて zyp と同じ表示(注音＋拼音 / 拼音のみ)
   function zyOpt(zy) {
     const o = Object.keys(W).map((k) => W[k]).find((x) => x.zy === zy);
-    if (o) return zyp(Object.assign({}, o, { py: o.py || "" }), true);
+    // 2026-11-10 日本ユーザー「読みを注音のみに設定しているのにピンインが出る」→ 自分で「注音だけ」を選んだ人は設定どおり。未設定の人だけ併記
+    let explicitZy = false;
+    try { explicitZy = localStorage.getItem("stw_phon") === "zy" || (!localStorage.getItem("stw_phon") && localStorage.getItem("stw_show_py") === "0"); } catch (e) {}
+    if (o) return zyp(Object.assign({}, o, { py: o.py || "" }), !explicitZy);
     return typeof twZy === "function" ? twZy(zy) : esc(zy);
   }
   function zyp(v, forceBoth) {

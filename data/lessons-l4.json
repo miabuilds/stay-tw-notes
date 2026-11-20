@@ -741,8 +741,11 @@
     },
     {
      "name": {
-      "ja": "職場・辦公",
-      "en": "職場・辦公"
+      "ja": "職場・オフィス",
+      "en": "At the office",
+      "ko": "사무실",
+      "vi": "Văn phòng",
+      "id": "Di kantor"
      },
      "words": [
       "同事",
@@ -2427,14 +2430,20 @@
    "id": "u19",
    "no": 19,
    "lead": {
-    "ja": "形容詞・副詞",
-    "en": "形容詞・副詞"
+    "ja": "形容詞と副詞",
+    "en": "Adjectives & adverbs",
+    "ko": "형용사와 부사",
+    "vi": "Tính từ & phó từ",
+    "id": "Kata sifat & keterangan"
    },
    "lessons": [
     {
      "name": {
-      "ja": "形容詞・副詞",
-      "en": "形容詞・副詞"
+      "ja": "形容詞と副詞",
+      "en": "Adjectives & adverbs",
+      "ko": "형용사와 부사",
+      "vi": "Tính từ & phó từ",
+      "id": "Kata sifat & keterangan"
      },
      "words": [
       "突然",
@@ -2449,8 +2458,11 @@
     },
     {
      "name": {
-      "ja": "交通補充",
-      "en": "交通補充"
+      "ja": "交通(追加)",
+      "en": "More on transport",
+      "ko": "교통 더 알기",
+      "vi": "Giao thông (bổ sung)",
+      "id": "Transportasi (tambahan)"
      },
      "words": [
       "紅綠燈",
@@ -2463,7 +2475,10 @@
     {
      "name": {
       "ja": "家事",
-      "en": "家事"
+      "en": "Housework",
+      "ko": "집안일",
+      "vi": "Việc nhà",
+      "id": "Pekerjaan rumah"
      },
      "words": [
       "煮飯",
@@ -2496,8 +2511,11 @@
     },
     {
      "name": {
-      "ja": "動詞補充",
-      "en": "動詞補充"
+      "ja": "動詞(追加)",
+      "en": "More verbs",
+      "ko": "동사 더 알기",
+      "vi": "Động từ (bổ sung)",
+      "id": "Kata kerja (tambahan)"
      },
      "words": [
       "複習",
@@ -2513,7 +2531,10 @@
     {
      "name": {
       "ja": "職場",
-      "en": "職場"
+      "en": "Workplace",
+      "ko": "직장",
+      "vi": "Nơi làm việc",
+      "id": "Tempat kerja"
      },
      "words": [
       "薪水",
@@ -2531,14 +2552,20 @@
    "id": "u20",
    "no": 20,
    "lead": {
-    "ja": "職場深化",
-    "en": "職場深化"
+    "ja": "職場(もっと深く)",
+    "en": "Workplace in depth",
+    "ko": "직장 더 깊이",
+    "vi": "Nơi làm việc chuyên sâu",
+    "id": "Tempat kerja lebih dalam"
    },
    "lessons": [
     {
      "name": {
-      "ja": "職場深化",
-      "en": "職場深化"
+      "ja": "職場(もっと深く)",
+      "en": "Workplace in depth",
+      "ko": "직장 더 깊이",
+      "vi": "Nơi làm việc chuyên sâu",
+      "id": "Tempat kerja lebih dalam"
      },
      "words": [
       "名片",
@@ -2571,8 +2598,11 @@
     },
     {
      "name": {
-      "ja": "情感深化",
-      "en": "情感深化"
+      "ja": "気持ち(もっと深く)",
+      "en": "Feelings in depth",
+      "ko": "감정 더 깊이",
+      "vi": "Cảm xúc chuyên sâu",
+      "id": "Perasaan lebih dalam"
      },
      "words": [
       "滿意",
@@ -2585,8 +2615,11 @@
     },
     {
      "name": {
-      "ja": "意見・討論",
-      "en": "意見・討論"
+      "ja": "意見と議論",
+      "en": "Opinions & discussion",
+      "ko": "의견과 토론",
+      "vi": "Ý kiến & thảo luận",
+      "id": "Pendapat & diskusi"
      },
      "words": [
       "反對",
@@ -2600,7 +2633,10 @@
     {
      "name": {
       "ja": "人間関係",
-      "en": "人間関係"
+      "en": "Relationships",
+      "ko": "인간관계",
+      "vi": "Các mối quan hệ",
+      "id": "Hubungan"
      },
      "words": [
       "信任",
@@ -2637,14 +2673,20 @@
    "id": "u21",
    "no": 21,
    "lead": {
-    "ja": "抽象語",
-    "en": "抽象語"
+    "ja": "抽象的なことば",
+    "en": "Abstract words",
+    "ko": "추상적인 말",
+    "vi": "Từ trừu tượng",
+    "id": "Kata abstrak"
    },
    "lessons": [
     {
      "name": {
-      "ja": "抽象語",
-      "en": "抽象語"
+      "ja": "抽象的なことば",
+      "en": "Abstract words",
+      "ko": "추상적인 말",
+      "vi": "Từ trừu tượng",
+      "id": "Kata abstrak"
      },
      "words": [
       "態度",
@@ -2657,8 +2699,11 @@
     },
     {
      "name": {
-      "ja": "抽象語",
-      "en": "抽象語"
+      "ja": "抽象的なことば",
+      "en": "Abstract words",
+      "ko": "추상적인 말",
+      "vi": "Từ trừu tượng",
+      "id": "Kata abstrak"
      },
      "words": [
       "改變",
@@ -2670,8 +2715,11 @@
     },
     {
      "name": {
-      "ja": "台湾生活",
-      "en": "台湾生活"
+      "ja": "台湾の暮らし",
+      "en": "Life in Taiwan",
+      "ko": "대만 생활",
+      "vi": "Cuộc sống ở Đài Loan",
+      "id": "Hidup di Taiwan"
      },
      "words": [
       "順利",
@@ -2703,8 +2751,11 @@
     },
     {
      "name": {
-      "ja": "描述・副詞",
-      "en": "描述・副詞"
+      "ja": "描写と副詞",
+      "en": "Describing & adverbs",
+      "ko": "묘사와 부사",
+      "vi": "Miêu tả & phó từ",
+      "id": "Deskripsi & keterangan"
      },
      "words": [
       "順便",
@@ -2719,8 +2770,11 @@
     },
     {
      "name": {
-      "ja": "抽象",
-      "en": "抽象"
+      "ja": "考えと概念",
+      "en": "Ideas & concepts",
+      "ko": "생각과 개념",
+      "vi": "Ý niệm & khái niệm",
+      "id": "Ide & konsep"
      },
      "words": [
       "記憶",
@@ -2738,14 +2792,20 @@
    "id": "u22",
    "no": 22,
    "lead": {
-    "ja": "抽象",
-    "en": "抽象"
+    "ja": "考えと概念",
+    "en": "Ideas & concepts",
+    "ko": "생각과 개념",
+    "vi": "Ý niệm & khái niệm",
+    "id": "Ide & konsep"
    },
    "lessons": [
     {
      "name": {
-      "ja": "抽象",
-      "en": "抽象"
+      "ja": "考えと概念",
+      "en": "Ideas & concepts",
+      "ko": "생각과 개념",
+      "vi": "Ý niệm & khái niệm",
+      "id": "Ide & konsep"
      },
      "words": [
       "內容",
@@ -2780,8 +2840,11 @@
     },
     {
      "name": {
-      "ja": "社會日常",
-      "en": "社會日常"
+      "ja": "社会と日常",
+      "en": "Society & everyday life",
+      "ko": "사회와 일상",
+      "vi": "Xã hội & đời thường",
+      "id": "Masyarakat & keseharian"
      },
      "words": [
       "政府",
@@ -2793,8 +2856,11 @@
     },
     {
      "name": {
-      "ja": "表達意見",
-      "en": "表達意見"
+      "ja": "意見を言う",
+      "en": "Giving your opinion",
+      "ko": "의견 말하기",
+      "vi": "Nêu ý kiến",
+      "id": "Menyampaikan pendapat"
      },
      "words": [
       "懷疑",
@@ -2901,8 +2967,11 @@
     },
     {
      "name": {
-      "ja": "抽象動詞",
-      "en": "抽象動詞"
+      "ja": "抽象的な動詞",
+      "en": "Abstract verbs",
+      "ko": "추상 동사",
+      "vi": "Động từ trừu tượng",
+      "id": "Kata kerja abstrak"
      },
      "words": [
       "考慮",
@@ -2937,8 +3006,11 @@
     },
     {
      "name": {
-      "ja": "連接詞・接続",
-      "en": "連接詞・接続"
+      "ja": "接続詞",
+      "en": "Connectors",
+      "ko": "접속사",
+      "vi": "Từ nối",
+      "id": "Kata penghubung"
      },
      "words": [
       "因此",

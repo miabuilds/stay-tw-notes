@@ -173,7 +173,7 @@ mark{background:rgba(184,54,42,.18);color:inherit;border-radius:3px}
 <script src="py2zy.js?v=1"></script>
 <script src="tts.js?v=67"></script>
 <script src="i18n.js?v=131"></script>
-<script src="paywall.js?v=115"></script>
+<script src="paywall.js?v=116"></script>
 <script src="life.js?v=4"></script>
 <script src="life-tr.js?v=1"></script>
 <script>
@@ -304,8 +304,9 @@ function playAll(id){
 async function copyScene(id){
   const s = LIFE.scenes.find(x => x.id === id); if (!s) return;
   const txt = tr(s.name) + "\n" + s.lines.map(l => (l.w === "t" ? "▷ " : "▶ ") + l.z + "\n   " + l.py + "\n   " + tr(l.m)).join("\n") + "\n\nStayTW https://staytw.pages.dev/life#" + id;
-  try { await navigator.clipboard.writeText(txt); toast(t("copied")); } catch(e){ prompt("", txt); }
+  try { await navigator.clipboard.writeText(txt); toast(t("copied")); } catch(e){ if (copyFallback(txt)) toast(t("copied")); }
 }
+function copyFallback(txt){ try { const ta=document.createElement("textarea"); ta.value=txt; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select(); const ok=document.execCommand("copy"); ta.remove(); return ok; } catch(e){ return false; } }
 function toast(msg){ const el = document.getElementById("toast"); el.textContent = msg; el.classList.add("on"); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove("on"), 2000); }
 
 // ── 起動 ──
@@ -318,5 +319,15 @@ function toast(msg){ const el = document.getElementById("toast"); el.textContent
 })();
 </script>
 <script>try{fetch("/api/hit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:location.pathname+(function(){try{var u=new URLSearchParams(location.search).get("utm_source");return u?"?utm_source="+u.replace(/[^\w-]/g,"").slice(0,40):""}catch(e){return ""}})(),ref:document.referrer,app:!!(window.STAYTW_NATIVE&&window.STAYTW_NATIVE.isNativeApp)})})}catch(e){}</script>
+<script>
+/* 回主程式時接回原本的畫面(index.html 讀 sessionStorage 的 stw_back)。Android 返回鍵 → stwReturn() */
+(function(){
+  var H = window.history;   // speak-chat.html 有全域 let history=[](聊天紀錄)會蓋掉 history,一律用 window.history
+  function fromApp(){ try { return !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) { return false; } }
+  window.stwReturn = function(){ try { sessionStorage.setItem("stw_back", "1"); } catch (e) {} if (H.length > 1 && fromApp()) H.back(); else location.href = "/?app=1"; };
+  if (!window.stwBack) window.stwBack = function(){ window.stwReturn(); return "handled"; };
+  window.addEventListener("pagehide", function(){ try { sessionStorage.setItem("stw_back", "1"); } catch (e) {} });
+})();
+</script>
 </body>
 </html>
